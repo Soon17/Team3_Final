@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html 
+lang="en" 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<style>
+  .search-box {
+		position: fixed;
+		width: 430px;
+		z-index: 10;
+		background-color: #fff;
+		padding: 30px;
+		border-radius: 10px;
+		box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+<main layout:fragment="content" class="mb-5">
+  <div class="search-box">
+    <h1>시바라시발</h1>
+  </div>
+
+  <script>
+    function toggleDetailAll() {
+      const $arrows = $(".arrowImg");
+    }
+  </script>
+</main>
+</body>
+</html>

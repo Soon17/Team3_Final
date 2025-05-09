@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html 
+lang="en" 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<style>
+  .pay-summary-box {
+		position: fixed;
+		width: 430px;
+		z-index: 10;
+		background-color: #fff;
+		padding: 30px;
+		border-radius: 10px;
+		box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+<main layout:fragment="content" class="mb-5">
+  <div class="pay-summary-box">
+    <h5 class="mb-4">결제 정보</h5>
+
+    <!-- 화살표 포함 총 상품금액 영역 -->
+    <div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
+      <div class="text-muted">총 상품금액</div>
+      <div class="d-flex align-items-center" style="gap: 4px;">
+        <div class="font-weight-bold">66,000원</div>
+        <img class="arrowImg" src="/imgs/small-up.png" width="16" height="16" />
+      </div>
+    </div>
+
+    <!-- 상세 요금 -->
+    <div class="priceDetail" style="display: none; font-size: 13px;">
+      <div class="d-flex justify-content-between bg-light p-2 rounded mb-2">
+        <div class="text-muted">1박 숙박 요금</div>
+        <div class="text-muted">33,000원</div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between mt-3 mb-3">
+      <strong>총 결제금액</strong>
+      <strong>66,000원</strong>
+    </div>
+    <button class="btn btn-primary btn-block">결제하기</button>
+  </div>
+
+  <script>
+    function toggleDetailAll() {
+      const $details = $(".priceDetail");
+      const $arrows = $(".arrowImg");
+
+      detailVisible = !detailVisible;
+
+      if (detailVisible) {
+        $details.slideDown(200);
+        $arrows.attr("src", "/imgs/small-up.png");
+      } else {
+        $details.slideUp(200);
+        $arrows.attr("src", "/imgs/small-down.png");
+      }
+    }
+
+    $(document).ready(function() {
+      $(".priceDetail").slideDown(0); // 초기 열림
+      $(".arrowImg").attr("src", "/imgs/small-up.png");
+    });
+  </script>
+</main>
+</body>
+</html>

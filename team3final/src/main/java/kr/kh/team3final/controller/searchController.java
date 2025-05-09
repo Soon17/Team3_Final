@@ -5,17 +5,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/pay")
-public class paymentController {
+@RequestMapping("/searching")
+public class searchController {
 
-  @GetMapping("/payment")
-	public String payment() {
-		return "pay/payment";
+  @GetMapping("/search")
+	public String search() {
+		return "searching/search";
 	}
 	
-	@GetMapping("/summary")
-	public String paymentSummary() {
-		return "pay/summary";
+	@GetMapping("/find")
+	public String find() {
+		return "searching/find";
 	}
 
 }
