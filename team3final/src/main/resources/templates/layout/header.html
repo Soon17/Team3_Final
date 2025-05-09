@@ -9,10 +9,10 @@
         <nav class="navbar navbar-expand-sm navbar-light">
             <!-- Brand/logo -->
             <div class="d-flex" style="width: 200px;">
-                <a id="hotelLogoLink" class="navbar-brand flex-fill m-0 p-0" href="#">
+                <a class="navbar-brand flex-fill m-0 p-0 icon-link" href="#" data-id="hotel-link">
                     <img id="hotelLogo" src="/resources/static/img/logo_hotel.png" alt="호텔로고" class="w-100 h-auto">
                 </a>
-                <a id="rentLogoLink" class="navbar-brand flex-fill m-0 p-0" href="#">
+                <a class="navbar-brand flex-fill m-0 p-0 icon-link" href="#" data-id="rent-link">
                     <img id="rentLogo" src="/resources/static/img/logo_rent.png" alt="렌트로고" class="w-100 h-auto">
                 </a>
             </div>
@@ -34,7 +34,7 @@
                 <div>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/member/mypage" class="nav-link">
                                 <img src="/resources/static/img/profile.png" alt="프로필이미지" style="width: 15px; height: 15px;">
                                 마이페이지
                             </a>
@@ -48,16 +48,10 @@
         </nav>
     </div>
 	<script>
-		$("#hotelLogoLink").click(function (e) {
-			e.preventDefault();
-			$("#rentLogo").addClass("dimmed");
-			$("#hotelLogo").removeClass("dimmed");
-		});
-	
-		$("#rentLogoLink").click(function (e) {
-			e.preventDefault();
-			$("#hotelLogo").addClass("dimmed");
-			$("#rentLogo").removeClass("dimmed");
+		$(".icon-link").click(function (e) {
+            const id = $(this).data("id");
+			$(".icon-link").addClass("dimmed");
+			$(this).removeClass("dimmed");
 		});
 	</script>
 </header>

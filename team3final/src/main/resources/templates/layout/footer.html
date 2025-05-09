@@ -4,10 +4,78 @@
 	<meta charset="UTF-8">
 </head>
 <body>
-	<footer th:fragment="footer" class="bg-light text-center py-3">
-		<div class="container">
-			<p>푸터</p>
+	<footer th:fragment="footer" class="bg-light py-3">
+		<div class="px-5">
+			<div class="footer-big">
+				<div class="footer-top">
+					<div class="contact-info">
+					  <sapn>고객센터 / 전화예약</sapn>
+					  <h2 class="phone" style="color : blue"><strong>1234-4321</strong></h2>
+					  <p class="info-foot">매일(공휴일 포함) 오전 9시 ~ 오후 6시<br>
+						 점심시간 오후 12시50분 ~ 1시50분 (1시간)</p>
+					</div>
+				</div>
+				<div class="footer-company">
+					<h3>Team3</h3>
+					<p class="info-foot">주식회사 Team3 | 대표자: 허대중</p>
+					<p class="info-foot">주소: 서울특별시 강남구 테헤란로14길 6 남도빌딩 2층</p>
+					<p class="disclaimer info-foot">
+						주식회사 Team3는 통신판매중개자 모방프로젝트 팀으로서 실질적 거래당사자가 아니며 상품정보, 거래조건 및 거래에 관한 의무와 책임은 각 사용자에게 있습니다.
+					</p>
+				</div>
+			</div>
+
+			<div class="footer-small">
+				<div class="bottom-nav bg-light" style="border-top: none;">
+					<a class="nav-item" href="#" data-id="hotel">
+						<i class="fas fa-hotel"></i>
+						<span>호텔</span>
+					</a>
+					<a class="nav-item" href="#" data-id="car">
+						<i class="fas fa-car"></i>
+						<span>렌트카</span>
+					</a>
+					<a class="nav-item" href="#" data-id="home">
+						<i class="fas fa-home"></i>
+						<span>홈</span>
+					</a>
+					<a class="nav-item" href="#" data-id="gift">
+						<i class="fas fa-gift"></i>
+						<span>호텔+렌트카</span>
+					</a>
+					<a class="nav-item" href="#" data-id="user">
+						<i class="fas fa-user"></i>
+						<span>My</span>
+					</a>
+				</div>
+			</div>
 		</div>
+
+		<script>
+			// 클릭 시 선택된 메뉴 저장 + 클래스 처리
+			$(".nav-item").click(function(){
+				const id = $(this).data("id");
+
+				// 클래스 갱신
+				$(".nav-item").removeClass("select-active");
+				$(this).addClass("select-active");
+
+				// localStorage에 저장
+				localStorage.setItem("selectedNav", id);
+				// location.reload();
+				// $(document).load();
+				history.pushState(null, '', '/?abc=de');
+			});
+			// 페이지 로드 시 localStorage에서 불러와 적용
+			$(document).ready(function () {
+				const saved = localStorage.getItem("selectedNav");
+				if (saved) {
+					// 저장된 id를 가진 항목만 활성화
+					$(".nav-item").removeClass("select-active");
+					$(`.nav-item[data-id="${saved}"]`).addClass("select-active");
+				}
+			});
+		</script>
 	</footer>
 </body>
 </html>

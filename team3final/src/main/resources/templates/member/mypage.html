@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html
+	lang="en" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{layout/layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>마이페이지</title>
+	<style>
+		.mypage {
+		font-family: sans-serif;
+		padding: 40px 20px;
+		max-width: 80%;
+		margin: auto;
+		color: #333;
+		}
+
+		/* 사용자 영역 */
+		.user-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 10px;
+		}
+		.user-info .username {
+		font-size: 18px;
+		font-weight: bold;
+		}
+		.user-info .email {
+		display: block;
+		font-size: 13px;
+		color: #777;
+		}
+		.family-btn {
+		font-size: 12px;
+		background: #f1f1f1;
+		border: none;
+		border-radius: 12px;
+		padding: 4px 10px;
+		cursor: pointer;
+		}
+
+		/* 요약 카드 */
+		.summary {
+		display: flex;
+		justify-content: space-between;
+		margin: 20px 0;
+		}
+		.summary-item {
+		flex: 1;
+		background: #fafafa;
+		text-align: center;
+		padding: 10px;
+		margin: 0 5px;
+		border-radius: 8px;
+		font-size: 14px;
+		}
+		.summary-item strong {
+		display: block;
+		font-size: 16px;
+		margin-bottom: 5px;
+		}
+		.summary-item i {
+		font-size: 20px;
+		color: #aaa;
+		margin-bottom: 4px;
+		}
+
+		/* 패밀리 라운지 링크 */
+		.family-link {
+		text-align: right;
+		font-size: 13px;
+		margin-bottom: 15px;
+		}
+
+		/* 탭 메뉴 */
+		.tabs {
+		display: flex;
+		justify-content: space-around;
+		border-bottom: 1px solid #eee;
+		margin-bottom: 20px;
+		}
+		.tab {
+		padding: 10px;
+		font-size: 14px;
+		color: #aaa;
+		cursor: pointer;
+		}
+		.tab.active {
+		color: #007bff;
+		border-bottom: 2px solid #007bff;
+		font-weight: bold;
+		}
+
+		/* 렌트 없음 박스 */
+		.empty-box {
+		text-align: center;
+		color: #444;
+		}
+		.empty-box img {
+		width: 100px;
+		margin-bottom: 20px;
+		}
+		.main-text {
+		font-size: 16px;
+		font-weight: bold;
+		}
+		.sub-text {
+		font-size: 14px;
+		color: #777;
+		margin: 10px 0 20px;
+		}
+		.primary-btn {
+		border: 1px solid #007bff;
+		background: none;
+		color: #007bff;
+		padding: 10px 20px;
+		border-radius: 10px;
+		cursor: pointer;
+		}
+		.link-btn {
+		display: block;
+		margin-top: 15px;
+		font-size: 13px;
+		color: #666;
+		text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+	<main layout:fragment="content">
+		<div class="mypage bg-light">
+			<!-- 사용자 정보 -->
+			<div class="user-header">
+			  <div class="user-info">
+				<strong class="username">학교가는자존심님</strong>
+				<span class="email">acejsh77@gmail.com</span>
+			  </div>
+			  <button class="family-btn">패밀리 소개</button>
+			</div>
+		  
+			<!-- 요약 영역 -->
+			<div class="summary">
+			  <div class="summary-item">
+				<i class="fa fa-file-alt"></i>
+				<p>예약내역</p>
+			  </div>
+			  <div class="summary-item">
+				<strong>0 P</strong>
+				<p>포인트</p>
+			  </div>
+			  <div class="summary-item">
+				<i class="fa fa-pen"></i>
+				<strong>31장</strong>
+				<p>나의리뷰</p>
+			  </div>
+			</div>
+		  
+			<!-- 탭 메뉴 -->
+			<div class="tabs">
+			  <div class="tab select-active">렌트카</div>
+			  <div class="tab">호텔</div>
+			  <div class="tab">보험</div>
+			</div>
+		  
+			<!-- 렌트 내역 없음 -->
+			<div class="empty-box">
+			  <img src="character.png" alt="렌트 없음 캐릭터" />
+			  <p class="main-text">진행중인 렌트 내역이 없습니다 :)</p>
+			  <p class="sub-text">지금 원하는 렌트카 빌리고<br>신나게 떠나볼까요?</p>
+			  <button class="primary-btn">렌트하러 가기</button>
+			</div>
+		  </div>
+	</main>
+</body>
+</html>
