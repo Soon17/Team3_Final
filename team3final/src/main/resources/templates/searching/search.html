@@ -1,157 +1,159 @@
 <!DOCTYPE html>
-<html 
-lang="en" 
-xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-layout:decorate="~{layout/layout.html}"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
-<meta charset="UTF-8">
-<title>검색</title>
-<style>
-	body{
-		background-color: #f5f6f7;
-    font-family: 'Noto Sans KR', sans-serif;
-	}
+	<meta charset="UTF-8">
+	<title>검색</title>
+	<style>
+		.main-container {
+			background-color: #f5f6f7;
+			font-family: 'Noto Sans KR', sans-serif;
+			width: 100%;
+			padding: 0;
+		}
 
-	.row{
-		max-width: 1032px;
-		display: flex;
-		flex-wrap: nowrap !important;
-		justify-content: start;
-		margin: 0px auto;
-		padding-top: 30px;
-	} 
+		.row {
+			max-width: 1032px;
+			display: flex;
+			flex-wrap: nowrap !important;
+			justify-content: start;
+			margin: 0px auto;
+			padding-top: 30px;
+		}
 
-	.search-bar-wrap {
-		width: 100%;
-		background-color: #fff;
-		border-bottom: 1px solid #eee;
-	}
+		.search-bar-wrap {
+			width: 100%;
+			background-color: #fff;
+			border-bottom: 1px solid #eee;
+		}
 
-	.search-bar-inner{
-		margin-left: 219px;
-		margin-right: 219px;
-		padding: 20px 0px;
-		display: flex;
-		gap: 21px;
-		height: 119px;
-		align-items: center;
-		box-sizing: border-box;
-		cursor: pointer;
-		justify-content: center;
-	}
+		.search-bar-inner {
+			margin-left: 219px;
+			margin-right: 219px;
+			padding: 20px 0px;
+			display: flex;
+			gap: 21px;
+			height: 119px;
+			align-items: center;
+			box-sizing: border-box;
+			cursor: pointer;
+			justify-content: center;
+		}
 
-	.search-input {
-		width: 300px;
-		padding: 12px 16px;
-		background-color: #f8f8f8;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		font-size: 14px;
-	}
+		.search-input {
+			width: 300px;
+			padding: 12px 16px;
+			background-color: #f8f8f8;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			font-size: 14px;
+		}
 
-	.search-btn {
-		padding: 12px 20px;
-		background-color: #007bff;
-		color: white;
-		border: none;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 600;
-	}
+		.search-btn {
+			padding: 12px 20px;
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+		}
 
 
-	.container-box {
-		background-color: #f5f6f7;
-		border-radius: 10px;
-  }
+		.container-box {
+			background-color: #f5f6f7;
+			border-radius: 10px;
+		}
 
-	.sort-options {
-		display: flex;
-		gap: 16px;
-		background: white;
-		padding: 5px 15px;
-		border-radius: 30px;
-		justify-content: flex-end;
-	}
+		.sort-options {
+			display: flex;
+			gap: 16px;
+			background: white;
+			padding: 5px 15px;
+			border-radius: 30px;
+			justify-content: flex-end;
+		}
 
-	.sort-options label {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		font-size: 14px;
-		color: #666;
-		font-weight: 400;
-		font-size: 12px;
-		margin: 0;
-	}
-	
-	.sort-options input[type="radio"] {
-		appearance: none;
-		width: 12px;
-		height: 12px;
-		border: 2px solid #ccc;
-		border-radius: 50%;
-		margin-right: 2px;
-		cursor: pointer;
-	}
+		.sort-options label {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+			font-size: 14px;
+			color: #666;
+			font-weight: 400;
+			font-size: 12px;
+			margin: 0;
+		}
 
-	.sort-options input[type="radio"]:checked::before {
-		content: '';
-		display: block;
-		width: 100%;
-		height: 100%;
-		background-color: #4564b8;
-		border-radius: 50%;
-	}
+		.sort-options input[type="radio"] {
+			appearance: none;
+			width: 12px;
+			height: 12px;
+			border: 2px solid #ccc;
+			border-radius: 50%;
+			margin-right: 2px;
+			cursor: pointer;
+		}
 
-	.search-box-area {
-		width: 330px;
-		margin-right: 50px; 
-	}
+		.sort-options input[type="radio"]:checked::before {
+			content: '';
+			display: block;
+			width: 100%;
+			height: 100%;
+			background-color: #4564b8;
+			border-radius: 50%;
+		}
 
-	.card-link {
-		display: flex;
-		text-decoration: none;
-		color: inherit;
-		gap: 30px;
-		padding-top: 30px;
-		background-color: #ffffff73;
-		width: 630px;
-		padding: 10px;
-	}
+		.search-box-area {
+			width: 330px;
+			margin-right: 50px;
+		}
 
-	.hotel-location{
-		color: #0d6ffc;
-	}
+		.card-link {
+			display: flex;
+			text-decoration: none;
+			color: inherit;
+			gap: 30px;
+			padding-top: 30px;
+			background-color: #ffffff73;
+			width: 630px;
+			padding: 10px;
+		}
 
-	.poto{
-		border-radius: 10px;
-		height: 208px;
-		width: 272px;
-	}
+		.hotel-location {
+			color: #0d6ffc;
+		}
 
-	.hotel-price{
-		display: flex;
-		justify-content: end;
-		font-weight: bold;
-		text-align: right;
-    margin-top: 110px;
-		margin-left: 180px;
-	}
+		.poto {
+			border-radius: 10px;
+			height: 208px;
+			width: 272px;
+		}
 
-	.hotel-info{
-		padding: 10px;
-	}
-	.card-link:hover {
-		color: inherit !important;
-		text-decoration: none !important;
-	}
-</style>
+		.hotel-price {
+			display: flex;
+			justify-content: end;
+			font-weight: bold;
+			text-align: right;
+			margin-top: 110px;
+			margin-left: 180px;
+		}
+
+		.hotel-info {
+			padding: 10px;
+		}
+
+		.card-link:hover {
+			color: inherit !important;
+			text-decoration: none !important;
+		}
+	</style>
 </head>
-<body >
-	<main layout:fragment="content" class="mb-5" style="width: 100%; padding: 0;">
+
+<body>
+
+	<main layout:fragment="content" class="main-container">
 		<div class="search-bar-wrap">
 			<div class="search-bar-inner">
 				<div class="search-input" onclick="openLocation()">📍 서울</div>
@@ -162,7 +164,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		</div>
 		<div class="row">
 			<div id="search-find" class="search-box-area">
-					<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+				<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
 			</div>
 			<div class="col-md-7 container-box">
 				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px; width: 630px;">
@@ -177,7 +179,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						<label><input type="radio" name="sort" value="성급순"> <span>성급순</span></label>
 						<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
 					</div>
-				</div>	
+				</div>
 				<div class="im">
 					<a href="#" class="card-link">
 						<div class="hotel-image">
@@ -223,12 +225,12 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						</div>
 					</a>
 				</div>
-			</div>	
+			</div>
 		</div>
 		<script>
 			function toggleDetailAll() {
 				const $arrows = $(".arrowImg");
-				
+
 				$.ajax({
 					url: '/searching/find',
 					type: 'GET',
@@ -247,4 +249,5 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		</script>
 	</main>
 </body>
+
 </html>
