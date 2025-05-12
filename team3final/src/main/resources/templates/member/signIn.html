@@ -92,13 +92,11 @@
 	.checkbox:checked + label:before {
 		transform: translateX(44px) rotate(-270deg);
 	}
-
-
 	.card-3d-wrap {
 		position: relative;
-		width: 440px;
+		width: 600px;
 		max-width: 100%;
-		height: 600px;
+		height: 700px;
 		-webkit-transform-style: preserve-3d;
 		transform-style: preserve-3d;
 		perspective: 800px;
@@ -244,7 +242,7 @@
 		-webkit-transition: all 200ms linear;
 		transition: all 200ms linear;
 	}
-	.signIn-a{  
+	.signIn-a,.msg-btn{  
 		border-radius: 4px;
 		height: 44px;
 		font-size: 13px;
@@ -357,7 +355,7 @@
 								<div class="center-wrap">
 									<div class="section text-center">
 										<h4 class="mb-4 pb-3">회원가입</h4>
-										<form action="#" method="post">
+										<form class="singIn-from"action="#" method="post">
 											<div class="form-group">
 												<input type="text" name="me_name" class="form-style" placeholder="이름" id="me_name" autocomplete="off">
 												<i class="input-icon uil uil-user"></i>
@@ -373,6 +371,10 @@
 											<div class="form-group mt-2">
 												<input type="password" name="me_pw2" class="form-style" placeholder="비밀번호 확인" id="me_pw2" autocomplete="off">
 												<i class="input-icon uil uil-lock-alt"></i>
+											</div> 
+											<div class="form-group mt-2">
+												<input type="text" name="me_nick" class="form-style" placeholder="닉네임" id="me_nick" autocomplete="off">
+												<i class="input-icon uil uil-users-alt"></i>
 											</div>
 											<div class="form-group mt-2">
 												<input type="email" name="me_eamil" class="form-style" placeholder="이메일" id="me_eamil" autocomplete="off">
@@ -381,6 +383,10 @@
 											<div class="form-group mt-2">
 												<input type="text" name="me_number" class="form-style" placeholder="전화번호" id="me_number" autocomplete="off">
 												<i class="input-icon  uil-phone"></i>
+											</div>
+											<div class="form-group mt-2">
+												<button class="msg-btn" type="button">문자인증</button>
+												
 											</div>
 											<div class="form-group mt-2">
 												<input type="text" name="me_birthday" class="form-style" placeholder="생년월일 (YYMMDD-X)" id="me_birthday" autocomplete="off" maxlength="8">
@@ -410,6 +416,62 @@
 				$(this).val(value); // 값 다시 세팅
 			})
 
+
+			$(document).ready(function () {
+				// 커스텀 정규표현식 메서드 먼저 정의
+				$.validator.addMethod("regex", function (value, element, regex) {
+					var re = new RegExp(regex);
+					return this.optional(element) || re.test(value);
+				}, "정규표현식을 확인하세요.");
+
+				// ID 입력할 때마다 중복 체크 실행
+				$("#me_id").on("input", function () {
+					checkId();
+				});
+
+				// 회원가입 유효성 검사
+				$(".singIn-from").validate({
+					rules: {
+						me_id: { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
+						me_name: { required: true },
+						me_pw: { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
+						me_pw2: { required: true, equalTo: "#me_pw"},
+						me_nick: { required: true, regex: /^[a-zA-Z0-9가-힣]{2,10}$/ },
+						me_email: { required: true, email: true },
+						me_number: { required: true, regex: /^010-\d{4}-\d{4}$/ },
+					},
+					messages: {
+						me_id: {
+							required: "필수 항목입니다.",
+							regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
+						},
+						me_name: { required: "필수 항목입니다." },
+						me_pw: {
+							required: "필수 항목입니다.",
+							regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
+						},
+						me_pw2: {
+							required: "필수 항목입니다.",
+     						equalTo: "비밀번호가 다릅니다."
+						},
+						me_nick: {
+							required: "필수 항목입니다.",
+							regex: "닉네임은 특수문자를 제외한 2~10자 입니다"
+						},
+						me_email: {
+							required: "필수 항목입니다.",
+							email: "이메일 형식이 아닙니다."
+						},
+						me_number: {
+							required: "필수 항목입니다.",
+							regex: "전화번호를 올바르게 적어주세요"
+						},
+					},
+					submitHandler: function () {
+						return checkId(); // ID 중복 체크 결과가 true여야 전송
+					},
+				});
+			});
 	</script>
 	</main>
 </body>
