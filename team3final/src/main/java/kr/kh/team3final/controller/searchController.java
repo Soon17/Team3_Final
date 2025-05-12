@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/searching")
-public class searchController {
+public class SearchController {
 
-  @GetMapping("/search")
+  	@GetMapping("/search")
 	public String search() {
 		return "searching/search";
 	}

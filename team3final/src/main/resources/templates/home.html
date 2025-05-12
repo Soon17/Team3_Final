@@ -149,7 +149,7 @@
 				  </div>
 			  
 				  <!-- 입력 박스 -->
-				  <form th:action="@{/hotel/search}" method="post" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+				  <form th:action="@{/searching/search}" method="get" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
 					<select name="rg_name" id="region" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
 						<option th:each="rg : ${regionList}" th:value="${rg.rg_num}" th:text="${rg.rg_name}">
 					</select>
@@ -179,7 +179,7 @@
 								<div class="swiper-wrapper swiper-lodging">
 								<!-- 카드 반복 시작 -->
 								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="/reserv">
 										<img src="/resources/static/imgs/할레루야.png" class="card-img-top" style="width: 240px; height: 240px;" alt="썸네일">
 										<div class="card-body p-2">
 										<h6 class="mb-1 fw-bold">신라 호텔</h6>
