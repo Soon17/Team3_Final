@@ -115,6 +115,16 @@
 			text-decoration: none;
 			color: #888;
 		}
+
+		.modal-custom {
+			color: rgb(100, 100, 100);
+			max-width: 100%;
+			font-size: 12px;
+		}
+
+		.input-box {
+			width: 100%;
+		}
 	</style>
 </head>
 
@@ -135,65 +145,86 @@
 						<span class="badge success">인증완료</span>
 					</div>
 					<span class="value">
-						acejsh77@gmail.com
+						<span id="myEmail">acejsh77@gmail.com</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
 
-				<div class="info-item">
+				<div class="info-item" data-toggle="modal" data-target="#numModal">
 					<div>
 						<span class="label">휴대폰 번호</span>
 						<span class="badge warning">미인증</span>
 					</div>
 					<span class="value">
-						010-1111-1111
+						<span id="myNum">010-1111-1111</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
-				<div class="info-item">
+				<div class="info-item" data-toggle="modal" data-target="#nickModal">
 					<span class="label">닉네임</span>
 					<span class="value">
-						학교가는자존심
+						<span id="myNick">학교가는자존심</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
-				<div class="info-item">
+				<div class="info-item" data-toggle="modal" data-target="#b-dayModal">
 					<span class="label">생년월일</span>
 					<span class="value">
-						1900.00.00
+						<span id="myB-day">1900.00.00</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
-				<div class="info-item">
+				<div class="info-item" data-toggle="modal" data-target="#genderModal">
 					<span class="label">성별</span>
 					<span class="value">
-						남
+						<span id="myGender">남</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
 			</div>
 
 			<!-- Modal -->
-			<div class="modal" id="emailModal">
-				<div class="modal-dialog">
-					<div class="modal-content">
 
+			<!-- 이메일 Modal -->
+			<div class="modal" id="emailModal">
+				<div class="modal-dialog modal-custom">
+					<div class="modal-content">
 						<!-- Modal 헤더 -->
 						<div class="modal-header">
-							<h4 class="modal-title">Modal Heading</h4>
+							<h4 class="modal-title">내 정보 수정</h4>
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 						</div>
-
 						<!-- Modal 바디 -->
 						<div class="modal-body">
-							Modal body..
+							10초 이메일 연결 시 예약 확인에 꼭 필요한 바우처부터 회원 전용 소식까지 모두 받아보실 수 있습니다.
+							<input type="email" class="input-box mt-3" id="input-email">
 						</div>
-
 						<!-- Modal 푸터 -->
-						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">이메일 인증</button>
 						</div>
+					</div>
+				</div>
+			</div>
 
+			<!-- 폰번호 Modal -->
+			<div class="modal" id="numModal">
+				<div class="modal-dialog modal-custom">
+					<div class="modal-content">
+						<!-- Modal 헤더 -->
+						<div class="modal-header">
+							<h4 class="modal-title">내 정보 수정</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<!-- Modal 바디 -->
+						<div class="modal-body">
+							10초 인증 시 호텔고 이용과 상담 진행이 더욱 원활해집니다.
+							<input type="tel" class="input-box mt-3" id="input-num" placeholder="휴대폰 번호">
+						</div>
+						<!-- Modal 푸터 -->
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">인증번호 받기</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -219,7 +250,16 @@
 				<a href="#">회원탈퇴</a>
 			</div>
 		</div>
-
+		<script>
+			$(".info-item").click(function(){
+				$($(this).data("target"))
+				.find("input")
+				.val($(this)
+					.find(".value>span")
+					.text()
+				);
+			})
+		</script>
 	</main>
 </body>
 
