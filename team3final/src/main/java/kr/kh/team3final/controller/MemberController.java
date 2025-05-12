@@ -5,12 +5,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
 @Controller
 @RequestMapping("/member")
 public class MemberController {
 	
 	@GetMapping("/mypage")
 	public String mypage() {
-		return "/member/mypage";
+		return "member/mypage";
 	}
+	@GetMapping("/reservation-history")
+	public String reservation() {
+		return "member/reservation-history";
+	}
+	@GetMapping("/view-review")
+	public String view() {
+		return "member/view-review";
+	}
+	
 }
