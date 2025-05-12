@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html 
-lang="en"
-xmlns:th="http://www.thymeleaf.org" 
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 	<meta charset="UTF-8">
     <title layout:fragment="title">Default Title</title>
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 	<!-- jQuery library -->
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
@@ -18,15 +17,79 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 	<!-- Latest compiled JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+	<style>
+		.dimmed {
+			filter: grayscale(100%) brightness(1) contrast(0.8);
+			opacity: 0.6;
+			transition: filter 0.3s ease, opacity 0.3s ease;
+		}
+		/* flexbox를 사용하여 main과 footer의 위치를 제어 */
+		.wrapper {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+		.info-foot {
+			font-size: 11px;
+			color: gray;
+		}
+		/* 기본은 데스크톱용(A) 보이기 */
+		.footer-big {
+			display: block;
+		}
+		.footer-small {
+			display: none;
+		}
+		.bottom-nav {
+			display: flex;
+			justify-content: space-around;
+			background: #fff;
+			padding: 10px 0;
+			border-top: 1px solid #ddd;
+		}
+
+		.nav-item {
+			text-align: center;
+			color: #aaa;
+			font-size: 12px;
+		}
+
+		.nav-item:hover {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		.nav-item i {
+			font-size: 20px;
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		.select-active {
+			color: #007bff; /* 파란색 */
+		}
+		/* 반응형 조건: 768px 이하에서는 모바일용(B)만 보이게 */
+		@media (max-width: 768px) {
+			.footer-big {
+				display: none;
+			}
+			.footer-small {
+				display: block;
+			}
+		}
+	</style>
 </head>
 <body>
-	<!-- 고정 헤더 -->
-	<div th:replace="~{layout/header.html :: header}"></div> <!-- 헤더 불러오기 -->
-	<!-- 컨텐츠 영역 -->
-	 <main layout:fragment="content">
-		<h1>기본 내용</h1>
-	 </main>
-	<!-- 고정 푸터 -->
-	<div th:replace="~{layout/footer.html :: footer}"></div> <!-- 푸터 불러오기 -->
+	<div class="wrapper d-flex flex-column min-vh-100">
+		<!-- 고정 헤더 -->
+		<div th:replace="~{layout/header.html :: header}"></div> <!-- 헤더 불러오기 -->
+		<!-- 컨텐츠 영역 -->
+		<main class="main-content flex-fill" layout:fragment="content">
+			<h1>기본 내용</h1>
+		</main>
+		<!-- 고정 푸터 -->
+		<div th:replace="~{layout/footer.html :: footer}"></div> <!-- 푸터 불러오기 -->
+	</div>
 </body>
 </html>

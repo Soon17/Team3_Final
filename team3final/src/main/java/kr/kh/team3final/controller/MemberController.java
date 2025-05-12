@@ -1,0 +1,36 @@
+package kr.kh.team3final.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+
+
+@Controller
+@RequestMapping("/member")
+public class MemberController {
+	
+	@GetMapping("/mypage")
+	public String mypage() {
+		return "member/mypage";
+	}
+	@GetMapping("/reservation-history")
+	public String reservation() {
+		return "member/reservation-history";
+	}
+	@GetMapping("/view-review")
+	public String view() {
+		return "member/view-review";
+	}
+	@GetMapping("/reservation-hotel")
+	public String myHotel(Model model) {
+		return "member/reservation-hotel";
+	}
+	@GetMapping("/reservation-rent")
+	public String myRent(Model model) {
+		return "member/reservation-rent";
+	}
+	
+}

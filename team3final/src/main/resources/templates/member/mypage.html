@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html
+	lang="en" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{layout/layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>마이페이지</title>
+	<style>
+		.mypage {
+			font-family: sans-serif;
+			padding: 40px 20px;
+			max-width: 80%;
+			margin: auto;
+			color: #333;
+		}
+
+		/* 사용자 영역 */
+		.user-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			margin-bottom: 10px;
+		}
+		.user-info .username {
+			font-size: 18px;
+			font-weight: bold;
+		}
+		.user-info .email {
+			display: block;
+			font-size: 13px;
+			color: #777;
+		}
+		.family-btn {
+			font-size: 12px;
+			background: #f1f1f1;
+			border: none;
+			border-radius: 12px;
+			padding: 4px 10px;
+			cursor: pointer;
+		}
+
+		/* 요약 카드 */
+		.summary {
+			display: flex;
+			justify-content: space-between;
+			margin: 20px 0;
+		}
+		.summary-item {
+			flex: 1;
+			background: #fafafa;
+			text-align: center;
+			padding: 10px;
+			margin: 0 5px;
+			border-radius: 8px;
+			font-size: 14px;
+			color: gray;
+			cursor: pointer;
+		}
+		.summary-item:hover {
+			text-decoration: none;
+  			color: inherit;
+		}
+		.summary-item i {
+			font-size: 20px;
+			color: #aaa;
+			margin-bottom: 4px;
+		}
+
+		/* 패밀리 라운지 링크 */
+		.family-link {
+			text-align: right;
+			font-size: 13px;
+			margin-bottom: 15px;
+		}
+
+		/* 탭 메뉴 */
+		.tabs {
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #eee;
+			margin-bottom: 20px;
+		}
+		.tab {
+			padding: 10px;
+			font-size: 14px;
+			color: #aaa;
+			cursor: pointer;
+		}
+		.tab.active {
+			color: #007bff;
+			border-bottom: 2px solid #007bff;
+			font-weight: bold;
+		}
+
+		/* 렌트 없음 박스 */
+		.empty-box {
+			text-align: center;
+			color: #444;
+		}
+		.empty-box img {
+			width: 100px;
+			margin-bottom: 20px;
+		}
+		.main-text {
+			font-size: 16px;
+			font-weight: bold;
+		}
+		.sub-text {
+			font-size: 14px;
+			color: #777;
+			margin: 10px 0 20px;
+		}
+		.primary-btn {
+			border: 1px solid #007bff;
+			background: none;
+			color: #007bff;
+			padding: 10px 20px;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+		.primary-btn:hover {
+			text-decoration: none;
+		}
+		.link-btn {
+			display: block;
+			margin-top: 15px;
+			font-size: 13px;
+			color: #666;
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+	<main layout:fragment="content">
+		<div class="mypage bg-light">
+			<!-- 사용자 정보 -->
+			<div class="user-header">
+			  <div class="user-info">
+				<strong class="username">학교가는자존심님</strong>
+				<span class="email">acejsh77@gmail.com</span>
+			  </div>
+			</div>
+		  
+			<!-- 요약 영역 -->
+			<div class="summary">
+			  <a class="summary-item" href="/member/reservation-history">
+				<i class="fa fa-file-alt"></i>
+				<p>예약내역</p>
+			  </a>
+			  <a class="summary-item" href="/member/view-review">
+				<i class="fa fa-pen"></i>
+				<p>나의리뷰</p>
+			  </a>
+			</div>
+		  
+			<!-- 탭 메뉴 -->
+			<div class="tabs">
+				<div class="tab active"  id="reservation-hotel">호텔</div>
+				<div class="tab" id="reservation-rent">렌트카</div>
+			</div>
+
+			<!-- 기본은 호텔 내역 -->
+			<div class="empty-box">
+				<p class="main-text">예약하신 호텔 내역이 없습니다 :)</p>
+				<p class="sub-text">지금 호텔 예약하고<br>신나는 여행 떠나볼까요?</p>
+				<a class="primary-btn" href="/">호텔 보러가기</a>
+			</div>
+		  </div>
+		  <script>
+			$("#reservation-hotel").click(function () {
+				$(this).addClass("active");
+				$("#reservation-rent").removeClass("active");
+				$.ajax({
+					url: '/member/reservation-hotel',  // 서버의 URL
+					method: 'GET',
+					success: function (data) {
+						$('.empty-box').html(data);  // 요소 내부 HTML 변경
+					}
+				});
+			});
+			$("#reservation-rent").click(function () {
+				$(this).addClass("active");
+				$("#reservation-hotel").removeClass("active");
+				$.ajax({
+					url: '/member/reservation-rent',  // 서버의 URL
+					method: 'GET',
+					success: function (data) {
+						$('.empty-box').html(data);  // 요소 내부 HTML 변경
+					}
+				});
+			});
+		  </script>
+	</main>
+</body>
+</html>
