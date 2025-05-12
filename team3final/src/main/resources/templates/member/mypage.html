@@ -130,6 +130,10 @@
 			color: #666;
 			text-decoration: underline;
 		}
+		.btn-modify {
+			border-color: gray;
+			font-size: 12px;
+		}
 	</style>
 </head>
 <body>
@@ -137,16 +141,17 @@
 		<div class="mypage bg-light">
 			<!-- 사용자 정보 -->
 			<div class="user-header">
-			  <div class="user-info">
-				<strong class="username">학교가는자존심님</strong>
-				<span class="email">acejsh77@gmail.com</span>
-			  </div>
+				<div class="user-info">
+					<strong class="username">학교가는자존심님</strong>
+					<span class="email">acejsh77@gmail.com</span>
+				</div>
+				<a class="btn btn-modify" href="/member/modify">내 정보 관리</a>
 			</div>
 		  
 			<!-- 요약 영역 -->
 			<div class="summary">
 			  <a class="summary-item" href="/member/reservation-history">
-				<i class="fa fa-file-alt"></i>
+				<i class="fa fa-calendar"></i>
 				<p>예약내역</p>
 			  </a>
 			  <a class="summary-item" href="/member/view-review">

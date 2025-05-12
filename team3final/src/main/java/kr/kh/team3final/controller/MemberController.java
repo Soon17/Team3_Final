@@ -1,7 +1,6 @@
 package kr.kh.team3final.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,12 +24,15 @@ public class MemberController {
 		return "member/view-review";
 	}
 	@GetMapping("/reservation-hotel")
-	public String myHotel(Model model) {
+	public String myHotel() {
 		return "member/reservation-hotel";
 	}
 	@GetMapping("/reservation-rent")
-	public String myRent(Model model) {
+	public String myRent() {
 		return "member/reservation-rent";
 	}
-	
+	@GetMapping("/modify")
+	public String modify() {
+		return "member/modify";
+	}
 }
