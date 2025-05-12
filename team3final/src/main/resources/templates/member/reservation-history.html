@@ -9,12 +9,54 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>예약내역</title>
 	<style>
+		.tab {
+			width: 50%;
+			text-align: center;
+			padding: 10px 20px;
+			color: #888;
+			cursor: pointer;
+		}
+		.tab.active {
+			color: #007bff;
+			border-bottom: 2px solid #007bff;
+		}
+		.state-select{
+			border: 1px solid #ced4da;
+			border-radius: .5rem;
+			padding: .5rem 1.5rem .5rem .75rem;
+			appearance: none;
+			-webkit-appearance: none;
+			background: #fff url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMyAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Im05LjUgNC0zIDMtMy0zIiBzdHJva2U9IiM5OTkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K) no-repeat center right .5rem;
+		}
 	</style>
 </head>
 <body>
 	<main layout:fragment="content">
-		<h1>예약내역</h1>
-		
+		<div style="width: 100%; border-top: 1px solid #eeeeee;"></div>
+		<div class="main-text" style="text-align: center; padding: 2rem 0;">
+			<h1 class="js-hero-pc-title" style="font-size: 24px; color: #333;">예약내역</h1>
+		</div>
+		<div style="width: 70%; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; width: 768px;">
+			<div id="tab-menu" style="display: flex; justify-content: center; margin-top: 20px; border-bottom: 2px solid #ddd;">
+				<div class="tab" onclick="changeTab(this)">렌트카</div>
+				<div class="tab active" onclick="changeTab(this)">호텔</div>
+			</div>
+			<select class="state-select"style="margin-top: 1rem; width: 100%; padding: .75rem; color: #494949; font-size: .875rem;">
+				<option>전체</option>
+				<option>예약완료</option>
+				<option>취소/환불</option>
+			</select>
+		</div>
+		<script>
+			function changeTab(clickedTab) {
+				const $tabs = $('.tab');
+				$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
+				$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
+				const selectedText = $(clickedTab).text();
+				const content = selectedText === '렌트카' ? '렌트카 리뷰가 없습니다.' : '호텔 리뷰가 없습니다.';
+				$('#tab-content').text(content);
+			}
+		</script>	
 	</main>
 </body>
 </html>
