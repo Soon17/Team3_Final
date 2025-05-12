@@ -26,6 +26,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	}
 
 	.row{
+		max-width: 1032px;
 		display: flex;
 		justify-content: center;
 		flex-wrap: nowrap;
@@ -227,7 +228,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				$details.stop(true, true).slideUp(200);
 				$arrows.attr("src", "/imgs/small-down.png");
 			}
-		}
+		};
 	
 		$(document).ready(function () {
 			$(".priceDetail").hide();

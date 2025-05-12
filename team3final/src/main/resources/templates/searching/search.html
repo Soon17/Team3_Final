@@ -14,18 +14,32 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     font-family: 'Noto Sans KR', sans-serif;
 	}
 
+	.sear{
+		margin-bottom: 20px;
+		padding: 10px;
+		height: 119px;
+		background-color: #fff;
+		align-items: center;
+	}
+
+	.row{
+		display: flex;
+		flex-wrap: nowrap !important;
+		justify-content: center;
+		max-width: 1032px;
+		margin: 0px;
+	}
+
 	.container-box {
 		background-color: #f5f6f7;
-		padding: 30px;
 		border-radius: 10px;
-		box-shadow: 0 0 10px rgba(0,0,0,0.05);
   }
 
 	.sort-options {
 		display: flex;
 		gap: 16px;
-		background: #f5f6f7;
-		padding: 10px 20px;
+		background: white;
+		padding: 5px 15px;
 		border-radius: 30px;
 		justify-content: flex-end;
 	}
@@ -37,6 +51,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		font-size: 14px;
 		color: #666;
 		font-weight: 400;
+		font-size: 12px;
+		margin: 0;
 	}
 	
 	.sort-options input[type="radio"] {
@@ -58,39 +74,47 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		border-radius: 50%;
 	}
 
+	.search-box-area {
+		width: 430px;
+		margin-right: 24px; /* 여유 간격 */
+	}
 </style>
 </head>
 <body >
-	<main layout:fragment="content" class="container mb-5">
-		<div class="col-md-7 container-box mr-3">
-			<div class="d-flex justify-content-between align-items-center mb-2">
-				<div>
-					<h5 class="mb-0">검색결과</h5>
-					<small class="text-muted">숙소 223개</small>
+	<main layout:fragment="content" class="mb-5" style="width: 100%; padding: 0;">
+		<div class="sear">
+			<h1>tlqkd</h1>
+		</div>
+		<div class="row">
+			<div id="search-find" class="search-box-area">
+					<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+			</div>
+			<div class="col-md-7 container-box">
+				<div class="d-flex justify-content-between align-items-center mb-2">
+					<div>
+						<h5 class="mb-0">검색결과</h5>
+						<small class="text-muted">숙소 223개</small>
+					</div>
+					<div class="sort-options">
+						<label><input type="radio" name="sort" value="추천순"> <span>추천순</span></label>
+						<label><input type="radio" name="sort" value="가격순" checked> <span>가격순</span></label>
+						<label><input type="radio" name="sort" value="성급순"> <span>성급순</span></label>
+						<label><input type="radio" name="sort" value="평점순"> <span>평점순</span></label>
+						<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
+					</div>
+				</div>	
+				<div class="d-flex justify-content-between align-items-center mb-2">
+					<a href="" style="display: flex;">
+						<div>사진</div>
+						<div>내용</div>
+					</a>
 				</div>
-				<div class="sort-options">
-					<label><input type="radio" name="sort" value="추천순"> <span>추천순</span></label>
-					<label><input type="radio" name="sort" value="가격순" checked> <span>가격순</span></label>
-					<label><input type="radio" name="sort" value="성급순"> <span>성급순</span></label>
-					<label><input type="radio" name="sort" value="평점순"> <span>평점순</span></label>
-					<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
-				</div>
-			</div>	
-			<div class="d-flex justify-content-between align-items-center mb-2">
-				<a href="">
-					<div>사진</div>
-					<div>내용</div>
-				</a>
 			</div>
 		</div>
-		<div class="col-md-5" id="search-find" style="position: relative; overflow: visible;">
-			<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
-		</div>
-
 		<script>
 			function toggleDetailAll() {
 				const $arrows = $(".arrowImg");
-		
+				
 				$.ajax({
 					url: '/searching/find',
 					type: 'GET',
@@ -101,7 +125,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						console.error("요청 실패", xhr);
 					}
 				});
-			};
+			}
+
+			$(document).ready(function () {
+				toggleDetailAll();
+			});
 		</script>
 	</main>
 </body>

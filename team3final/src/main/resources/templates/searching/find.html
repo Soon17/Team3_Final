@@ -8,27 +8,155 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8">
 <style>
   .search-box {
-		position: fixed;
-		width: 430px;
+    display: flex;
+		width: 336px;
 		z-index: 10;
+    overflow-y: auto;
 		background-color: #fff;
-		padding: 30px;
 		border-radius: 10px;
 		box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .section {
+    margin-bottom: 15px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    padding-bottom: 8px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    color: #333;
+  }
+
+  .section:first-of-type .section-title {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .sub-text {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 10px;
+  }
+
+  .btn-map {
+    width: 100%;
+    padding: 10px;
+    background-color: #f5f6f7;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .search-bar {
+    display: flex;
+    gap: 8px;
+  }
+
+  .search-bar input {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .search-bar button {
+    padding: 8px 12px;
+    background-color: #4564b8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 6px 12px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    background-color: #4564b8;
+    color: white;
+    border-color: #4564b8;
+  }
+
+  .price-range {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+  }
+
+  .range-slider {
+    width: 100%;
   }
 </style>
 </head>
 <body>
-<main layout:fragment="content" class="mb-5">
   <div class="search-box">
-    <h1>시바라시발</h1>
-  </div>
+    <div class="section">
+      <div class="section-title">지도보기</div>
+      <div class="sub-text">지도에서 호텔 위치를 확인해보세요!</div>
+      <button class="btn-map">지도보기</button>
+    </div>
 
-  <script>
-    function toggleDetailAll() {
-      const $arrows = $(".arrowImg");
-    }
-  </script>
-</main>
+    <div class="section">
+      <div class="section-title">결과 내에서 검색</div>
+      <div class="search-bar">
+        <input type="text" placeholder="호텔명 혹은 지역명으로 검색">
+        <button>검색</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">특가</div>
+      <button class="filter-btn">패밀리 특가 보기</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">성급</div>
+      <div class="filter-group">
+        <button class="filter-btn">5성급</button>
+        <button class="filter-btn">4성급</button>
+        <button class="filter-btn">3성급</button>
+        <button class="filter-btn">2성급 이하</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">평점</div>
+      <div class="filter-group">
+        <button class="filter-btn">5.0 이상</button>
+        <button class="filter-btn">4.0 이상</button>
+        <button class="filter-btn">3.0 이상</button>
+        <button class="filter-btn">2.0 이상</button>
+        <button class="filter-btn">1.0 이상</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">가격</div>
+      <p class="price-range">0원 ~ 206만원</p>
+      <input type="range" min="0" max="100" value="50" class="range-slider">
+    </div>
+  </div>
 </body>
 </html>
