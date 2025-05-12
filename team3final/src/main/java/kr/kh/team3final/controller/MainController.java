@@ -34,5 +34,9 @@ public class MainController {
 		return "regionLodgingList";
 	}
 	
-
+	@GetMapping("/reserv")
+	public String reserv() {
+		return "reserv";
+	}
+	
 }
