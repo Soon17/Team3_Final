@@ -115,7 +115,7 @@
 <body>
 	<div layout:fragment="content">
 		<div>
-			<div class="swiper event-swiper">
+			<div class="swiper event-swiper d-md-flex" >
 				<div class="swiper-wrapper">
 					<div class="swiper-slide first">
 						<a class="link" href="#">
@@ -408,8 +408,7 @@
 				</div>
 			</div>
 		</div>
-		 
-		  <script>
+		<script>
 			const swiper = new Swiper(".event-swiper", {
 				loop: true,
 				autoplay: {
@@ -468,7 +467,7 @@
 					$(this).children().first().trigger("click")
 				});
   			});
-		  </script>
+		</script>
 	</div>
 </body>
 </html>
