@@ -55,7 +55,7 @@
 			margin-top: 0; width: 100px; flex-direction: row-reverse; flex: 1.6 1; overflow: hidden;
 		}
 		.infor-map{
-			display: flex; height: 100px; width: 200px; flex: 1 1; background-image: url(/img/지도.jpg);
+			display: flex; height: 100px; width: 200px; flex: 1 1; background-image: url(/resources/static/img/지도.jpg);
 		}
 		.infor-item2{
 			flex-direction: row-reverse; gap: 3.375rem; display: flex;
@@ -162,7 +162,7 @@
 		}
 		.hotel-map-datail{
 			position: relative; overflow: hidden; user-select: none; -webkit-user-drag: none;left: 0px; top: 0px;width: 968px; height: 150px; z-index: 0;
-			background-image: url(/img/지도.jpg);
+			background-image: url(/resources/static/img/지도.jpg);
 		}
 		.sub-infor{
 			font-size: 1rem; border: 0; border-radius: 4px; padding: .375rem .75rem; white-space: nowrap; cursor: pointer; transition: all 2s ease-in-out;
@@ -183,6 +183,10 @@
 		.hotel-rivew{
 			padding: 1rem; background-color: #fff; padding-top: 2rem; margin: 0; padding-left: 2rem; padding-right: 2rem;
 		}
+		.list-menu{
+			display: block; position: absolute; top: 1.313rem; right: 0; width: 14.25rem; background-color: #fff; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, .1);
+			border-radius: 12px; backdrop-filter: blur(50px); font-size: .875rem; color: #000; transition: all .3s;
+		}
 	</style>
 </head>
 <body style="background-color: #f5f6f7;">
@@ -191,11 +195,11 @@
 			<div class="container">
 				<div class="reserv-img">
 					<div class="img-gallary">
-						<img src="/img/호텔.jpg" alt="이미지 없음">
-						<img src="/img/호텔2.jpg" alt="이미지 없음">
-						<img src="/img/호텔3.jpg" alt="이미지 없음">
-						<img src="/img/호텔4.jpg" alt="이미지 없음">
-						<img src="/img/호텔.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔2.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔3.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔4.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔.jpg" alt="이미지 없음">
 					</div>
 					<div class="img-all">
 						<span class="img-all2">모두보기</span>
@@ -218,21 +222,27 @@
 						</div>
 						<div class="service-value">
 							<div class="service-name">
+								<i class="fas fa-wifi"></i>
 								<span>무료 유선 인터넷</span>
 							</div>
 							<div class="service-name">
+								<i class="fas fa-utensils"></i>
 								<span>아침 식사 가능(요금 별도)</span>
 							</div>
 							<div class="service-name">
-								<span>커피숍/카페 수 - 1</span>
+								<i class="fas fa-newspaper"></i>
+								<span>로비의 신문(요금 별도)</span>
 							</div>
 							<div class="service-name">
+								<i class="fas fa-cart-flatbed-suitcase"></i>
 								<span>짐 보관 서비스</span>
 							</div>
 							<div class="service-name">
+								<i class="fas fa-check"></i>
 								<span>점자표지</span>
 							</div>
 							<div class="service-name">
+								<i class="fas fa-ban-smoking"></i>
 								<span>금연 숙박 시설</span>
 							</div>
 						</div>
@@ -258,6 +268,7 @@
 									<div class="date-box">
 										<div class="date-item">
 											<div>
+												<i class="fas fa-square-list"></i>
 												<span class="date-write">5.9(금)</span>
 												<span class="date-write">></span>
 												<span class="date-write">5.10(토)</span>
@@ -267,6 +278,7 @@
 									<button class="date-btn">
 										<div class="date-item">
 											<div>
+												<i class="fas fa-user"></i>
 												<span class="date-write">성인 2</span>
 											</div>
 										</div>
@@ -289,11 +301,11 @@
 								<div class="hotel-box">
 									<div class="hotel-img">
 										<div class="img1" style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-											<img src="/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+											<img src="/resources/static/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
 										</div>
 										<div class="img-sub">
-											<img src="/img/호텔3.jpg" alt="">
-											<img src="/img/호텔4.jpg" alt="">
+											<img src="/resources/static/img/호텔3.jpg" alt="">
+											<img src="/resources/static/img/호텔4.jpg" alt="">
 										</div>
 										<div style="margin-top: 1rem;">
 											<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">디럭스 프리미엄룸</div>
@@ -350,11 +362,11 @@
 								<div class="hotel-box">
 									<div class="hotel-img">
 										<div class="img1" style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-											<img src="/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+											<img src="/resources/static/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
 										</div>
 										<div class="img-sub">
-											<img src="/img/호텔3.jpg" alt="">
-											<img src="/img/호텔4.jpg" alt="">
+											<img src="/resources/static/img/호텔3.jpg" alt="">
+											<img src="/resources/static/img/호텔4.jpg" alt="">
 										</div>
 										<div style="margin-top: 1rem;">
 											<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">디럭스 프리미엄룸</div>
@@ -411,11 +423,11 @@
 								<div class="hotel-box">
 									<div class="hotel-img">
 										<div class="img1" style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-											<img src="/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+											<img src="/resources/static/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
 										</div>
 										<div class="img-sub">
-											<img src="/img/호텔3.jpg" alt="">
-											<img src="/img/호텔4.jpg" alt="">
+											<img src="/resources/static/img/호텔3.jpg" alt="">
+											<img src="/resources/static/img/호텔4.jpg" alt="">
 										</div>
 										<div style="margin-top: 1rem;">
 											<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">디럭스 프리미엄룸</div>
@@ -472,11 +484,11 @@
 								<div class="hotel-box">
 									<div class="hotel-img">
 										<div class="img1" style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-											<img src="/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+											<img src="/resources/static/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
 										</div>
 										<div class="img-sub">
-											<img src="/img/호텔3.jpg" alt="">
-											<img src="/img/호텔4.jpg" alt="">
+											<img src="/resources/static/img/호텔3.jpg" alt="">
+											<img src="/resources/static/img/호텔4.jpg" alt="">
 										</div>
 										<div style="margin-top: 1rem;">
 											<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">디럭스 프리미엄룸</div>
@@ -533,11 +545,11 @@
 								<div class="hotel-box">
 									<div class="hotel-img">
 										<div class="img1" style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-											<img src="/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+											<img src="/resources/static/img/호텔2.jpg" alt="" style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
 										</div>
 										<div class="img-sub">
-											<img src="/img/호텔3.jpg" alt="">
-											<img src="/img/호텔4.jpg" alt="">
+											<img src="/resources/static/img/호텔3.jpg" alt="">
+											<img src="/resources/static/img/호텔4.jpg" alt="">
 										</div>
 										<div style="margin-top: 1rem;">
 											<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">디럭스 프리미엄룸</div>
@@ -668,7 +680,10 @@
 												<h3 style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">호텔 편의시설 및 서비스</h3>
 												<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
 													<div style="flex: 1 1;">
-														<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">인터넷</h4>
+														<div style="display: flex; align-items: center; gap: 0.5rem;">
+															<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">인터넷</h4>
+															<i class="fas fa-wifi"></i>
+														</div>
 														<div style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 															<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
 																<div style="flex: 1 1 49%; width: 49%;">무료 유선 인터넷</div>
@@ -680,7 +695,10 @@
 												<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
 												<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
 													<div style="flex: 1 1;">
-														<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">식사 및 음료</h4>
+														<div style="display: flex; align-items: center; gap: 0.5rem;">
+															<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">식사 및 음료</h4>
+															<i class="fas fa-utensils"></i>
+														</div>
 														<div style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 															<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
 																<div style="flex: 1 1 49%; width: 49%;">아침 식사 가능(요금 별도)</div>
@@ -691,7 +709,10 @@
 												<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
 												<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
 													<div style="flex: 1 1;">
-														<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">편의시설</h4>
+														<div style="display: flex; align-items: center; gap: 0.5rem;">
+															<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">편의시설</h4>
+															<i class="fas fa-newspaper"></i>
+														</div>
 														<div style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 															<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
 																<div style="flex: 1 1 49%; width: 49%;">커피숍/카페 수 - 1</div>
@@ -704,7 +725,10 @@
 												<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
 												<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
 													<div style="flex: 1 1;">
-														<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">리셉션 서비스</h4>
+														<div style="display: flex; align-items: center; gap: 0.5rem;">
+															<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">리셉션 서비스</h4>
+															<i class="fas fa-cart-flatbed-suitcase"></i>
+														</div>
 														<div style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 															<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
 																<div style="flex: 1 1 49%; width: 49%;">짐 보관 서비스</div>
@@ -717,7 +741,10 @@
 												<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
 												<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
 													<div style="flex: 1 1;">
-														<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">장애인 편의시설</h4>
+														<div style="display: flex; align-items: center; gap: 0.5rem;">
+															<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">장애인 편의시설</h4>
+															<i class="fas fa-check"></i>
+														</div>
 														<div style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 															<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
 																<div style="flex: 1 1 49%; width: 49%;">점자표지</div>
@@ -730,7 +757,10 @@
 												<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
 												<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
 													<div style="flex: 1 1;">
-														<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">기타</h4>
+														<div style="display: flex; align-items: center; gap: 0.5rem;">
+															<h4 style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">기타</h4>
+															<i class="fas fa-check"></i>
+														</div>
 														<div style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 															<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
 																<div style="flex: 1 1 49%; width: 49%;">금연 숙박 시설</div>
@@ -1049,11 +1079,126 @@
 																</div>
 															</div>
 														</div>
+														<!-- 댓글 스와이프 -->
 														<div style="position: relative; margin-left: 0; padding-left: 1rem; width: 50%; flex: 1 1 50%;">
 															<div style="padding: 0 .5rem !important;">
 
 															</div>
 														</div>
+													</div>
+													<!-- 리뷰 리스트 -->
+													<div style="display: flex; flex-direction: column; gap: 1rem;">
+														<div style="display: flex; justify-content: space-between;align-items: center;">
+															<div style="font-size: 1rem; font-weight: bold; color: #494949;">트러스트 리뷰</div>
+															<div style="display: flex; align-items: center; gap: .25rem; cursor: pointer; height: 1.313rem; position: relative;">
+																<div style="font-size: .875rem; color: #666;">평점 높은 순</div>
+															</div>
+															<!-- <div class="list-menu">
+																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
+																	<i class="fas fa-check"></i>
+																	<div style="color: #000; font-size: .875rem;">평점 높은 순</div>
+																</div>
+																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
+																	<i class="fas fa-check"></i>
+																	<div style="color: #000; font-size: .875rem;">평점 낮은 순</div>
+																</div>
+																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
+																	<i class="fas fa-check"></i>
+																	<div style="color: #000; font-size: .875rem;">최신순</div>
+																</div>
+															</div> -->
+														</div>
+														<!-- 리뷰 리스트 목록 -->
+														<div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+															<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+																<div style="display: flex; align-items: end; gap: .125rem;">
+																	<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
+																	<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0</div>
+																</div>
+																<div>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0 | 친절도 5.0 | 만족도 5.0</span>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe Room</span>
+																</div>
+															</div>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<i class="fas fa-user"></i>
+																<p style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">닉네임임. 쨋든 닉네임임</p>
+															</div>
+															<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+																<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+															</p>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+															<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+																<div style="display: flex; align-items: end; gap: .125rem;">
+																	<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
+																	<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0</div>
+																</div>
+																<div>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0 | 친절도 5.0 | 만족도 5.0</span>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe Room</span>
+																</div>
+															</div>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<i class="fas fa-user"></i>
+																<p style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">닉네임임. 쨋든 닉네임임</p>
+															</div>
+															<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+																<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+															</p>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+															<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+																<div style="display: flex; align-items: end; gap: .125rem;">
+																	<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
+																	<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0</div>
+																</div>
+																<div>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0 | 친절도 5.0 | 만족도 5.0</span>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe Room</span>
+																</div>
+															</div>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<i class="fas fa-user"></i>
+																<p style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">닉네임임. 쨋든 닉네임임</p>
+															</div>
+															<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+																<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+															</p>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+															<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+																<div style="display: flex; align-items: end; gap: .125rem;">
+																	<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
+																	<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0</div>
+																</div>
+																<div>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0 | 친절도 5.0 | 만족도 5.0</span>
+																	<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe Room</span>
+																</div>
+															</div>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<i class="fas fa-user"></i>
+																<p style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">닉네임임. 쨋든 닉네임임</p>
+															</div>
+															<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+																<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+															</p>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+															</div>
+														</div>
+														<button style="cursor: pointer; font-size: 1rem; border-radius: .5rem; color: #7b8bab; border: 1px solid #7b8bab; background: rgba(0, 0, 0, 0); gap: .25rem; justify-content: center; align-items: centerdis;
+														display: flex; width: 100%; margin: 1rem 0; padding: 7px 0;">더보기</button>
 													</div>
 												</div>
 											</div>
