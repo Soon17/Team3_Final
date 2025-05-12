@@ -8,11 +8,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<title>숙소 소개</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<!-- Kakao Maps API -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5243696dcf6fdf3e4e96416b90a0cd8d&autoload=false"></script>
+	<!-- jQuery, Popper.js, Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<style>
 		.container{
 			display: block; border-radius: 5px; padding: 0px; margin: auto; position: relative;
@@ -54,9 +58,9 @@
 		.infor-review{
 			margin-top: 0; width: 100px; flex-direction: row-reverse; flex: 1.6 1; overflow: hidden;
 		}
-		.infor-map{
-			display: flex; height: 100px; width: 200px; flex: 1 1; background-image: url(/resources/static/img/지도.jpg);
-		}
+		/* .infor-map{
+			display: flex; height: 100px; width: 200px; flex: 1 1;
+		} */
 		.infor-item2{
 			flex-direction: row-reverse; gap: 3.375rem; display: flex;
 		}
@@ -187,6 +191,9 @@
 			display: block; position: absolute; top: 1.313rem; right: 0; width: 14.25rem; background-color: #fff; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, .1);
 			border-radius: 12px; backdrop-filter: blur(50px); font-size: .875rem; color: #000; transition: all .3s;
 		}
+		/* #map{
+			background-color: red;
+		} */
 	</style>
 </head>
 <body style="background-color: #f5f6f7;">
@@ -211,11 +218,10 @@
 					<span class="infor-star">5성급</span>
 					<p class="infor-name">KH호텔</p>
 				<div class="infor-sub">
-					<div class="infor-map"></div>
+					<div id="map" style="width: 300px; height: 200px; margin: 20px 0;"></div>
 					<div class="infor-review">댓글</div>
 				</div>
 				<div class="infor-item2">
-					<div class="infor-sale">할인 혜택</div>
 					<div class="infor-service">
 						<div class="infor-title">
 							<span>호텔 편의시설 및 서비스</span>
@@ -1212,5 +1218,23 @@
 			</div>
 		</main>
 	</div>
+	<script type="text/javascript">
+    window.onload = function () {
+        kakao.maps.load(function () {
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 3
+            };
+            var map = new kakao.maps.Map(container, options);
+
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(33.450701, 126.570667)
+            });
+            marker.setMap(map);
+
+        });
+    }; 
+</script>
 </body>
 </html>
