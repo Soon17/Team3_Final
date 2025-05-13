@@ -1,9 +1,20 @@
 package kr.kh.team3final.controller;
 
+import java.lang.reflect.Member;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.kh.team3final.model.vo.MemberVO;
+import kr.kh.team3final.service.MemberService;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -13,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/member")
 public class MemberController {
 	
+	@Autowired
+	MemberService memberService;
+
 	@GetMapping("/mypage")
 	public String mypage() {
 		return "member/mypage";
@@ -40,6 +54,17 @@ public class MemberController {
 	@GetMapping("/singIn")
 	public String getMethodName() {
 		return "member/signIn";
+	}
+	@PostMapping("/check/id")
+	@ResponseBody
+	public boolean checkId(@RequestParam String id) {
+		return memberService.checkId(id);
+	}
+	
+	@PostMapping("/signup")
+	public String signUp(@RequestParam MemberVO member) {
+
+		return "home";
 	}
 	
 }

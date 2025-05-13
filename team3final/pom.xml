@@ -82,6 +82,41 @@
 		 	</artifactId>
 		 	<optional>true</optional>
 		 </dependency>
+		     <!-- Spring Web -->
+			 <dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+			</dependency>
+		
+			<!-- Thymeleaf (템플릿용) -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			</dependency>
+		
+			<!-- Validation -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-validation</artifactId>
+			</dependency>
+		
+			<!-- OkHttp (Solapi 통신용) -->
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>4.9.3</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.10.1</version> <!-- 또는 최신 안정 버전 -->
+			</dependency>
+			<dependency>
+				<groupId>net.nurigo</groupId>
+				<artifactId>sdk</artifactId>
+				<version>4.2.7</version>
+			</dependency>
 	</dependencies>
 
 	<build>
