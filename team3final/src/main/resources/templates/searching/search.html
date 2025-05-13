@@ -16,10 +16,11 @@
 		.row {
 			max-width: 1032px;
 			display: flex;
-			flex-wrap: nowrap !important;
-			justify-content: start;
+			flex-wrap: wrap;
+			justify-content: space-between;
 			margin: 0px auto;
-			padding-top: 30px;
+			padding-top: 40px;
+			padding-bottom: 100px;
 		}
 
 		.search-bar-wrap {
@@ -29,8 +30,6 @@
 		}
 
 		.search-bar-inner {
-			margin-left: 219px;
-			margin-right: 219px;
 			padding: 20px 0px;
 			display: flex;
 			gap: 21px;
@@ -64,6 +63,9 @@
 		.container-box {
 			background-color: #f5f6f7;
 			border-radius: 10px;
+			width: 100%;
+			max-width: 680px;
+			padding-right: 0;
 		}
 
 		.sort-options {
@@ -106,8 +108,10 @@
 		}
 
 		.search-box-area {
-			width: 330px;
-			margin-right: 50px;
+			width: 100%;
+			max-width: 330px;
+			margin-right: 20px;
+			position: fixed;
 		}
 
 		.card-link {
@@ -115,10 +119,10 @@
 			text-decoration: none;
 			color: inherit;
 			gap: 30px;
-			padding-top: 30px;
+			padding: 20px 15px;
 			background-color: #ffffff73;
-			width: 630px;
-			padding: 10px;
+			width: 100%;
+			justify-content: space-between;
 		}
 
 		.hotel-location {
@@ -126,27 +130,137 @@
 		}
 
 		.poto {
-			border-radius: 10px;
+			border-radius: 5px;
 			height: 208px;
 			width: 272px;
+
 		}
 
+		.price {
+			color: #9f1f13;
+			font-size: 20px;
+		}
+
+
 		.hotel-price {
-			display: flex;
-			justify-content: end;
+			align-self: flex-end;
 			font-weight: bold;
-			text-align: right;
-			margin-top: 110px;
-			margin-left: 180px;
+			font-size: 15px;
+			margin-top: auto;
 		}
 
 		.hotel-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100%;
 			padding: 10px;
+			padding-top: 0px !important;
+		}
+
+		.hotel-up {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			margin-right: 100px;
+		}
+
+		.hotel-grade {
+			display: flex;
+			gap: 4px;
+			align-items: flex-start;
+			flex-direction: row;
 		}
 
 		.card-link:hover {
 			color: inherit !important;
 			text-decoration: none !important;
+		}
+
+		.mobile-header {
+			display: none;
+			padding: 16px;
+			background: #fff;
+			font-size: 14px;
+			border-bottom: 1px solid #eee;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.im {
+			display: flex;
+			justify-content: center;
+		}
+
+		.star {
+			width: 16px;
+			height: 16px;
+		}
+
+		@media screen and (max-width: 1080px) {
+			header {
+				display: none;
+			}
+
+			.search-bar-wrap {
+				display: none;
+			}
+
+			.mobile-header {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				padding: 10px 30px;
+				align-items: center;
+				font-size: 14px;
+			}
+
+			.row {
+				align-content: center;
+				flex-direction: column;
+			}
+
+			.container-box {
+				margin-top: 10px;
+			}
+
+			.search-box-area {
+				display: none;
+			}
+
+			.poto {
+				max-width: 272px;
+				max-height: 208px;
+				height: 100%;
+				width: 100%;
+			}
+
+			.mobile-search {
+				display: flex;
+				width: 250px;
+				padding: 12px 16px;
+				background-color: #f8f8f8;
+				border: 1px solid #ddd;
+				border-radius: 8px;
+				font-size: 14px;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+
+		@media screen and (max-width: 720px) {
+			.card-link {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.poto {
+				max-width: 720px !important;
+				max-height: 250px !important;
+				height: 100%;
+				width: 100%;
+			}
+
 		}
 	</style>
 </head>
@@ -162,12 +276,24 @@
 				<button class="search-btn">검색</button>
 			</div>
 		</div>
+		<!-- 모바일 전용 헤더 -->
+		<div class="mobile-header">
+			<div class="mobile-header-top">
+				<span class="place-name" style="font-weight: bold;">신라 아이파크 몰</span>
+				<i class="fas fa-pen edit-icon" style="font-size: 10px;"></i>
+			</div>
+			<div class="mobile-header-bottom">
+				<span>05.13 (월) ~ 05.14 (수)</span>
+				<span> | </span>
+				<span>성인2</span>
+			</div>
+		</div>
 		<div class="row">
-			<div id="search-find" class="search-box-area">
+			<div id="search-find" class="search-box-area" style="position: relative; overflow: visible;">
 				<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
 			</div>
-			<div class="col-md-7 container-box">
-				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px; width: 630px;">
+			<div class="col-md-10 container-box">
+				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px;">
 					<div>
 						<h5 class="mb-0">검색결과</h5>
 						<small class="text-muted">숙소 223개</small>
@@ -186,9 +312,15 @@
 							<img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
 						</div>
 						<div class="hotel-info">
-							<div class="hotel-name">롯데 호텔 월드</div>
-							<div class="hotel-grade">⭐ 4.6 (999+) · 5성급</div>
-							<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
+							<div class="hotel-up">
+								<div class="hotel-name">롯데 호텔 월드</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">4.6 (999+)</span>
+									<span class="hotel-stars">· 4성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
+							</div>
 							<div class="hotel-price">
 								<span class="price">321,268원</span> /1박
 							</div>
@@ -201,9 +333,15 @@
 							<img class="poto" src="/resources/static/imgs/hotel2.png" alt="호텔2">
 						</div>
 						<div class="hotel-info">
-							<div class="hotel-name">멋져 호텔 월드</div>
-							<div class="hotel-grade">⭐ 4.8 (999+) · 4성급</div>
-							<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
+							<div class="hotel-up">
+								<div class="hotel-name">멋져 호텔 월드</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">4.8 (999+)</span>
+									<span class="hotel-stars">· 5성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
+							</div>
 							<div class="hotel-price">
 								<span class="price">352268원</span> /1박
 							</div>
@@ -216,11 +354,38 @@
 							<img class="poto" src="/resources/static/imgs/hotel3.png" alt="호텔3">
 						</div>
 						<div class="hotel-info">
-							<div class="hotel-name">꿀잼 호텔 월드</div>
-							<div class="hotel-grade">⭐ 4.0 (9) · 3성급</div>
-							<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
+							<div class="hotel-up">
+								<div class="hotel-name">꿀잼 호텔 월드</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">4.5 (999+)</span>
+									<span class="hotel-stars">· 4성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
+							</div>
 							<div class="hotel-price">
 								<span class="price">35068원</span> /1박
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="im">
+					<a href="#" class="card-link">
+						<div class="hotel-image">
+							<img class="poto" src="/resources/static/imgs/hotel4.png" alt="호텔4">
+						</div>
+						<div class="hotel-info">
+							<div class="hotel-up">
+								<div class="hotel-name">래기 호텔</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">1.1 (9)</span>
+									<span class="hotel-stars">· 2성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 강남역에서 3500m</div>
+							</div>
+							<div class="hotel-price">
+								<span class="price">5000원</span> /1박
 							</div>
 						</div>
 					</a>
@@ -229,17 +394,20 @@
 		</div>
 		<script>
 			function toggleDetailAll() {
-				const $arrows = $(".arrowImg");
-
 				$.ajax({
 					url: '/searching/find',
 					type: 'GET',
 					success: function (data) {
 						$('#search-find').html(data);
+
+						// 버튼토글 이벤트 바인딩
+						const buttons = document.querySelectorAll('.filter-btn');
+						buttons.forEach(btn => {
+							btn.addEventListener('click', function () {
+								this.classList.toggle('active');
+							});
+						});
 					},
-					error: function (xhr) {
-						console.error("요청 실패", xhr);
-					}
 				});
 			}
 
