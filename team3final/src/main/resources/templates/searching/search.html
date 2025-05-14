@@ -334,9 +334,8 @@
 </head>
 
 <body>
-
-	<main layout:fragment="content" class="main-container">
-		<div class="search-bar-wrap">
+	<main layout:fragment="content" class="main-container"><!--메인-->
+		<div class="search-bar-wrap"><!--헤더 검색창-->
 			<div class="search-bar-inner">
 				<div class="search-input" onclick="openLocation()">📍 서울</div>
 				<div class="search-input" onclick="openDate()">🗓 05.13(월) ~ 05.15(수)</div>
@@ -356,6 +355,7 @@
 				<span>성인2</span>
 			</div>
 		</div>
+		<!--모바일 절용 헤더2-->
 		<div class="mobile-sort-bar">
 			<div class="sort-top">
 				<div class="left-buttons">
@@ -388,6 +388,7 @@
 						<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
 					</div>
 				</div>
+				<!--숙소 데이터 시작-->
 				<div class="im">
 					<a href="#" class="card-link">
 						<div class="hotel-image">
@@ -398,13 +399,17 @@
 								<div class="hotel-name">롯데 호텔 월드</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">4.6 (999+)</span>
+									<span class="review-score">
+										<span>4.6</span>
+										<span>(999+)</span>
+									</span>
 									<span class="hotel-stars">· 4성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">321,268원</span> /1박
+								<span class="price">321,268원</span>
+								<span>/1박</span>
 							</div>
 						</div>
 					</a>
@@ -419,13 +424,17 @@
 								<div class="hotel-name">멋져 호텔 월드</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">4.8 (999+)</span>
+									<span class="review-score">
+										<span>4.8</span>
+										<span>(999+)</span>
+									</span>
 									<span class="hotel-stars">· 5성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">352268원</span> /1박
+								<span class="price">352268원</span>
+								<span>/1박</span>
 							</div>
 						</div>
 					</a>
@@ -440,13 +449,17 @@
 								<div class="hotel-name">꿀잼 호텔 월드</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">4.5 (999+)</span>
+									<span class="review-score">
+										<span>4.5</span>
+										<span>(999+)</span>
+									</span>
 									<span class="hotel-stars">· 4성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">35068원</span> /1박
+								<span class="price">35068원</span>
+								<span>/1박</span>
 							</div>
 						</div>
 					</a>
@@ -461,17 +474,22 @@
 								<div class="hotel-name">래기 호텔</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">1.1 (9)</span>
+									<span class="review-score">
+										<span>1.1</span>
+										<span>(9)</span>
+									</span>
 									<span class="hotel-stars">· 2성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 강남역에서 3500m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">5000원</span> /1박
+								<span class="price">5000원</span>
+								<span>/1박</span>
 							</div>
 						</div>
 					</a>
 				</div>
+				<!--숙소 데이터 끝-->
 			</div>
 		</div>
 		<script>
@@ -502,7 +520,7 @@
 				const searchBoxArea = document.querySelector('.search-box-area');
 
 				// 초기 진입 시 위치 보정
-				if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+				if (searchBoxArea) searchBoxArea.style.transform = 'translateY(00px)';
 
 				window.addEventListener('scroll', function () {
 					const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
