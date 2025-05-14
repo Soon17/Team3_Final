@@ -114,7 +114,7 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<div>
+		<div>		
 			<div class="swiper event-swiper d-md-flex" >
 				<div class="swiper-wrapper">
 					<div class="swiper-slide first">
@@ -154,8 +154,8 @@
 						<option th:each="rg : ${regionList}" th:value="${rg.rg_num}" th:text="${rg.rg_name}">
 					</select>
 			  
-					<input type="text" name="checkin" value="05.09(금)" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
-					<input type="text" name="checkout" value="05.10(토)" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; border: 2px solid #000;background-color: #f8f8f8; border-radius: 0.5rem;" />
+					<input type="text" name="checkin" value="🗓 05.13(월) ~ 05.15(수)" readonly style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+					
 			  
 					<input type="text" name="guests" value="성인2" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
 			  
@@ -468,6 +468,8 @@
 				});
   			});
 		</script>
+
+   
 	</div>
 </body>
 </html>

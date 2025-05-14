@@ -33,7 +33,10 @@ public class MainController {
 		List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
 		return "regionLodgingList";
 	}
-	
+	@GetMapping("/test")
+	public String test() {
+		return "test";
+	}
 	@GetMapping("/reserv")
 	public String reserv() {
 		return "reserv";
