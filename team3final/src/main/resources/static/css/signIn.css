@@ -299,7 +299,7 @@ input:-webkit-autofill {
 	color: green;
 	font-size: 14px;
 }
-label.regex-error,#checkId,#smsSend,#check-sms {
+label.regex-error,#checkId,#smsSend,#sms-msg {
 	position: absolute;
 	top: 50%;
 	left: 62%;
@@ -311,7 +311,7 @@ label.regex-error,#checkId,#smsSend,#check-sms {
 	line-height: 22px;
 	letter-spacing: 0.5px;
 }
-#sms-btn:disabled,#checkSms:disabled,.me_agree:disabled {
+#sms-btn:disabled,#checkSms:disabled,.me_agree:disabled,#btn-singup:disabled {
 	background-color: #ccc;
 	cursor: not-allowed;
 }
