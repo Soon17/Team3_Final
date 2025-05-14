@@ -7,306 +7,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>마이페이지</title>
-	
-	<style>
+	<link rel="stylesheet" href="/resources/static/css/signIn.css">
 
-	.signInhtml{
-		font-family: 'Poppins', sans-serif;
-		font-weight: 300;
-		font-size: 15px;
-		line-height: 1.7;
-		color: #c4c3ca;
-		overflow-x: hidden;
-	}
-	.signIn-a, .signIn-p{
-		cursor: pointer;
-		transition: all 200ms linear;
-	}
-	.signIn-a:hover {
-		text-decoration: none;
-	}
-	.link {
-		color: #c4c3ca;
-	}
-	.link:hover {
-		color: #ffeba7;
-	}
-	.signIn-p {
-		font-weight: 500;
-		font-size: 14px;
-		line-height: 1.7;
-	}
-	h4 {
-		font-weight: 600;
-	}
-	h6 span{
-		padding: 0 20px;
-		text-transform: uppercase;
-		font-weight: 700;
-	}
-	.section{
-		position: relative;
-		width: 100%;
-		display: block;
-	}
-	.full-height{
-		min-height: 100vh;
-		}
-		[type="checkbox"]:checked,
-		[type="checkbox"]:not(:checked){
-		position: absolute;
-		left: -9999px;
-	}
-	.checkbox:checked + label,
-	.checkbox:not(:checked) + label{
-		position: relative;
-		display: block;
-		text-align: center;
-		width: 60px;
-		height: 16px;
-		border-radius: 8px;
-		padding: 0;
-		margin: 10px auto;
-		cursor: pointer;
-		background-color: #ffeba7;
-	}
-	.checkbox:checked + label:before,
-	.checkbox:not(:checked) + label:before{
-		position: absolute;
-		display: block;
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		color: #ffeba7;
-		background-color: #102770;
-		font-family: 'unicons';
-		content: '\eb4f';
-		z-index: 20;
-		top: -10px;
-		left: -10px;
-		line-height: 36px;
-		text-align: center;
-		font-size: 24px;
-		transition: all 0.5s ease;
-	}
-	.checkbox:checked + label:before {
-		transform: translateX(44px) rotate(-270deg);
-	}
-
-
-	.card-3d-wrap {
-		position: relative;
-		width: 440px;
-		max-width: 100%;
-		height: 600px;
-		-webkit-transform-style: preserve-3d;
-		transform-style: preserve-3d;
-		perspective: 800px;
-		margin-top: 60px;
-	}
-	.card-3d-wrapper {
-		width: 100%;
-		height: 100%;
-		position:absolute;    
-		top: 0;
-		left: 0;  
-		-webkit-transform-style: preserve-3d;
-		transform-style: preserve-3d;
-		transition: all 600ms ease-out; 
-	}
-	input:-webkit-autofill {
-		background-color: #1f2029 !important;
-		-webkit-box-shadow: 0 0 0px 1000px #1f2029 inset !important;
-		-webkit-text-fill-color: #c4c3ca !important;
-		transition: background-color 5000s ease-in-out 0s;
-	}
-	.card-front, .card-back {
-		width: 100%;
-		height: 100%;
-		background-color: #2a2b38;
-		background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
-		background-position: bottom center;
-		background-repeat: no-repeat;
-		background-size: 300%;
-		position: absolute;
-		border-radius: 6px;
-		left: 0;
-		top: 0;
-		-webkit-transform-style: preserve-3d;
-		transform-style: preserve-3d;
-		-webkit-backface-visibility: hidden;
-		-moz-backface-visibility: hidden;
-		-o-backface-visibility: hidden;
-		backface-visibility: hidden;
-	}
-	.card-back {
-		transform: rotateY(180deg);
-	}
-	.checkbox:checked ~ .card-3d-wrap .card-3d-wrapper {
-		transform: rotateY(180deg);
-	}
-	.center-wrap{
-		position: absolute;
-		width: 100%;
-		padding: 0 35px;
-		top: 50%;
-		left: 0;
-		transform: translate3d(0, -50%, 35px) perspective(100px);
-		z-index: 20;
-		display: block;
-	}
-
-
-	.form-group{ 
-		position: relative;
-		display: block;
-		margin: 0;
-		padding: 0;
-	}
-	.form-style {
-		padding: 13px 20px;
-		padding-left: 55px;
-		height: 48px;
-		width: 100%;
-		font-weight: 500;
-		border-radius: 4px;
-		font-size: 14px;
-		line-height: 22px;
-		letter-spacing: 0.5px;
-		outline: none;
-		color: #c4c3ca;
-		background-color: #1f2029;
-		border: none;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-		box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
-	}
-	.form-style:focus,
-	.form-style:active {
-		border: none;
-		outline: none;
-		box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
-	}
-	.input-icon {
-		position: absolute;
-		top: 0;
-		left: 18px;
-		height: 48px;
-		font-size: 24px;
-		line-height: 48px;
-		text-align: left;
-		color: #ffeba7;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-
-	.form-group input:-ms-input-placeholder  {
-		color: #c4c3ca;
-		opacity: 0.7;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input::-moz-placeholder  {
-		color: #c4c3ca;
-		opacity: 0.7;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input:-moz-placeholder  {
-		color: #c4c3ca;
-		opacity: 0.7;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input::-webkit-input-placeholder  {
-		color: #c4c3ca;
-		opacity: 0.7;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input:focus:-ms-input-placeholder  {
-		opacity: 0;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input:focus::-moz-placeholder  {
-		opacity: 0;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input:focus:-moz-placeholder  {
-		opacity: 0;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.form-group input:focus::-webkit-input-placeholder  {
-		opacity: 0;
-		-webkit-transition: all 200ms linear;
-		transition: all 200ms linear;
-	}
-	.signIn-a{  
-		border-radius: 4px;
-		height: 44px;
-		font-size: 13px;
-		font-weight: 600;
-		text-transform: uppercase;
-		-webkit-transition : all 200ms linear;
-		transition: all 200ms linear;
-		padding: 0 30px;
-		letter-spacing: 1px;
-		display: -webkit-inline-flex;
-		display: -ms-inline-flexbox;
-		display: inline-flex;
-		-webkit-align-items: center;
-		-moz-align-items: center;
-		-ms-align-items: center;
-		align-items: center;
-		-webkit-justify-content: center;
-		-moz-justify-content: center;
-		-ms-justify-content: center;
-		justify-content: center;
-		-ms-flex-pack: center;
-		text-align: center;
-		border: none;
-		background-color: #ffeba7;
-		color: #102770;
-		box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
-	}
-	.signIn-a:active,
-	.signIn-a:focus{ 
-		background-color: #102770;
-		color: #ffeba7;
-		box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
-	}
-	.signIn-a:hover{  
-		background-color: #102770;
-		color: #ffeba7;
-		box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
-	}
-	.kakao-login{
-	    width: 100%;
-		font-size: 1rem;
-		cursor: pointer;
-		transition: all .3s ease;
-		color: #000;
-		border: 0;
-		border-radius: .25rem;
-	}
-	.api-box{
-		width: 100%;
-		-ms-flex-align: center;
-		align-items: center;
-		display: -ms-flexbox;
-		display: flex;
-		gap: .5rem;
-		-ms-flex-pack: center;
-		justify-content: center;
-	}
-	</style>
 </head>
 <body>
 	<main layout:fragment="content" class="signInhtml">
-
+	<!--그 아이디 비밀번호 이런거는 placeholder에 한글로 적혀있을듯-->
 	<div class="section">
 		<div class="container">
 			<div class="col-12 text-center align-self-center py-5">
@@ -329,7 +35,7 @@
 												<input type="password" name="me_pw" class="form-style" placeholder="비밀번호" id="logpass" autocomplete="off">
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-											<button type="submit" class="btn mt-4 signIn-a">로그인</button>
+											<button type="submit" class="btn mt-4 signIn-a">로그인</button><!--로그인 버튼-->
 										</form>
 										<p class="mb-0 mt-4 text-center signIn-p"><a href="#0" class="link mr-3">아이디 찾기</a><a href="#0" class="link">비밀번호 찾기</a></p>
 										<button class="kakao-login"style="background: #fccb00;">
@@ -357,36 +63,58 @@
 								<div class="center-wrap">
 									<div class="section text-center">
 										<h4 class="mb-4 pb-3">회원가입</h4>
-										<form action="#" method="post">
+										<form class="singUp-from" th:action="@{/member/signup}" method="post">
 											<div class="form-group">
 												<input type="text" name="me_name" class="form-style" placeholder="이름" id="me_name" autocomplete="off">
+												<label id="me_name-error" class="error regex-error" for="me_name" style="overflow: hidden;"></label>
 												<i class="input-icon uil uil-user"></i>
 											</div> 
 											<div class="form-group mt-2">
 												<input type="text" name="me_id" class="form-style" placeholder="아이디" id="me_id" autocomplete="off">
+												<label id="checkId" class=""></label>
+												<label id="me_id-error" class="error regex-error" for="me_id" style="overflow: hidden;"></label>
 												<i class="input-icon uil-user-square"></i>
 											</div> 
 											<div class="form-group mt-2">
 												<input type="password" name="me_pw" class="form-style" placeholder="비밀번호" id="me_pw" autocomplete="off">
+												<label id="me_pw-error" class="error regex-error" for="me_pw" style="overflow: hidden;"></label>
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
 											<div class="form-group mt-2">
 												<input type="password" name="me_pw2" class="form-style" placeholder="비밀번호 확인" id="me_pw2" autocomplete="off">
+												<label id="me_pw2-error" class="error regex-error" for="me_pw2" style="overflow: hidden;"></label>
 												<i class="input-icon uil uil-lock-alt"></i>
+											</div> 
+											<div class="form-group mt-2">
+												<input type="text" name="me_nick" class="form-style" placeholder="닉네임" id="me_nick" autocomplete="off">
+												<label id="me_nick-error" class="error regex-error" for="me_nick" style="overflow: hidden;"></label>
+												<i class="input-icon uil uil-users-alt"></i>
 											</div>
 											<div class="form-group mt-2">
-												<input type="email" name="me_eamil" class="form-style" placeholder="이메일" id="me_eamil" autocomplete="off">
+												<input type="email" name="me_email" class="form-style" placeholder="이메일" id="me_email" autocomplete="off">
+												<label id="me_email-error" class="error regex-error" for="me_email" style="overflow: hidden;"></label>
 												<i class="input-icon uil uil-at"></i>
 											</div> 
 											<div class="form-group mt-2">
-												<input type="text" name="me_number" class="form-style" placeholder="전화번호" id="me_number" autocomplete="off">
+												<input type="text" name="me_number" class="form-style" placeholder="전화번호를 입력하여 인증번호를 받으시오" id="me_number" autocomplete="off">
+												<label id="smsSend" class=""></label>
+												<label id="me_number-error" class="error regex-error" for="me_number" style="overflow: hidden;"></label>
+												<button class="sms-btn" type="button" id="sms-btn" disabled>인증번호 받기</button>
 												<i class="input-icon  uil-phone"></i>
 											</div>
 											<div class="form-group mt-2">
+												<input type="text" name="me_agree" class="form-style" placeholder="인증번호를 받고 작성해주세요" id="me_agree" autocomplete="off" disabled>
+												<label id="me_agree-error" class="error regex-error" for="me_agree" style="overflow: hidden;"></label>
+												<label id="sms-msg" class=""></label>
+												<button class="sms-btn" id="checkSms" type="button" disabled>인증번호 확인</button>
+												<i class="input-icon uil-comment-alt-dots"></i>
+											</div>
+											<div class="form-group mt-2">
 												<input type="text" name="me_birthday" class="form-style" placeholder="생년월일 (YYMMDD-X)" id="me_birthday" autocomplete="off" maxlength="8">
+												<label id="me_birthday-error" class="error regex-error" for="me_birthday" style="overflow: hidden;"></label>
 												<i class="input-icon uil uil-calendar-alt"></i>
 											</div>
-											<button class="btn mt-4 signIn-a" type="submit">회원가입</button>
+											<button id="btn-singup" class="btn mt-4 signIn-a" type="submit" disabled>회원가입</button><!--회원가입 버튼-->
 										</form>
 									</div>
 								</div>
@@ -398,7 +126,6 @@
 		</div>
 	</div>
 	<script>
-		
 			$('#me_birthday').on('input', function() {
 				let value = $(this).val().replace(/[^0-9]/g, ''); 
 				if (value.length >= 6) {
@@ -409,7 +136,147 @@
 				}
 				$(this).val(value); // 값 다시 세팅
 			})
+			function checkId() {
+				$("#checkId").text("");
+				let id = $("#me_id").val();
+				if (!/^[a-zA-Z0-9]{3,13}$/.test(id)) return false;
+				let res = false;
+				$.ajax({
+					async: false,
+					url: '/member/check/id',
+					type: 'post',
+					data: { id: id },
+					success: function (data) {
+						if (data) res = true;
+					},
+				});
+				let str = res ? "사용 가능한 아이디입니다." : "이미 사용중인 아이디입니다.";
+				$("#checkId")
+				.text(str)
+				.toggleClass("green", res)
+				.toggleClass("red", !res)
+				return res;
+			}
+			$('#checkSms').on('click', function () {
+				checkSMS();
+			});
+			function checkSMS(){
+				$("#sms-msg").text("");
+				let userCode = $("#me_agree").val();
+				let res = false;
+				$.ajax({
+					async: false,
+					url: '/sms/check',
+					type: 'post',
+					data: { userCode: userCode },
+					success: function (data) {
+						if (data) res = true;
+					},
+				});
+				let str = res ? "인증 성공!." : "인증번호가 다릅니다.";
+				$("#sms-msg")
+				.text(str)
+				.toggleClass("green", res)
+				.toggleClass("red", !res)
+				if(res){
+					$("#btn-singup").prop("disabled", false);
+				}
+				return res;
+			}
+			$(document).ready(function () {
+				// 커스텀 정규표현식 메서드 먼저 정의
+				$.validator.addMethod("regex", function (value, element, regex) {
+					var re = new RegExp(regex);
+					return this.optional(element) || re.test(value);
+				}, "정규표현식을 확인하세요.");
+				$.validator.addMethod("phone", function (value, element) {
+					$("#sms-btn").prop("disabled", true);
+					$("#smsSend").text("");
+					let res = this.optional(element) || /^010\d{4}\d{4}$/.test(value);
+					if(res){
+						$("#sms-btn").prop("disabled", false);
+					}
+					return res;
+				}, "정규표현식을 확인하세요.");
+				// ID 입력할 때마다 중복 체크 실행
+				$("#me_id").on("input", function () {
+					checkId();
+				});
 
+				// 회원가입 유효성 검사
+				$(".singUp-from").validate({
+					rules: {
+						me_id: { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
+						me_name: { required: true },
+						me_pw: { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
+						me_pw2: { required: true, equalTo: "#me_pw"},
+						me_nick: { required: true, regex: /^[a-zA-Z0-9가-힣\s]{2,10}$/ },
+						me_email: { required: true, email: true },
+						me_number: { required: true, phone:true },
+						me_birthday: { required: true},
+					},
+					messages: {
+						me_id: {
+							required: "필수 항목입니다.",
+							regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
+						},
+						me_name: { required: "필수 항목입니다." },
+						me_pw: {
+							required: "필수 항목입니다.",
+							regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
+						},
+						me_pw2: {
+							required: "필수 항목입니다.",
+     						equalTo: "비밀번호가 다릅니다."
+						},
+						me_nick: {
+							required: "필수 항목입니다.",
+							regex: "닉네임은 특수문자를 제외한 2~10자 입니다"
+						},
+						me_email: {
+							required: "필수 항목입니다.",
+							email: "이메일 형식이 아닙니다."
+						},
+						me_number: {
+							required: "필수 항목입니다.",
+							phone: "전화번호가 맞지 않습니다"
+						},
+						me_birthday: {
+							required: "필수 항목입니다.",
+						},
+					},
+					submitHandler: function () {
+						if(checkSMS() && checkId()){
+							return true;
+						}
+						return false;
+					},
+				});
+			});
+			$('#sms-btn').on('click', function () {
+				smsSend();
+			});
+			function smsSend() {
+				const me_number = $('#me_number').val();
+				$.ajax({
+					async: false,
+					url: '/sms/send',
+					type: 'post',
+					data: { me_number: me_number },
+					success: function (data) {
+					if (data) res = true;
+					},
+				});
+				let str = res ? "전송 성공!." : "전송 실패ㅠ";
+				$("#smsSend")
+				.text(str)
+				.toggleClass("green", res)
+				.toggleClass("red", !res);
+				if(res){
+					$("#checkSms, #me_agree").prop("disabled", false);
+				}
+				return res;
+			}
 	</script>
 	</main>
 </body>
