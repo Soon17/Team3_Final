@@ -51,7 +51,7 @@ public class MemberController {
 	public String modify() {
 		return "member/modify";
 	}
-	@GetMapping("/singIn")
+	@GetMapping("/signIn")
 	public String getMethodName() {
 		return "member/signIn";
 	}
