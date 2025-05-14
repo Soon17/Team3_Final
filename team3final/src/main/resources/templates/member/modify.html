@@ -372,8 +372,8 @@
 			// 임의의 정보 아이템 요소를 클릭 시 동작
 			$(".info-another").click(function () {
 				const modal = $(this).data("target");				//해당 요소와 연결된 모달
-				const val = $(this).find(".value>span").text();	//해당 요소의 텍스트 값
-				$(modal).find("input").val(val);	
+				const val = $(this).find(".value>span").text();		//해당 요소의 텍스트 값
+				$(modal).find("input").val(val);					//모달의 input태그에 넣기
 			})
 
 			// 생일/성별 정보 아이템 요소를 클릭 시 동작
@@ -438,7 +438,7 @@
 				$("#myDay").text(selectedDay);
 			});
 
-			// 연도 선택 생성(J쿼리 방식)
+			// 연도 선택 생성(J쿼리 방식, 아래와 동일)
 			const $yearSelect = $('#select-year');
 			for (let y = 1900; y <= 2005; y++) {
 				$yearSelect.append($('<option>', {
@@ -447,7 +447,7 @@
 				}));
 			}
 
-			// 일 선택 생성(document방식)
+			// 일 선택 생성(document방식, 위와 동일)
 			const daySelect = document.getElementById('select-day');
 			for (let d = 1; d <= 31; d++) {
 				const option = document.createElement('option');
