@@ -1,157 +1,341 @@
 <!DOCTYPE html>
-<html 
-lang="en" 
-xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-layout:decorate="~{layout/layout.html}"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
-<meta charset="UTF-8">
-<title>검색</title>
-<style>
-	body{
-		background-color: #f5f6f7;
-    font-family: 'Noto Sans KR', sans-serif;
-	}
+	<meta charset="UTF-8">
+	<title>검색</title>
+	<style>
+		.main-container {
+			background-color: #f5f6f7;
+			font-family: 'Noto Sans KR', sans-serif;
+			width: 100%;
+			padding: 0;
+		}
 
-	.row{
-		max-width: 1032px;
-		display: flex;
-		flex-wrap: nowrap !important;
-		justify-content: start;
-		margin: 0px auto;
-		padding-top: 30px;
-	} 
+		.row {
+			max-width: 1032px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			margin: 0px auto;
+			padding-top: 40px;
+			padding-bottom: 100px;
+		}
 
-	.search-bar-wrap {
-		width: 100%;
-		background-color: #fff;
-		border-bottom: 1px solid #eee;
-	}
+		.search-bar-wrap {
+			width: 100%;
+			background-color: #fff;
+			border-bottom: 1px solid #eee;
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+			transition: transform 0.3s ease;
+			background-color: white;
+			overflow: hidden;
+		}
 
-	.search-bar-inner{
-		margin-left: 219px;
-		margin-right: 219px;
-		padding: 20px 0px;
-		display: flex;
-		gap: 21px;
-		height: 119px;
-		align-items: center;
-		box-sizing: border-box;
-		cursor: pointer;
-		justify-content: center;
-	}
+		.search-bar-inner {
+			padding: 10px 0;
+			display: flex;
+			gap: 20px;
+			height: 80px;
+			align-items: center;
+			box-sizing: border-box;
+			cursor: pointer;
+			justify-content: center;
+		}
 
-	.search-input {
-		width: 300px;
-		padding: 12px 16px;
-		background-color: #f8f8f8;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		font-size: 14px;
-	}
+		.search-input {
+			width: 300px;
+			padding: 12px 16px;
+			background-color: #f8f8f8;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			font-size: 14px;
+			font-weight: bold;
+		}
 
-	.search-btn {
-		padding: 12px 20px;
-		background-color: #007bff;
-		color: white;
-		border: none;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 600;
-	}
+		.search-btn {
+			padding: 12px 20px;
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-weight: 600;
+		}
+
+		.search-box-area {
+			width: 100%;
+			max-width: 330px;
+			margin-right: 20px;
+			position: fixed;
+			transition: transform 0.3s ease;
+			top: 0;
+		}
 
 
-	.container-box {
-		background-color: #f5f6f7;
-		border-radius: 10px;
-  }
+		.container-box {
+			background-color: #f5f6f7;
+			border-radius: 10px;
+			width: 100%;
+			max-width: 680px;
+			padding-right: 0;
+		}
 
-	.sort-options {
-		display: flex;
-		gap: 16px;
-		background: white;
-		padding: 5px 15px;
-		border-radius: 30px;
-		justify-content: flex-end;
-	}
+		.sort-options {
+			display: flex;
+			gap: 16px;
+			background: white;
+			padding: 5px 15px;
+			border-radius: 30px;
+			justify-content: flex-end;
+		}
 
-	.sort-options label {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		font-size: 14px;
-		color: #666;
-		font-weight: 400;
-		font-size: 12px;
-		margin: 0;
-	}
-	
-	.sort-options input[type="radio"] {
-		appearance: none;
-		width: 12px;
-		height: 12px;
-		border: 2px solid #ccc;
-		border-radius: 50%;
-		margin-right: 2px;
-		cursor: pointer;
-	}
+		.sort-options label {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+			font-size: 14px;
+			color: #666;
+			font-weight: 400;
+			font-size: 12px;
+			margin: 0;
+		}
 
-	.sort-options input[type="radio"]:checked::before {
-		content: '';
-		display: block;
-		width: 100%;
-		height: 100%;
-		background-color: #4564b8;
-		border-radius: 50%;
-	}
+		.sort-options input[type="radio"] {
+			appearance: none;
+			width: 12px;
+			height: 12px;
+			border: 2px solid #ccc;
+			border-radius: 50%;
+			margin-right: 2px;
+			cursor: pointer;
+		}
 
-	.search-box-area {
-		width: 330px;
-		margin-right: 50px; 
-	}
+		.sort-options input[type="radio"]:checked::before {
+			content: '';
+			display: block;
+			width: 100%;
+			height: 100%;
+			background-color: #4564b8;
+			border-radius: 50%;
+		}
 
-	.card-link {
-		display: flex;
-		text-decoration: none;
-		color: inherit;
-		gap: 30px;
-		padding-top: 30px;
-		background-color: #ffffff73;
-		width: 630px;
-		padding: 10px;
-	}
+		.card-link {
+			display: flex;
+			text-decoration: none;
+			color: inherit;
+			padding: 20px 15px;
+			background-color: #ffffff73;
+			width: 100%;
+			justify-content: space-between;
+		}
 
-	.hotel-location{
-		color: #0d6ffc;
-	}
+		.hotel-location {
+			color: #0d6ffc;
+			font-size: .75rem;
+		}
 
-	.poto{
-		border-radius: 10px;
-		height: 208px;
-		width: 272px;
-	}
+		.poto {
+			border-radius: 5px;
+			height: 208px;
+			width: 272px;
 
-	.hotel-price{
-		display: flex;
-		justify-content: end;
-		font-weight: bold;
-		text-align: right;
-    margin-top: 110px;
-		margin-left: 180px;
-	}
+		}
 
-	.hotel-info{
-		padding: 10px;
-	}
-	.card-link:hover {
-		color: inherit !important;
-		text-decoration: none !important;
-	}
-</style>
+		.price {
+			color: #9f1f13;
+			font-size: 20px;
+		}
+
+
+		.hotel-price {
+			align-self: flex-end;
+			font-weight: bold;
+			font-size: 15px;
+			margin-top: auto;
+		}
+
+		.hotel-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100%;
+			padding: 10px 30px;
+			padding-top: 0px !important;
+			max-width: 400px;
+			width: 100%;
+		}
+
+		.hotel-up {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			margin-right: 100px;
+		}
+
+		.hotel-grade {
+			display: flex;
+			gap: 4px;
+			align-items: flex-start;
+			flex-direction: row;
+		}
+
+		.card-link:hover {
+			color: inherit !important;
+			text-decoration: none !important;
+		}
+
+		.mobile-header {
+			display: none;
+			padding: 16px;
+			background: #fff;
+			font-size: 14px;
+			border-bottom: 1px solid #eee;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.im {
+			display: flex;
+			justify-content: center;
+		}
+
+		.star {
+			width: 16px;
+			height: 16px;
+		}
+
+		.hotel-stars {
+			font-size: 12px;
+		}
+
+		.hotel-name {
+			font-weight: bold;
+		}
+
+		.review-score {
+			font-size: 12px;
+		}
+
+		.mobile-sort-bar {
+			display: none;
+		}
+
+		@media screen and (max-width: 1080px) {
+			header {
+				display: none;
+			}
+
+			.search-bar-wrap {
+				display: none;
+			}
+
+			div.d-flex.justify-content-between.align-items-center.mb-2 {
+				display: none !important;
+			}
+
+			.mobile-header {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				padding: 10px 30px;
+				align-items: center;
+				font-size: 14px;
+			}
+
+			.row {
+				align-content: center;
+				flex-direction: column;
+				padding-top: 10px !important;
+			}
+
+			.container-box {
+				margin-top: 10px;
+				max-width: 970px !important;
+				width: 100% !important;
+			}
+
+			.hotel-info {
+				max-width: 800px !important;
+				width: 100%;
+				padding: 0px 15px !important;
+			}
+
+			.search-box-area {
+				display: none;
+			}
+
+			.poto {
+				width: 272px;
+				height: 208px;
+			}
+
+			.mobile-sort-bar {
+				position: sticky;
+				top: 0;
+				z-index: 999;
+				transition: transform 0.3s ease;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-items: flex-start;
+				padding: 10px 30px;
+				background-color: #fff;
+				font-size: 12px;
+			}
+
+			.mobile-sort-bar button {
+				padding: 6px 10px;
+				font-size: 12px;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				background-color: #fff;
+				white-space: nowrap;
+				margin-bottom: 10px;
+			}
+
+			.mobile-sort-bar .toggle-area {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				font-size: 12px;
+				margin-left: auto;
+			}
+
+			.mobile-sort-bar .count {
+				font-size: 12px;
+				color: #555;
+			}
+
+		}
+
+		@media screen and (max-width: 720px) {
+			.card-link {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.poto {
+				max-width: 650px !important;
+				max-height: 250px !important;
+				height: 100%;
+				width: 100%;
+			}
+
+			.hotel-info {
+				padding: 10px 0px !important;
+			}
+
+		}
+	</style>
 </head>
-<body >
-	<main layout:fragment="content" class="mb-5" style="width: 100%; padding: 0;">
+
+<body>
+
+	<main layout:fragment="content" class="main-container">
 		<div class="search-bar-wrap">
 			<div class="search-bar-inner">
 				<div class="search-input" onclick="openLocation()">📍 서울</div>
@@ -160,12 +344,38 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				<button class="search-btn">검색</button>
 			</div>
 		</div>
-		<div class="row">
-			<div id="search-find" class="search-box-area">
-					<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+		<!-- 모바일 전용 헤더 -->
+		<div class="mobile-header">
+			<div class="mobile-header-top">
+				<span class="place-name" style="font-weight: bold;">신라 아이파크 몰</span>
+				<i class="fas fa-pen edit-icon" style="font-size: 10px;"></i>
 			</div>
-			<div class="col-md-7 container-box">
-				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px; width: 630px;">
+			<div class="mobile-header-bottom">
+				<span>05.13 (월) ~ 05.14 (수)</span>
+				<span> | </span>
+				<span>성인2</span>
+			</div>
+		</div>
+		<div class="mobile-sort-bar">
+			<div class="sort-top">
+				<div class="left-buttons">
+					<button>추천순</button>
+					<button>🛠 필터</button>
+				</div>
+				<div class="sort-bottom">
+					<span class="count">숙소 202개</span>
+				</div>
+			</div>
+			<div class="right-map">
+				<button>🗺 지도</button>
+			</div>
+		</div>
+		<div class="row">
+			<div id="search-find" class="search-box-area" style="position: relative; overflow: visible;">
+				<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+			</div>
+			<div class="col-md-10 container-box">
+				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px;">
 					<div>
 						<h5 class="mb-0">검색결과</h5>
 						<small class="text-muted">숙소 223개</small>
@@ -177,16 +387,22 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						<label><input type="radio" name="sort" value="성급순"> <span>성급순</span></label>
 						<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
 					</div>
-				</div>	
+				</div>
 				<div class="im">
 					<a href="#" class="card-link">
 						<div class="hotel-image">
 							<img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
 						</div>
 						<div class="hotel-info">
-							<div class="hotel-name">롯데 호텔 월드</div>
-							<div class="hotel-grade">⭐ 4.6 (999+) · 5성급</div>
-							<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
+							<div class="hotel-up">
+								<div class="hotel-name">롯데 호텔 월드</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">4.6 (999+)</span>
+									<span class="hotel-stars">· 4성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
+							</div>
 							<div class="hotel-price">
 								<span class="price">321,268원</span> /1박
 							</div>
@@ -199,9 +415,15 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 							<img class="poto" src="/resources/static/imgs/hotel2.png" alt="호텔2">
 						</div>
 						<div class="hotel-info">
-							<div class="hotel-name">멋져 호텔 월드</div>
-							<div class="hotel-grade">⭐ 4.8 (999+) · 4성급</div>
-							<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
+							<div class="hotel-up">
+								<div class="hotel-name">멋져 호텔 월드</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">4.8 (999+)</span>
+									<span class="hotel-stars">· 5성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
+							</div>
 							<div class="hotel-price">
 								<span class="price">352268원</span> /1박
 							</div>
@@ -214,37 +436,102 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 							<img class="poto" src="/resources/static/imgs/hotel3.png" alt="호텔3">
 						</div>
 						<div class="hotel-info">
-							<div class="hotel-name">꿀잼 호텔 월드</div>
-							<div class="hotel-grade">⭐ 4.0 (9) · 3성급</div>
-							<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
+							<div class="hotel-up">
+								<div class="hotel-name">꿀잼 호텔 월드</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">4.5 (999+)</span>
+									<span class="hotel-stars">· 4성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
+							</div>
 							<div class="hotel-price">
 								<span class="price">35068원</span> /1박
 							</div>
 						</div>
 					</a>
 				</div>
-			</div>	
+				<div class="im">
+					<a href="#" class="card-link">
+						<div class="hotel-image">
+							<img class="poto" src="/resources/static/imgs/hotel4.png" alt="호텔4">
+						</div>
+						<div class="hotel-info">
+							<div class="hotel-up">
+								<div class="hotel-name">래기 호텔</div>
+								<div class="hotel-grade">
+									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
+									<span class="review-score">1.1 (9)</span>
+									<span class="hotel-stars">· 2성급</span>
+								</div>
+								<div class="hotel-location">서울특별시 - 강남역에서 3500m</div>
+							</div>
+							<div class="hotel-price">
+								<span class="price">5000원</span> /1박
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
 		<script>
 			function toggleDetailAll() {
-				const $arrows = $(".arrowImg");
-				
 				$.ajax({
 					url: '/searching/find',
 					type: 'GET',
 					success: function (data) {
 						$('#search-find').html(data);
+
+						// 버튼토글 이벤트 바인딩
+						const buttons = document.querySelectorAll('.filter-btn');
+						buttons.forEach(btn => {
+							btn.addEventListener('click', function () {
+								this.classList.toggle('active');
+							});
+						});
 					},
-					error: function (xhr) {
-						console.error("요청 실패", xhr);
-					}
 				});
 			}
 
 			$(document).ready(function () {
 				toggleDetailAll();
+
+				let lastScrollTop = 0;
+				const searchBarWrap = document.querySelector('.search-bar-wrap');
+				const mobileSortBar = document.querySelector('.mobile-sort-bar');
+				const searchBoxArea = document.querySelector('.search-box-area');
+
+				// 초기 진입 시 위치 보정
+				if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+
+				window.addEventListener('scroll', function () {
+					const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+					if (currentScroll === 0) {
+						// 맨 위로 올라가면 원위치 (초기 상태 복귀)
+						searchBarWrap.style.transform = 'translateY(0)';
+						searchBarWrap.style.opacity = '1';
+						if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
+						if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+					} else if (currentScroll < lastScrollTop) {
+						// 위로 스크롤 → 다시 보임
+						searchBarWrap.style.transform = 'translateY(0)';
+						searchBarWrap.style.opacity = '1';
+						if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
+						if (searchBoxArea) searchBoxArea.style.transform = 'translateY(80px)';
+					} else {
+						// 아래로 스크롤 → 숨김
+						searchBarWrap.style.transform = 'translateY(-100%)';
+						searchBarWrap.style.opacity = '0';
+						if (mobileSortBar) mobileSortBar.style.transform = 'translateY(-100%)';
+						if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0)';
+					}
+
+					lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+				});
 			});
 		</script>
 	</main>
 </body>
+
 </html>
