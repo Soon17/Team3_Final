@@ -1,15 +1,31 @@
 package kr.kh.team3final.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import kr.kh.team3final.model.vo.LodgingVO;
+import kr.kh.team3final.service.LodgingService;
 
 @Controller
 @RequestMapping("/searching")
 public class SearchController {
 
+	@Autowired
+	LodgingService lodgingService;
   	@GetMapping("/search")
-	public String search() {
+	public String search(
+		Model model,
+		@RequestParam("rg_name") String rg_name,@RequestParam("checkTime") String checkTime,@RequestParam("rm_person") String rm_person) {
+		model.addAttribute("rg_name", rg_name);
+		model.addAttribute("checkTime", checkTime);
+		model.addAttribute("rm_person", rm_person);
+		List<LodgingVO> lodgingList = lodgingService.getSearchlodgingList(rg_name,checkTime,rm_person);
 		return "searching/search";
 	}
 	
