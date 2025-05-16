@@ -6,6 +6,91 @@
 	<meta charset="UTF-8">
 	<title>검색</title>
 	<style>
+		.calendar-wrapper {
+			background: white;
+			max-width: 700px;
+			margin: auto;
+			padding: 20px;
+			border-radius: 15px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.1);
+		}
+
+		.modal-header {
+			margin-bottom: 20px;
+			font-size: 18px;
+			font-weight: bold;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.calendar-grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 30px;
+			max-height: 600px;
+			overflow-y: auto;
+			padding-right: 10px;
+		}
+
+		.month {
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			padding: 10px;
+			background: #fff;
+		}
+
+		.month h3 {
+			text-align: center;
+			margin: 0 0 10px;
+		}
+
+		.days {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+		gap: 5px;
+		}
+
+		.day, .day-name {
+			text-align: center;
+			padding: 8px 0;
+		}
+		.day:hover{
+			cursor: pointer;
+		}
+		.day-name {
+			font-weight: bold;
+			background-color: #f8f8f8;
+		}
+
+		.day.disabled {
+			color: #ccc;
+			cursor: not-allowed;
+		}
+
+		.day.selected {
+			background-color: #007aff;
+			color: white;
+			border-radius: 10px;
+		}
+
+		.day.in-range {
+			background-color: rgba(0, 122, 255, 0.3);
+			border-radius: 10px;
+		}
+
+		.apply-btn {
+			width: 100%;
+			padding: 15px;
+			background-color: #007aff;
+			color: white;
+			font-size: 16px;
+			border: none;
+			margin-top: 20px;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+	
 		.main-container {
 			background-color: #f5f6f7;
 			font-family: 'Noto Sans KR', sans-serif;
@@ -330,6 +415,73 @@
 			}
 
 		}
+		.counter-header {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 15px;
+		}
+		.counter-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 15px 0;
+		border-bottom: 1px solid #eee;
+		}
+		.counter-row:last-child {
+		border-bottom: none;
+		}
+		.counter-label {
+		font-size: 16px;
+		}
+		.counter-subtext {
+		font-size: 12px;
+		color: #666;
+		margin-top: 3px;
+		}
+		.counter-controls {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		}
+		.counter-btn {
+		width: 32px;
+		height: 32px;
+		line-height: 32px;
+		text-align: center;
+		background: #eee;
+		border-radius: 50%;
+		font-weight: bold;
+		font-size: 22px;
+		user-select: none;
+		cursor: pointer;
+		transition: background 0.3s;
+		}
+		.counter-btn:hover {
+		background: #007aff;
+		color: white;
+		}
+		.count-value {
+		min-width: 30px;
+		text-align: center;
+		font-size: 16px;
+		user-select: none;
+		}
+		#confirm-btn {
+		width: 100%;
+		padding: 14px;
+		margin-top: 25px;
+		border: none;
+		background-color: #007aff;
+		color: white;
+		font-size: 18px;
+		border-radius: 10px;
+		cursor: pointer;
+		user-select: none;
+		transition: background-color 0.3s;
+		}
+		#confirm-btn:hover {
+		background-color: #005bb5;
+		}		
 	</style>
 </head>
 
@@ -338,17 +490,20 @@
 	<main layout:fragment="content" class="main-container">
 		<div class="search-bar-wrap">
 			<div class="search-bar-inner">
-				<div class="search-input"  onclick="openLocation()">
+				<select name="rg_name" id="region" class="search-input">
+					<!-- 첫 번째: 서버에서 넘어온 선택 값 -->
+					<option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
+					
+					<!-- 나머지 지역 리스트 -->
+					<option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
+				</select>
+				<div class="search-input" data-toggle="modal" data-target="#calendarModal">
 					<i class="fas fa-list-alt"></i>
-					<span>[[${rg_name}]]</span>
+					<span id="checkTime">[[${checkTime}]]</span>			
 				</div>
-				<div class="search-input" onclick="openDate()">
-					<i class="fas fa-list-alt"></i>
-					<span>[[${checkTime}]]</span>			
-				</div>
-				<div class="search-input" onclick="openGuest()">
+				<div class="search-input" data-toggle="modal" data-target="#guestModal">
 					<i class="fas fa-user"></i>
-					<span>[[${rm_person}]]</span>
+					<span id="check-people">[[${rm_person}]]</span>
 				</div>
 				<button class="search-btn">검색</button>
 			</div>
@@ -483,6 +638,59 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal" id="calendarModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- Modal 헤더 -->
+					<div class="modal-header">
+						<div>
+							<span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
+						</div>
+						<div class="nights" id="nights"></div>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal 바디 -->
+					<div class="modal-body">
+						<div class="calendar-wrapper">
+							<div id="calendar-grid" class="calendar-grid"></div>
+						</div>
+					</div>
+					<!-- Modal 푸터 -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="apply-btn"  onclick="applySelection()" data-dismiss="modal">적용하기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal" id="guestModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- Modal 헤더 -->
+					<div class="modal-header">
+						<div>
+							<span>인원 선택</span>
+						</div>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal 바디 -->
+					<div class="modal-body">
+						<div>
+							<div class="counter-label">성인</div>
+							<div class="counter-subtext">만 18세 이상</div>
+						</div>
+						<div class="counter-controls">
+							<div class="counter-btn" id="adult-minus">−</div>
+							<div class="count-value" id="adult-count">2</div>
+							<div class="counter-btn" id="adult-increase">+</div>
+						</div>
+					</div>
+					<!-- Modal 푸터 -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script>
 			function toggleDetailAll() {
 				$.ajax({
@@ -539,6 +747,158 @@
 					lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 				});
 			});
+
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+
+			let selectedStart = null;
+			let selectedEnd = null;
+
+			function formatDate(date) {
+			const y = date.getFullYear();
+			const m = String(date.getMonth() + 1).padStart(2, '0');
+			const d = String(date.getDate()).padStart(2, '0');
+			const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+			return `${y}.${m}.${d}(${w})`;
+			}
+
+			function createCalendar(year, month) {
+			const $monthContainer = $('<div class="month"></div>');
+			const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
+			const $daysGrid = $('<div class="days"></div>');
+
+			const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+			$.each(dayNames, (_, day) => {
+				$daysGrid.append($('<div class="day-name"></div>').text(day));
+			});
+
+			const firstDay = new Date(year, month, 1);
+			const lastDay = new Date(year, month + 1, 0);
+
+			for (let i = 0; i < firstDay.getDay(); i++) {
+				$daysGrid.append('<div></div>');
+			}
+
+			for (let d = 1; d <= lastDay.getDate(); d++) {
+				const date = new Date(year, month, d);
+				const $dayEl = $('<div class="day"></div>').text(d);
+
+				if (date < today) {
+					$dayEl.addClass('disabled');
+				} else {
+					$dayEl.on('click', function () {
+					selectDate(date);
+				});
+				}
+
+				$daysGrid.append($dayEl);
+			}
+
+				$monthContainer.append($monthTitle).append($daysGrid);
+				$('#calendar-grid').append($monthContainer);
+			}
+
+			function renderCalendars() {
+				const startYear = today.getFullYear();
+				const startMonth = today.getMonth();
+
+				for (let i = 0; i < 12; i++) {
+					const year = startYear + Math.floor((startMonth + i) / 12);
+					const month = (startMonth + i) % 12;
+					createCalendar(year, month);
+				}
+			}
+
+			function selectDate(date) {
+			if (!selectedStart || (selectedStart && selectedEnd)) {
+				selectedStart = date;
+				selectedEnd = null;
+			} else {
+				if (date < selectedStart) {
+					selectedStart = date;
+					selectedEnd = null;
+				} else {
+					const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
+					if (diff > 30) {
+						alert('최대 30일까지만 선택 가능합니다.');
+						return;
+					}
+					selectedEnd = date;
+				}
+			}
+			updateSelection();
+			}
+
+			function updateSelection() {
+			$('.day').removeClass('selected in-range');
+
+			if (selectedStart) {
+				$('.month').each(function () {
+				const [year, month] = $(this).find('h3').text().split('.').map(Number);
+				$(this).find('.day').each(function () {
+					const dayNum = parseInt($(this).text());
+					const date = new Date(year, month - 1, dayNum);
+
+					if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
+					$(this).addClass('selected');
+					}
+					if (selectedStart && selectedEnd) {
+					if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
+						$(this).addClass('selected');
+					} else if (date > selectedStart && date < selectedEnd) {
+						$(this).addClass('in-range');
+					}
+					}
+				});
+				});
+			}
+
+			$('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
+			$('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
+			if (selectedStart && selectedEnd) {
+				const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
+				$('#nights').text(`${nights}박`);
+			} else {
+				$('#nights').text('');
+			}
+			}
+
+			function applySelection() {
+			if (selectedStart && selectedEnd) {
+				//아이디를 해당 인풋 아이디로 하시면 도ㅣ요
+				$('#checkTime').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+
+			} else {
+				alert('날짜를 선택해주세요.');
+			}
+			}
+
+			$(document).ready(function () {
+			renderCalendars();
+			});			
+			$(function(){
+			const $adultCount = $('#adult-count');
+			const minAdult = 1;
+			const maxAdult = 10;
+
+			$('#adult-minus').click(function() {
+				let val = parseInt($adultCount.text());
+				if(val > minAdult) {
+				$adultCount.text(val - 1);
+				}
+			});
+
+			$('#adult-increase').click(function() {
+				let val = parseInt($adultCount.text());
+				if(val < maxAdult) {
+				$adultCount.text(val + 1);
+				}
+			});
+
+			$('#confirm-btn').click(function() {
+				$('#check-people').text(`성인${$adultCount.text()}`);
+			});
+			});			
 		</script>
 	</main>
 </body>

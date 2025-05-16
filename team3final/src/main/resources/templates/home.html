@@ -51,10 +51,10 @@
 		margin: 0 0 10px;
 	}
 
-		.days {
-		display: grid;
-		grid-template-columns: repeat(7, 1fr);
-		gap: 5px;
+	.days {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 5px;
 	}
 
 	.day, .day-name {
@@ -96,6 +96,7 @@
 		border-radius: 10px;
 		cursor: pointer;
 	}
+
 	.event-swiper {
 		width: 100%;
 		height: auto;
@@ -271,7 +272,6 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<div id="region2"></div>
 		<div class="modal" id="calendarModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -364,11 +364,11 @@
 							<option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}">
 						</select>
 						<input type="text" id="check-time" name="checkTime" data-toggle="modal" data-target="#calendarModal"
-						value="날짜를 입력해주세요" readonly style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+						placeholder="날짜를 입력해주세요" readonly style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
 						<input type="text" readonly id="check-people" name="rm_person" data-toggle="modal" data-target="#guestModal"
 						value="성인2" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
 						<div>
-							<button type="submit" style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
+							<button type="submit" id="search-btn"style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
 							검색
 							</button>
 						</div>
@@ -617,6 +617,13 @@
 			</div>
 		</div>
 	<script>
+		$('#search-btn').on('click', function(e) {
+			const time = $('#check-time').val();
+			if(time.trim().length==0){
+				e.preventDefault(); // submit 막음
+				alert('날짜를 입력해주세요');
+			}
+		});
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 	
@@ -784,26 +791,26 @@
 			prevEl: ".booking-prev"
 			}
 		});
-		$(document).ready(function() {
-			$('.region-btn').click(function() {
-				$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
-				$(this).addClass('active'); // 클릭한 버튼만 active 추가
-				const rg_num= $(this).data('id');
-				var $target = $(this).parent().next().find(".swiper")
-				$.ajax({
-					async: false,
-					url: "/regionLodging",
-					type: 'GET',
-					data: { rg_num : rg_num },
-					success: function (data) {
-						$target.html(data);
-					}
-				});
-			});
-			$(".region-btn-box").each(function(){
-				$(this).children().first().trigger("click")
-			});
-		});
+		// $(document).ready(function() {
+		// 	$('.region-btn').click(function() {
+		// 		$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
+		// 		$(this).addClass('active'); // 클릭한 버튼만 active 추가
+		// 		const rg_num= $(this).data('id');
+		// 		var $target = $(this).parent().next().find(".swiper")
+		// 		$.ajax({
+		// 			async: false,
+		// 			url: "/regionLodging",
+		// 			type: 'GET',
+		// 			data: { rg_num : rg_num },
+		// 			success: function (data) {
+		// 				$target.html(data);
+		// 			}
+		// 		});
+		// 	});
+		// 	$(".region-btn-box").each(function(){
+		// 		$(this).children().first().trigger("click")
+		// 	});
+		// });
 		$(function(){
 		const $adultCount = $('#adult-count');
 		const minAdult = 1;

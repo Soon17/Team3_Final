@@ -18,10 +18,10 @@ public class LodgingService {
 		return lodgingDao.selectRegionLodgingList(rg_num);
 	}
 
-	public List<LodgingVO> getSearchlodgingList(String rg_name, String checkTime, String rm_person) {
+	public List<LodgingVO> getSearchlodgingList(String rg_name, String checkTime, String person) {
 		String lr_checkin = getStartTime(checkTime);
 		String lr_checkout =getEndTime(checkTime);
-		
+		int rm_person = Integer.parseInt(person.replaceAll("[^0-9]", ""));
 		return lodgingDao.selectSearchLodgingList(rg_name,lr_checkin,lr_checkout,rm_person);
 	}
 	String getStartTime(String str){

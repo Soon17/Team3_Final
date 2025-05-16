@@ -4,4 +4,33 @@
 	<select id="selectRegionLodgingList" resultType="LodgingVO">
 		select* from region; 
 	</select>
+	<select id="selectSearchLodgingList" resultType="LodgingVO">
+		SELECT lodging.*,
+			(
+				SELECT ROUND(AVG(rv_rating), 1)
+				FROM review
+				WHERE rv_table_name = 'lodging' 
+					AND rv_number = lodging.LD_NUM
+			) AS avg_rating
+		FROM lodging
+		JOIN (
+			SELECT *
+			FROM room
+			LEFT JOIN (
+				SELECT 
+					lr_rm_num, 
+					COUNT(lr_rm_num) AS count
+				FROM lo_reservation
+				WHERE (LR_CHECKOUT BETWEEN DATE_ADD(#{lr_checkin}, INTERVAL 1 DAY) AND #{lr_checkout})
+				OR (LR_CHECKIN BETWEEN #{lr_checkin} AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY))
+					AND LR_STATE = "예약완료"
+				GROUP BY lr_rm_num
+			) AS tmp_lo_reservation ON lr_rm_num = rm_num
+			WHERE RM_ROOMCOUNT - IFNULL(count, 0) &gt; 0 
+			AND rm_person &gt;= #{rm_person}
+		) t ON rm_ld_num = ld_num
+		JOIN region ON rg_num = LD_RG_NUM
+		WHERE rg_name = #{rg_name}
+		GROUP BY LD_NUM;
+	</select>
 </mapper>
