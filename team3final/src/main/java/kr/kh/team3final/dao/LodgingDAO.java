@@ -8,5 +8,6 @@ public interface LodgingDAO {
 
 	List<LodgingVO> selectRegionLodgingList(int rg_num);
 
-	
+	List<LodgingVO> allLodgingList(int ld_num);
+
 }

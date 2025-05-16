@@ -4,8 +4,96 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>검색</title>
+	<title>카모아 - 국내도 해외도 렌트카</title>
 	<style>
+		.calendar-wrapper {
+			background: white;
+			max-width: 700px;
+			margin: auto;
+			padding: 20px;
+			border-radius: 15px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.modal-header {
+			margin-bottom: 20px;
+			font-size: 18px;
+			font-weight: bold;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.calendar-grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 30px;
+			max-height: 600px;
+			overflow-y: auto;
+			padding-right: 10px;
+		}
+
+		.month {
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			padding: 10px;
+			background: #fff;
+		}
+
+		.month h3 {
+			text-align: center;
+			margin: 0 0 10px;
+		}
+
+		.days {
+			display: grid;
+			grid-template-columns: repeat(7, 1fr);
+			gap: 5px;
+		}
+
+		.day,
+		.day-name {
+			text-align: center;
+			padding: 8px 0;
+		}
+
+		.day:hover {
+			cursor: pointer;
+		}
+
+		.day-name {
+			font-weight: bold;
+			background-color: #f8f8f8;
+		}
+
+		.day.disabled {
+			color: #ccc;
+			cursor: not-allowed;
+		}
+
+		.day.selected {
+			background-color: #007aff;
+			color: white;
+			border-radius: 10px;
+		}
+
+		.day.in-range {
+			background-color: rgba(0, 122, 255, 0.3);
+			border-radius: 10px;
+		}
+
+		.apply-btn {
+			width: 100%;
+			padding: 15px;
+			background-color: #007aff;
+			color: white;
+			font-size: 16px;
+			border: none;
+			margin-top: 20px;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+
 		.main-container {
 			background-color: #f5f6f7;
 			font-family: 'Noto Sans KR', sans-serif;
@@ -330,17 +418,106 @@
 			}
 
 		}
+
+		.counter-header {
+			font-size: 20px;
+			font-weight: bold;
+			margin-bottom: 15px;
+		}
+
+		.counter-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 0;
+			border-bottom: 1px solid #eee;
+		}
+
+		.counter-row:last-child {
+			border-bottom: none;
+		}
+
+		.counter-label {
+			font-size: 16px;
+		}
+
+		.counter-subtext {
+			font-size: 12px;
+			color: #666;
+			margin-top: 3px;
+		}
+
+		.counter-controls {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.counter-btn {
+			width: 32px;
+			height: 32px;
+			line-height: 32px;
+			text-align: center;
+			background: #eee;
+			border-radius: 50%;
+			font-weight: bold;
+			font-size: 22px;
+			user-select: none;
+			cursor: pointer;
+			transition: background 0.3s;
+		}
+
+		.counter-btn:hover {
+			background: #007aff;
+			color: white;
+		}
+
+		.count-value {
+			min-width: 30px;
+			text-align: center;
+			font-size: 16px;
+			user-select: none;
+		}
+
+		#confirm-btn {
+			width: 100%;
+			padding: 14px;
+			margin-top: 25px;
+			border: none;
+			background-color: #007aff;
+			color: white;
+			font-size: 18px;
+			border-radius: 10px;
+			cursor: pointer;
+			user-select: none;
+			transition: background-color 0.3s;
+		}
+
+		#confirm-btn:hover {
+			background-color: #005bb5;
+		}
 	</style>
 </head>
 
 <body>
-	<main layout:fragment="content" class="main-container"><!--메인-->
-		<div class="search-bar-wrap"><!--헤더 검색창-->
+
+	<main layout:fragment="content" class="main-container">
+		<div class="search-bar-wrap">
 			<div class="search-bar-inner">
-				<div class="search-input" onclick="openLocation()">📍 서울</div>
-				<div class="search-input" onclick="openDate()">🗓 05.13(월) ~ 05.15(수)</div>
-				<div class="search-input" onclick="openGuest()">👤 성인2</div>
-				<button class="search-btn">검색</button>
+				<select name="rg_name" id="region" class="search-input">
+					<option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
+					<option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}"
+						th:text="${rg.rg_name}"></option>
+				</select>
+				<div class="search-input" data-toggle="modal" data-target="#calendarModal">
+					<i class="fas fa-list-alt"></i>
+					<span id="checkTime">[[${checkTime}]]</span>
+				</div>
+				<div class="search-input" data-toggle="modal" data-target="#guestModal">
+					<i class="fas fa-user"></i>
+					<span id="check-people">[[${rm_person}]]</span>
+				</div>
+				<button id="searchBtn" type="button" class="search-btn">검색</button>
 			</div>
 		</div>
 		<!-- 모바일 전용 헤더 -->
@@ -355,7 +532,6 @@
 				<span>성인2</span>
 			</div>
 		</div>
-		<!--모바일 절용 헤더2-->
 		<div class="mobile-sort-bar">
 			<div class="sort-top">
 				<div class="left-buttons">
@@ -388,7 +564,6 @@
 						<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
 					</div>
 				</div>
-				<!--숙소 데이터 시작-->
 				<div class="im">
 					<a href="#" class="card-link">
 						<div class="hotel-image">
@@ -399,17 +574,13 @@
 								<div class="hotel-name">롯데 호텔 월드</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">
-										<span>4.6</span>
-										<span>(999+)</span>
-									</span>
+									<span class="review-score">4.6 (999+)</span>
 									<span class="hotel-stars">· 4성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">321,268원</span>
-								<span>/1박</span>
+								<span class="price">321,268원</span> /1박
 							</div>
 						</div>
 					</a>
@@ -424,17 +595,13 @@
 								<div class="hotel-name">멋져 호텔 월드</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">
-										<span>4.8</span>
-										<span>(999+)</span>
-									</span>
+									<span class="review-score">4.8 (999+)</span>
 									<span class="hotel-stars">· 5성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">352268원</span>
-								<span>/1박</span>
+								<span class="price">352268원</span> /1박
 							</div>
 						</div>
 					</a>
@@ -449,17 +616,13 @@
 								<div class="hotel-name">꿀잼 호텔 월드</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">
-										<span>4.5</span>
-										<span>(999+)</span>
-									</span>
+									<span class="review-score">4.5 (999+)</span>
 									<span class="hotel-stars">· 4성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">35068원</span>
-								<span>/1박</span>
+								<span class="price">35068원</span> /1박
 							</div>
 						</div>
 					</a>
@@ -474,22 +637,70 @@
 								<div class="hotel-name">래기 호텔</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">
-										<span>1.1</span>
-										<span>(9)</span>
-									</span>
+									<span class="review-score">1.1 (9)</span>
 									<span class="hotel-stars">· 2성급</span>
 								</div>
 								<div class="hotel-location">서울특별시 - 강남역에서 3500m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">5000원</span>
-								<span>/1박</span>
+								<span class="price">5000원</span> /1박
 							</div>
 						</div>
 					</a>
 				</div>
-				<!--숙소 데이터 끝-->
+			</div>
+		</div>
+		<div class="modal" id="calendarModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- Modal 헤더 -->
+					<div class="modal-header">
+						<div>
+							<span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
+						</div>
+						<div class="nights" id="nights"></div>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal 바디 -->
+					<div class="modal-body">
+						<div class="calendar-wrapper">
+							<div id="calendar-grid" class="calendar-grid"></div>
+						</div>
+					</div>
+					<!-- Modal 푸터 -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal" id="guestModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- Modal 헤더 -->
+					<div class="modal-header">
+						<div>
+							<span>인원 선택</span>
+						</div>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal 바디 -->
+					<div class="modal-body">
+						<div>
+							<div class="counter-label">성인</div>
+							<div class="counter-subtext">만 18세 이상</div>
+						</div>
+						<div class="counter-controls">
+							<div class="counter-btn" id="adult-minus">−</div>
+							<div class="count-value" id="adult-count">2</div>
+							<div class="counter-btn" id="adult-increase">+</div>
+						</div>
+					</div>
+					<!-- Modal 푸터 -->
+					<div class="modal-footer justify-content-center">
+						<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script>
@@ -520,7 +731,7 @@
 				const searchBoxArea = document.querySelector('.search-box-area');
 
 				// 초기 진입 시 위치 보정
-				if (searchBoxArea) searchBoxArea.style.transform = 'translateY(00px)';
+				if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
 
 				window.addEventListener('scroll', function () {
 					const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
@@ -548,7 +759,193 @@
 					lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 				});
 			});
+
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+
+			let selectedStart = null;
+			let selectedEnd = null;
+
+			function formatDate(date) {
+				const y = date.getFullYear();
+				const m = String(date.getMonth() + 1).padStart(2, '0');
+				const d = String(date.getDate()).padStart(2, '0');
+				const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+				return `${y}.${m}.${d}(${w})`;
+			}
+
+			function createCalendar(year, month) {
+				const $monthContainer = $('<div class="month"></div>');
+				const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
+				const $daysGrid = $('<div class="days"></div>');
+
+				const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+				$.each(dayNames, (_, day) => {
+					$daysGrid.append($('<div class="day-name"></div>').text(day));
+				});
+
+				const firstDay = new Date(year, month, 1);
+				const lastDay = new Date(year, month + 1, 0);
+
+				for (let i = 0; i < firstDay.getDay(); i++) {
+					$daysGrid.append('<div></div>');
+				}
+
+				for (let d = 1; d <= lastDay.getDate(); d++) {
+					const date = new Date(year, month, d);
+					const $dayEl = $('<div class="day"></div>').text(d);
+
+					if (date < today) {
+						$dayEl.addClass('disabled');
+					} else {
+						$dayEl.on('click', function () {
+							selectDate(date);
+						});
+					}
+
+					$daysGrid.append($dayEl);
+				}
+
+				$monthContainer.append($monthTitle).append($daysGrid);
+				$('#calendar-grid').append($monthContainer);
+			}
+
+			function renderCalendars() {
+				const startYear = today.getFullYear();
+				const startMonth = today.getMonth();
+
+				for (let i = 0; i < 12; i++) {
+					const year = startYear + Math.floor((startMonth + i) / 12);
+					const month = (startMonth + i) % 12;
+					createCalendar(year, month);
+				}
+			}
+
+			function selectDate(date) {
+				if (!selectedStart || (selectedStart && selectedEnd)) {
+					selectedStart = date;
+					selectedEnd = null;
+				} else {
+					if (date < selectedStart) {
+						selectedStart = date;
+						selectedEnd = null;
+					} else {
+						const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
+						if (diff > 30) {
+							alert('최대 30일까지만 선택 가능합니다.');
+							return;
+						}
+						selectedEnd = date;
+					}
+				}
+				updateSelection();
+			}
+
+			function updateSelection() {
+				$('.day').removeClass('selected in-range');
+
+				if (selectedStart) {
+					$('.month').each(function () {
+						const [year, month] = $(this).find('h3').text().split('.').map(Number);
+						$(this).find('.day').each(function () {
+							const dayNum = parseInt($(this).text());
+							const date = new Date(year, month - 1, dayNum);
+
+							if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
+								$(this).addClass('selected');
+							}
+							if (selectedStart && selectedEnd) {
+								if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
+									$(this).addClass('selected');
+								} else if (date > selectedStart && date < selectedEnd) {
+									$(this).addClass('in-range');
+								}
+							}
+						});
+					});
+				}
+
+				$('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
+				$('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
+				if (selectedStart && selectedEnd) {
+					const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
+					$('#nights').text(`${nights}박`);
+				} else {
+					$('#nights').text('');
+				}
+			}
+
+			function applySelection() {
+				if (selectedStart && selectedEnd) {
+
+					$('#checkTime').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+
+				} else {
+					alert('날짜를 선택해주세요.');
+				}
+			}
+
+			$(document).ready(function () {
+				renderCalendars();
+			});
+			$(function () {
+				const $adultCount = $('#adult-count');
+				const minAdult = 1;
+				const maxAdult = 10;
+
+				$('#adult-minus').click(function () {
+					let val = parseInt($adultCount.text());
+					if (val > minAdult) {
+						$adultCount.text(val - 1);
+					}
+				});
+
+				$('#adult-increase').click(function () {
+					let val = parseInt($adultCount.text());
+					if (val < maxAdult) {
+						$adultCount.text(val + 1);
+					}
+				});
+
+				$('#confirm-btn').click(function () {
+					$('#check-people').text(`성인${$adultCount.text()}`);
+				});
+			});         
 		</script>
+		<script>
+			$(document).ready(function () {
+
+				function updateCardLinks() {
+					const region = $('#region').val();
+					const checkTime = $('#checkTime').text().trim();
+					const people = $('#check-people').text().trim();
+					const qR = encodeURIComponent(region);
+					const qT = encodeURIComponent(checkTime);
+					const qP = encodeURIComponent(people);
+
+					$('.card-link').each(function () {
+						$(this).attr(
+							'href',
+							`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}`
+						);
+					});
+				}
+				updateCardLinks();
+
+				// 검색 버튼 클릭 시 직접 URL 이동
+				$('#searchBtn').on('click', function () {
+					const region = $('#region').val();
+					const checkTime = $('#checkTime').text().trim();
+					const people = $('#check-people').text().trim();
+					const url = `/searching/search?rg_name=${encodeURIComponent(region)}`
+						+ `&checkTime=${encodeURIComponent(checkTime)}`
+						+ `&rm_person=${encodeURIComponent(people)}`;
+					window.location.href = url;
+				});
+
+			});
+		</script>
+
 	</main>
 </body>
 

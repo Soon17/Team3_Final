@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <title>호텔 스타일 일정 선택</title>
@@ -18,7 +19,7 @@
       margin: auto;
       padding: 20px;
       border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     .calendar-header {
@@ -57,7 +58,8 @@
       gap: 5px;
     }
 
-    .day, .day-name {
+    .day,
+    .day-name {
       text-align: center;
       padding: 8px 0;
     }
@@ -96,6 +98,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="calendar-wrapper">
     <div class="calendar-header">
@@ -166,15 +169,15 @@
       calendarGrid.appendChild(monthContainer);
     }
 
-	function renderCalendars() {
-		let startYear = today.getFullYear();
-		let startMonth = today.getMonth(); // 0부터 시작
-		for (let i = 0; i < 12; i++) {
-			const year = startYear + Math.floor((startMonth + i) / 12);
-			const month = (startMonth + i) % 12;
-			createCalendar(year, month);
-		}
-	}
+    function renderCalendars() {
+      let startYear = today.getFullYear();
+      let startMonth = today.getMonth(); // 0부터 시작
+      for (let i = 0; i < 12; i++) {
+        const year = startYear + Math.floor((startMonth + i) / 12);
+        const month = (startMonth + i) % 12;
+        createCalendar(year, month);
+      }
+    }
 
     function selectDate(date, el) {
       if (!selectedStart || (selectedStart && selectedEnd)) {
@@ -251,4 +254,5 @@
     renderCalendars();
   </script>
 </body>
+
 </html>
