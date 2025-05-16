@@ -6,7 +6,7 @@
 	layout:decorate="~{layout/layout.html}">
 <head>
 	<meta charset="UTF-8">
-	<title>마이페이지</title>
+	<title>로그인페이지</title>
 	<link rel="stylesheet" href="/resources/static/css/signIn.css">
 
 </head>
@@ -26,17 +26,20 @@
 								<div class="center-wrap">
 									<div class="section text-center">
 										<h4 class="mb-4 pb-3">로그인</h4>
-										<form action="#" method="post">
+										<form th:action="@{/logInPost}" method="post">
 											<div class="form-group">
-												<input type="text" name="me_id" class="form-style" placeholder="아이디" id="logemail" autocomplete="off">
+												<input type="text" name="username" class="form-style" placeholder="아이디" id="logemail" autocomplete="off">
 												<i class="input-icon uil uil-at"></i>
 											</div>  
 											<div class="form-group mt-2">
-												<input type="password" name="me_pw" class="form-style" placeholder="비밀번호" id="logpass" autocomplete="off">
+												<input type="password" name="password" class="form-style" placeholder="비밀번호" id="logpass" autocomplete="off">
 												<i class="input-icon uil uil-lock-alt"></i>
 											</div>
-											<button type="submit" class="btn mt-4 signIn-a">로그인</button><!--로그인 버튼-->
+											<button id="btn-login" type="submit" class="btn mt-4 signIn-a">로그인</button><!--로그인 버튼-->
 										</form>
+										<div th:if="${param.error}" class="alert alert-danger">
+											아이디 또는 비밀번호가 잘못되었습니다.
+										</div>
 										<p class="mb-0 mt-4 text-center signIn-p"><a href="#0" class="link mr-3">아이디 찾기</a><a href="#0" class="link">비밀번호 찾기</a></p>
 										<button class="kakao-login"style="background: #fccb00;">
 											<div class="api-box">
@@ -63,7 +66,7 @@
 								<div class="center-wrap">
 									<div class="section text-center">
 										<h4 class="mb-4 pb-3">회원가입</h4>
-										<form class="singUp-from" th:action="@{/member/signup}" method="post">
+										<form class="singUp-from" th:action="@{/member/signInPost}" method="post">
 											<div class="form-group">
 												<input type="text" name="me_name" class="form-style" placeholder="이름" id="me_name" autocomplete="off">
 												<label id="me_name-error" class="error regex-error" for="me_name" style="overflow: hidden;"></label>
@@ -96,15 +99,15 @@
 												<i class="input-icon uil uil-at"></i>
 											</div> 
 											<div class="form-group mt-2">
-												<input type="text" name="me_number" class="form-style" placeholder="전화번호를 입력하여 인증번호를 받으시오" id="me_number" autocomplete="off">
+												<input type="text" name="me_number" class="form-style" placeholder="전화번호를 입력하세요(01x-xxxx-xxxx)" id="me_number" autocomplete="off">
 												<label id="smsSend" class=""></label>
 												<label id="me_number-error" class="error regex-error" for="me_number" style="overflow: hidden;"></label>
 												<button class="sms-btn" type="button" id="sms-btn" disabled>인증번호 받기</button>
 												<i class="input-icon  uil-phone"></i>
 											</div>
 											<div class="form-group mt-2">
-												<input type="text" name="me_agree" class="form-style" placeholder="인증번호를 받고 작성해주세요" id="me_agree" autocomplete="off" disabled>
-												<label id="me_agree-error" class="error regex-error" for="me_agree" style="overflow: hidden;"></label>
+												<input type="text" name="checknumber" class="form-style" placeholder="인증번호를 받고 작성해주세요" id="checknumber" autocomplete="off" disabled>
+												<label id="checknumber-error" class="error regex-error" for="checknumber" style="overflow: hidden;"></label>
 												<label id="sms-msg" class=""></label>
 												<button class="sms-btn" id="checkSms" type="button" disabled>인증번호 확인</button>
 												<i class="input-icon uil-comment-alt-dots"></i>
@@ -126,148 +129,158 @@
 		</div>
 	</div>
 	<script>
-			function checkId() {
-				$("#checkId").text("");
-				let id = $("#me_id").val();
-				if (!/^[a-zA-Z0-9]{3,13}$/.test(id)) return false;
-				let res = false;
-				$.ajax({
-					async: false,
-					url: '/member/check/id',
-					type: 'post',
-					data: { id: id },
-					success: function (data) {
-						if (data) res = true;
-					},
-				});
-				let str = res ? "사용 가능한 아이디입니다." : "이미 사용중인 아이디입니다.";
-				$("#checkId")
-				.text(str)
-				.toggleClass("green", res)
-				.toggleClass("red", !res)
-				return res;
-			}
-			$('#checkSms').on('click', function () {
-				checkSMS();
-			});
-			function checkSMS(){
-				$("#sms-msg").text("");
-				let userCode = $("#me_agree").val();
-				let res = false;
-				$.ajax({
-					async: false,
-					url: '/sms/check',
-					type: 'post',
-					data: { userCode: userCode },
-					success: function (data) {
-						if (data) res = true;
-					},
-				});
-				let str = res ? "인증 성공!." : "인증번호가 다릅니다.";
-				$("#sms-msg")
-				.text(str)
-				.toggleClass("green", res)
-				.toggleClass("red", !res)
-				if(res){
-					$("#btn-singup").prop("disabled", false);
+		// 회원가입 유효성 검사
+		$(".singUp-from").validate({
+			rules: {
+				me_id: { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
+				me_name: { required: true },
+				me_pw: { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
+				me_pw2: { required: true, equalTo: "#me_pw"},
+				me_nick: { required: true, regex: /^[a-zA-Z0-9가-힣]{2,10}$/ },
+				me_email: { required: true, email: true },
+				me_number: { required: true, phone:true },
+				me_birthday: { required: true , regex: /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/},
+			},
+			messages: {
+				me_id: {
+					required: "필수 항목입니다.",
+					regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
+				},
+				me_name: { required: "필수 항목입니다." },
+				me_pw: {
+					required: "필수 항목입니다.",
+					regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
+				},
+				me_pw2: {
+					required: "필수 항목입니다.",
+					equalTo: "비밀번호가 다릅니다."
+				},
+				me_nick: {
+					required: "필수 항목입니다.",
+					regex: "닉네임은 특수문자를 제외한 2~10자 입니다"
+				},
+				me_email: {
+					required: "필수 항목입니다.",
+					email: "이메일 형식이 아닙니다."
+				},
+				me_number: {
+					required: "필수 항목입니다.",
+					phone: "전화번호가 맞지 않습니다"
+				},
+				me_birthday: {
+					required: "필수 항목입니다.",
+					regex: "생년월일 형식이 아닙니다."
+				},
+			},
+			submitHandler: function () {
+				if(checkSMS() && checkId()){
+					return true;
 				}
-				return res;
-			}
-			$(document).ready(function () {
-				// 커스텀 정규표현식 메서드 먼저 정의
-				$.validator.addMethod("regex", function (value, element, regex) {
-					var re = new RegExp(regex);
-					return this.optional(element) || re.test(value);
-				}, "정규표현식을 확인하세요.");
-				$.validator.addMethod("phone", function (value, element) {
-					$("#sms-btn").prop("disabled", true);
-					$("#smsSend").text("");
-					let res = this.optional(element) || /^010\d{4}\d{4}$/.test(value);
-					if(res){
-						$("#sms-btn").prop("disabled", false);
-					}
-					return res;
-				}, "정규표현식을 확인하세요.");
-				// ID 입력할 때마다 중복 체크 실행
-				$("#me_id").on("input", function () {
-					checkId();
-				});
+				return false;
+			},
+		});
 
-				// 회원가입 유효성 검사
-				$(".singUp-from").validate({
-					rules: {
-						me_id: { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
-						me_name: { required: true },
-						me_pw: { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
-						me_pw2: { required: true, equalTo: "#me_pw"},
-						me_nick: { required: true, regex: /^[a-zA-Z0-9가-힣\s]{2,10}$/ },
-						me_email: { required: true, email: true },
-						me_number: { required: true, phone:true },
-						me_birthday: { required: true , regex: /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/},
-					},
-					messages: {
-						me_id: {
-							required: "필수 항목입니다.",
-							regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
-						},
-						me_name: { required: "필수 항목입니다." },
-						me_pw: {
-							required: "필수 항목입니다.",
-							regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
-						},
-						me_pw2: {
-							required: "필수 항목입니다.",
-     						equalTo: "비밀번호가 다릅니다."
-						},
-						me_nick: {
-							required: "필수 항목입니다.",
-							regex: "닉네임은 특수문자를 제외한 2~10자 입니다"
-						},
-						me_email: {
-							required: "필수 항목입니다.",
-							email: "이메일 형식이 아닙니다."
-						},
-						me_number: {
-							required: "필수 항목입니다.",
-							phone: "전화번호가 맞지 않습니다"
-						},
-						me_birthday: {
-							required: "필수 항목입니다.",
-							regex: "생년월일 형식이 아닙니다."
-						},
-					},
-					submitHandler: function () {
-						if(checkSMS() && checkId()){
-							return true;
-						}
-						return false;
-					},
-				});
-			});
-			$('#sms-btn').on('click', function () {
-				smsSend();
-			});
-			function smsSend() {
-				const me_number = $('#me_number').val();
-				$.ajax({
-					async: false,
-					url: '/sms/send',
-					type: 'post',
-					data: { me_number: me_number },
-					success: function (data) {
-					if (data) res = true;
-					},
-				});
-				let str = res ? "전송 성공!." : "전송 실패ㅠ";
-				$("#smsSend")
-				.text(str)
-				.toggleClass("green", res)
-				.toggleClass("red", !res);
-				if(res){
-					$("#checkSms, #me_agree").prop("disabled", false);
-				}
-				return res;
+		// 커스텀 정규표현식 메서드 먼저 정의
+		$.validator.addMethod("regex", function (value, element, regex) {
+			var re = new RegExp(regex);
+			return this.optional(element) || re.test(value);
+		}, "정규표현식을 확인하세요.");
+		$.validator.addMethod("phone", function (value, element) {
+			$("#sms-btn").prop("disabled", true);
+			$("#smsSend").text("");
+			let res = this.optional(element) || /^01[016789]-\d{3,4}-\d{4}$/.test(value);
+			if(res){
+				$("#sms-btn").prop("disabled", false);
 			}
+			return res;
+		}, "정규표현식을 확인하세요.");
+
+		// ID 입력할 때마다 중복 체크 실행
+		$("#me_id").on("input", function () {
+			checkId();
+		});
+
+		function checkId() {
+			$("#checkId").text("");
+			let id = $("#me_id").val();
+			if (!/^[a-zA-Z0-9]{3,13}$/.test(id)) return false;
+			let res = false;
+			$.ajax({
+				async: false,
+				url: '/member/check/id',
+				type: 'get',
+				data: { id: id },
+				success: function (data) {
+					res = data;
+				},
+			});
+			let str = res ? "사용 가능한 아이디입니다." : "이미 사용중인 아이디입니다.";
+			$("#checkId")
+			.text(str)
+			.toggleClass("green", res)
+			.toggleClass("red", !res)
+			return res;
+		}
+
+		//인증번호 확인 버튼 클릭
+		$('#checkSms').on('click', function () {
+			checkSMS();
+		});
+		function checkSMS(){
+			$("#sms-msg").text("");
+			let userCode = $("#checknumber").val();
+			let res = false;
+
+			// $.ajax({
+			// 	async: false,
+			// 	url: '/sms/check',
+			// 	type: 'post',
+			// 	data: { userCode: userCode },
+			// 	success: function (data) {
+			// 		if (data) res = true;
+			// 	},
+			// });
+			res = true; //임의 값 = 무조건 참
+
+			let str = res ? "인증 성공!" : "인증번호가 다릅니다.";
+			$("#sms-msg")
+			.text(str)
+			.toggleClass("green", res)
+			.toggleClass("red", !res)
+			if(res){
+				$("#btn-singup").prop("disabled", false);
+			}
+			return res;
+		}
+
+		//인증번호 받기 버튼 클릭
+		$('#sms-btn').on('click', function () {	
+			smsSend();
+		});
+		function smsSend() {
+			const me_number = $('#me_number').val();
+
+			// $.ajax({
+			// 	async: false,
+			// 	url: '/sms/send',
+			// 	type: 'post',
+			// 	data: { me_number: me_number },
+			// 	success: function (data) {
+			// 	res = data;
+			// 	},
+			// });
+			res = true; //임의 값 = 무조건 참
+
+			let str = res ? "전송 성공!" : "전송 실패!";
+			$("#smsSend")
+			.text(str)
+			.toggleClass("green", res)
+			.toggleClass("red", !res);
+			if(res){
+				$("#checkSms, #checknumber").prop("disabled", false);
+			}
+			return res;
+		}
 	</script>
 	</main>
 </body>

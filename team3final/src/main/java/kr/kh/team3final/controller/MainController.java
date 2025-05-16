@@ -54,10 +54,4 @@ public class MainController {
 		model.addAttribute("mapId", mapId);
 		return "reserv";
 	}
-	@ResponseBody
-	@GetMapping(value = "/test", produces = MediaType.TEXT_PLAIN_VALUE)
-	public String test() {
-		String url = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + mapId + "&libraries=services,clusterer,drawing";
-		return restTemplate.getForObject(url, String.class);
-	}
 }
