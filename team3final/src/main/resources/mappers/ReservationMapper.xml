@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.ReservationDAO">
+    <!-- 전체 숙소 예약 내역 -->
+	<select id="selectList" resultType="ReservationVO"> 
+        SELECT 
+            r.LR_NUM,
+            r.LR_CHECKIN,
+            r.LR_CHECKOUT,
+            r.LR_COUNT,
+            r.LR_TOTAL_PRICE,
+            r.LR_STATE,
+            r.LR_DATE,
+            r.LR_BOOKER_NAME,
+            r.LR_GUEST_NAME,
+            r.LR_GUEST_NUMBER,
+            r.LR_CONTENT,
+            r.LR_MEAL_STATE,
+            r.LR_ME_NUM,
+            r.LR_RM_NUM,
+            m.ME_NAME AS LR_ME_NAME,
+            rm.RM_NAME AS LR_RM_NAME,
+            ld.LD_NAME AS LR_LD_NAME
+        FROM 
+            lo_reservation r
+        JOIN 
+            member m ON r.LR_ME_NUM = m.ME_NUM
+        JOIN 
+            room rm ON r.LR_RM_NUM = rm.RM_NUM
+        JOIN 
+            lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
+    </select>
+
+    <!-- 최신 예약완료 내역 1개 -->
+	<select id="selectLatestReservation" resultType="ReservationVO">
+        SELECT 
+            r.LR_NUM,
+            r.LR_CHECKIN,
+            r.LR_CHECKOUT,
+            r.LR_COUNT,
+            r.LR_TOTAL_PRICE,
+            r.LR_STATE,
+            r.LR_DATE,
+            r.LR_BOOKER_NAME,
+            r.LR_GUEST_NAME,
+            r.LR_GUEST_NUMBER,
+            r.LR_CONTENT,
+            r.LR_MEAL_STATE,
+            r.LR_ME_NUM,
+            r.LR_RM_NUM,
+            m.ME_NAME AS LR_ME_NAME,
+            rm.RM_NAME AS LR_RM_NAME,
+            ld.LD_NAME AS LR_LD_NAME
+        FROM 
+            lo_reservation r
+        JOIN 
+            member m ON r.LR_ME_NUM = m.ME_NUM
+        JOIN 
+            room rm ON r.LR_RM_NUM = rm.RM_NUM
+        JOIN 
+            lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
+        WHERE
+            r.LR_STATE = '예약완료'
+        ORDER BY
+            r.LR_DATE DESC
+        LIMIT 1
+    </select>
+</mapper>

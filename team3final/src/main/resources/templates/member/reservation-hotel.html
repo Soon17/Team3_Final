@@ -8,14 +8,56 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>예약내역</title>
 	<style>
+		.container {
+    margin: 0 auto;
+		}
+
+		.table {
+				width: 100%;
+				margin: 10px auto;
+		}
+
+		.text-center {
+				text-align: center;
+		}
 	</style>
 </head>
 <body>
 	<main layout:fragment="content">
-		<div class="empty-box">
-			<p class="main-text">예약하신 호텔 내역이 없습니다 :)</p>
-			<p class="sub-text">지금 호텔 예약하고<br>신나는 여행 떠나볼까요?</p>
-			<a class="primary-btn" href="/">호텔 보러가기</a>
+		<div class="container">
+				<h3 class="text-center">최근 호텔 예약 내역</h3>
+				<table class="table table-striped text-center">
+						<thead>
+								<tr>
+										<th>예약번호</th>
+										<th>예약자</th>
+										<th>숙소이름</th>
+										<th>객실이름</th>
+										<th>체크인</th>
+										<th>체크아웃</th>
+										<th>예약일자</th>
+										<th>상태</th>
+								</tr>
+						</thead>
+						<tbody>
+								<tr th:each="res : ${reservations}">
+										<td th:text="${res.lr_num}"></td>
+										<td th:text="${res.lr_booker_name}"></td>
+										<td th:text="${res.lr_ld_name}"></td>
+										<td th:text="${res.lr_rm_name}"></td>
+										<td th:text="${#dates.format(res.lr_checkin, 'yyyy-MM-dd')}"></td>
+										<td th:text="${#dates.format(res.lr_checkout, 'yyyy-MM-dd')}"></td>
+										<td th:text="${#dates.format(res.lr_date, 'yyyy-MM-dd HH:mm')}"></td>
+										<td th:text="${res.lr_state}"></td>
+								</tr>
+						</tbody>
+				</table>
+		</div>
+		<!-- 예약 내역이 없을 때 -->
+		<div th:if="${#lists.isEmpty(reservations)}" class="empty-box">
+				<p class="main-text">예약하신 호텔 내역이 없습니다 :)</p>
+				<p class="sub-text">지금 호텔 예약하고<br>신나는 여행 떠나볼까요?</p>
+				<a class="primary-btn" href="/">호텔 보러가기</a>
 		</div>
 	</main>
 </body>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,11 +51,5 @@ public class MainController {
 	public String reserv(Model model) {
 		model.addAttribute("mapId", mapId);
 		return "reserv";
-	}
-	@ResponseBody
-	@GetMapping(value = "/test", produces = MediaType.TEXT_PLAIN_VALUE)
-	public String test() {
-		String url = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + mapId + "&libraries=services,clusterer,drawing";
-		return restTemplate.getForObject(url, String.class);
 	}
 }
