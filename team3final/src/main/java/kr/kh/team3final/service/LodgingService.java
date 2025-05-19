@@ -17,7 +17,7 @@ public class LodgingService {
 		return lodgingDao.selectRegionLodgingList(rg_num);
 	}
 
-	public List<LodgingVO> allLodgingList(int ld_num) {
+	public LodgingVO allLodgingList(int ld_num) {
 		return lodgingDao.allLodgingList(ld_num);
 	}
 }

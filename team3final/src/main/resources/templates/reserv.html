@@ -688,12 +688,12 @@
 		<main layout:fragment="content">
 			<div class="container">
 				<div class="reserv-img">
+
 					<div class="img-gallary">
-						<img src="/resources/static/img/호텔.jpg" alt="이미지 없음">
-						<img src="/resources/static/img/호텔2.jpg" alt="이미지 없음">
-						<img src="/resources/static/img/호텔3.jpg" alt="이미지 없음">
-						<img src="/resources/static/img/호텔4.jpg" alt="이미지 없음">
-						<img src="/resources/static/img/호텔.jpg" alt="이미지 없음">
+						<th:block th:each="thumb : ${thumbList}">
+							<img th:src="@{${thumb.th_upload + thumb.th_name}}" alt="이미지 없음">
+						</th:block>
+
 					</div>
 					<div class="img-all">
 						<span class="img-all2">모두보기</span>
@@ -702,10 +702,8 @@
 			</div>
 			<div class="infor-container container">
 				<div class="infor-item">
-					<span class="infor-star">5성급</span>
-					<th:block th:each="lodging : ${lodgingAll}">
-						<p class="infor-name" th:attr="data-name=${lodging.ld_name}">[[${lodging.ld_name}]]</p>
-					</th:block>
+					<span class="infor-star" th:text="${lodging.ld_rating + '성급'}"></span>
+					<p class="infor-name" th:text="${lodging.ld_name}"></p>
 					<div class="infor-sub">
 						<!-- 지도 호출 부분 -->
 						<div id="map" style="width: 300px; height: 200px; margin: 20px 0;"></div>
@@ -747,6 +745,7 @@
 						</div>
 					</div>
 				</div>
+
 				<!-- 숙소 상세 정보 버튼 -->
 				<div class="menu-button">
 					<button class="button-menu" data-target=".hotel-box">
@@ -775,31 +774,41 @@
 									</div>
 								</div>
 							</div>
-
 							<div class="list-box">
 								<span style="font-size: 1.25rem; color: #494949; line-height: 1.4; font-weight: 700;">객실목록</span>
 							</div>
+
 							<!-- 숙소 방 정보 리스트 -->
-							<div class="hotel-box">
+							<div class="hotel-box" th:each="room : ${roomList}">
 								<div class="hotel-img">
+
+									<!-- 메인 이미지 (첫 번째 이미지) -->
 									<div class="img1"
 										style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-										<img src="/resources/static/img/호텔2.jpg" alt=""
+										<img th:src="@{${room.thumbList[0].th_upload + room.thumbList[0].th_name}}" alt="대표 이미지"
 											style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
 									</div>
+									<!-- 서브 이미지 (두 번째, 세 번째 이미지) -->
 									<div class="img-sub">
-										<img src="/resources/static/img/호텔3.jpg" alt="">
-										<img src="/resources/static/img/호텔4.jpg" alt="">
+										<th:block th:each="thumb, iterStat : ${room.thumbList}">
+											<th:block th:if="${iterStat.index == 1 || iterStat.index == 2}">
+												<img th:src="@{${thumb.th_upload + thumb.th_name}}" alt="서브 이미지">
+											</th:block>
+										</th:block>
 									</div>
+
 									<div style="margin-top: 1rem;">
-										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">디럭스 프리미엄룸</div>
+										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;"
+											th:text="${room.rm_name}">방 이름</div>
 										<div style="margin-top: .25rem;">
-											<p style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">· 인원 최대 2명</p>
+											<p style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 인원 최대 <span th:text="${room.rm_person}"></span>명</p>
 											<p style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">· 킹사이즈침대 1개</p>
 											<p style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">· 시내 전망</p>
 										</div>
 									</div>
 								</div>
+
 								<div class="hotel-price-list">
 									<div style="padding: 1.5rem; width: 100%; border: 1px solid #f3f3f3; border-radius: 6px;">
 										<div style="margin-top: 0; flex-direction: column; display: flex; gap: 1.5rem;">
@@ -812,16 +821,7 @@
 													</div>
 												</div>
 												<div class="hotel-content">
-													<p style="margin: 0;">· 체크인 15:00 ~ 자정, 체크아웃 11:00 까지</p>
-													<div style="display: flex;">
-														<span>·&nbsp;</span>
-														<p style="margin: 0;">무료 세차</p>
-													</div>
-													<div style="display: flex;">
-														<span>·&nbsp;</span>
-														<p style="margin: 0;">무료 WiFi</p>
-													</div>
-													<button class="hotel-more">시설 및 서비스 더보기></button>
+													<p style="margin: 0;" th:text="${room.rm_infor}"></p>
 												</div>
 												<div style="align-items: flex-end; display: flex; justify-content: flex-end;">
 													<div style="font-size: .875rem; display: flex; flex-direction: column; gap: .125rem;">
@@ -834,7 +834,8 @@
 															</div>
 															<div style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
 																<span
-																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;">100,000원</span>
+																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;"
+																	th:text="${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"></span><!--3자리마다 콤마 끊기 -->
 																<span style="align-items: center; display: flex; color: #666;">/1박</span>
 															</div>
 														</div>
@@ -848,6 +849,7 @@
 									</div>
 								</div>
 							</div>
+
 						</div>
 						<div>
 							<div>

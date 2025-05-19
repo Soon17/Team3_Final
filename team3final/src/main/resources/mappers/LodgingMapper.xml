@@ -4,7 +4,7 @@
 	<select id="selectRegionLodgingList" resultType="LodgingVO">
 		 select* from region; 
 	</select>
-	<select id="allLodgingList" resultType="LodgingVO"> 
-		 SELECT * FROM lodging WHERE LD_NUM = #{ld_num}
+	<select id="allLodgingList" resultType="LodgingVO">
+  SELECT * FROM lodging WHERE ld_num = #{ld_num}
 	</select>
 </mapper>

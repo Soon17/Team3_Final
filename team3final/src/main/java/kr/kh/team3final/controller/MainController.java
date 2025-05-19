@@ -44,19 +44,6 @@ public class MainController {
 		return "regionLodgingList";
 	}
 
-	@GetMapping("/reserv")
-	public String showReservPage(
-			Model model,
-			@RequestParam("checkTime") String checkTime,
-			@RequestParam("rm_person") String rm_person) {
-
-		List<RegionVO> list = regionService.getRegionList();
-		model.addAttribute("regionList", list);
-		model.addAttribute("checkTime", checkTime);
-		model.addAttribute("rm_person", rm_person);
-		return "reserv";
-	}
-
 	@ResponseBody
 	@GetMapping(value = "/test", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String test() {

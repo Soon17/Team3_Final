@@ -565,13 +565,13 @@
 					</div>
 				</div>
 				<div class="im">
-					<a href="#" class="card-link">
+					<a href="#" class="card-link" data-ld-num="1">
 						<div class="hotel-image">
 							<img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
 						</div>
 						<div class="hotel-info">
 							<div class="hotel-up">
-								<div class="hotel-name">롯데 호텔 월드</div>
+								<div class="hotel-name">개조하영</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
 									<span class="review-score">4.6 (999+)</span>
@@ -586,64 +586,22 @@
 					</a>
 				</div>
 				<div class="im">
-					<a href="#" class="card-link">
+					<a href="#" class="card-link" data-ld-num="2">
 						<div class="hotel-image">
-							<img class="poto" src="/resources/static/imgs/hotel2.png" alt="호텔2">
+							<img class="poto" src="/resources/static/imgs/hotel2.png" alt="호텔1">
 						</div>
 						<div class="hotel-info">
 							<div class="hotel-up">
-								<div class="hotel-name">멋져 호텔 월드</div>
+								<div class="hotel-name">안조아영</div>
 								<div class="hotel-grade">
 									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">4.8 (999+)</span>
-									<span class="hotel-stars">· 5성급</span>
-								</div>
-								<div class="hotel-location">서울특별시 - 삼성역에서 355m</div>
-							</div>
-							<div class="hotel-price">
-								<span class="price">352268원</span> /1박
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="im">
-					<a href="#" class="card-link">
-						<div class="hotel-image">
-							<img class="poto" src="/resources/static/imgs/hotel3.png" alt="호텔3">
-						</div>
-						<div class="hotel-info">
-							<div class="hotel-up">
-								<div class="hotel-name">꿀잼 호텔 월드</div>
-								<div class="hotel-grade">
-									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">4.5 (999+)</span>
-									<span class="hotel-stars">· 4성급</span>
-								</div>
-								<div class="hotel-location">서울특별시 - 구로역에서 355m</div>
-							</div>
-							<div class="hotel-price">
-								<span class="price">35068원</span> /1박
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="im">
-					<a href="#" class="card-link">
-						<div class="hotel-image">
-							<img class="poto" src="/resources/static/imgs/hotel4.png" alt="호텔4">
-						</div>
-						<div class="hotel-info">
-							<div class="hotel-up">
-								<div class="hotel-name">래기 호텔</div>
-								<div class="hotel-grade">
-									<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-									<span class="review-score">1.1 (9)</span>
+									<span class="review-score">4.6 (999+)</span>
 									<span class="hotel-stars">· 2성급</span>
 								</div>
-								<div class="hotel-location">서울특별시 - 강남역에서 3500m</div>
+								<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
 							</div>
 							<div class="hotel-price">
-								<span class="price">5000원</span> /1박
+								<span class="price">321,268원</span> /1박
 							</div>
 						</div>
 					</a>
@@ -924,9 +882,10 @@
 					const qP = encodeURIComponent(people);
 
 					$('.card-link').each(function () {
+						const ld_num = $(this).data('ld-num');
 						$(this).attr(
 							'href',
-							`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}`
+							`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}`
 						);
 					});
 				}
