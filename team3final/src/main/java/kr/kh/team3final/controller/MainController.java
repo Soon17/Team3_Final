@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,21 +20,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-
-
 @Controller
 public class MainController {
 	@Autowired
 	RegionService regionService;
 
-	
 	private RestTemplate restTemplate = new RestTemplate();
 
 	@Value("${kakao.map-id}")
-    private String mapId;
+	private String mapId;
 
 	@Autowired
-	LodgingService lodgingService; 
+	LodgingService lodgingService;
 
 	@GetMapping("/")
 	public String main(Model model) {
@@ -40,15 +39,18 @@ public class MainController {
 		model.addAttribute("regionList", list);
 		return "home";
 	}
+
 	@GetMapping("/regionLodging")
-	public String getRegionLodging(Model model ,@RequestParam("rg_num") int rg_num) {
+	public String getRegionLodging(Model model, @RequestParam("rg_num") int rg_num) {
 		List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
 		return "regionLodgingList";
 	}
+
 	@GetMapping("/test")
 	public String test() {
 		return "test";
 	}
+
 	@GetMapping("/reserv")
 	public String reserv(Model model) {
 		model.addAttribute("mapId", mapId);

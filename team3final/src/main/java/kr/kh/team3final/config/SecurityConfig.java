@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import kr.kh.team3final.model.vo.UserRole;
+import kr.kh.team3final.service.CustomOAuth2UserService;
 import kr.kh.team3final.service.MemberDetailService;
 
 @Configuration
@@ -22,6 +23,9 @@ public class SecurityConfig {
 	MemberDetailService memberDetailService;
 	// @Value("${spring.remember.me.key}")
 	// String rememberMeKey;
+
+	@Autowired
+	CustomOAuth2UserService customOAuth2UserService;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,10 +38,16 @@ public class SecurityConfig {
 						.permitAll() // 그 외 요청은 인증 필요
 				)
 				.formLogin((form) -> form
-						.loginPage("/member/signIn") 		// 생략시 기본 로그인 페이지를 출력.
+						.loginPage("/member/signIn") // 생략시 기본 로그인 페이지를 출력.
 						.permitAll()
-						.loginProcessingUrl("/logInPost") 	// 어느 페이지를 사용할 건지
-						.defaultSuccessUrl("/") 			// 성공 시 이동할 페이지
+						.loginProcessingUrl("/logInPost") // 어느 페이지를 사용할 건지
+						.defaultSuccessUrl("/") // 성공 시 이동할 페이지
+				)
+				.oauth2Login(oauth -> oauth
+						.loginPage("/member/signIn") // 커스텀 로그인 페이지
+						.userInfoEndpoint(userInfo -> userInfo
+								.userService(customOAuth2UserService))// 사용자 정보 처리
+						.defaultSuccessUrl("/") // 로그인 성공 후 이동
 				)
 				// 자동 로그인 처리
 				// .rememberMe(rm -> rm
@@ -58,7 +68,7 @@ public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance(); // 평문 비밀번호를 사용
-		// return new BCryptPasswordEncoder();
+		// return NoOpPasswordEncoder.getInstance(); // 평문 비밀번호를 사용
+		return new BCryptPasswordEncoder();
 	}
 }

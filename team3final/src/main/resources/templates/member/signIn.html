@@ -41,19 +41,23 @@
 											아이디 또는 비밀번호가 잘못되었습니다.
 										</div>
 										<p class="mb-0 mt-4 text-center signIn-p"><a href="#0" class="link mr-3">아이디 찾기</a><a href="#0" class="link">비밀번호 찾기</a></p>
-										<button class="kakao-login"style="background: #fccb00;">
-											<div class="api-box">
-												<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTMgM0M2LjkyNSAzIDIgNi44NTMgMiAxMS42MDVjMCAzLjA5MyAyLjA4NyA1LjgwNSA1LjIxOSA3LjMyMi0uMjMuODUtLjgzNCAzLjA3OC0uOTU0IDMuNTU1LS4xNS41OTMuMjE4LjU4NS40Ni40MjYuMTktLjEyNiAzLjAxNC0yLjAyNiA0LjIzMy0yLjg0Ny42NjIuMDk4IDEuMzQ1LjE0OSAyLjA0Mi4xNDkgNi4wNzUgMCAxMS0zLjg1MyAxMS04LjYwNUMyNCA2Ljg1MyAxOS4wNzUgMyAxMyAzeiIgZmlsbD0iIzM4MUUxRiIvPgo8L3N2Zz4K" alt="kakao">
-												카카오톡으로 로그인
-											</div>
-										</button>
-										<button class="kakao-login" style="background:#1ec800;">
-											<div class="api-box">
-												<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0xNi41NjEgMTMuNzA0IDkuMTQ2IDNIM3YyMGg2LjQzOFYxMi4yOTZMMTYuODU0IDIzSDIzVjNoLTYuNDM5djEwLjcwNHoiIGZpbGw9IiNmZmYiLz4KPC9zdmc+Cg==" alt="naver">
-												네이버로 로그인
-											</div>
-										</button>
-										<button class="kakao-login">
+										<a href="/oauth2/authorization/kakao">
+											<button class="kakao-login" style="background: #fccb00;">
+												<div class="api-box">
+													<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTMgM0M2LjkyNSAzIDIgNi44NTMgMiAxMS42MDVjMCAzLjA5MyAyLjA4NyA1LjgwNSA1LjIxOSA3LjMyMi0uMjMuODUtLjgzNCAzLjA3OC0uOTU0IDMuNTU1LS4xNS41OTMuMjE4LjU4NS40Ni40MjYuMTktLjEyNiAzLjAxNC0yLjAyNiA0LjIzMy0yLjg0Ny42NjIuMDk4IDEuMzQ1LjE0OSAyLjA0Mi4xNDkgNi4wNzUgMCAxMS0zLjg1MyAxMS04LjYwNUMyNCA2Ljg1MyAxOS4wNzUgMyAxMyAzeiIgZmlsbD0iIzM4MUUxRiIvPgo8L3N2Zz4K" alt="kakao">
+													카카오톡으로 로그인
+												</div>
+											</button>
+										</a>
+										<a href="/oauth2/authorization/naver">
+											<button class="naver-login" style="background:#1ec800;">
+												<div class="api-box">
+													<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0xNi41NjEgMTMuNzA0IDkuMTQ2IDNIM3YyMGg2LjQzOFYxMi4yOTZMMTYuODU0IDIzSDIzVjNoLTYuNDM5djEwLjcwNHoiIGZpbGw9IiNmZmYiLz4KPC9zdmc+Cg==" alt="naver">
+													네이버로 로그인
+												</div>
+											</button>
+										</a>
+										<button class="google-login">
 											<div class="api-box">
 												<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAACXBIWXMAAAsSAAALEgHS3X78AAAC4UlEQVRIibWXTWgTQRiGn01jm5ZqUhFBsTRED4KiKYh70sYQLQpCCrl4ioXitfFaEFqQ3MSAB6/Ze8D0YgkspfVQ2JPJyYMQEz1UtJXEgNX+GA87qfnZv7TJC3OZmf2eb2dn3v1Gqtfr2KkYkX1AFAiJNmEwrQDkgWxA1bK2QQHJCi6gCdG8TgIKlYHFgKqljwQvRuQokO4S2q4CEA2oWslo0GUCTgFvjgkGuA7kixE5aDToNgCngfgxoY7U8ubFiJzoMbgKhAKqlreEi6V56SCgAswAkwFVk4A7wCyw3g0YmjZcMSLn0b+RmZaBhNnmETFCQArw24EP4d9eX33ya33kxd8tadRk3lJA1RatAjUl4AN8Vkm2wKsr42v1XfdUTT3D3oeOA6AEVO2xE3C3clVXxv3AlDS4z6kHXxm5+6d5vIxuMH2RC90uDzV8bZuTj2pIw4DuUpV+wd1AhwEMnq8xNrfDj1dnLT16emE1ZfS8A+VzyXDCEA4gDe6XHbx1EJg6AhwwsVeh0lGDOpDfDt5PTdjB/X2EFxpwMxeakJWYr0/wCui73RC+/Psi6NVL2iJIArBKMI1x1VMCkCpvL/iBT43eXdwkK1fY2PWAbjJBLZ7p+qxPL6y2xG3T01wynHJ5738p7dQHCwCf/3qZ3Q42wIisU92ChdIWY1kQG+7jwenMxt44c1uX+X4w0D4xLisxq0Adml5YTWN+/gu5ZLgETb9UWYk5+qVq8UzJbIKsxHxDP28uD2/euG0RZzaXDKfb4UHgvcVDDSnoy1bS4pm8rMRC6JsuKpp3YO8co+WHSAcdVVohlwwfOmpL9SorsQTOqhlbSXUPI5sznKiNNXdP5pLh/P85baWz+L49q+M82/fwbF2CpuU2hYsEUsB8rxIYqtx69m5+/nl7v+mlQVZivbg0VIGoFs+sGQ2aersWz2TR/X1JBOkWugT4zcBgc1drSHi83UWxDKyJlnXiiv8ANRgOD/qVS6cAAAAASUVORK5CYII=" alt="google"></img>
 												구글로 로그인
