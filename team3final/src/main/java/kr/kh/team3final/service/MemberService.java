@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.kh.team3final.dao.MemberDAO;
@@ -16,6 +17,9 @@ public class MemberService {
 	@Autowired
 	MemberDAO memberDAO;
 
+	@Autowired
+    PasswordEncoder passwordEncoder;
+
 	public boolean checkId(String id) {
 		return memberDAO.selectMember(id) == null;
 	}
@@ -24,6 +28,7 @@ public class MemberService {
 		if(member == null){
 			return false;
 		}
+
 		//아이디 정규 표현식 확인
 		if(!Pattern.matches("^[a-zA-Z0-9]{3,13}$", member.getMe_id())){
 			return false;
@@ -50,10 +55,25 @@ public class MemberService {
 			return false;
 		}
 		try {
+			// 비밀번호 암호화
+            String encodedPw = passwordEncoder.encode(member.getMe_pw());
+            member.setMe_pw(encodedPw);  // 암호화된 비밀번호로 설정
 			return memberDAO.insertMember(member);
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	public MemberVO getMemberByEmail(String email) {
+		return memberDAO.selectMemberByEmail(email);
+	}
+
+	public boolean insertMember(MemberVO newUser) {
+		return memberDAO.insertMember(newUser);
+	}
+
+	public boolean insertMemberByIp(MemberVO newUser) {
+		return memberDAO.insertMemberByIp(newUser);
 	}
 
 	

@@ -10,4 +10,13 @@
 		insert into member(me_id, me_pw, me_email, me_number, me_name, me_nick, me_birthday)
 		value(#{me_id},#{me_pw},#{me_email},#{me_number}, #{me_name}, #{me_nick}, #{me_birthday})
 	</insert>
+	<select id="selectMemberByEmail" resultType="MemberVO">
+		select*
+		from member
+		where me_email = #{me_email}
+	</select>
+	<insert id="insertMemberByIp">
+		insert into member(me_id, me_pw, me_email, me_number, me_name, me_nick, me_birthday, me_gender, me_profile)
+		value(#{me_id},#{me_pw},#{me_email},#{me_number}, #{me_name}, #{me_nick}, #{me_birthday}, #{me_gender}, #{me_profile})
+	</insert>
 </mapper>

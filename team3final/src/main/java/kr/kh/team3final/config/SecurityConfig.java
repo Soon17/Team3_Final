@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import kr.kh.team3final.model.vo.UserRole;
@@ -62,13 +59,12 @@ public class SecurityConfig {
 						.logoutSuccessUrl("/")
 						.clearAuthentication(true)
 						.invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID")
+						// .logoutSuccessHandler((request, response, authentication) -> {
+						// 	// 네이버 로그아웃 페이지로 리다이렉트
+						// 	response.sendRedirect("https://nid.naver.com/nidlogin.logout");
+						// })
 						.permitAll()); // 로그아웃도 모두 접근 가능
 		return http.build();
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		// return NoOpPasswordEncoder.getInstance(); // 평문 비밀번호를 사용
-		return new BCryptPasswordEncoder();
 	}
 }

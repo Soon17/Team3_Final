@@ -1,128 +1,160 @@
 <!DOCTYPE html>
-<html
-	lang="en" 
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout.html}">
+
 <head>
 	<meta charset="UTF-8">
 	<title>로그인페이지</title>
 	<link rel="stylesheet" href="/resources/static/css/signIn.css">
 
 </head>
+
 <body>
 	<main layout:fragment="content" class="signInhtml">
-	<!--그 아이디 비밀번호 이런거는 placeholder에 한글로 적혀있을듯-->
-	<div class="section">
-		<div class="container">
-			<div class="col-12 text-center align-self-center py-5">
-				<div class="section pb-5 pt-5 pt-sm-2 text-center">
-					<h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
-					<input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-					<label for="reg-log"></label>
-					<div class="card-3d-wrap mx-auto">
-						<div class="card-3d-wrapper">
-							<div class="card-front">
-								<div class="center-wrap">
-									<div class="section text-center">
-										<h4 class="mb-4 pb-3">로그인</h4>
-										<form th:action="@{/logInPost}" method="post">
-											<div class="form-group">
-												<input type="text" name="username" class="form-style" placeholder="아이디" id="logemail" autocomplete="off">
-												<i class="input-icon uil uil-at"></i>
-											</div>  
-											<div class="form-group mt-2">
-												<input type="password" name="password" class="form-style" placeholder="비밀번호" id="logpass" autocomplete="off">
-												<i class="input-icon uil uil-lock-alt"></i>
+		<!--그 아이디 비밀번호 이런거는 placeholder에 한글로 적혀있을듯-->
+		<div class="section">
+			<div class="container">
+				<div class="col-12 text-center align-self-center py-5">
+					<div class="section pb-5 pt-5 pt-sm-2 text-center">
+						<h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+						<input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+						<label for="reg-log"></label>
+						<div class="card-3d-wrap mx-auto">
+							<div class="card-3d-wrapper">
+								<div class="card-front">
+									<div class="center-wrap">
+										<div class="section text-center">
+											<h4 class="mb-4 pb-3">로그인</h4>
+											<form th:action="@{/logInPost}" method="post">
+												<div class="form-group">
+													<input type="text" name="username" class="form-style"
+														placeholder="아이디" id="logemail" autocomplete="off">
+													<i class="input-icon uil uil-at"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="password" name="password" class="form-style"
+														placeholder="비밀번호" id="logpass" autocomplete="off">
+													<i class="input-icon uil uil-lock-alt"></i>
+												</div>
+												<button id="btn-login" type="submit"
+													class="btn mt-4 signIn-a">로그인</button><!--로그인 버튼-->
+											</form>
+											<div th:if="${param.error}" class="alert alert-danger">
+												아이디 또는 비밀번호가 잘못되었습니다.
 											</div>
-											<button id="btn-login" type="submit" class="btn mt-4 signIn-a">로그인</button><!--로그인 버튼-->
-										</form>
-										<div th:if="${param.error}" class="alert alert-danger">
-											아이디 또는 비밀번호가 잘못되었습니다.
+											<p class="mb-0 mt-4 text-center signIn-p"><a href="#0" class="link mr-3">아이디
+													찾기</a><a href="#0" class="link">비밀번호 찾기</a></p>
+											
+											<a href="/oauth2/authorization/kakao">
+												<div class="kakao-login" style="background: #fccb00;">
+													<div class="api-box mb-1">
+														<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTMgM0M2LjkyNSAzIDIgNi44NTMgMiAxMS42MDVjMCAzLjA5MyAyLjA4NyA1LjgwNSA1LjIxOSA3LjMyMi0uMjMuODUtLjgzNCAzLjA3OC0uOTU0IDMuNTU1LS4xNS41OTMuMjE4LjU4NS40Ni40MjYuMTktLjEyNiAzLjAxNC0yLjAyNiA0LjIzMy0yLjg0Ny42NjIuMDk4IDEuMzQ1LjE0OSAyLjA0Mi4xNDkgNi4wNzUgMCAxMS0zLjg1MyAxMS04LjYwNUMyNCA2Ljg1MyAxOS4wNzUgMyAxMyAzeiIgZmlsbD0iIzM4MUUxRiIvPgo8L3N2Zz4K"
+															alt="kakao">
+														카카오톡으로 로그인
+													</div>
+												</div>
+											</a>
+											<a href="/oauth2/authorization/naver">
+												<div class="naver-login" style="background:#1ec800;">
+													<div class="api-box mb-1">
+														<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0xNi41NjEgMTMuNzA0IDkuMTQ2IDNIM3YyMGg2LjQzOFYxMi4yOTZMMTYuODU0IDIzSDIzVjNoLTYuNDM5djEwLjcwNHoiIGZpbGw9IiNmZmYiLz4KPC9zdmc+Cg=="
+															alt="naver">
+														네이버로 로그인
+													</div>
+												</div>
+											</a>
+											<button class="google-login">
+												<div class="api-box">
+													<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAACXBIWXMAAAsSAAALEgHS3X78AAAC4UlEQVRIibWXTWgTQRiGn01jm5ZqUhFBsTRED4KiKYh70sYQLQpCCrl4ioXitfFaEFqQ3MSAB6/Ze8D0YgkspfVQ2JPJyYMQEz1UtJXEgNX+GA87qfnZv7TJC3OZmf2eb2dn3v1Gqtfr2KkYkX1AFAiJNmEwrQDkgWxA1bK2QQHJCi6gCdG8TgIKlYHFgKqljwQvRuQokO4S2q4CEA2oWslo0GUCTgFvjgkGuA7kixE5aDToNgCngfgxoY7U8ubFiJzoMbgKhAKqlreEi6V56SCgAswAkwFVk4A7wCyw3g0YmjZcMSLn0b+RmZaBhNnmETFCQArw24EP4d9eX33ya33kxd8tadRk3lJA1RatAjUl4AN8Vkm2wKsr42v1XfdUTT3D3oeOA6AEVO2xE3C3clVXxv3AlDS4z6kHXxm5+6d5vIxuMH2RC90uDzV8bZuTj2pIw4DuUpV+wd1AhwEMnq8xNrfDj1dnLT16emE1ZfS8A+VzyXDCEA4gDe6XHbx1EJg6AhwwsVeh0lGDOpDfDt5PTdjB/X2EFxpwMxeakJWYr0/wCui73RC+/Psi6NVL2iJIArBKMI1x1VMCkCpvL/iBT43eXdwkK1fY2PWAbjJBLZ7p+qxPL6y2xG3T01wynHJ5738p7dQHCwCf/3qZ3Q42wIisU92ChdIWY1kQG+7jwenMxt44c1uX+X4w0D4xLisxq0Adml5YTWN+/gu5ZLgETb9UWYk5+qVq8UzJbIKsxHxDP28uD2/euG0RZzaXDKfb4UHgvcVDDSnoy1bS4pm8rMRC6JsuKpp3YO8co+WHSAcdVVohlwwfOmpL9SorsQTOqhlbSXUPI5sznKiNNXdP5pLh/P85baWz+L49q+M82/fwbF2CpuU2hYsEUsB8rxIYqtx69m5+/nl7v+mlQVZivbg0VIGoFs+sGQ2aersWz2TR/X1JBOkWugT4zcBgc1drSHi83UWxDKyJlnXiiv8ANRgOD/qVS6cAAAAASUVORK5CYII="
+														alt="google"></img>
+													구글로 로그인
+												</div>
+											</button>
 										</div>
-										<p class="mb-0 mt-4 text-center signIn-p"><a href="#0" class="link mr-3">아이디 찾기</a><a href="#0" class="link">비밀번호 찾기</a></p>
-										<a href="/oauth2/authorization/kakao">
-											<button class="kakao-login" style="background: #fccb00;">
-												<div class="api-box">
-													<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTMgM0M2LjkyNSAzIDIgNi44NTMgMiAxMS42MDVjMCAzLjA5MyAyLjA4NyA1LjgwNSA1LjIxOSA3LjMyMi0uMjMuODUtLjgzNCAzLjA3OC0uOTU0IDMuNTU1LS4xNS41OTMuMjE4LjU4NS40Ni40MjYuMTktLjEyNiAzLjAxNC0yLjAyNiA0LjIzMy0yLjg0Ny42NjIuMDk4IDEuMzQ1LjE0OSAyLjA0Mi4xNDkgNi4wNzUgMCAxMS0zLjg1MyAxMS04LjYwNUMyNCA2Ljg1MyAxOS4wNzUgMyAxMyAzeiIgZmlsbD0iIzM4MUUxRiIvPgo8L3N2Zz4K" alt="kakao">
-													카카오톡으로 로그인
-												</div>
-											</button>
-										</a>
-										<a href="/oauth2/authorization/naver">
-											<button class="naver-login" style="background:#1ec800;">
-												<div class="api-box">
-													<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyNiAyNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0xNi41NjEgMTMuNzA0IDkuMTQ2IDNIM3YyMGg2LjQzOFYxMi4yOTZMMTYuODU0IDIzSDIzVjNoLTYuNDM5djEwLjcwNHoiIGZpbGw9IiNmZmYiLz4KPC9zdmc+Cg==" alt="naver">
-													네이버로 로그인
-												</div>
-											</button>
-										</a>
-										<button class="google-login">
-											<div class="api-box">
-												<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAACXBIWXMAAAsSAAALEgHS3X78AAAC4UlEQVRIibWXTWgTQRiGn01jm5ZqUhFBsTRED4KiKYh70sYQLQpCCrl4ioXitfFaEFqQ3MSAB6/Ze8D0YgkspfVQ2JPJyYMQEz1UtJXEgNX+GA87qfnZv7TJC3OZmf2eb2dn3v1Gqtfr2KkYkX1AFAiJNmEwrQDkgWxA1bK2QQHJCi6gCdG8TgIKlYHFgKqljwQvRuQokO4S2q4CEA2oWslo0GUCTgFvjgkGuA7kixE5aDToNgCngfgxoY7U8ubFiJzoMbgKhAKqlreEi6V56SCgAswAkwFVk4A7wCyw3g0YmjZcMSLn0b+RmZaBhNnmETFCQArw24EP4d9eX33ya33kxd8tadRk3lJA1RatAjUl4AN8Vkm2wKsr42v1XfdUTT3D3oeOA6AEVO2xE3C3clVXxv3AlDS4z6kHXxm5+6d5vIxuMH2RC90uDzV8bZuTj2pIw4DuUpV+wd1AhwEMnq8xNrfDj1dnLT16emE1ZfS8A+VzyXDCEA4gDe6XHbx1EJg6AhwwsVeh0lGDOpDfDt5PTdjB/X2EFxpwMxeakJWYr0/wCui73RC+/Psi6NVL2iJIArBKMI1x1VMCkCpvL/iBT43eXdwkK1fY2PWAbjJBLZ7p+qxPL6y2xG3T01wynHJ5738p7dQHCwCf/3qZ3Q42wIisU92ChdIWY1kQG+7jwenMxt44c1uX+X4w0D4xLisxq0Adml5YTWN+/gu5ZLgETb9UWYk5+qVq8UzJbIKsxHxDP28uD2/euG0RZzaXDKfb4UHgvcVDDSnoy1bS4pm8rMRC6JsuKpp3YO8co+WHSAcdVVohlwwfOmpL9SorsQTOqhlbSXUPI5sznKiNNXdP5pLh/P85baWz+L49q+M82/fwbF2CpuU2hYsEUsB8rxIYqtx69m5+/nl7v+mlQVZivbg0VIGoFs+sGQ2aersWz2TR/X1JBOkWugT4zcBgc1drSHi83UWxDKyJlnXiiv8ANRgOD/qVS6cAAAAASUVORK5CYII=" alt="google"></img>
-												구글로 로그인
-											</div>
-										</button>
 									</div>
 								</div>
-							</div>
-							<div class="card-back">
-								<div class="center-wrap">
-									<div class="section text-center">
-										<h4 class="mb-4 pb-3">회원가입</h4>
-										<form class="singUp-from" th:action="@{/member/signInPost}" method="post">
-											<div class="form-group">
-												<input type="text" name="me_name" class="form-style" placeholder="이름" id="me_name" autocomplete="off">
-												<label id="me_name-error" class="error regex-error" for="me_name" style="overflow: hidden;"></label>
-												<i class="input-icon uil uil-user"></i>
-											</div> 
-											<div class="form-group mt-2">
-												<input type="text" name="me_id" class="form-style" placeholder="아이디" id="me_id" autocomplete="off">
-												<label id="checkId" class=""></label>
-												<label id="me_id-error" class="error regex-error" for="me_id" style="overflow: hidden;"></label>
-												<i class="input-icon uil-user-square"></i>
-											</div> 
-											<div class="form-group mt-2">
-												<input type="password" name="me_pw" class="form-style" placeholder="비밀번호" id="me_pw" autocomplete="off">
-												<label id="me_pw-error" class="error regex-error" for="me_pw" style="overflow: hidden;"></label>
-												<i class="input-icon uil uil-lock-alt"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="password" name="me_pw2" class="form-style" placeholder="비밀번호 확인" id="me_pw2" autocomplete="off">
-												<label id="me_pw2-error" class="error regex-error" for="me_pw2" style="overflow: hidden;"></label>
-												<i class="input-icon uil uil-lock-alt"></i>
-											</div> 
-											<div class="form-group mt-2">
-												<input type="text" name="me_nick" class="form-style" placeholder="닉네임" id="me_nick" autocomplete="off">
-												<label id="me_nick-error" class="error regex-error" for="me_nick" style="overflow: hidden;"></label>
-												<i class="input-icon uil uil-users-alt"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="email" name="me_email" class="form-style" placeholder="이메일" id="me_email" autocomplete="off">
-												<label id="me_email-error" class="error regex-error" for="me_email" style="overflow: hidden;"></label>
-												<i class="input-icon uil uil-at"></i>
-											</div> 
-											<div class="form-group mt-2">
-												<input type="text" name="me_number" class="form-style" placeholder="전화번호를 입력하세요(01x-xxxx-xxxx)" id="me_number" autocomplete="off">
-												<label id="smsSend" class=""></label>
-												<label id="me_number-error" class="error regex-error" for="me_number" style="overflow: hidden;"></label>
-												<button class="sms-btn" type="button" id="sms-btn" disabled>인증번호 받기</button>
-												<i class="input-icon  uil-phone"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="text" name="checknumber" class="form-style" placeholder="인증번호를 받고 작성해주세요" id="checknumber" autocomplete="off" disabled>
-												<label id="checknumber-error" class="error regex-error" for="checknumber" style="overflow: hidden;"></label>
-												<label id="sms-msg" class=""></label>
-												<button class="sms-btn" id="checkSms" type="button" disabled>인증번호 확인</button>
-												<i class="input-icon uil-comment-alt-dots"></i>
-											</div>
-											<div class="form-group mt-2">
-												<input type="text" name="me_birthday" class="form-style" placeholder="생년월일 (YYYYMMDD)" id="me_birthday" autocomplete="off" maxlength="8">
-												<label id="me_birthday-error" class="error regex-error" for="me_birthday" style="overflow: hidden;"></label>
-												<i class="input-icon uil uil-calendar-alt"></i>
-											</div>
-											<button id="btn-singup" class="btn mt-4 signIn-a" type="submit" disabled>회원가입</button><!--회원가입 버튼-->
-										</form>
+								<div class="card-back">
+									<div class="center-wrap">
+										<div class="section text-center">
+											<h4 class="mb-4 pb-3">회원가입</h4>
+											<form class="singUp-from" th:action="@{/member/signInPost}" method="post">
+												<div class="form-group">
+													<input type="text" name="me_name" class="form-style"
+														placeholder="이름" id="me_name" autocomplete="off">
+													<label id="me_name-error" class="error regex-error" for="me_name"
+														style="overflow: hidden;"></label>
+													<i class="input-icon uil uil-user"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="text" name="me_id" class="form-style" placeholder="아이디"
+														id="me_id" autocomplete="off">
+													<label id="checkId" class=""></label>
+													<label id="me_id-error" class="error regex-error" for="me_id"
+														style="overflow: hidden;"></label>
+													<i class="input-icon uil-user-square"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="password" name="me_pw" class="form-style"
+														placeholder="비밀번호" id="me_pw" autocomplete="off">
+													<label id="me_pw-error" class="error regex-error" for="me_pw"
+														style="overflow: hidden;"></label>
+													<i class="input-icon uil uil-lock-alt"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="password" name="me_pw2" class="form-style"
+														placeholder="비밀번호 확인" id="me_pw2" autocomplete="off">
+													<label id="me_pw2-error" class="error regex-error" for="me_pw2"
+														style="overflow: hidden;"></label>
+													<i class="input-icon uil uil-lock-alt"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="text" name="me_nick" class="form-style"
+														placeholder="닉네임" id="me_nick" autocomplete="off">
+													<label id="me_nick-error" class="error regex-error" for="me_nick"
+														style="overflow: hidden;"></label>
+													<i class="input-icon uil uil-users-alt"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="email" name="me_email" class="form-style"
+														placeholder="이메일" id="me_email" autocomplete="off">
+													<label id="me_email-error" class="error regex-error" for="me_email"
+														style="overflow: hidden;"></label>
+													<i class="input-icon uil uil-at"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="text" name="me_number" class="form-style"
+														placeholder="전화번호를 입력하세요(01x-xxxx-xxxx)" id="me_number"
+														autocomplete="off">
+													<label id="smsSend" class=""></label>
+													<label id="me_number-error" class="error regex-error"
+														for="me_number" style="overflow: hidden;"></label>
+													<button class="sms-btn" type="button" id="sms-btn" disabled>인증번호
+														받기</button>
+													<i class="input-icon  uil-phone"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="text" name="checknumber" class="form-style"
+														placeholder="인증번호를 받고 작성해주세요" id="checknumber"
+														autocomplete="off" disabled>
+													<label id="checknumber-error" class="error regex-error"
+														for="checknumber" style="overflow: hidden;"></label>
+													<label id="sms-msg" class=""></label>
+													<button class="sms-btn" id="checkSms" type="button" disabled>인증번호
+														확인</button>
+													<i class="input-icon uil-comment-alt-dots"></i>
+												</div>
+												<div class="form-group mt-2">
+													<input type="text" name="me_birthday" class="form-style"
+														placeholder="생년월일 (YYYYMMDD)" id="me_birthday"
+														autocomplete="off" maxlength="8">
+													<label id="me_birthday-error" class="error regex-error"
+														for="me_birthday" style="overflow: hidden;"></label>
+													<i class="input-icon uil uil-calendar-alt"></i>
+												</div>
+												<button id="btn-singup" class="btn mt-4 signIn-a" type="submit"
+													disabled>회원가입</button><!--회원가입 버튼-->
+											</form>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -131,161 +163,161 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<script>
-		// 회원가입 유효성 검사
-		$(".singUp-from").validate({
-			rules: {
-				me_id: { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
-				me_name: { required: true },
-				me_pw: { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
-				me_pw2: { required: true, equalTo: "#me_pw"},
-				me_nick: { required: true, regex: /^[a-zA-Z0-9가-힣]{2,10}$/ },
-				me_email: { required: true, email: true },
-				me_number: { required: true, phone:true },
-				me_birthday: { required: true , regex: /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/},
-			},
-			messages: {
-				me_id: {
-					required: "필수 항목입니다.",
-					regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
+		<script>
+			// 회원가입 유효성 검사
+			$(".singUp-from").validate({
+				rules: {
+					me_id: { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
+					me_name: { required: true },
+					me_pw: { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
+					me_pw2: { required: true, equalTo: "#me_pw" },
+					me_nick: { required: true, regex: /^[a-zA-Z0-9가-힣]{2,10}$/ },
+					me_email: { required: true, email: true },
+					me_number: { required: true, phone: true },
+					me_birthday: { required: true, regex: /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/ },
 				},
-				me_name: { required: "필수 항목입니다." },
-				me_pw: {
-					required: "필수 항목입니다.",
-					regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
+				messages: {
+					me_id: {
+						required: "필수 항목입니다.",
+						regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
+					},
+					me_name: { required: "필수 항목입니다." },
+					me_pw: {
+						required: "필수 항목입니다.",
+						regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
+					},
+					me_pw2: {
+						required: "필수 항목입니다.",
+						equalTo: "비밀번호가 다릅니다."
+					},
+					me_nick: {
+						required: "필수 항목입니다.",
+						regex: "닉네임은 특수문자를 제외한 2~10자 입니다"
+					},
+					me_email: {
+						required: "필수 항목입니다.",
+						email: "이메일 형식이 아닙니다."
+					},
+					me_number: {
+						required: "필수 항목입니다.",
+						phone: "전화번호가 맞지 않습니다"
+					},
+					me_birthday: {
+						required: "필수 항목입니다.",
+						regex: "생년월일 형식이 아닙니다."
+					},
 				},
-				me_pw2: {
-					required: "필수 항목입니다.",
-					equalTo: "비밀번호가 다릅니다."
-				},
-				me_nick: {
-					required: "필수 항목입니다.",
-					regex: "닉네임은 특수문자를 제외한 2~10자 입니다"
-				},
-				me_email: {
-					required: "필수 항목입니다.",
-					email: "이메일 형식이 아닙니다."
-				},
-				me_number: {
-					required: "필수 항목입니다.",
-					phone: "전화번호가 맞지 않습니다"
-				},
-				me_birthday: {
-					required: "필수 항목입니다.",
-					regex: "생년월일 형식이 아닙니다."
-				},
-			},
-			submitHandler: function () {
-				if(checkSMS() && checkId()){
-					return true;
-				}
-				return false;
-			},
-		});
-
-		// 커스텀 정규표현식 메서드 먼저 정의
-		$.validator.addMethod("regex", function (value, element, regex) {
-			var re = new RegExp(regex);
-			return this.optional(element) || re.test(value);
-		}, "정규표현식을 확인하세요.");
-		$.validator.addMethod("phone", function (value, element) {
-			$("#sms-btn").prop("disabled", true);
-			$("#smsSend").text("");
-			let res = this.optional(element) || /^01[016789]-\d{3,4}-\d{4}$/.test(value);
-			if(res){
-				$("#sms-btn").prop("disabled", false);
-			}
-			return res;
-		}, "정규표현식을 확인하세요.");
-
-		// ID 입력할 때마다 중복 체크 실행
-		$("#me_id").on("input", function () {
-			checkId();
-		});
-
-		function checkId() {
-			$("#checkId").text("");
-			let id = $("#me_id").val();
-			if (!/^[a-zA-Z0-9]{3,13}$/.test(id)) return false;
-			let res = false;
-			$.ajax({
-				async: false,
-				url: '/member/check/id',
-				type: 'get',
-				data: { id: id },
-				success: function (data) {
-					res = data;
+				submitHandler: function () {
+					if (checkSMS() && checkId()) {
+						return true;
+					}
+					return false;
 				},
 			});
-			let str = res ? "사용 가능한 아이디입니다." : "이미 사용중인 아이디입니다.";
-			$("#checkId")
-			.text(str)
-			.toggleClass("green", res)
-			.toggleClass("red", !res)
-			return res;
-		}
 
-		//인증번호 확인 버튼 클릭
-		$('#checkSms').on('click', function () {
-			checkSMS();
-		});
-		function checkSMS(){
-			$("#sms-msg").text("");
-			let userCode = $("#checknumber").val();
-			let res = false;
+			// 커스텀 정규표현식 메서드 먼저 정의
+			$.validator.addMethod("regex", function (value, element, regex) {
+				var re = new RegExp(regex);
+				return this.optional(element) || re.test(value);
+			}, "정규표현식을 확인하세요.");
+			$.validator.addMethod("phone", function (value, element) {
+				$("#sms-btn").prop("disabled", true);
+				$("#smsSend").text("");
+				let res = this.optional(element) || /^01[016789]-\d{3,4}-\d{4}$/.test(value);
+				if (res) {
+					$("#sms-btn").prop("disabled", false);
+				}
+				return res;
+			}, "정규표현식을 확인하세요.");
 
-			// $.ajax({
-			// 	async: false,
-			// 	url: '/sms/check',
-			// 	type: 'post',
-			// 	data: { userCode: userCode },
-			// 	success: function (data) {
-			// 		if (data) res = true;
-			// 	},
-			// });
-			res = true; //임의 값 = 무조건 참
+			// ID 입력할 때마다 중복 체크 실행
+			$("#me_id").on("input", function () {
+				checkId();
+			});
 
-			let str = res ? "인증 성공!" : "인증번호가 다릅니다.";
-			$("#sms-msg")
-			.text(str)
-			.toggleClass("green", res)
-			.toggleClass("red", !res)
-			if(res){
-				$("#btn-singup").prop("disabled", false);
+			function checkId() {
+				$("#checkId").text("");
+				let id = $("#me_id").val();
+				if (!/^[a-zA-Z0-9]{3,13}$/.test(id)) return false;
+				let res = false;
+				$.ajax({
+					async: false,
+					url: '/member/check/id',
+					type: 'get',
+					data: { id: id },
+					success: function (data) {
+						res = data;
+					},
+				});
+				let str = res ? "사용 가능한 아이디입니다." : "이미 사용중인 아이디입니다.";
+				$("#checkId")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res)
+				return res;
 			}
-			return res;
-		}
 
-		//인증번호 받기 버튼 클릭
-		$('#sms-btn').on('click', function () {	
-			smsSend();
-		});
-		function smsSend() {
-			const me_number = $('#me_number').val();
+			//인증번호 확인 버튼 클릭
+			$('#checkSms').on('click', function () {
+				checkSMS();
+			});
+			function checkSMS() {
+				$("#sms-msg").text("");
+				let userCode = $("#checknumber").val();
+				let res = false;
 
-			// $.ajax({
-			// 	async: false,
-			// 	url: '/sms/send',
-			// 	type: 'post',
-			// 	data: { me_number: me_number },
-			// 	success: function (data) {
-			// 	res = data;
-			// 	},
-			// });
-			res = true; //임의 값 = 무조건 참
+				// $.ajax({
+				// 	async: false,
+				// 	url: '/sms/check',
+				// 	type: 'post',
+				// 	data: { userCode: userCode },
+				// 	success: function (data) {
+				// 		if (data) res = true;
+				// 	},
+				// });
+				res = true; //임의 값 = 무조건 참
 
-			let str = res ? "전송 성공!" : "전송 실패!";
-			$("#smsSend")
-			.text(str)
-			.toggleClass("green", res)
-			.toggleClass("red", !res);
-			if(res){
-				$("#checkSms, #checknumber").prop("disabled", false);
+				let str = res ? "인증 성공!" : "인증번호가 다릅니다.";
+				$("#sms-msg")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res)
+				if (res) {
+					$("#btn-singup").prop("disabled", false);
+				}
+				return res;
 			}
-			return res;
-		}
-	</script>
+
+			//인증번호 받기 버튼 클릭
+			$('#sms-btn').on('click', function () {
+				smsSend();
+			});
+			function smsSend() {
+				const me_number = $('#me_number').val();
+
+				// $.ajax({
+				// 	async: false,
+				// 	url: '/sms/send',
+				// 	type: 'post',
+				// 	data: { me_number: me_number },
+				// 	success: function (data) {
+				// 	res = data;
+				// 	},
+				// });
+				res = true; //임의 값 = 무조건 참
+
+				let str = res ? "전송 성공!" : "전송 실패!";
+				$("#smsSend")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res);
+				if (res) {
+					$("#checkSms, #checknumber").prop("disabled", false);
+				}
+				return res;
+			}
+		</script>
 	</main>
 </body>
+
 </html>

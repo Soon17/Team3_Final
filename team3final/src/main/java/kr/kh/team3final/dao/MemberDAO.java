@@ -8,4 +8,8 @@ public interface MemberDAO {
 
 	boolean insertMember(MemberVO member);
 
+	MemberVO selectMemberByEmail(String me_email);
+
+	boolean insertMemberByIp(MemberVO newUser);
+
 }
