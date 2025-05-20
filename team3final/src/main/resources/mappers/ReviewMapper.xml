@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.ReviewDAO">
+<select id="getSelectReviewList" resultType="kr.kh.team3final.model.dto.Lodging_ReviewDTO">
+    SELECT
+        r.rv_num,
+        r.rv_rating,
+        r.rv_date,
+        r.rv_content,
+        l.ld_num,
+        l.ld_name,
+        l.ld_region
+    FROM review r
+    JOIN lodging l ON r.rv_number = l.ld_num
+    WHERE r.rv_table_name = 'hotel'
+    ORDER BY r.rv_num DESC
+</select>
+
+</mapper>

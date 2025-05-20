@@ -1,6 +1,7 @@
 package kr.kh.team3final.controller;
 
 import java.lang.reflect.Member;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 import kr.kh.team3final.model.vo.MemberVO;
 import kr.kh.team3final.model.vo.ReservationVO;
 import kr.kh.team3final.service.MemberService;
 import kr.kh.team3final.service.ReservationService;
+import kr.kh.team3final.service.ReviewService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +32,9 @@ public class MemberController {
 	@Autowired
 	ReservationService reservationService;
 
+	@Autowired
+	ReviewService reviewService;
+
 	@GetMapping("/mypage") //마이 페이지
 	public String mypage() {
 		return "member/mypage";
@@ -42,7 +48,10 @@ public class MemberController {
 	}
 	
 	@GetMapping("/view-review")
-	public String view() {
+	public String view(Model model) {
+		List<Lodging_ReviewDTO> list = reviewService.getSelectReviewList();
+		if(list == null) list = new ArrayList<>();
+		model.addAttribute("list", list);
 		return "member/view-review";
 	}
 	
