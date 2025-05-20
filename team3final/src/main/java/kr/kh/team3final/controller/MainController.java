@@ -52,4 +52,11 @@ public class MainController {
 		model.addAttribute("mapId", mapId);
 		return "reserv";
 	}
+
+	@GetMapping("/rent")
+	public String rent(Model model) {
+		List<RegionVO> list = regionService.getRegionList();
+		model.addAttribute("regionList", list);
+		return "rent";
+	}
 }

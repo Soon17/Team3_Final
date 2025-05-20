@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html
+	lang="en" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{layout/layout.html}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>카모아 - 국내도 해외도 렌트카</title>
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+	<style>
+		.event-swiper {
+			width: 100%;
+			height: auto;
+			position: relative;
+		}
+	  
+		.swiper-slide {
+			position: relative;
+		}
+	  
+		.link {
+			display: flex;
+			justify-content: center; /* 가로 중앙 */
+			width: 100%;
+			height: 100%;
+		}
+	  
+		.link img {
+			width: 1032px;
+			max-height: 100%;
+			max-width: 1032px;
+			object-fit: fill;
+		}
+		.event-swiper .swiper-slide.first{
+			background-color: rgb(255, 226, 213);
+		}
+		.event-swiper .swiper-slide.second{
+			background-color: rgb(84, 193, 200);
+		}
+		.event-swiper .swiper-slide.third{
+			background-color: rgb(34, 97, 228);
+		}
+		.event-swiper .event-next,.event-prev{
+			opacity: 0;
+			transition: .2s;
+		}
+		.event-swiper:hover .event-prev,
+		.event-swiper:hover .event-next {
+			opacity: 1;
+		}
+		.event-next::after,
+		.event-prev::after,.lodging-next::after,
+		.lodging-prev::after,.money-next::after,.money-prev::after,
+		.booking-next::after,.booking-prev::after {
+			display: none;
+		}
+		.event-next,.lodging-next,.money-next,.booking-next{
+			right: calc(50% - 516px - 2.5rem);
+			border-radius: 2.5rem;
+			width: 2.5rem;
+			height: 2.5rem;
+			background-repeat: no-repeat;
+			background-size: 100% auto;
+			background-position: center;
+			box-shadow: 0 4px 14px 0 rgba(0, 0, 0, .2);
+			cursor: pointer;
+			position: absolute;
+			-ms-transform: translate(0, -50%);
+			transform: translate(0, -50%);
+			z-index: 1;
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOSIvPgo8cGF0aCBkPSJNMTggMTRMMjQgMjBMMTggMjYiIHN0cm9rZT0iIzk5OTk5OSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjwvc3ZnPgo=);
+
+		}
+		.event-prev ,.lodging-prev,.money-prev,.booking-prev{
+			border-radius: 2.5rem;
+			width: 2.5rem;
+			height: 2.5rem;
+			background-repeat: no-repeat;
+			background-size: 100% auto;
+			background-position: center;
+			box-shadow: 0 4px 14px 0 rgba(0, 0, 0, .2);
+			cursor: pointer;
+			position: absolute;
+			-ms-transform: translate(0, -50%);
+			transform: translate(0, -50%);
+			z-index: 1;
+			left: calc(50% - 516px - 2.5rem);
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSByPSIyMCIgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMjAgMjApIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjkiLz4KPHBhdGggZD0iTTIyIDE0TDE2IDIwTDIyIDI2IiBzdHJva2U9IiM5OTk5OTkiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K);
+		}
+		.region-lodging{
+			margin-top: 100px;
+		}
+		.region-text{
+			width: 1032px;
+		}
+		.region-btn {
+			background-color: #f1f1f1;
+			border: none;
+			padding: 8px 16px;
+			margin-right: 8px;
+			border-radius: 6px;
+			cursor: pointer;
+		}
+
+		.region-btn.active {
+			background-color: #6b7ba3;
+			color: white;
+		}
+	  </style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div>
+			<div class="swiper event-swiper d-md-flex" >
+				<div class="swiper-wrapper">
+					<div class="swiper-slide first">
+						<a class="link" href="#">
+							<img src="/resources/static/imgs/렌트카 메인1.png" alt="이미지1" />
+						</a>
+					</div>
+					<div class="swiper-slide second">
+						<a class="link" href="#">
+							<img src="/resources/static/imgs/렌트카 메인2.png" alt="이미지1" />
+						</a>
+					</div>
+					<div class="swiper-slide third" >
+						<a class="link" href="#">
+							<img src="/resources/static/imgs/렌트카 메인3.png" alt="이미지1" />
+						</a>
+					</div>
+				</div>							
+				<div class="swiper-button-prev event-prev"></div>
+				<div class="swiper-button-next event-next"></div>
+				
+			</div>
+			<div th:fragment="hotel-search-box">
+				<div style="margin-top: 2rem; background-color: white; border-radius: 1rem; padding: 1.5rem; max-width: 1032px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);">
+			  
+				  <!-- 탭 메뉴 -->
+				  <div style="display: flex; gap: 1rem; margin-bottom: 1rem; font-weight: bold;">
+					<div style="color: #007aff; display: flex; align-items: center; gap: 0.3rem;">
+						<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzQzOTJfMjEwMTcxKSI+CjxwYXRoIGQ9Ik0xOCAxOS40OTkxQzI3LjM4ODggMTkuNDk5MSAzNSAxOS4yNTM2IDM1IDE4Ljk1MDdDMzUgMTguNjQ3OSAyNy4zODg4IDE4LjQwMjMgMTggMTguNDAyM0M4LjYxMTE2IDE4LjQwMjMgMSAxOC42NDc5IDEgMTguOTUwN0MxIDE5LjI1MzYgOC42MTExNiAxOS40OTkxIDE4IDE5LjQ5OTFaIiBmaWxsPSIjQzRDNEM0Ii8+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMV80MzkyXzIxMDE3MSkiPgo8cGF0aCBkPSJNMTIuNzY5NSAyLjg1OTUzQzEyLjc2OTUgMi44NTk1MyAxMy4zMDMzIDIuNSAxMy45NzU1IDIuNUgyMi44MTI0QzIyLjgxMjQgMi41IDIzLjE2ODMgMi41IDIzLjQ0NTEgMi44NTk1M0gxMi43Njk1WiIgZmlsbD0iIzE5MTkxOSIvPgo8cGF0aCBkPSJNNi40MjIzMSAxOC45MTA3QzcuODc0NDYgMTguOTEwNyA5LjA1MTY2IDE3LjMyIDkuMDUxNjYgMTUuMzU3N0M5LjA1MTY2IDEzLjM5NTQgNy44NzQ0NiAxMS44MDQ3IDYuNDIyMzEgMTEuODA0N0M0Ljk3MDE3IDExLjgwNDcgMy43OTI5NyAxMy4zOTU0IDMuNzkyOTcgMTUuMzU3N0MzLjc5Mjk3IDE3LjMyIDQuOTcwMTcgMTguOTEwNyA2LjQyMjMxIDE4LjkxMDdaIiBmaWxsPSIjMTcwRjAwIi8+CjxwYXRoIGQ9Ik0yMi4xMDk4IDE4LjcyMTNDMjMuNTYyIDE4LjcyMTMgMjQuNzM5MiAxNy4xMzA1IDI0LjczOTIgMTUuMTY4M0MyNC43MzkyIDEzLjIwNiAyMy41NjIgMTEuNjE1MiAyMi4xMDk4IDExLjYxNTJDMjAuNjU3NyAxMS42MTUyIDE5LjQ4MDUgMTMuMjA2IDE5LjQ4MDUgMTUuMTY4M0MxOS40ODA1IDE3LjEzMDUgMjAuNjU3NyAxOC43MjEzIDIyLjEwOTggMTguNzIxM1oiIGZpbGw9IiMxNzBGMDAiLz4KPHBhdGggZD0iTTM2LjExNDEgOS43OTY1NEgxMi40ODk1TDEuODczMjkgOS44Mzg4NEMxLjE0MTgyIDEwLjE3NzIgMS4wNDI5NyAxNC4xNTMyIDEuMDQyOTcgMTUuNjk3MUgxMS41NjAzQzExLjU2MDMgMTUuNjk3MSAxMS41NjAzIDE1LjM1ODcgMTEuNTYwMyAxNC44NTExQzExLjU2MDMgMTUuMzU4NyAxMS41NjAzIDE1LjY5NzEgMTEuNTYwMyAxNS42OTcxSDEyLjY2NzRMMTMuNjk1NSAxNi45NDQ5TDM1LjU4MDMgMTYuODM5MkwzNi4zNTEzIDE1Ljg4NzRMMzYuMDk0MyA5Ljc3NTM5TDM2LjExNDEgOS43OTY1NFoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl80MzkyXzIxMDE3MSkiLz4KPHBhdGggZD0iTTUuNjEzMjggOC41MDYxNUwxMS42MDM0IDMuMjYxMjFDMTEuOSAyLjk4NjI3IDEyLjI5NTQgMi44NTkzOCAxMi42OTA4IDIuODU5MzhIMjEuNzQ1MkwxNi41ODU0IDguNTA2MTVINS42MTMyOFoiIGZpbGw9IiNEMkU3RkYiLz4KPHBhdGggZD0iTTM2LjExMzMgOS43OTYyNEwzMy4xODc0IDMuNjYzMDRDMzIuOTY5OSAzLjE3NjYxIDMyLjUxNTIgMi44NTkzOCAzMi4wMDEyIDIuODU5MzhIMjAuOTY5OEMyMC42OTMxIDIuODU5MzggMjAuNDM2MSAzLjAwNzQyIDIwLjI1ODEgMy4yNDAwNkwxNi41ODEgOC41MDYxNUwxMy4xMDE2IDkuNzk2MjRIMzYuMTMzSDM2LjExMzNaIiBmaWxsPSIjODJCOUY5Ii8+CjxwYXRoIGQ9Ik0xMS40NDUzIDMuMzg4NjdMNS42MTMyOCA4LjUwNjczSDE2LjU4NTRMMjAuMTQ0IDMuNDEwNDZMMTEuNDQ1MyAzLjM4ODY3WiIgZmlsbD0iIzM1MzUzNSIvPgo8cGF0aCBkPSJNNS42MDc1MyA4LjUwNTg2TDEuODcxMDkgOS44MzgyNUwxMy4xMDAyIDkuNzk1OTVDMTUuMjE1NSA5Ljc5NTk1IDE2LjU3OTYgOC41MDU4NiAxNi41Nzk2IDguNTA1ODZINS42MDc1M1oiIGZpbGw9IiNEMkU3RkYiLz4KPHBhdGggZD0iTTE2LjU4MiA4LjUwNzA2SDMyLjY3NDRDMzMuMzg2MSA4LjUwNzA2IDMzLjg2MDYgNy43MDM0IDMzLjU0NDMgNy4wMjY2M0wzMi4xNjA0IDMuODk2NThDMzIuMDIyIDMuNjAwNSAzMS43NDUyIDMuNDEwMTYgMzEuNDI4OSAzLjQxMDE2SDIwLjE0MDVMMTYuNTgyIDguNTA3MDZaIiBmaWxsPSIjMTcwRjAwIi8+CjxwYXRoIGQ9Ik0xMi42ODc1IDE1LjY5NzNIMzYuMzUxNlYxNS45MDg4TDM1LjYwMDQgMTYuODM5M0wxMy43MTU1IDE2Ljk0NTFMMTIuNjg3NSAxNS42OTczWiIgZmlsbD0iIzE3MEYwMCIvPgo8cGF0aCBkPSJNMTMuMjIzNiAxMi4xNjVIOS41ODU5OUw4LjkzMzU5IDEwLjc0OEgxNC4xOTIzTDEzLjIyMzYgMTIuMTY1WiIgZmlsbD0iI0Y0RjRGNCIvPgo8cGF0aCBkPSJNMS4xOTkyMiAxMi4xNjVIMy4xMzY2M0wzLjc4OTAyIDEwLjc0OEgxLjQxNjY4QzEuMzE3ODQgMTEuMTQ5OSAxLjI1ODUzIDExLjYzNjMgMS4xOTkyMiAxMi4xNjVaIiBmaWxsPSIjRjRGNEY0Ii8+CjxwYXRoIGQ9Ik0xLjA0Mjk3IDE1LjY5NzNDMS4wNDI5NyAxNS42OTczIDEuMTQxODIgMTYuOTQ1MSAyLjA3MDk4IDE2Ljk0NTFIMTMuNzE1MkwxMi42ODcyIDE1LjY5NzNIMS4wNDI5N1oiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGQ9Ik0zLjEzNjcyIDEyLjE2NUg5LjU4MTU4TDguOTI5MTggMTAuNzQ4SDMuNzg5MTFMMy4xMzY3MiAxMi4xNjVaIiBmaWxsPSIjMUUxRTFFIi8+CjxwYXRoIGQ9Ik0xLjA0Mjk3IDE1LjAyMDlIMTIuMTkzVjE0LjQ5MjJIMS4wNjI3NEMxLjA2Mjc0IDE0LjY2MTQgMS4wNjI3NCAxNC44NTE3IDEuMDYyNzQgMTUuMDIwOUgxLjA0Mjk3WiIgZmlsbD0iYmxhY2siLz4KPHBhdGggZD0iTTIxLjAyNzMgMi44NTk1M0MyMS4wMjczIDIuODU5NTMgMjEuNTYxMSAyLjUgMjIuMjMzMyAyLjVIMzEuMDcwM0MzMS4wNzAzIDIuNSAzMS40MjYxIDIuNSAzMS43MDI5IDIuODU5NTNIMjEuMDI3M1oiIGZpbGw9ImJsYWNrIi8+CjxwYXRoIGQ9Ik0xOC45MzQ4IDE2Ljg1OTRIMTMuOTcyN0MxNC4zMjg1IDE4LjI3NjQgMTUuMjk3MiAxOS4yNzA0IDE2LjQ0MzggMTkuMjcwNEgxNy44NDc1VjE4LjY3ODJDMTguMzQxNyAxOC4yNTUyIDE4LjczNzEgMTcuNjIwNyAxOC45MzQ4IDE2Ljg1OTRaIiBmaWxsPSIjMTcwRjAwIi8+CjxwYXRoIGQ9Ik0xNy42NDg5IDE5LjI3MjFDMTkuMTAxIDE5LjI3MjEgMjAuMjc4MiAxNy42ODEzIDIwLjI3ODIgMTUuNzE5QzIwLjI3ODIgMTMuNzU2OCAxOS4xMDEgMTIuMTY2IDE3LjY0ODkgMTIuMTY2QzE2LjE5NjcgMTIuMTY2IDE1LjAxOTUgMTMuNzU2OCAxNS4wMTk1IDE1LjcxOUMxNS4wMTk1IDE3LjY4MTMgMTYuMTk2NyAxOS4yNzIxIDE3LjY0ODkgMTkuMjcyMVoiIGZpbGw9IiMxNzBGMDAiLz4KPHBhdGggZD0iTTE3LjY0NzcgMTcuODMzM0MxOC41MTAzIDE3LjgzMzMgMTkuMjA5NSAxNi44ODY0IDE5LjIwOTUgMTUuNzE4NEMxOS4yMDk1IDE0LjU1MDQgMTguNTEwMyAxMy42MDM1IDE3LjY0NzcgMTMuNjAzNUMxNi43ODUyIDEzLjYwMzUgMTYuMDg1OSAxNC41NTA0IDE2LjA4NTkgMTUuNzE4NEMxNi4wODU5IDE2Ljg4NjQgMTYuNzg1MiAxNy44MzMzIDE3LjY0NzcgMTcuODMzM1oiIGZpbGw9IndoaXRlIi8+CjwvZz4KPC9nPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzQzOTJfMjEwMTcxIiB4MT0iMS4wNDI5NyIgeTE9IjEzLjM3MDciIHgyPSIzMi44OTE2IiB5Mj0iMTMuMzcwNyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRDVFOUZDIi8+CjxzdG9wIG9mZnNldD0iMC4yMSIgc3RvcC1jb2xvcj0iI0JERDlGOSIvPgo8c3RvcCBvZmZzZXQ9IjAuNTQiIHN0b3AtY29sb3I9IiM5MUJERkQiLz4KPC9saW5lYXJHcmFkaWVudD4KPGNsaXBQYXRoIGlkPSJjbGlwMF80MzkyXzIxMDE3MSI+CjxyZWN0IHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPGNsaXBQYXRoIGlkPSJjbGlwMV80MzkyXzIxMDE3MSI+CjxyZWN0IHdpZHRoPSIzNS4zMjgxIiBoZWlnaHQ9IjE2Ljc3MTEiIGZpbGw9IndoaXRlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxLjA0Mjk3IDIuNSkiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K"/>	
+						<span>단기렌트</span>
+					</div>
+				  </div>
+			  
+				  <!-- 입력 박스 -->
+				  <form th:action="@{/searching/search}" method="get" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+					<select name="rg_name" id="region" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
+						<option th:each="rg : ${regionList}" th:value="${rg.rg_num}" th:text="${rg.rg_name}">
+					</select>
+			  
+					<input type="text" name="checkin" value="05.09(금)" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+					<input type="text" name="checkout" value="05.10(토)" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; border: 2px solid #000;background-color: #f8f8f8; border-radius: 0.5rem;" />
+			  
+					<input type="text" name="guests" value="성인2" style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+			  
+					<div>
+					  <button type="submit" style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
+						검색
+					  </button>
+					</div>
+				  </form>
+				</div>
+				<div class="container region-lodging">
+					<div class=" container region-text">
+						<h3 style="font-size: 24px; width: 1032px;">🌼 국내 인기 차량</h3>
+					</div>
+					<div class="container region-text region-btn-box">
+						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}" th:text="${rg.rg_name}"></button>
+					</div>
+					<div class="container region-text" style="margin-top: 20px; position: relative;">
+						
+							<div class="swiper lodging-swiper">
+								<div class="swiper-wrapper swiper-lodging">
+								<!-- 카드 반복 시작 -->
+								<div class="swiper-slide">
+									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+										<img src="/resources/static/imgs/K-3 2세대 FL.png" class="card-img-top" style="width: 240px; height: 240px;" alt="썸네일">
+										<div class="card-body p-2">
+										<h6 class="mb-1 fw-bold">K-3 2세대 F/L</h6>
+										<div>
+											<span class="mb-0 text-muted" style="font-size: 14px;">21년식~</span>
+										</div>
+										<p class="mb-0 text-muted" >가성비와 실용성을 모두</p>
+										</div>
+									</a>
+								</div>
+								  <div class="swiper-slide">
+									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
+									  <img src="/resources/static/imgs/K-5 3세대.png"style="width: 240px; height: 240px;" class="card-img-top" alt="썸네일">
+									  <div class="card-body p-2">
+										<h6 class="mb-1 fw-bold">K-5 3세대</h6>
+										<div>
+											<span class="mb-0 text-muted" style="font-size: 14px;">19~23년식</span>
+										</div>
+										<p class="mb-0 text-muted" >중형차의 1인자</p>
+									  </div>
+									</a>
+								  </div>
+								  <div class="swiper-slide">
+									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+									  <img src="/resources/static/imgs/쏘나타 DN8 엣지.png"style="width: 240px; height: 240px;" class="card-img-top" alt="썸네일">
+									  <div class="card-body p-2">
+										<h6 class="mb-1 fw-bold">쏘나타 DN8 엣지</h6>
+										<div>
+											<span class="mb-0 text-muted" style="font-size: 14px;">23년식~</span>
+										</div>
+										<p class="mb-0 text-muted" >국내 대표 중형 세단</p>
+									  </div>
+									</a>
+								  </div>
+								  <div class="swiper-slide">
+									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+									  <img src="/resources/static/imgs/아반떼 CN7.png" style="width: 240px; height: 240px;"class="card-img-top" alt="썸네일">
+									  <div class="card-body p-2">
+										<h6 class="mb-1 fw-bold">아반떼 CN7</h6>
+										<div>
+											<span class="mb-0 text-muted" style="font-size: 14px;">20~23년식</span>
+										</div>
+										<p class="mb-0 text-muted" >준중형 차량의 교과서</p>
+									  </div>
+									</a>
+								  </div>
+								  <div class="swiper-slide">
+									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
+									  <img src="/resources/static/imgs/아이오닉5.png"style="width: 240px; height: 240px;" class="card-img-top" alt="썸네일">
+									  <div class="card-body p-2">
+										<h6 class="mb-1 fw-bold">아이오닉5</h6>
+										<div>
+											<span class="mb-0 text-muted" style="font-size: 14px;">21년식~</span>
+										</div>
+										<p class="mb-0 text-muted" >준중형 크로스오버 SUV 전기차</p>
+									  </div>
+									</a>
+								  </div>
+								  <div class="swiper-slide">
+									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+									  <img src="/resources/static/imgs/코나 2세대.png"style="width: 240px; height: 240px;" class="card-img-top" alt="썸네일">
+									  <div class="card-body p-2">
+										<h6 class="mb-1 fw-bold">코나 2세대</h6>
+										<div>
+											<span class="mb-0 text-muted" style="font-size: 14px;">23년식~</span>
+										</div>
+										<p class="mb-0 text-muted" >실용성 높은 SUV</p>
+									  </div>
+									</a>
+								  </div>
+						  		<!-- 카드 반복 끝 -->
+						  		</div>
+						  
+						  <!-- 슬라이드 화살표 -->
+						</div>
+						<div class="swiper-button-next lodging-next"></div>
+						<div class="swiper-button-prev lodging-prev"></div>						
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<script>
+			const swiper = new Swiper(".event-swiper", {
+				loop: true,
+				autoplay: {
+				delay: 5000,
+				disableOnInteraction: false
+				},
+				navigation: {
+				nextEl: ".event-next",
+				prevEl: ".event-prev"
+				}
+			});
+			const swiper2 = new Swiper(".lodging-swiper", {
+				slidesPerView: 4,
+				spaceBetween: 10,
+	       		slidesPerGroup: 1,
+				navigation: {
+				nextEl: ".lodging-next",
+				prevEl: ".lodging-prev"
+				}
+			});
+			const swiper3 = new Swiper(".money-swiper", {
+				slidesPerView: 4,
+				spaceBetween: 10,
+	       		slidesPerGroup: 1,
+				navigation: {
+				nextEl: ".money-next",
+				prevEl: ".money-prev"
+				}
+			});
+			const swiper4 = new Swiper(".booking-swiper", {
+				slidesPerView: 4,
+				spaceBetween: 10,
+	       		slidesPerGroup: 1,
+				navigation: {
+				nextEl: ".booking-next",
+				prevEl: ".booking-prev"
+				}
+			});
+			$(document).ready(function() {
+				$('.region-btn').click(function() {
+					$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
+					$(this).addClass('active'); // 클릭한 버튼만 active 추가
+					const rg_num= $(this).data('id');
+					var $target = $(this).parent().next().find(".swiper")
+					$.ajax({
+						async: false,
+						url: "/regionLodging",
+						type: 'GET',
+						data: { rg_num : rg_num },
+						success: function (data) {
+							$target.html(data);
+						}
+					});
+				});
+				$(".region-btn-box").each(function(){
+					$(this).children().first().trigger("click")
+				});
+  			});
+		</script>
+	</div>
+</body>
+</html>
