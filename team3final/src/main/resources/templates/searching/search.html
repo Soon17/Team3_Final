@@ -669,11 +669,18 @@
 					success: function (data) {
 						$('#search-find').html(data);
 
-						// 버튼토글 이벤트 바인딩
 						const buttons = document.querySelectorAll('.filter-btn');
 						buttons.forEach(btn => {
 							btn.addEventListener('click', function () {
-								this.classList.toggle('active');
+								const section = btn.closest('.section')?.querySelector('.section-title')?.textContent.trim();
+
+								if (section === '평점') {
+									const group = btn.closest('.filter-group');
+									group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+									btn.classList.add('active');
+								} else {
+									btn.classList.toggle('active');
+								}
 							});
 						});
 					},
