@@ -134,36 +134,44 @@
     <div class="section">
       <div class="section-title">성급</div>
       <div class="filter-group">
-        <button class="filter-btn">5성급</button>
-        <button class="filter-btn">4성급</button>
-        <button class="filter-btn">3성급</button>
-        <button class="filter-btn">2성급 이하</button>
+        <button class="filter-btn fillter-rating" data-rating="5">5성급</button>
+        <button class="filter-btn fillter-rating" data-rating="4">4성급</button>
+        <button class="filter-btn fillter-rating" data-rating="3">3성급</button>
+        <button class="filter-btn fillter-rating" data-rating="2">2성급 이하</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">평점</div>
       <div class="filter-group">
-        <button class="filter-btn">5.0 이상</button>
-        <button class="filter-btn">4.0 이상</button>
-        <button class="filter-btn">3.0 이상</button>
-        <button class="filter-btn">2.0 이상</button>
-        <button class="filter-btn">1.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="5">5.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="4">4.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="3">3.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="2">2.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="1">1.0 이상</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">숙소유형</div>
       <div class="filter-group">
-        <button class="filter-btn">호텔</button>
-        <button class="filter-btn">팬션</button>
-        <button class="filter-btn">모텔</button>
+        <button class="filter-btn fillter-type" data-type="호텔">호텔</button>
+        <button class="filter-btn fillter-type" data-type="팬션">팬션</button>
+        <button class="filter-btn fillter-type" data-type="모텔">모텔</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">가격</div>
-      <p class="price-range">0원 ~ 206만원</p>
-      <input type="range" min="0" max="100" value="50" class="range-slider">
+      <p class="price-range">0원 ~ [[${maxPrice}]]만원</p>
+      <input type="range" min="0" th:max="${maxPrice}" id="price" th:value="${maxPrice}" class="range-slider">
     </div>
   </div>
+  <script>
+    $(function () {
+      $('.range-slider').on('input', function () {
+        const value = $(this).val(); // 현재 슬라이더 값
+        $('.price-range').text(`0원 ~ ${value}만원`);
+      });
+    });
+  </script>
 </body>
 
 </html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+ 
+  </style>
+</head>
+
+<body>
+  <div class="im" th:each="ld : ${lodgingList}">
+    <a href="#" class="card-link">
+      <div class="hotel-image">
+        <img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
+      </div>
+      <div class="hotel-info">
+        <div class="hotel-up">
+          <div class="hotel-name" th:text="${ld.ld_name}"></div>
+          <div class="hotel-grade">
+            <img class="star" src="/resources/static/imgs/star.svg" alt="star">
+            <span class="review-score" th:text="${ld.avg_rating}"></span>
+            <span class="hotel-stars">· [[${ld.ld_rating}]]성급</span>
+          </div>
+          <div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
+        </div>
+        <div class="hotel-price">
+          <span class="price">[[${ld.min_price}]]원</span> /1박
+        </div>
+      </div>
+    </a>
+  </div>
+</body>
+
+</html>

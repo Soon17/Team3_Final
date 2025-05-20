@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.kh.team3final.dao.LodgingDAO;
 import kr.kh.team3final.model.vo.LodgingVO;
+import kr.kh.team3final.model.vo.SearchCriteria;
 
 @Service
 public class LodgingService {
@@ -18,11 +19,22 @@ public class LodgingService {
 		return lodgingDao.selectRegionLodgingList(rg_num);
 	}
 
-	public List<LodgingVO> getSearchlodgingList(String rg_name, String checkTime, String person) {
-		String lr_checkin = getStartTime(checkTime);
-		String lr_checkout =getEndTime(checkTime);
-		int rm_person = Integer.parseInt(person.replaceAll("[^0-9]", ""));
-		return lodgingDao.selectSearchLodgingList(rg_name,lr_checkin,lr_checkout,rm_person);
+	public List<LodgingVO> getSearchlodgingList(SearchCriteria cri) {
+		String lr_checkin = getStartTime(cri.getCheckTime());
+		String lr_checkout =getEndTime(cri.getCheckTime());
+		int rm_person = Integer.parseInt(cri.getRm_person().replaceAll("[^0-9]", ""));
+		switch (cri.getSort()) {
+			case "추천순":
+				return lodgingDao.selectSearchLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
+			case "평점순":
+			return lodgingDao.selectSearchAVGLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
+			case "가격순":
+			return lodgingDao.selectSearchPriceLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
+			case "성급순":			
+			return lodgingDao.selectSearchRatingLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
+			default:
+				return lodgingDao.selectSearchLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
+		}
 	}
 	String getStartTime(String str){
 		str = str.replaceAll("\\(.*?\\)", "").trim();
