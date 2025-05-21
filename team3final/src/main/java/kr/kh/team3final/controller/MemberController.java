@@ -19,7 +19,6 @@ import kr.kh.team3final.service.ReservationService;
 import kr.kh.team3final.service.ReviewService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/member")
