@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.RegionDAO">
 	<select id="selectRegionList" resultType="RegionVO">
-		select* from region order by rg_name desc; 
+		select* from region; 
 	</select>
 
 </mapper>
