@@ -30,40 +30,68 @@
 			color: #007bff;
 			border-bottom: 2px solid #007bff;
 		}
+		.review-box {
+			text-align: left;
+			border-bottom: 1px solid #eee;
+			padding: 20px 0;
+		}
 	</style>
 </head>
 <body>
 	<main layout:fragment="content">
 		<div style="width: 100%; border-top: 1px solid #eeeeee;"></div>
-		<div class="main-text" style="text-align: center; padding: 2rem 0;">
-			<h1 class="js-hero-pc-title" style="font-size: 24px; color: #333;">나의 리뷰</h1>
+		<div class="main-text">
+			<h1 class="js-hero-pc-title">나의 리뷰</h1>
 		</div>
+
+		<!-- 유저 정보 -->
 		<div style="width: 70%; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 8px; width: 768px;">
 			<p><strong>사용자</strong></p>
-			<p style="color: #999;">작성한 리뷰 0</p>
+			<p style="color: #999;">작성한 리뷰 <span th:text="${#lists.size(list)}">0</span></p>
 		</div>
+
+		<!-- 리뷰 목록 -->
 		<div style="width: 70%; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; width: 768px;">
 			<p><strong>사용자 리뷰</strong></p>
 
+			<!-- 탭 -->
 			<div id="tab-menu" style="display: flex; justify-content: center; margin-top: 20px; border-bottom: 2px solid #ddd;">
 				<div class="tab" onclick="changeTab(this)">렌트카</div>
 				<div class="tab active" onclick="changeTab(this)">호텔</div>
 			</div>
-			<div id="tab-content" style="text-align: center; margin-top: 30px; color: #aaa;">
-			작성된 리뷰가 없습니다.
+
+			<!-- 호텔 리뷰 -->
+			<div id="tab-content" style="margin-top: 30px;">
+				<!-- null 또는 비었을 때 메시지 -->
+				<div th:if="${list == null or #lists.isEmpty(list)}" style="text-align: center; color: #aaa;">
+					작성된 리뷰가 없습니다.
+				</div>
+
+				<!-- 리뷰 리스트 -->
+				<div th:each="review : ${list}" class="review-box" th:unless="${list == null or #lists.isEmpty(list)}">
+					<p><strong th:text="${review.ld_name}">숙소명</strong> | <span th:text="${review.ld_region}">지역</span></p>
+					<p th:text="${review.rv_content}">리뷰 내용</p>
+					<p>⭐ <span th:text="${review.rv_rating}">5</span>점 |
+					   작성일: <span th:text="${#dates.format(review.rv_date, 'yyyy-MM-dd')}">2025-05-20</span></p>
+				</div>
 			</div>
 		</div>	  
+
 		<script>
 			function changeTab(clickedTab) {
 				const $tabs = $('.tab');
 				$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
 				$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
-				const selectedText = $(clickedTab).text();
-				const content = selectedText === '렌트카' ? '렌트카 리뷰가 없습니다.' : '호텔 리뷰가 없습니다.';
-				$('#tab-content').text(content);
-			}
 
-			
+				const selectedText = $(clickedTab).text();
+				const contentDiv = $('#tab-content');
+
+				if (selectedText === '렌트카') {
+					contentDiv.html('<div style="text-align: center; color: #aaa;">렌트카 리뷰가 없습니다.</div>');
+				} else {
+					location.reload(); // 호텔 탭 클릭 시 현재 페이지 새로고침해서 호텔 리뷰 다시 출력
+				}
+			}
 		</script>
 	</main>
 </body>

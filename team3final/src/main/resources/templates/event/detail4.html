@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+	lang="en" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{layout/layout.html}">
+<head>
+	<meta charset="UTF-8">
+	<title>이벤트</title>
+	<style>
+		.center-wrapper {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 4rem 1rem;
+		}
+
+		.button-box {
+			display: flex;
+			justify-content: flex-end;
+			width: 100%;
+			max-width: 700px; /* 이미지 최대 너비 기준 */
+			margin-top: 1rem;
+			gap: 10px;
+		}
+
+		.event-image {
+			max-width: 100%;
+			height: auto;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<main layout:fragment="content" style="background-color: #f5f6f7;">
+		<div class="container center-wrapper">
+			
+			<!-- 이미지 -->
+			<img src="/resources/static/imgs/이벤트2-1.png" alt="이미지1" class="event-image" />
+			<img src="/resources/static/imgs/이벤트2-2.png" alt="이미지1" class="event-image" />
+			<img src="/resources/static/imgs/이벤트2-3.png" alt="이미지1" class="event-image" />
+			<img src="/resources/static/imgs/이벤트2-4.png" alt="이미지1" class="event-image" />
+
+			<!-- 버튼은 이미지 아래 우측 정렬 -->
+			<div class="button-box">
+				<a href="/" class="btn btn-dark">홈으로</a>
+				<a href="/event/list" class="btn btn-dark">목록</a>
+			</div>
+
+		</div>
+	</main>
+</body>
+</html>
