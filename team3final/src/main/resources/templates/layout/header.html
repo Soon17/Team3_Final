@@ -14,7 +14,7 @@
                     <a class="navbar-brand flex-fill m-0 p-0 icon-link" href="/" data-id="hotel-link">
                         <img id="hotelLogo" src="/resources/static/img/logo_hotel.png" alt="호텔로고" class="w-100 h-auto">
                     </a>
-                    <a class="navbar-brand flex-fill m-0 p-0 icon-link dimmed" href="#" data-id="rent-link">
+                    <a class="navbar-brand flex-fill m-0 p-0 icon-link dimmed" href="/rent" data-id="rent-link">
                         <img id="rentLogo" src="/resources/static/img/logo_rent.png" alt="렌트로고" class="w-100 h-auto">
                     </a>
                 </div>
@@ -23,13 +23,16 @@
                         <!-- Links -->
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="/">렌트카</a>
+                                <a class="nav-link" href="/rent">렌트카</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/">호텔</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/">호텔+렌트카</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/event/list">이벤트</a>
                             </li>
                         </ul>
                     </div>
@@ -54,10 +57,27 @@
             </nav>
         </div>
         <script>
-            $(".icon-link").click(function (e) {
-                const id = $(this).data("id");
+            $(document).ready(function () {
+                const path = window.location.pathname;
+
+                $(".icon-link").on("click", function () {
+                    const id = $(this).data("id");
+                    localStorage.setItem("selectedSection", id);
+                });
+
+                let section = "hotel-link"; // 기본값
+
+                if (path === "/" || path.startsWith("/hotel") || path.startsWith("/reserv")) {
+                    section = "hotel-link";
+                } else if (path.startsWith("/rent")) {
+                    section = "rent-link";
+                } else if (path.startsWith("/member")) {
+                    const saved = localStorage.getItem("selectedSection");
+                    if (saved) section = saved;
+                }
+
                 $(".icon-link").addClass("dimmed");
-                $(this).removeClass("dimmed");
+                $(`[data-id='${section}']`).removeClass("dimmed");
             });
         </script>
     </header>

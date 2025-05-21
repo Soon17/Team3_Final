@@ -9,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.ui.Model;
 
 import kr.kh.team3final.model.vo.LodgingVO;
@@ -24,11 +23,6 @@ import org.springframework.web.client.RestTemplate;
 public class MainController {
 	@Autowired
 	RegionService regionService;
-
-	private RestTemplate restTemplate = new RestTemplate();
-
-	@Value("${kakao.map-id}")
-	private String mapId;
 
 	@Autowired
 	LodgingService lodgingService;
@@ -46,14 +40,10 @@ public class MainController {
 		return "regionLodgingList";
 	}
 
-	@GetMapping("/test")
-	public String test() {
-		return "test";
-	}
-
-	@GetMapping("/reserv")
-	public String reserv(Model model) {
-		model.addAttribute("mapId", mapId);
-		return "reserv";
+	@GetMapping("/rent")
+	public String rent(Model model) {
+		List<RegionVO> list = regionService.getRegionList();
+		model.addAttribute("regionList", list);
+		return "rent";
 	}
 }

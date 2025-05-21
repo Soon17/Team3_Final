@@ -147,6 +147,20 @@
 			border-color: gray;
 			font-size: 12px;
 		}
+		/* 기본 헤더 스타일 */
+		.user-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				margin-bottom: 10px;
+				min-height: 50px; /* 최소 높이 고정 */
+		}
+
+		/* 호텔 예약 내역이 로드될 때도 높이를 유지 */
+		.summary-item, .summary-item.active {
+				height: auto;
+				min-height: 50px; /* 최소 높이 설정 */
+		}
 	</style>
 </head>
 
@@ -160,57 +174,75 @@
 					<span class="email">acejsh77@gmail.com</span>
 				</div>
 				<a class="btn btn-modify" href="/member/modify">내 정보 관리</a>
-			</div>
-
-			<!-- 요약 영역 -->
-			<div class="summary">
-				<a class="summary-item" href="/member/reservation-history">
+				</div>
+				
+				<!-- 요약 영역 -->
+				<div class="summary">
+					<a class="summary-item" href="/member/reservation-history">
 					<i class="fa fa-calendar"></i>
 					<p>예약내역</p>
-				</a>
-				<a class="summary-item" href="/member/view-review">
+					</a>
+					<a class="summary-item" href="/member/view-review">
 					<i class="fa fa-pen"></i>
 					<p>나의리뷰</p>
-				</a>
-			</div>
+					</a>
+				</div>
+				
+				<!-- 탭 메뉴 -->
+				<div class="tabs">
+					<div class="tab active"  id="reservation-hotel">호텔</div>
+					<div class="tab" id="reservation-rent">렌트카</div>
+				</div>
 
-			<!-- 탭 메뉴 -->
-			<div class="tabs">
-				<div class="tab active" id="reservation-hotel">호텔</div>
-				<div class="tab" id="reservation-rent">렌트카</div>
-			</div>
+				<!-- 기본은 호텔 내역 -->
+				<div class="empty-box">
+					<p class="main-text">예약하신 호텔 내역이 없습니다 :)</p>
+					<p class="sub-text">지금 호텔 예약하고<br>신나는 여행 떠나볼까요?</p>
+					<a class="primary-btn" href="/">호텔 보러가기</a>
+				</div>
+		  </div>
+		  <script>
+				// 페이지 로드 시 호텔 예약 내역 자동 로드
+				$(document).ready(function () {
+						loadHotelReservation();
 
-			<!-- 기본은 호텔 내역 -->
-			<div class="empty-box">
-				<p class="main-text">예약하신 호텔 내역이 없습니다 :)</p>
-				<p class="sub-text">지금 호텔 예약하고<br>신나는 여행 떠나볼까요?</p>
-				<a class="primary-btn" href="/">호텔 보러가기</a>
-			</div>
-		</div>
-		<script>
-			$("#reservation-hotel").click(function () {
-				$(this).addClass("active");
-				$("#reservation-rent").removeClass("active");
-				$.ajax({
-					url: '/member/reservation-hotel',  // 서버의 URL
-					method: 'GET',
-					success: function (data) {
-						$('.empty-box').html(data);  // 요소 내부 HTML 변경
-					}
+						// 탭 클릭 이벤트 바인딩
+						$('#reservation-hotel').on('click', function () {
+								$(this).addClass('active');
+								$('#reservation-rent').removeClass('active');
+								loadHotelReservation();
+						});
+
+						$('#reservation-rent').on('click', function () {
+								$(this).addClass('active');
+								$('#reservation-hotel').removeClass('active');
+								$.ajax({
+										url: '/member/reservation-rent',
+										method: 'GET',
+										success: function (data) {
+												$('.empty-box').html(data);
+										},
+										error: function () {
+												$('.empty-box').html('<p>렌트카 예약 내역을 불러오는 데 실패했습니다.</p>');
+										}
+								});
+						});
+
+						// 호텔 예약 내역을 불러오는 함수
+						function loadHotelReservation() {
+								$.ajax({
+										url: '/member/reservation-hotel',
+										method: 'GET',
+										success: function (data) {
+												$('.empty-box').html(data);
+										},
+										error: function () {
+												$('.empty-box').html('<p>호텔 예약 내역을 불러오는 데 실패했습니다.</p>');
+										}
+								});
+						}
 				});
-			});
-			$("#reservation-rent").click(function () {
-				$(this).addClass("active");
-				$("#reservation-hotel").removeClass("active");
-				$.ajax({
-					url: '/member/reservation-rent',  // 서버의 URL
-					method: 'GET',
-					success: function (data) {
-						$('.empty-box').html(data);  // 요소 내부 HTML 변경
-					}
-				});
-			});
-		</script>
+			</script>
 	</main>
 </body>
 

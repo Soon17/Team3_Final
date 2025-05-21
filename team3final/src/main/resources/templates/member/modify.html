@@ -383,15 +383,15 @@
 				const month = $("#myMonth").text();
 				const day = $("#myDay").text();
 
-				if(gender === "남자") $('#male').prop('checked', true);
-				if(gender === "여자") $('#female').prop('checked', true);
+				if (gender === "남자") $('#male').prop('checked', true);
+				if (gender === "여자") $('#female').prop('checked', true);
 
 				$('#select-year option[value="' + year + '"]').prop('selected', true);
 				$('#select-month option[value="' + month + '"]').prop('selected', true);
 				$('#select-day option[value="' + day + '"]').prop('selected', true);
 			})
-			
-			/**************************************************/ 
+
+			/**************************************************/
 
 			// 이메일 - 수정 버튼 클릭 시 동작
 			$('.btn-email').click(function () {
