@@ -1,18 +1,24 @@
 package kr.kh.team3final.service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import kr.kh.team3final.model.vo.MemberVO;
 
@@ -43,27 +49,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             String email = (String) kakaoAccount.get("email");
             String birthday = (String) kakaoAccount.get("birthday");
             String birthyear = (String) kakaoAccount.get("birthyear");
-            String birth = birthyear + birthday;
+            String birth = convertBirthday(birthyear + birthday);
             String phoneNumber = (String) kakaoAccount.get("phone_number");
             phoneNumber = convertPhoneNumber(phoneNumber);
             String gender = (String) kakaoAccount.get("gender");
-            if (gender.equals("male"))
-                gender = "남자";
-            if (gender.equals("female"))
-                gender = "여자";
+            gender = convertGender(gender);
             String profileImage = (String) profile.get("profile_image_url");
 
             // 필드 추출 출력
-            System.out.println("# 카카오 로그인");
-            System.out.println("ID: " + id);
-            System.out.println("이름: " + name);
-            System.out.println("닉네임: " + nickname);
-            System.out.println("이메일: " + email);
-            System.out.println("생일: " + birth);
-            System.out.println("성: " + gender);
-            System.out.println("번호: " + phoneNumber);
-            System.out.println("프로필사진: " + profileImage);
+            // System.out.println("# 카카오 로그인");
+            // System.out.println("ID: " + id);
+            // System.out.println("이름: " + name);
+            // System.out.println("닉네임: " + nickname);
+            // System.out.println("이메일: " + email);
+            // System.out.println("생일: " + birth);
+            // System.out.println("성: " + gender);
+            // System.out.println("번호: " + phoneNumber);
+            // System.out.println("프로필사진: " + profileImage);
 
+            // 최초 로그인 시 자동 회원가입
             MemberVO dbUser = memberService.getMemberByEmail(email);
 
             if (dbUser == null) {
@@ -87,8 +91,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     "name", name,
                     "nickname", nickname,
                     "email", email,
-                    "birthday", birthday,
-                    "birthyear", birthyear,
+                    "birthday", birth,
                     "gender", gender,
                     "phoneNumber", phoneNumber,
                     "profileImage", profileImage);
@@ -109,25 +112,41 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             String email = (String) attributes.get("email");
             String birthday = (String) attributes.get("birthday");
             String birthyear = (String) attributes.get("birthyear");
-            String gender = (String) attributes.get("gender");
+            String birth = convertBirthday(birthyear + birthday);
             String phoneNumber = (String) attributes.get("mobile");
-            if (gender.equals("M"))
-                gender = "남자";
-            if (gender.equals("W"))
-                gender = "여자";
+            phoneNumber = convertPhoneNumber(phoneNumber);
+            String gender = (String) attributes.get("gender");
+            gender = convertGender(gender);
             String profileImage = (String) attributes.get("profile_image");
 
-            // TODO: 사용자 정보로 원하는 작업 수행 (DB 저장, 세션 저장 등)
-            System.out.println("# 네이버 로그인");
-            System.out.println("ID: " + id);
-            System.out.println("이름: " + nickname);
-            System.out.println("닉네임: " + name);
-            System.out.println("이메일: " + email);
-            System.out.println("생일: " + birthday);
-            System.out.println("생년: " + birthyear);
-            System.out.println("성: " + gender);
-            System.out.println("번호: " + phoneNumber);
-            System.out.println("프로필사진: " + profileImage);
+            // 필드 추출 출력
+            // System.out.println("# 네이버 로그인");
+            // System.out.println("ID: " + id);
+            // System.out.println("이름: " + nickname);
+            // System.out.println("닉네임: " + name);
+            // System.out.println("이메일: " + email);
+            // System.out.println("생일: " + birth);
+            // System.out.println("성: " + gender);
+            // System.out.println("번호: " + phoneNumber);
+            // System.out.println("프로필사진: " + profileImage);
+
+            // 최초 로그인 시 자동 회원가입
+            MemberVO dbUser = memberService.getMemberByEmail(email);
+
+            if (dbUser == null) {
+                MemberVO newUser = new MemberVO();
+                newUser.setMe_id(id);
+                newUser.setMe_name(name);
+                newUser.setMe_nick(nickname);
+                newUser.setMe_pw("naver");
+                newUser.setMe_email(email);
+                newUser.setMe_birthday(birth);
+                newUser.setMe_gender(gender);
+                newUser.setMe_number(phoneNumber);
+                newUser.setMe_profile(profileImage);
+
+                boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
+            }
 
             // 필요한 정보만 attributes로 새롭게 구성하고 리턴
             Map<String, Object> customAttributes = Map.of(
@@ -135,8 +154,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     "name", name,
                     "nickname", nickname,
                     "email", email,
-                    "birthday", birthday,
-                    "birthyear", birthyear,
+                    "birthday", birth,
                     "gender", gender,
                     "phoneNumber", phoneNumber,
                     "profileImage", profileImage);
@@ -148,11 +166,114 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             );
         }
 
+        else if ("google".equals(provider)) {
+            attributes = oauth2User.getAttributes();
+
+            String id = (String) attributes.get("sub"); // Google은 "sub"를 사용자 고유 ID로 사용
+            String name = (String) attributes.get("name");
+            String nickname = (String) attributes.get("given_name"); // 또는 필요 시 name을 그대로 사용
+            String email = (String) attributes.get("email");
+            String profileImage = (String) attributes.get("picture");
+
+            OAuth2AccessToken accessToken = userRequest.getAccessToken();
+            String tokenValue = accessToken.getTokenValue();
+
+            // 👉 People API 호출
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(tokenValue);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Map> peopleResponse = restTemplate.exchange(
+                    "https://people.googleapis.com/v1/people/me?personFields=birthdays,genders",
+                    HttpMethod.GET,
+                    entity,
+                    Map.class);
+
+            Map<String, Object> people = peopleResponse.getBody();
+
+            String phoneNumber = ""; // 기본 정보에 없음
+
+            String birth = ""; // Google은 생일 정보는 기본적으로 제공하지 않음
+            List<Map<String, Object>> birthdays = (List<Map<String, Object>>) people.get("birthdays");
+            if (birthdays != null && !birthdays.isEmpty()) {
+                Map<String, Object> date = (Map<String, Object>) birthdays.get(0).get("date");
+                birth = String.format("%04d%02d%02d", date.get("year"), date.get("month"), date.get("day"));
+            }
+
+            String gender = "";
+            List<Map<String, Object>> genders = (List<Map<String, Object>>) people.get("genders");
+            if (genders != null && !genders.isEmpty()) {
+                gender = (String) genders.get(0).get("value");
+            }
+            gender = convertGender(gender);
+
+            // 필드 추출 출력
+            System.out.println("# 구글 로그인");
+            System.out.println("ID: " + id);
+            System.out.println("이름: " + nickname);
+            System.out.println("닉네임: " + name);
+            System.out.println("이메일: " + email);
+            System.out.println("생일: " + birth);
+            System.out.println("성: " + gender);
+            System.out.println("번호: " + phoneNumber);
+            System.out.println("프로필사진: " + profileImage);
+
+            // 최초 로그인 시 자동 회원가입
+            MemberVO dbUser = memberService.getMemberByEmail(email);
+
+            if (dbUser == null) {
+            MemberVO newUser = new MemberVO();
+            newUser.setMe_id(id);
+            newUser.setMe_name(name);
+            newUser.setMe_nick(nickname);
+            newUser.setMe_pw("google");
+            newUser.setMe_email(email);
+            newUser.setMe_birthday(birth);
+            newUser.setMe_gender(gender);
+            newUser.setMe_number(phoneNumber);
+            newUser.setMe_profile(profileImage);
+
+            boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
+            }
+
+            // 필요한 정보만 attributes로 새롭게 구성하고 리턴
+            Map<String, Object> customAttributes = Map.of(
+                    "id", id,
+                    "name", name,
+                    "nickname", nickname,
+                    "email", email,
+                    "birthday", birth,
+                    "gender", gender,
+                    "phoneNumber", phoneNumber,
+                    "profileImage", profileImage);
+
+            return new DefaultOAuth2User(
+                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                    customAttributes,
+                    "id" // Google의 사용자 고유 식별자 key
+            );
+        }
+
         // 다른 OAuth 제공자는 기본 처리
         return oauth2User;
     }
 
     public String convertPhoneNumber(String phone) {
-        return phone.replace("+82", "0").replaceAll(" ", "");
+        return phone.replace("+82", "0")
+                .replaceAll(" ", "");
+    }
+
+    public String convertGender(String gender) {
+        if (gender.equals("M") || gender.equals("male"))
+            return "남자";
+        if (gender.equals("W") || gender.equals("female"))
+            return "여자";
+        else
+            return "";
+    }
+
+    public String convertBirthday(String birthday) {
+        return birthday.replaceAll("-", "");
     }
 }
