@@ -23,11 +23,6 @@ public class MainController {
 	@Autowired
 	RegionService regionService;
 
-	private RestTemplate restTemplate = new RestTemplate();
-
-	@Value("${kakao.map-id}")
-	private String mapId;
-
 	@Autowired
 	LodgingService lodgingService;
 
@@ -44,10 +39,4 @@ public class MainController {
 		return "regionLodgingList";
 	}
 
-	@ResponseBody
-	@GetMapping(value = "/test", produces = MediaType.TEXT_PLAIN_VALUE)
-	public String test() {
-		String url = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + mapId + "&libraries=services,clusterer,drawing";
-		return restTemplate.getForObject(url, String.class);
-	}
 }

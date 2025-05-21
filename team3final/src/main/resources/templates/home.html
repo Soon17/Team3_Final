@@ -311,592 +311,610 @@
 
 <body>
 	<div layout:fragment="content">
-		<div id="region2"></div>
-		<div class="modal" id="calendarModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
-						</div>
-						<div class="nights" id="nights"></div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<<<<<<< HEAD <div id="region2">
+	</div>
+	=======
+	>>>>>>> origin/han
+	<div class="modal" id="calendarModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal 헤더 -->
+				<div class="modal-header">
+					<div>
+						<span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
 					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div class="calendar-wrapper">
-							<div id="calendar-grid" class="calendar-grid"></div>
-						</div>
+					<div class="nights" id="nights"></div>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal 바디 -->
+				<div class="modal-body">
+					<div class="calendar-wrapper">
+						<div id="calendar-grid" class="calendar-grid"></div>
 					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
+				</div>
+				<!-- Modal 푸터 -->
+				<div class="modal-footer justify-content-center">
+					<<<<<<< HEAD <button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">
+						적용하기</button>
+						=======
 						<button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
-					</div>
+						>>>>>>> origin/han
 				</div>
 			</div>
 		</div>
-		<div class="modal" id="guestModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span>인원 선택</span>
-						</div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
+	</div>
+	<div class="modal" id="guestModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal 헤더 -->
+				<div class="modal-header">
+					<div>
+						<span>인원 선택</span>
 					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div>
-							<div class="counter-label">성인</div>
-							<div class="counter-subtext">만 18세 이상</div>
-						</div>
-						<div class="counter-controls">
-							<div class="counter-btn" id="adult-minus">−</div>
-							<div class="count-value" id="adult-count">2</div>
-							<div class="counter-btn" id="adult-increase">+</div>
-						</div>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal 바디 -->
+				<div class="modal-body">
+					<div>
+						<div class="counter-label">성인</div>
+						<div class="counter-subtext">만 18세 이상</div>
 					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
-						<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
+					<div class="counter-controls">
+						<div class="counter-btn" id="adult-minus">−</div>
+						<div class="count-value" id="adult-count">2</div>
+						<div class="counter-btn" id="adult-increase">+</div>
 					</div>
+				</div>
+				<!-- Modal 푸터 -->
+				<div class="modal-footer justify-content-center">
+					<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
 				</div>
 			</div>
 		</div>
-		<div>
-			<div class="swiper event-swiper d-md-flex">
-				<div class="swiper-wrapper">
-					<div class="swiper-slide first">
-						<a class="link" href="#">
-							<img src="/resources/static/imgs/레전드.png" alt="이미지1" />
-						</a>
+	</div>
+	<<<<<<< HEAD <div>
+		<div class="swiper event-swiper d-md-flex">
+			=======
+			<div>
+				<div class="swiper event-swiper d-md-flex">
+					>>>>>>> origin/han
+					<div class="swiper-wrapper">
+						<div class="swiper-slide first">
+							<a class="link" href="#">
+								<img src="/resources/static/imgs/레전드.png" alt="이미지1" />
+							</a>
+						</div>
+						<div class="swiper-slide second">
+							<a class="link" href="#">
+								<img src="/resources/static/imgs/할레루야.png" alt="이미지1" />
+							</a>
+						</div>
+						<div class="swiper-slide third">
+							<a class="link" href="#">
+								<img src="/resources/static/imgs/댐잇.png" alt="이미지1" />
+							</a>
+						</div>
 					</div>
-					<div class="swiper-slide second">
-						<a class="link" href="#">
-							<img src="/resources/static/imgs/할레루야.png" alt="이미지1" />
-						</a>
+					<div class="swiper-button-prev event-prev"></div>
+					<div class="swiper-button-next event-next"></div>
+
+				</div>
+				<div th:fragment="hotel-search-box">
+					<div
+						style="margin-top: 2rem; background-color: white; border-radius: 1rem; padding: 1.5rem; max-width: 1032px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);">
+
+						<!-- 탭 메뉴 -->
+						<div style="display: flex; gap: 1rem; margin-bottom: 1rem; font-weight: bold;">
+							<div style="color: #007aff; display: flex; align-items: center; gap: 0.3rem;">
+								<img
+									src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzExMzM0XzIwNjkxNikiPgo8cGF0aCBkPSJNMTkuODA5NCAxNi40OThIMTQuODUxNlYyMC45OTk3SDE5LjgwOTRWMTYuNDk4WiIgZmlsbD0iIzAwNzhGRiIvPgo8cGF0aCBkPSJNNy4yODA5MiAxLjQ3MTY4SDMuMjUyOTNWMTYuNDk3OEg3LjI4MDkyVjEuNDcxNjhaIiBmaWxsPSIjOTJDMkZGIi8+CjxwYXRoIGQ9Ik03LjI4MDkyIDFIMy4yNTI5M1YxLjYyODU3SDcuMjgwOTJWMVoiIGZpbGw9IiM2M0E4RkYiLz4KPHBhdGggZD0iTTEwLjU1ODEgMUg3LjI4MjIzVjEuNjI4NTdIMTAuNTU4MVYxWiIgZmlsbD0iIzJFOEFGRiIvPgo8cGF0aCBkPSJNNy4yODA5MiAxNS44NzExSDMuMjUyOTNWMTYuNDk5N0g3LjI4MDkyVjE1Ljg3MTFaIiBmaWxsPSIjNjNBOEZGIi8+CjxwYXRoIGQ9Ik0xOC43NDU2IDEuNDcxNjhIMTUuNDY5N1YxNi40OTc4SDE4Ljc0NTZWMS40NzE2OFoiIGZpbGw9IiM1NDlGRkYiLz4KPHBhdGggZD0iTTE1LjQ3MDQgMS40NzE2OEgxMS40NDI0VjE2LjQ5NzhIMTUuNDcwNFYxLjQ3MTY4WiIgZmlsbD0iIzkyQzJGRiIvPgo8cGF0aCBkPSJNMTUuNDcwNCAxSDExLjQ0MjRWMS42Mjg1N0gxNS40NzA0VjFaIiBmaWxsPSIjNjNBOEZGIi8+CjxwYXRoIGQ9Ik0xOC43NDU2IDFIMTUuNDY5N1YxLjYyODU3SDE4Ljc0NTZWMVoiIGZpbGw9IiMyRThBRkYiLz4KPHBhdGggZD0iTTE1LjQ3MDQgMTUuODcxMUgxMS40NDI0VjE2LjQ5OTdIMTUuNDcwNFYxNS44NzExWiIgZmlsbD0iIzYzQThGRiIvPgo8cGF0aCBkPSJNMTguNzQ1NiAxNS44NzExSDE1LjQ2OTdWMTYuNDk5N0gxOC43NDU2VjE1Ljg3MTFaIiBmaWxsPSIjMkU4QUZGIi8+CjxwYXRoIGQ9Ik0xMS40NDMxIDEuOTMxNjRINy4yODIyM1YxNi40OTc2SDExLjQ0MzFWMS45MzE2NFoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTExLjQ0MzEgMS42Mjk4OEg3LjI4MjIzVjIuMjU4NDVIMTEuNDQzMVYxLjYyOTg4WiIgZmlsbD0iIzkyQzJGRiIvPgo8cGF0aCBkPSJNMTEuNDQyMSA1LjE4NTU1SDcuMjgxMjVWNS42NTY5OEgxMS40NDIxVjUuMTg1NTVaIiBmaWxsPSIjOTJDMkZGIi8+CjxwYXRoIGQ9Ik0xMS40NDIxIDguNjAzNTJINy4yODEyNVY5LjA3NDk0SDExLjQ0MjFWOC42MDM1MloiIGZpbGw9IiM5MkMyRkYiLz4KPHBhdGggZD0iTTExLjQ0MjEgMTIuMDIxNUg3LjI4MTI1VjEyLjQ5MjlIMTEuNDQyMVYxMi4wMjE1WiIgZmlsbD0iIzkyQzJGRiIvPgo8cGF0aCBkPSJNMTQuODQ4IDE2LjQ5OEgxNC4wNjU0VjIwLjk5OTdIMTQuODQ4VjE2LjQ5OFoiIGZpbGw9IiMzNDkzRkYiLz4KPHBhdGggZD0iTTE0LjA2NTkgMTYuNDk4SDIuMTkwNDNWMjAuOTk5N0gxNC4wNjU5VjE2LjQ5OFoiIGZpbGw9IiMzNDkzRkYiLz4KPHBhdGggZD0iTTUuOTc3OTcgMy45Mjg3MUg0LjU1NTY2VjUuNzk5MzVINS45Nzc5N1YzLjkyODcxWiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNNS45Nzc5NyA1Ljc5OThINC41NTU2NlY2LjA4OTlINS45Nzc5N1Y1Ljc5OThaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik01Ljk3Nzk3IDEwLjk5MDJINC41NTU2NlYxMi44NjA5SDUuOTc3OTdWMTAuOTkwMloiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTUuOTc3OTcgMTIuODYxM0g0LjU1NTY2VjEzLjE1MTRINS45Nzc5N1YxMi44NjEzWiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNNS45Nzc5NyA3LjQ1ODk4SDQuNTU1NjZWOS4zMjk2MUg1Ljk3Nzk3VjcuNDU4OThaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik01Ljk3Nzk3IDkuMzMwMDhINC41NTU2NlY5LjYyMDE3SDUuOTc3OTdWOS4zMzAwOFoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTE0LjA3ODYgMy45Mjg3MUgxMi42NTYyVjUuNzk5MzVIMTQuMDc4NlYzLjkyODcxWiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNMTQuMDc4NiA1Ljc5OThIMTIuNjU2MlY2LjA4OTlIMTQuMDc4NlY1Ljc5OThaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik0xNC4wNzg2IDcuNDU4OThIMTIuNjU2MlY5LjMyOTYxSDE0LjA3ODZWNy40NTg5OFoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTE0LjA3ODYgOS4zMzAwOEgxMi42NTYyVjkuNjIwMTdIMTQuMDc4NlY5LjMzMDA4WiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNMTQuMDc4NiAxMC45OTAySDEyLjY1NjJWMTIuODYwOUgxNC4wNzg2VjEwLjk5MDJaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik0xNC4wNzg2IDEyLjg2MTNIMTIuNjU2MlYxMy4xNTE0SDE0LjA3ODZWMTIuODYxM1oiIGZpbGw9IiNERkVERkYiLz4KPHJlY3QgeD0iNS4xNDY0OCIgeT0iMTQuNDM0NiIgd2lkdGg9IjcuODE1MTEiIGhlaWdodD0iMi4wNjYzOSIgZmlsbD0iIzQ5NDk0OSIvPgo8cmVjdCB4PSIxMi42MzQ4IiB5PSIxNC40MzQ2IiB3aWR0aD0iMC40NzE0MjkiIGhlaWdodD0iMi4wNjYzOSIgZmlsbD0iIzJGMkYzMCIvPgo8cGF0aCBkPSJNNi40NTgwMSAxNC44ODgxSDYuNzYyM1YxNS4zNDQ1SDcuMTg5OTJWMTQuODg4MUg3LjQ5NTgyVjE2LjA0NzZINy4xODk5MlYxNS41OTEySDYuNzYyM1YxNi4wNDc2SDYuNDU4MDFWMTQuODg4MVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik04Ljc0OTQ1IDE1LjQ2NzhDOC43NDk0NSAxNS41OTI4IDguNzI0ODkgMTUuNzAwMSA4LjY3NTc4IDE1Ljc4OThDOC42MjY2NiAxNS44Nzk0IDguNTU5NjYgMTUuOTQ3NSA4LjQ3NDc4IDE1Ljk5NEM4LjM4OTkgMTYuMDQwNCA4LjI5NDYxIDE2LjA2MzYgOC4xODg5IDE2LjA2MzZDOC4wODIxMyAxNi4wNjM2IDcuOTg2MzEgMTYuMDQwNCA3LjkwMTQzIDE1Ljk5NEM3LjgxNjU0IDE1Ljk0NyA3Ljc0OTU0IDE1Ljg3ODYgNy43MDA0MyAxNS43ODlDNy42NTEzMiAxNS42OTkzIDcuNjI2NzYgMTUuNTkyMiA3LjYyNjc2IDE1LjQ2NzhDNy42MjY3NiAxNS4zNDI5IDcuNjUxMzIgMTUuMjM1NiA3LjcwMDQzIDE1LjE0NTlDNy43NDk1NCAxNS4wNTYyIDcuODE2NTQgMTQuOTg4MiA3LjkwMTQzIDE0Ljk0MTdDNy45ODYzMSAxNC44OTUzIDguMDgyMTMgMTQuODcyMSA4LjE4ODkgMTQuODcyMUM4LjI5NDYxIDE0Ljg3MjEgOC4zODk5IDE0Ljg5NTMgOC40NzQ3OCAxNC45NDE3QzguNTU5NjYgMTQuOTg4MiA4LjYyNjY2IDE1LjA1NjIgOC42NzU3OCAxNS4xNDU5QzguNzI0ODkgMTUuMjM1NiA4Ljc0OTQ1IDE1LjM0MjkgOC43NDk0NSAxNS40Njc4Wk03Ljk0MDY2IDE1LjQ2NzhDNy45NDA2NiAxNS41NzQxIDcuOTYyMDIgMTUuNjU1NSA4LjAwNDczIDE1LjcxMjFDOC4wNDc0MyAxNS43Njg3IDguMTA4ODMgMTUuNzk3MiA4LjE4ODkgMTUuNzk3OEM4LjI2ODQ1IDE1Ljc5NzIgOC4zMjk1NyAxNS43Njg3IDguMzcyMjggMTUuNzEyMUM4LjQxNDk5IDE1LjY1NTUgOC40MzYwOCAxNS41NzQxIDguNDM1NTQgMTUuNDY3OEM4LjQzNjA4IDE1LjM2MTEgOC40MTQ5OSAxNS4yNzk0IDguMzcyMjggMTUuMjIyOEM4LjMyOTU3IDE1LjE2NjIgOC4yNjg0NSAxNS4xMzc5IDguMTg4OSAxNS4xMzc5QzguMTA4ODMgMTUuMTM3OSA4LjA0NzQzIDE1LjE2NjIgOC4wMDQ3MyAxNS4yMjI4QzcuOTYyMDIgMTUuMjc5NCA3Ljk0MDY2IDE1LjM2MTEgNy45NDA2NiAxNS40Njc4WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTguNzkzOTEgMTQuODg4MUg5Ljc5MzI4VjE1LjEzNDdIOS40NDQxNFYxNi4wNDc2SDkuMTQzMDVWMTUuMTM0N0g4Ljc5MzkxVjE0Ljg4ODFaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNOS45MDAyIDE0Ljg4ODFIMTAuNzI4MlYxNS4xMzQ3SDEwLjIwNDVWMTUuMzQ0NUgxMC42ODVWMTUuNTkxMkgxMC4yMDQ1VjE1LjgwMUgxMC43MjY2VjE2LjA0NzZIOS45MDAyVjE0Ljg4ODFaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTAuODcyIDE0Ljg4ODFIMTEuMTc2M1YxNS44MDFIMTEuNjQ4N1YxNi4wNDc2SDEwLjg3MlYxNC44ODgxWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTEwLjYwNjkgMTcuNTAySDYuNDAzMzJWMjAuOTk4NEgxMC42MDY5VjE3LjUwMloiIGZpbGw9IiMzNzdGRTgiLz4KPHBhdGggZD0iTTguMzAzNDMgMTcuOTE0MUg2LjgwNjY0VjE4LjYzSDguMzAzNDNWMTcuOTE0MVoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTEwLjE5MzEgMTcuOTE0MUg4LjY5NjI5VjE4LjYzSDEwLjE5MzFWMTcuOTE0MVoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTguMzAyMzQgMTkuMDIyNUg2LjgwNjY0VjIwLjk5ODVIOC4zMDIzNFYxOS4wMjI1WiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNMTAuMTkxIDE5LjAyMjVIOC42OTUzMVYyMC45OTg1SDEwLjE5MVYxOS4wMjI1WiIgZmlsbD0iI0RGRURGRiIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzExMzM0XzIwNjkxNiI+CjxyZWN0IHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K" />
+								<span>국내호텔</span>
+							</div>
+						</div>
+						<!-- 입력 박스 -->
+						<form th:action="@{/searching/search}" method="get"
+							style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; position: relative;">
+							<select name="rg_name" id="region"
+								style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
+								<option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}">
+							</select>
+							<input type="text" id="check-time" name="checkTime" data-toggle="modal" data-target="#calendarModal"
+								placeholder="날짜를 입력해주세요" readonly
+								style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+							<input type="text" readonly id="check-people" name="rm_person" data-toggle="modal"
+								data-target="#guestModal" value="성인2"
+								style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+							<div>
+								<button type="submit" id="search-btn"
+									style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
+									검색
+								</button>
+							</div>
+						</form>
 					</div>
-					<div class="swiper-slide third">
-						<a class="link" href="#">
-							<img src="/resources/static/imgs/댐잇.png" alt="이미지1" />
-						</a>
+					<div class="container region-lodging">
+						<div class=" container region-text">
+							<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(리뷰 평점 좋은 순)</h3>
+						</div>
+						<div class="container region-text region-btn-box">
+							<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
+								th:text="${rg.rg_name}"></button>
+						</div>
+						<div class="container region-text" style="margin-top: 20px; position: relative;">
+
+							<div class="swiper lodging-swiper">
+								<div class="swiper-wrapper swiper-lodging">
+									<!-- 카드 반복 시작 -->
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="/reserv">
+											<img src="/resources/static/imgs/할레루야.png" class="card-img-top"
+												style="width: 240px; height: 240px;" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">신라 호텔</h6>
+												<div>
+													<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
+													<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
+												</div>
+												<p class="mb-0 text-muted">85,764원</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<!-- 카드 반복 끝 -->
+								</div>
+
+								<!-- 슬라이드 화살표 -->
+							</div>
+							<div class="swiper-button-next lodging-next"></div>
+							<div class="swiper-button-prev lodging-prev"></div>
+						</div>
+					</div>
+					<div class="container region-lodging">
+						<div class=" container region-text">
+							<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 가성비 숙소!!(가격 싼 순)</h3>
+						</div>
+						<div class="container region-text region-btn-box">
+							<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
+								th:text="${rg.rg_name}"></button>
+						</div>
+						<div class="container region-text" style="margin-top: 20px; position: relative;">
+
+							<div class="swiper money-swiper">
+								<div class="swiper-wrapper swiper-lodging">
+									<!-- 카드 반복 시작 -->
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" class="card-img-top"
+												style="width: 240px; height: 240px;" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">신라 호텔</h6>
+												<div>
+													<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
+													<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
+												</div>
+												<p class="mb-0 text-muted">85,764원</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<!-- 카드 반복 끝 -->
+								</div>
+
+								<!-- 슬라이드 화살표 -->
+							</div>
+							<div class="swiper-button-next money-next"></div>
+							<div class="swiper-button-prev money-prev"></div>
+						</div>
+					</div>
+					<div class="container region-lodging">
+						<div class=" container region-text">
+							<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(예약순)</h3>
+						</div>
+						<div class="container region-text region-btn-box">
+							<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
+								th:text="${rg.rg_name}"></button>
+						</div>
+						<div class="container region-text" style="margin-top: 20px; position: relative;">
+
+							<div class="swiper  booking-swiper">
+								<div class="swiper-wrapper swiper-lodging">
+									<!-- 카드 반복 시작 -->
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" class="card-img-top"
+												style="width: 240px; height: 240px;" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">신라 호텔</h6>
+												<div>
+													<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
+													<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
+												</div>
+												<p class="mb-0 text-muted">85,764원</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<div class="swiper-slide">
+										<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
+											<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;"
+												class="card-img-top" alt="썸네일">
+											<div class="card-body p-2">
+												<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
+												<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
+											</div>
+										</a>
+									</div>
+									<!-- 카드 반복 끝 -->
+								</div>
+
+								<!-- 슬라이드 화살표 -->
+							</div>
+							<div class="swiper-button-next booking-next"></div>
+							<div class="swiper-button-prev booking-prev"></div>
+						</div>
 					</div>
 				</div>
-				<div class="swiper-button-prev event-prev"></div>
-				<div class="swiper-button-next event-next"></div>
-
 			</div>
-			<div th:fragment="hotel-search-box">
-				<div
-					style="margin-top: 2rem; background-color: white; border-radius: 1rem; padding: 1.5rem; max-width: 1032px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);">
-
-					<!-- 탭 메뉴 -->
-					<div style="display: flex; gap: 1rem; margin-bottom: 1rem; font-weight: bold;">
-						<div style="color: #007aff; display: flex; align-items: center; gap: 0.3rem;">
-							<img
-								src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzExMzM0XzIwNjkxNikiPgo8cGF0aCBkPSJNMTkuODA5NCAxNi40OThIMTQuODUxNlYyMC45OTk3SDE5LjgwOTRWMTYuNDk4WiIgZmlsbD0iIzAwNzhGRiIvPgo8cGF0aCBkPSJNNy4yODA5MiAxLjQ3MTY4SDMuMjUyOTNWMTYuNDk3OEg3LjI4MDkyVjEuNDcxNjhaIiBmaWxsPSIjOTJDMkZGIi8+CjxwYXRoIGQ9Ik03LjI4MDkyIDFIMy4yNTI5M1YxLjYyODU3SDcuMjgwOTJWMVoiIGZpbGw9IiM2M0E4RkYiLz4KPHBhdGggZD0iTTEwLjU1ODEgMUg3LjI4MjIzVjEuNjI4NTdIMTAuNTU4MVYxWiIgZmlsbD0iIzJFOEFGRiIvPgo8cGF0aCBkPSJNNy4yODA5MiAxNS44NzExSDMuMjUyOTNWMTYuNDk5N0g3LjI4MDkyVjE1Ljg3MTFaIiBmaWxsPSIjNjNBOEZGIi8+CjxwYXRoIGQ9Ik0xOC43NDU2IDEuNDcxNjhIMTUuNDY5N1YxNi40OTc4SDE4Ljc0NTZWMS40NzE2OFoiIGZpbGw9IiM1NDlGRkYiLz4KPHBhdGggZD0iTTE1LjQ3MDQgMS40NzE2OEgxMS40NDI0VjE2LjQ5NzhIMTUuNDcwNFYxLjQ3MTY4WiIgZmlsbD0iIzkyQzJGRiIvPgo8cGF0aCBkPSJNMTUuNDcwNCAxSDExLjQ0MjRWMS42Mjg1N0gxNS40NzA0VjFaIiBmaWxsPSIjNjNBOEZGIi8+CjxwYXRoIGQ9Ik0xOC43NDU2IDFIMTUuNDY5N1YxLjYyODU3SDE4Ljc0NTZWMVoiIGZpbGw9IiMyRThBRkYiLz4KPHBhdGggZD0iTTE1LjQ3MDQgMTUuODcxMUgxMS40NDI0VjE2LjQ5OTdIMTUuNDcwNFYxNS44NzExWiIgZmlsbD0iIzYzQThGRiIvPgo8cGF0aCBkPSJNMTguNzQ1NiAxNS44NzExSDE1LjQ2OTdWMTYuNDk5N0gxOC43NDU2VjE1Ljg3MTFaIiBmaWxsPSIjMkU4QUZGIi8+CjxwYXRoIGQ9Ik0xMS40NDMxIDEuOTMxNjRINy4yODIyM1YxNi40OTc2SDExLjQ0MzFWMS45MzE2NFoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTExLjQ0MzEgMS42Mjk4OEg3LjI4MjIzVjIuMjU4NDVIMTEuNDQzMVYxLjYyOTg4WiIgZmlsbD0iIzkyQzJGRiIvPgo8cGF0aCBkPSJNMTEuNDQyMSA1LjE4NTU1SDcuMjgxMjVWNS42NTY5OEgxMS40NDIxVjUuMTg1NTVaIiBmaWxsPSIjOTJDMkZGIi8+CjxwYXRoIGQ9Ik0xMS40NDIxIDguNjAzNTJINy4yODEyNVY5LjA3NDk0SDExLjQ0MjFWOC42MDM1MloiIGZpbGw9IiM5MkMyRkYiLz4KPHBhdGggZD0iTTExLjQ0MjEgMTIuMDIxNUg3LjI4MTI1VjEyLjQ5MjlIMTEuNDQyMVYxMi4wMjE1WiIgZmlsbD0iIzkyQzJGRiIvPgo8cGF0aCBkPSJNMTQuODQ4IDE2LjQ5OEgxNC4wNjU0VjIwLjk5OTdIMTQuODQ4VjE2LjQ5OFoiIGZpbGw9IiMzNDkzRkYiLz4KPHBhdGggZD0iTTE0LjA2NTkgMTYuNDk4SDIuMTkwNDNWMjAuOTk5N0gxNC4wNjU5VjE2LjQ5OFoiIGZpbGw9IiMzNDkzRkYiLz4KPHBhdGggZD0iTTUuOTc3OTcgMy45Mjg3MUg0LjU1NTY2VjUuNzk5MzVINS45Nzc5N1YzLjkyODcxWiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNNS45Nzc5NyA1Ljc5OThINC41NTU2NlY2LjA4OTlINS45Nzc5N1Y1Ljc5OThaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik01Ljk3Nzk3IDEwLjk5MDJINC41NTU2NlYxMi44NjA5SDUuOTc3OTdWMTAuOTkwMloiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTUuOTc3OTcgMTIuODYxM0g0LjU1NTY2VjEzLjE1MTRINS45Nzc5N1YxMi44NjEzWiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNNS45Nzc5NyA3LjQ1ODk4SDQuNTU1NjZWOS4zMjk2MUg1Ljk3Nzk3VjcuNDU4OThaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik01Ljk3Nzk3IDkuMzMwMDhINC41NTU2NlY5LjYyMDE3SDUuOTc3OTdWOS4zMzAwOFoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTE0LjA3ODYgMy45Mjg3MUgxMi42NTYyVjUuNzk5MzVIMTQuMDc4NlYzLjkyODcxWiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNMTQuMDc4NiA1Ljc5OThIMTIuNjU2MlY2LjA4OTlIMTQuMDc4NlY1Ljc5OThaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik0xNC4wNzg2IDcuNDU4OThIMTIuNjU2MlY5LjMyOTYxSDE0LjA3ODZWNy40NTg5OFoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTE0LjA3ODYgOS4zMzAwOEgxMi42NTYyVjkuNjIwMTdIMTQuMDc4NlY5LjMzMDA4WiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNMTQuMDc4NiAxMC45OTAySDEyLjY1NjJWMTIuODYwOUgxNC4wNzg2VjEwLjk5MDJaIiBmaWxsPSIjREZFREZGIi8+CjxwYXRoIGQ9Ik0xNC4wNzg2IDEyLjg2MTNIMTIuNjU2MlYxMy4xNTE0SDE0LjA3ODZWMTIuODYxM1oiIGZpbGw9IiNERkVERkYiLz4KPHJlY3QgeD0iNS4xNDY0OCIgeT0iMTQuNDM0NiIgd2lkdGg9IjcuODE1MTEiIGhlaWdodD0iMi4wNjYzOSIgZmlsbD0iIzQ5NDk0OSIvPgo8cmVjdCB4PSIxMi42MzQ4IiB5PSIxNC40MzQ2IiB3aWR0aD0iMC40NzE0MjkiIGhlaWdodD0iMi4wNjYzOSIgZmlsbD0iIzJGMkYzMCIvPgo8cGF0aCBkPSJNNi40NTgwMSAxNC44ODgxSDYuNzYyM1YxNS4zNDQ1SDcuMTg5OTJWMTQuODg4MUg3LjQ5NTgyVjE2LjA0NzZINy4xODk5MlYxNS41OTEySDYuNzYyM1YxNi4wNDc2SDYuNDU4MDFWMTQuODg4MVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik04Ljc0OTQ1IDE1LjQ2NzhDOC43NDk0NSAxNS41OTI4IDguNzI0ODkgMTUuNzAwMSA4LjY3NTc4IDE1Ljc4OThDOC42MjY2NiAxNS44Nzk0IDguNTU5NjYgMTUuOTQ3NSA4LjQ3NDc4IDE1Ljk5NEM4LjM4OTkgMTYuMDQwNCA4LjI5NDYxIDE2LjA2MzYgOC4xODg5IDE2LjA2MzZDOC4wODIxMyAxNi4wNjM2IDcuOTg2MzEgMTYuMDQwNCA3LjkwMTQzIDE1Ljk5NEM3LjgxNjU0IDE1Ljk0NyA3Ljc0OTU0IDE1Ljg3ODYgNy43MDA0MyAxNS43ODlDNy42NTEzMiAxNS42OTkzIDcuNjI2NzYgMTUuNTkyMiA3LjYyNjc2IDE1LjQ2NzhDNy42MjY3NiAxNS4zNDI5IDcuNjUxMzIgMTUuMjM1NiA3LjcwMDQzIDE1LjE0NTlDNy43NDk1NCAxNS4wNTYyIDcuODE2NTQgMTQuOTg4MiA3LjkwMTQzIDE0Ljk0MTdDNy45ODYzMSAxNC44OTUzIDguMDgyMTMgMTQuODcyMSA4LjE4ODkgMTQuODcyMUM4LjI5NDYxIDE0Ljg3MjEgOC4zODk5IDE0Ljg5NTMgOC40NzQ3OCAxNC45NDE3QzguNTU5NjYgMTQuOTg4MiA4LjYyNjY2IDE1LjA1NjIgOC42NzU3OCAxNS4xNDU5QzguNzI0ODkgMTUuMjM1NiA4Ljc0OTQ1IDE1LjM0MjkgOC43NDk0NSAxNS40Njc4Wk03Ljk0MDY2IDE1LjQ2NzhDNy45NDA2NiAxNS41NzQxIDcuOTYyMDIgMTUuNjU1NSA4LjAwNDczIDE1LjcxMjFDOC4wNDc0MyAxNS43Njg3IDguMTA4ODMgMTUuNzk3MiA4LjE4ODkgMTUuNzk3OEM4LjI2ODQ1IDE1Ljc5NzIgOC4zMjk1NyAxNS43Njg3IDguMzcyMjggMTUuNzEyMUM4LjQxNDk5IDE1LjY1NTUgOC40MzYwOCAxNS41NzQxIDguNDM1NTQgMTUuNDY3OEM4LjQzNjA4IDE1LjM2MTEgOC40MTQ5OSAxNS4yNzk0IDguMzcyMjggMTUuMjIyOEM4LjMyOTU3IDE1LjE2NjIgOC4yNjg0NSAxNS4xMzc5IDguMTg4OSAxNS4xMzc5QzguMTA4ODMgMTUuMTM3OSA4LjA0NzQzIDE1LjE2NjIgOC4wMDQ3MyAxNS4yMjI4QzcuOTYyMDIgMTUuMjc5NCA3Ljk0MDY2IDE1LjM2MTEgNy45NDA2NiAxNS40Njc4WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTguNzkzOTEgMTQuODg4MUg5Ljc5MzI4VjE1LjEzNDdIOS40NDQxNFYxNi4wNDc2SDkuMTQzMDVWMTUuMTM0N0g4Ljc5MzkxVjE0Ljg4ODFaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNOS45MDAyIDE0Ljg4ODFIMTAuNzI4MlYxNS4xMzQ3SDEwLjIwNDVWMTUuMzQ0NUgxMC42ODVWMTUuNTkxMkgxMC4yMDQ1VjE1LjgwMUgxMC43MjY2VjE2LjA0NzZIOS45MDAyVjE0Ljg4ODFaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTAuODcyIDE0Ljg4ODFIMTEuMTc2M1YxNS44MDFIMTEuNjQ4N1YxNi4wNDc2SDEwLjg3MlYxNC44ODgxWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTEwLjYwNjkgMTcuNTAySDYuNDAzMzJWMjAuOTk4NEgxMC42MDY5VjE3LjUwMloiIGZpbGw9IiMzNzdGRTgiLz4KPHBhdGggZD0iTTguMzAzNDMgMTcuOTE0MUg2LjgwNjY0VjE4LjYzSDguMzAzNDNWMTcuOTE0MVoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTEwLjE5MzEgMTcuOTE0MUg4LjY5NjI5VjE4LjYzSDEwLjE5MzFWMTcuOTE0MVoiIGZpbGw9IiNERkVERkYiLz4KPHBhdGggZD0iTTguMzAyMzQgMTkuMDIyNUg2LjgwNjY0VjIwLjk5ODVIOC4zMDIzNFYxOS4wMjI1WiIgZmlsbD0iI0RGRURGRiIvPgo8cGF0aCBkPSJNMTAuMTkxIDE5LjAyMjVIOC42OTUzMVYyMC45OTg1SDEwLjE5MVYxOS4wMjI1WiIgZmlsbD0iI0RGRURGRiIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzExMzM0XzIwNjkxNiI+CjxyZWN0IHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K" />
-							<span>국내호텔</span>
-						</div>
-					</div>
-					<!-- 입력 박스 -->
-					<form th:action="@{/searching/search}" method="get"
-						style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; position: relative;">
-						<select name="rg_name" id="region"
-							style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
-							<option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}">
-						</select>
-						<input type="text" id="check-time" name="checkTime" data-toggle="modal" data-target="#calendarModal"
-							value="날짜를 입력해주세요" readonly
-							style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
-						<input type="text" readonly id="check-people" name="rm_person" data-toggle="modal" data-target="#guestModal"
-							value="성인2"
-							style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
-						<div>
-							<button type="submit"
-								style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
-								검색
-							</button>
-						</div>
-					</form>
-				</div>
-				<div class="container region-lodging">
-					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(리뷰 평점 좋은 순)</h3>
-					</div>
-					<div class="container region-text region-btn-box">
-						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
-							th:text="${rg.rg_name}"></button>
-					</div>
-					<div class="container region-text" style="margin-top: 20px; position: relative;">
-
-						<div class="swiper lodging-swiper">
-							<div class="swiper-wrapper swiper-lodging">
-								<!-- 카드 반복 시작 -->
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="/reserv">
-										<img src="/resources/static/imgs/할레루야.png" class="card-img-top" style="width: 240px; height: 240px;"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">신라 호텔</h6>
-											<div>
-												<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
-												<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
-											</div>
-											<p class="mb-0 text-muted">85,764원</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<!-- 카드 반복 끝 -->
-							</div>
-
-							<!-- 슬라이드 화살표 -->
-						</div>
-						<div class="swiper-button-next lodging-next"></div>
-						<div class="swiper-button-prev lodging-prev"></div>
-					</div>
-				</div>
-				<div class="container region-lodging">
-					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 가성비 숙소!!(가격 싼 순)</h3>
-					</div>
-					<div class="container region-text region-btn-box">
-						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
-							th:text="${rg.rg_name}"></button>
-					</div>
-					<div class="container region-text" style="margin-top: 20px; position: relative;">
-
-						<div class="swiper money-swiper">
-							<div class="swiper-wrapper swiper-lodging">
-								<!-- 카드 반복 시작 -->
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" class="card-img-top" style="width: 240px; height: 240px;"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">신라 호텔</h6>
-											<div>
-												<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
-												<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
-											</div>
-											<p class="mb-0 text-muted">85,764원</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<!-- 카드 반복 끝 -->
-							</div>
-
-							<!-- 슬라이드 화살표 -->
-						</div>
-						<div class="swiper-button-next money-next"></div>
-						<div class="swiper-button-prev money-prev"></div>
-					</div>
-				</div>
-				<div class="container region-lodging">
-					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(예약순)</h3>
-					</div>
-					<div class="container region-text region-btn-box">
-						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
-							th:text="${rg.rg_name}"></button>
-					</div>
-					<div class="container region-text" style="margin-top: 20px; position: relative;">
-
-						<div class="swiper  booking-swiper">
-							<div class="swiper-wrapper swiper-lodging">
-								<!-- 카드 반복 시작 -->
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" class="card-img-top" style="width: 240px; height: 240px;"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">신라 호텔</h6>
-											<div>
-												<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
-												<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
-											</div>
-											<p class="mb-0 text-muted">85,764원</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/할레루야.png" style="width: 240px; height: 240px;" class="card-img-top"
-											alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<!-- 카드 반복 끝 -->
-							</div>
-
-							<!-- 슬라이드 화살표 -->
-						</div>
-						<div class="swiper-button-next booking-next"></div>
-						<div class="swiper-button-prev booking-prev"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script>
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
-
-			let selectedStart = null;
-			let selectedEnd = null;
-
-			function formatDate(date) {
-				const y = date.getFullYear();
-				const m = String(date.getMonth() + 1).padStart(2, '0');
-				const d = String(date.getDate()).padStart(2, '0');
-				const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-				return `${y}.${m}.${d}(${w})`;
-			}
-
-			function createCalendar(year, month) {
-				const $monthContainer = $('<div class="month"></div>');
-				const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
-				const $daysGrid = $('<div class="days"></div>');
-
-				const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-				$.each(dayNames, (_, day) => {
-					$daysGrid.append($('<div class="day-name"></div>').text(day));
+			<script>
+				$('#search-btn').on('click', function (e) {
+					const time = $('#check-time').val();
+					if (time.trim().length == 0) {
+						e.preventDefault(); // submit 막음
+						alert('날짜를 입력해주세요');
+					}
 				});
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
 
-				const firstDay = new Date(year, month, 1);
-				const lastDay = new Date(year, month + 1, 0);
+				let selectedStart = null;
+				let selectedEnd = null;
 
-				for (let i = 0; i < firstDay.getDay(); i++) {
-					$daysGrid.append('<div></div>');
+				function formatDate(date) {
+					const y = date.getFullYear();
+					const m = String(date.getMonth() + 1).padStart(2, '0');
+					const d = String(date.getDate()).padStart(2, '0');
+					const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+					return `${y}.${m}.${d}(${w})`;
 				}
 
-				for (let d = 1; d <= lastDay.getDate(); d++) {
-					const date = new Date(year, month, d);
-					const $dayEl = $('<div class="day"></div>').text(d);
+				function createCalendar(year, month) {
+					const $monthContainer = $('<div class="month"></div>');
+					const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
+					const $daysGrid = $('<div class="days"></div>');
 
-					if (date < today) {
-						$dayEl.addClass('disabled');
-					} else {
-						$dayEl.on('click', function () {
-							selectDate(date);
-						});
+					const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+					$.each(dayNames, (_, day) => {
+						$daysGrid.append($('<div class="day-name"></div>').text(day));
+					});
+
+					const firstDay = new Date(year, month, 1);
+					const lastDay = new Date(year, month + 1, 0);
+
+					for (let i = 0; i < firstDay.getDay(); i++) {
+						$daysGrid.append('<div></div>');
 					}
 
-					$daysGrid.append($dayEl);
+					for (let d = 1; d <= lastDay.getDate(); d++) {
+						const date = new Date(year, month, d);
+						const $dayEl = $('<div class="day"></div>').text(d);
+
+						if (date < today) {
+							$dayEl.addClass('disabled');
+						} else {
+							$dayEl.on('click', function () {
+								selectDate(date);
+							});
+						}
+
+						$daysGrid.append($dayEl);
+					}
+
+					$monthContainer.append($monthTitle).append($daysGrid);
+					$('#calendar-grid').append($monthContainer);
 				}
 
-				$monthContainer.append($monthTitle).append($daysGrid);
-				$('#calendar-grid').append($monthContainer);
-			}
+				function renderCalendars() {
+					const startYear = today.getFullYear();
+					const startMonth = today.getMonth();
 
-			function renderCalendars() {
-				const startYear = today.getFullYear();
-				const startMonth = today.getMonth();
-
-				for (let i = 0; i < 12; i++) {
-					const year = startYear + Math.floor((startMonth + i) / 12);
-					const month = (startMonth + i) % 12;
-					createCalendar(year, month);
+					for (let i = 0; i < 12; i++) {
+						const year = startYear + Math.floor((startMonth + i) / 12);
+						const month = (startMonth + i) % 12;
+						createCalendar(year, month);
+					}
 				}
-			}
 
-			function selectDate(date) {
-				if (!selectedStart || (selectedStart && selectedEnd)) {
-					selectedStart = date;
-					selectedEnd = null;
-				} else {
-					if (date < selectedStart) {
+				function selectDate(date) {
+					if (!selectedStart || (selectedStart && selectedEnd)) {
 						selectedStart = date;
 						selectedEnd = null;
 					} else {
-						const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
-						if (diff > 30) {
-							alert('최대 30일까지만 선택 가능합니다.');
-							return;
-						}
-						selectedEnd = date;
-					}
-				}
-				updateSelection();
-			}
-
-			function updateSelection() {
-				$('.day').removeClass('selected in-range');
-
-				if (selectedStart) {
-					$('.month').each(function () {
-						const [year, month] = $(this).find('h3').text().split('.').map(Number);
-						$(this).find('.day').each(function () {
-							const dayNum = parseInt($(this).text());
-							const date = new Date(year, month - 1, dayNum);
-
-							if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
-								$(this).addClass('selected');
+						if (date < selectedStart) {
+							selectedStart = date;
+							selectedEnd = null;
+						} else {
+							const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
+							if (diff > 30) {
+								alert('최대 30일까지만 선택 가능합니다.');
+								return;
 							}
-							if (selectedStart && selectedEnd) {
-								if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
+							selectedEnd = date;
+						}
+					}
+					updateSelection();
+				}
+
+				function updateSelection() {
+					$('.day').removeClass('selected in-range');
+
+					if (selectedStart) {
+						$('.month').each(function () {
+							const [year, month] = $(this).find('h3').text().split('.').map(Number);
+							$(this).find('.day').each(function () {
+								const dayNum = parseInt($(this).text());
+								const date = new Date(year, month - 1, dayNum);
+
+								if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
 									$(this).addClass('selected');
-								} else if (date > selectedStart && date < selectedEnd) {
-									$(this).addClass('in-range');
 								}
-							}
+								if (selectedStart && selectedEnd) {
+									if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
+										$(this).addClass('selected');
+									} else if (date > selectedStart && date < selectedEnd) {
+										$(this).addClass('in-range');
+									}
+								}
+							});
 						});
-					});
+					}
+
+					$('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
+					$('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
+					if (selectedStart && selectedEnd) {
+						const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
+						$('#nights').text(`${nights}박`);
+					} else {
+						$('#nights').text('');
+					}
 				}
 
-				$('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
-				$('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
-				if (selectedStart && selectedEnd) {
-					const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
-					$('#nights').text(`${nights}박`);
-				} else {
-					$('#nights').text('');
-				}
-			}
+				function applySelection() {
+					if (selectedStart && selectedEnd) {
+						//아이디를 해당 인풋 아이디로 하시면 도ㅣ요
+						$('#check-time').val(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
 
-			function applySelection() {
-				if (selectedStart && selectedEnd) {
-					//아이디를 해당 인풋 아이디로 하시면 도ㅣ요
-					$('#check-time').val(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+					} else {
+						alert('날짜를 선택해주세요.');
+					}
+				}
 
-				} else {
-					alert('날짜를 선택해주세요.');
-				}
-			}
+				$(document).ready(function () {
+					renderCalendars();
+				});
 
-			$(document).ready(function () {
-				renderCalendars();
-			});
+				const swiper = new Swiper(".event-swiper", {
+					loop: true,
+					autoplay: {
+						delay: 5000,
+						disableOnInteraction: false
+					},
+					navigation: {
+						nextEl: ".event-next",
+						prevEl: ".event-prev"
+					}
+				});
+				const swiper2 = new Swiper(".lodging-swiper", {
+					slidesPerView: 4,
+					spaceBetween: 10,
+					slidesPerGroup: 1,
+					navigation: {
+						nextEl: ".lodging-next",
+						prevEl: ".lodging-prev"
+					}
+				});
+				const swiper3 = new Swiper(".money-swiper", {
+					slidesPerView: 4,
+					spaceBetween: 10,
+					slidesPerGroup: 1,
+					navigation: {
+						nextEl: ".money-next",
+						prevEl: ".money-prev"
+					}
+				});
+				const swiper4 = new Swiper(".booking-swiper", {
+					slidesPerView: 4,
+					spaceBetween: 10,
+					slidesPerGroup: 1,
+					navigation: {
+						nextEl: ".booking-next",
+						prevEl: ".booking-prev"
+					}
+				});
+				// $(document).ready(function() {
+				// 	$('.region-btn').click(function() {
+				// 		$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
+				// 		$(this).addClass('active'); // 클릭한 버튼만 active 추가
+				// 		const rg_num= $(this).data('id');
+				// 		var $target = $(this).parent().next().find(".swiper")
+				// 		$.ajax({
+				// 			async: false,
+				// 			url: "/regionLodging",
+				// 			type: 'GET',
+				// 			data: { rg_num : rg_num },
+				// 			success: function (data) {
+				// 				$target.html(data);
+				// 			}
+				// 		});
+				// 	});
+				// 	$(".region-btn-box").each(function(){
+				// 		$(this).children().first().trigger("click")
+				// 	});
+				// });
+				$(function () {
+					const $adultCount = $('#adult-count');
+					const minAdult = 1;
+					const maxAdult = 10;
 
-			const swiper = new Swiper(".event-swiper", {
-				loop: true,
-				autoplay: {
-					delay: 5000,
-					disableOnInteraction: false
-				},
-				navigation: {
-					nextEl: ".event-next",
-					prevEl: ".event-prev"
-				}
-			});
-			const swiper2 = new Swiper(".lodging-swiper", {
-				slidesPerView: 4,
-				spaceBetween: 10,
-				slidesPerGroup: 1,
-				navigation: {
-					nextEl: ".lodging-next",
-					prevEl: ".lodging-prev"
-				}
-			});
-			const swiper3 = new Swiper(".money-swiper", {
-				slidesPerView: 4,
-				spaceBetween: 10,
-				slidesPerGroup: 1,
-				navigation: {
-					nextEl: ".money-next",
-					prevEl: ".money-prev"
-				}
-			});
-			const swiper4 = new Swiper(".booking-swiper", {
-				slidesPerView: 4,
-				spaceBetween: 10,
-				slidesPerGroup: 1,
-				navigation: {
-					nextEl: ".booking-next",
-					prevEl: ".booking-prev"
-				}
-			});
-			$(document).ready(function () {
-				$('.region-btn').click(function () {
-					$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
-					$(this).addClass('active'); // 클릭한 버튼만 active 추가
-					const rg_num = $(this).data('id');
-					var $target = $(this).parent().next().find(".swiper")
-					$.ajax({
-						async: false,
-						url: "/regionLodging",
-						type: 'GET',
-						data: { rg_num: rg_num },
-						success: function (data) {
-							$target.html(data);
+					$('#adult-minus').click(function () {
+						let val = parseInt($adultCount.text());
+						if (val > minAdult) {
+							$adultCount.text(val - 1);
 						}
 					});
-				});
-				$(".region-btn-box").each(function () {
-					$(this).children().first().trigger("click")
-				});
-			});
-			$(function () {
-				const $adultCount = $('#adult-count');
-				const minAdult = 1;
-				const maxAdult = 10;
 
-				$('#adult-minus').click(function () {
-					let val = parseInt($adultCount.text());
-					if (val > minAdult) {
-						$adultCount.text(val - 1);
-					}
-				});
+					$('#adult-increase').click(function () {
+						let val = parseInt($adultCount.text());
+						if (val < maxAdult) {
+							$adultCount.text(val + 1);
+						}
+					});
 
-				$('#adult-increase').click(function () {
-					let val = parseInt($adultCount.text());
-					if (val < maxAdult) {
-						$adultCount.text(val + 1);
-					}
+					$('#confirm-btn').click(function () {
+						$('#check-people').val(`성인${$adultCount.text()}`);
+					});
 				});
-
-				$('#confirm-btn').click(function () {
-					$('#check-people').val(`성인${$adultCount.text()}`);
-				});
-			});
-		</script>
-	</div>
+			</script>
+		</div>
 </body>
 
 </html>

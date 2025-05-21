@@ -1,26 +1,15 @@
 package kr.kh.team3final.service;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.JsonObject;
 
-import kr.kh.team3final.dao.LodgingDAO;
-import kr.kh.team3final.model.vo.LodgingVO;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+
 
 @Service
 public class SmsService {

@@ -12,30 +12,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.kh.team3final.model.vo.RegionVO;
 import kr.kh.team3final.service.RegionService;
 
+import kr.kh.team3final.model.vo.LodgingVO;
+import kr.kh.team3final.model.vo.RegionVO;
+import kr.kh.team3final.model.vo.SearchCriteria;
+import kr.kh.team3final.service.LodgingService;
+import kr.kh.team3final.service.RegionService;
+
 @Controller
 @RequestMapping("/searching")
 public class SearchController {
 
-   @Autowired
-   RegionService regionService;
+	@Autowired
+	LodgingService lodgingService;
 
-   @GetMapping("/search")
-   public String search(
-         Model model,
-         @RequestParam("rg_name") String rg_name, @RequestParam("checkTime") String checkTime,
-         @RequestParam("rm_person") String rm_person) {
-      List<RegionVO> list = regionService.getRegionList();
-      model.addAttribute("regionList", list);
-      model.addAttribute("rg_name", rg_name);
-      model.addAttribute("checkTime", checkTime);
-      model.addAttribute("rm_person", rm_person);
+	@Autowired
+	RegionService regionService;
 
-      return "searching/search";
-   }
+	@GetMapping("/search")
+	public String search(
+			Model model,
+			SearchCriteria cri) {
+		List<RegionVO> list = regionService.getRegionList();
+		model.addAttribute("regionList", list);
+		model.addAttribute("rg_name", cri.getRg_name());
+		model.addAttribute("checkTime", cri.getCheckTime());
+		model.addAttribute("rm_person", cri.getRm_person());
+		List<LodgingVO> lodgingList = lodgingService.getSearchlodgingList(cri);
 
-   @GetMapping("/find")
-   public String find() {
-      return "searching/find";
-   }
+		model.addAttribute("lodgingList", lodgingList);
+		model.addAttribute("cri", cri);
+		return "searching/search";
+	}
+
+	@GetMapping("/lodging")
+	public String searchlodging(
+			Model model,
+			SearchCriteria cri) {
+
+		List<LodgingVO> lodgingList = lodgingService.getSearchlodgingList(cri);
+
+		model.addAttribute("lodgingList", lodgingList);
+		model.addAttribute("cri", cri);
+
+		return "searching/searchLodging";
+	}
+
+	@GetMapping("/find")
+	public String find() {
+		return "searching/find";
+	}
 
 }

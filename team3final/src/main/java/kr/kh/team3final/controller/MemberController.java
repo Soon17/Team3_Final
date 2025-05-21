@@ -1,6 +1,6 @@
 package kr.kh.team3final.controller;
 
-import java.lang.reflect.Member;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,12 +13,6 @@ import kr.kh.team3final.model.vo.MemberVO;
 import kr.kh.team3final.service.MemberService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
-
-
-
 
 @Controller
 @RequestMapping("/member")
