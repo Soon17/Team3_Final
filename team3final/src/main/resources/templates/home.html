@@ -858,26 +858,26 @@
 					prevEl: ".booking-prev"
 				}
 			});
-			// $(document).ready(function() {
-			//    $('.region-btn').click(function() {
-			//       $(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
-			//       $(this).addClass('active'); // 클릭한 버튼만 active 추가
-			//       const rg_num= $(this).data('id');
-			//       var $target = $(this).parent().next().find(".swiper")
-			//       $.ajax({
-			//          async: false,
-			//          url: "/regionLodging",
-			//          type: 'GET',
-			//          data: { rg_num : rg_num },
-			//          success: function (data) {
-			//             $target.html(data);
-			//          }
-			//       });
-			//    });
-			//    $(".region-btn-box").each(function(){
-			//       $(this).children().first().trigger("click")
-			//    });
-			// });
+			$(document).ready(function () {
+				$('.region-btn').click(function () {
+					$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
+					$(this).addClass('active'); // 클릭한 버튼만 active 추가
+					const rg_num = $(this).data('id');
+					var $target = $(this).parent().next().find(".swiper")
+					$.ajax({
+						async: false,
+						url: "/regionLodging",
+						type: 'GET',
+						data: { rg_num: rg_num },
+						success: function (data) {
+							$target.html(data);
+						}
+					});
+				});
+				$(".region-btn-box").each(function () {
+					$(this).children().first().trigger("click")
+				});
+			});
 			$(function () {
 				const $adultCount = $('#adult-count');
 				const minAdult = 1;

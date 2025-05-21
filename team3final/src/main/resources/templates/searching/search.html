@@ -705,6 +705,26 @@
 			</div>
 		</div>
 		<script>
+			function updateCardLinks() {
+				const region = $('#region').val();
+				const checkTime = $('#checkTime').text().trim();
+				const people = $('#check-people').text().trim();
+				const qR = encodeURIComponent(region);
+				const qT = encodeURIComponent(checkTime);
+				const qP = encodeURIComponent(people);
+
+				$('.card-link').each(function () {
+					const ld_num = $(this).data('ld-num');
+					const ld_region = encodeURIComponent($(this).data('ld-region'));
+
+					$(this).attr(
+						'href',
+						`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
+					);
+				});
+			}
+		</script>
+		<script>
 			$(document).on('click', '#name-search', function () {
 				getLodgingList();
 			});
@@ -755,6 +775,8 @@
 						$('#hotel_ajx').html(data);
 						const lo_size = $("#lo-size").val();
 						$("#lodging-size").text("숙소 " + lo_size + "개");
+
+						updateCardLinks();
 					},
 				});
 			}
@@ -771,8 +793,15 @@
 
 								if (section === '평점') {
 									const group = btn.closest('.filter-group');
+									const isActive = btn.classList.contains('active');
+
+									// 일단 다 비활성화
 									group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-									btn.classList.add('active');
+
+									// 원래 active 아니었으면 지금 누른 거만 다시 활성화
+									if (!isActive) {
+										btn.classList.add('active');
+									}
 								} else {
 									btn.classList.toggle('active');
 								}
@@ -784,6 +813,7 @@
 
 			$(document).ready(function () {
 				toggleDetailAll();
+				updateCardLinks();
 
 				let lastScrollTop = 0;
 				const searchBarWrap = document.querySelector('.search-bar-wrap');
@@ -974,33 +1004,6 @@
 				});
 			});			
 		</script>
-		<script>
-			$(document).ready(function () {
-
-				function updateCardLinks() {
-					const region = $('#region').val();
-					const checkTime = $('#checkTime').text().trim();
-					const people = $('#check-people').text().trim();
-					const qR = encodeURIComponent(region);
-					const qT = encodeURIComponent(checkTime);
-					const qP = encodeURIComponent(people);
-
-					$('.card-link').each(function () {
-						const ld_num = $(this).data('ld-num');
-						const ld_region = encodeURIComponent($(this).data('ld-region'));
-
-						$(this).attr(
-							'href',
-							`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
-						);
-					});
-				}
-				updateCardLinks();
-
-
-			});
-		</script>
-
 	</main>
 </body>
 
