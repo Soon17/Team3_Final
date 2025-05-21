@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.RegionVO;
+import kr.kh.team3final.model.vo.ReviewVO;
 import kr.kh.team3final.model.vo.RoomVO;
 import kr.kh.team3final.model.vo.ThumbnailVO;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RegionService;
+import kr.kh.team3final.service.ReviewService;
 import kr.kh.team3final.service.RoomService;
 import kr.kh.team3final.service.ThumbnailService;
 
@@ -32,6 +34,9 @@ public class LodgingController {
   @Autowired
   ThumbnailService thumbnailService;
 
+  @Autowired
+  ReviewService reviewService;
+
   @GetMapping("/reserv")
   public String showReservPage(
       Model model,
@@ -43,6 +48,7 @@ public class LodgingController {
     LodgingVO lodging = lodgingService.allLodgingList(ld_num);
     List<RoomVO> roomList = roomService.selectRoomListByLodging(ld_num);
     List<ThumbnailVO> thumbList = thumbnailService.selectThumbnail("lodging", ld_num);
+    List<ReviewVO> reviewList = reviewService.getReviewList("lodging", ld_num);
 
     for (RoomVO room : roomList) {
       List<ThumbnailVO> roomThumbList = thumbnailService.selectThumbnail("room", room.getRm_num());

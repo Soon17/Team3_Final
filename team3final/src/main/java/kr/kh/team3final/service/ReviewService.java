@@ -10,11 +10,15 @@ import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 
 @Service
 public class ReviewService {
-	
+
 	@Autowired
 	ReviewDAO reviewDAO;
 
 	public List<Lodging_ReviewDTO> getSelectReviewList() {
+		return reviewDAO.getSelectReviewList();
+	}
+
+	public List<Lodging_ReviewDTO> getReviewList(String rv_table_name, int ld_num) {
 		return reviewDAO.getSelectReviewList();
 	}
 
