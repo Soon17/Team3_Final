@@ -127,8 +127,8 @@
     <div class="section">
       <div class="section-title">결과 내에서 검색</div>
       <div class="search-bar">
-        <input type="text" placeholder="호텔명 혹은 지역명으로 검색">
-        <button>검색</button>
+        <input type="text" id="search-ld-name" placeholder="숙소명으로 검색">
+        <button type="button" id="name-search">검색</button>
       </div>
     </div>
     <div class="section">
@@ -154,14 +154,14 @@
       <div class="section-title">숙소유형</div>
       <div class="filter-group">
         <button class="filter-btn fillter-type" data-type="호텔">호텔</button>
-        <button class="filter-btn fillter-type" data-type="팬션">팬션</button>
+        <button class="filter-btn fillter-type" data-type="펜션">펜션</button>
         <button class="filter-btn fillter-type" data-type="모텔">모텔</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">가격</div>
-      <p class="price-range">0원 ~ [[${maxPrice}]]만원</p>
-      <input type="range" min="0" th:max="${maxPrice}" id="price" th:value="${maxPrice}" class="range-slider">
+      <p class="price-range">0원 ~ 500만원</p>
+      <input type="range" min="0" th:max="500" id="price" th:value="500" class="range-slider">
     </div>
   </div>
   <script>

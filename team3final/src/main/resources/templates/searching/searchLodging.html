@@ -9,8 +9,9 @@
 </head>
 
 <body>
+  <input type="hidden" th:value="${lodgingList.size()}" id="lo-size">
   <div class="im" th:each="ld : ${lodgingList}">
-    <a href="#" class="card-link">
+    <a href="#" class="card-link" th:data-ld-num="${ld.ld_num}" th:data-ld-region="${ld.ld_region}">
       <div class="hotel-image">
         <img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
       </div>

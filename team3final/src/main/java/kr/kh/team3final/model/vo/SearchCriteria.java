@@ -12,4 +12,5 @@ public class SearchCriteria {
 	private String[] type;
 	private int avg;
 	private int price;
+	private String ld_name;
 }

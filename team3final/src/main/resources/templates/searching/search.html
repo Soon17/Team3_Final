@@ -489,29 +489,28 @@
 
 	<main layout:fragment="content" class="main-container">
 		<div class="search-bar-wrap">
-			<input type="hidden" th:value="${maxPrice}" id="maxPrice">
-			<form th:action="@{/searching/search}" method="get" id="searchForm">
-				<div class="search-bar-inner">
-					<select name="rg_name" id="region" class="search-input">
-						<!-- 첫 번째: 서버에서 넘어온 선택 값 -->
-						<option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
-						
-						<!-- 나머지 지역 리스트 -->
-						<option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
-					</select>
-					<div class="search-input" data-toggle="modal" data-target="#calendarModal">
-						<i class="fas fa-list-alt"></i>
-						<span id="checkTime">[[${checkTime}]]</span>			
-					</div>
-					<div class="search-input" data-toggle="modal" data-target="#guestModal">
-						<i class="fas fa-user"></i>
-						<span id="check-people">[[${rm_person}]]</span>
-					</div>
-					<input type="hidden" name="checkTime" id="hiddenCheckTime" th:value="${checkTime}" />
-					<input type="hidden" name="rm_person" id="hiddenRmPerson" th:value="${rm_person}" />
-					<button type="submit" class="search-btn">검색</button>
+
+			<div class="search-bar-inner">
+				<select name="rg_name" id="region" class="search-input">
+					<!-- 첫 번째: 서버에서 넘어온 선택 값 -->
+					<option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
+					
+					<!-- 나머지 지역 리스트 -->
+					<option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
+				</select>
+				<div class="search-input" data-toggle="modal" data-target="#calendarModal">
+					<i class="fas fa-list-alt"></i>
+					<span id="checkTime">[[${checkTime}]]</span>			
 				</div>
-			</form>	
+				<div class="search-input" data-toggle="modal" data-target="#guestModal">
+					<i class="fas fa-user"></i>
+					<span id="check-people">[[${rm_person}]]</span>
+				</div>
+				<input type="hidden" name="checkTime" id="hiddenCheckTime" th:value="${checkTime}" />
+				<input type="hidden" name="rm_person" id="hiddenRmPerson" th:value="${rm_person}" />
+				<button type="button" class="search-btn">검색</button>
+			</div>
+
 		</div>
 		<!-- 반응형 전용 헤더 -->
 		<div class="mobile-header">
@@ -520,9 +519,9 @@
 				<i class="fas fa-pen edit-icon" style="font-size: 10px;"></i>
 			</div>
 			<div class="mobile-header-bottom">
-				<span>05.13 (월) ~ 05.14 (수)</span>
+				<span data-toggle="modal" data-target="#calendarModal">05.13 (월) ~ 05.14 (수)</span>
 				<span> | </span>
-				<span>성인2</span>
+				<span data-toggle="modal" data-target="#guestModal">성인2</span>
 			</div>
 		</div>
 		<div class="mobile-sort-bar">
@@ -547,7 +546,7 @@
 				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px;">
 					<div>
 						<h5 class="mb-0">검색결과</h5>
-						<small class="text-muted">숙소 [[${lodgingList.size()}]]개</small>
+						<small class="text-muted" id="lodging-size">숙소 [[${lodgingList.size()}]]개</small>
 					</div>
 					<div class="sort-options">
 						<label><input type="radio" name="sort" value="추천순" checked> <span>추천순</span></label>
@@ -560,7 +559,7 @@
 				<div id="hotel_ajx">
 					<!-- Ajax로 숙소  처음 검색한 데이터는 있고 다음부터 바뀜-->
 					<div class="im" th:each="ld : ${lodgingList}">
-						<a href="#" class="card-link">
+						<a href="#" class="card-link" th:data-ld-num="${ld.ld_num}" th:data-ld-region="${ld.ld_region}">
 						  <div class="hotel-image">
 							<img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
 						  </div>
@@ -638,10 +637,23 @@
 			</div>
 		</div>
 		<script>
+			$(document).on('click', '#name-search', function() {
+				getLodgingList();
+			});
+			$(".search-btn").on('click',function(){
+				getLodgingList();
+			})
+			$(document).on('input', '#price', function() {
+				getLodgingList();
+			});
+			$(document).on('click', '.filter-btn', function() {
+				getLodgingList();
+			});
 			$("[name = sort]").on('change',function(){
 				getLodgingList();
 			})
 			function getLodgingList(){
+				let ld_name = $("#search-ld-name").val();
 				let ratings =[];
 				$('.filter-btn.fillter-rating.active').each(function () {
 					ratings.push($(this).data('rating'));
@@ -664,25 +676,24 @@
 					rating : ratings,
 					avg : avg,
 					type : types,
-					price : price
+					price : price,
+					ld_name:ld_name
 				}
 				$.ajax({
 					url: '/searching/lodging',
 					type: 'GET',
 					data: cri,
 					success: function (data) {
-						$('#hotel_ajx').html(data);						
+						$('#hotel_ajx').html(data);
+						const lo_size = $("#lo-size").val();
+						$("#lodging-size").text("숙소 "+lo_size+"개");			
 					},
 				});	
 			}
 			function toggleDetailAll() {
-				const maxPrice = $("#maxPrice").val();
 				$.ajax({
 					url: '/searching/find',
 					type: 'GET',
-					data:{
-						maxPrice : maxPrice
-					}, 
 					success: function (data) {
 						$('#search-find').html(data);
 						const buttons = document.querySelectorAll('.filter-btn');

@@ -14,12 +14,6 @@ import kr.kh.team3final.service.MemberService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
-
-
-
-
 @Controller
 @RequestMapping("/member")
 public class MemberController {

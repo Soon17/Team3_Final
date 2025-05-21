@@ -23,18 +23,10 @@ public class LodgingService {
 		String lr_checkin = getStartTime(cri.getCheckTime());
 		String lr_checkout =getEndTime(cri.getCheckTime());
 		int rm_person = Integer.parseInt(cri.getRm_person().replaceAll("[^0-9]", ""));
-		switch (cri.getSort()) {
-			case "추천순":
-				return lodgingDao.selectSearchLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
-			case "평점순":
-			return lodgingDao.selectSearchAVGLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
-			case "가격순":
-			return lodgingDao.selectSearchPriceLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
-			case "성급순":			
-			return lodgingDao.selectSearchRatingLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
-			default:
-				return lodgingDao.selectSearchLodgingList(cri.getRg_name(),lr_checkin,lr_checkout,rm_person);
-		}
+		//sort만 판단
+		return lodgingDao.selectRegionSwitchLodgingList(lr_checkin,lr_checkout,rm_person,cri);
+
+		// //다 있다는 가정하에 매퍼에서 if문?
 	}
 	String getStartTime(String str){
 		str = str.replaceAll("\\(.*?\\)", "").trim();
