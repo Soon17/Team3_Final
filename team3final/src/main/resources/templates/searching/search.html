@@ -890,9 +890,11 @@
 
 					$('.card-link').each(function () {
 						const ld_num = $(this).data('ld-num');
+						const ld_region = encodeURIComponent($(this).data('ld-region'));
+
 						$(this).attr(
 							'href',
-							`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}`
+							`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
 						);
 					});
 				}

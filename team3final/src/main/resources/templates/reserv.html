@@ -837,6 +837,7 @@
 																		예약가&nbsp;
 																	</span>
 																</div>
+																<!--예약가격-->
 																<div
 																	style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
 																	<span
@@ -844,12 +845,21 @@
 																		th:text="${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"></span><!--3자리마다 콤마 끊기 -->
 																	<span style="align-items: center; display: flex; color: #666;">/1박</span>
 																</div>
+																<!--총 금액  -->
+															</div>
+															<div style="text-align: right; font-size: 0.8rem; color: #666; margin-top: 4px;">
+																<small th:text="'총' + ${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"
+																	style="font-size: 13px;"></small>
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="go-btn">
-													<button class="reserv-btn">호텔 바로 예약</button>
+													<button class="btn btn-primary hotel-reserve-btn"
+														th:attr="data-check-time=${checkTime}, data-rm-person=${room.rm_person}, data-ld-num=${lodging.ld_num}"
+														th:attrappend="data-rm-num=${room.rm_num}">
+														호텔 바로 예약
+													</button>
 												</div>
 											</div>
 										</div>
@@ -1227,7 +1237,7 @@
 																			style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 																			<div style="line-height: 1.5;">
 																				<ul style="margin: 0; padding: 0 0 0 1.5rem;">
-																					<li>뷔페아침 식사 요금: 성인 KRW 28000, 어린이 KRW 15000(대략적인 금액)</li>
+																					<li>뷔페아침 식사 요금: 성인 KRW 3000(대략적인 금액)</li>
 																				</ul>
 																				<p style="margin: 0;">위 목록에 명시되지 않은 다른 항목이 있을 수 있습니다. 요금 및 보증금은 세전 금액일 수 있으며 변경될
 																					수
@@ -1723,7 +1733,7 @@
 														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
 														<div style="line-height: 1.5;">
 															<ul style="margin: 0; padding: 0 0 0 1.5rem;">
-																<li>뷔페아침 식사 요금: 성인 KRW 28000, 어린이 KRW 15000(대략적인 금액)</li>
+																<li>뷔페아침 식사 요금: 성인 KRW 3000(대략적인 금액)</li>
 															</ul>
 															<p style="margin: 0;">위 목록에 명시되지 않은 다른 항목이 있을 수 있습니다. 요금 및 보증금은 세전 금액일 수 있으며 변경될 수 있습니다.
 															</p>
@@ -2123,6 +2133,8 @@
 							const firstBtn = document.querySelector('.button-menu:first-child');
 							if (firstBtn && !firstBtn.classList.contains('active')) {
 								firstBtn.style.borderBottomColor = 'transparent';
+							} else {
+								firstBtn.style.borderBottomColor = '#007bff';
 							}
 
 							// 이동할 대상 위치 계산
@@ -2153,6 +2165,23 @@
 					});
 				});
 			</script>
+			<!--호텔 예약 -->
+			<script>
+				document.addEventListener('DOMContentLoaded', function () {
+					document.querySelectorAll('.hotel-reserve-btn').forEach(btn => {
+						btn.addEventListener('click', function () {
+							const checkTime = this.dataset.checkTime;
+							const rmPerson = this.dataset.rmPerson;
+							const ldNum = this.dataset.ldNum;
+							const rmNum = this.dataset.rmNum;
+
+							const url = `/pay/payment?checkTime=${encodeURIComponent(checkTime)}&rm_person=${encodeURIComponent(rmPerson)}&ld_num=${ldNum}&rm_num=${rmNum}`;
+							location.href = url;
+						});
+					});
+				});
+			</script>
+
 			<script>
 				const today = new Date();
 				today.setHours(0, 0, 0, 0);
