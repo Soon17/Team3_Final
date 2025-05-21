@@ -3,12 +3,8 @@ package kr.kh.team3final.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.ui.Model;
 
 import kr.kh.team3final.model.vo.LodgingVO;
@@ -16,21 +12,11 @@ import kr.kh.team3final.model.vo.RegionVO;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RegionService;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-
-
 
 @Controller
 public class MainController {
 	@Autowired
 	RegionService regionService;
-
-	
-	private RestTemplate restTemplate = new RestTemplate();
-
-	@Value("${kakao.map-id}")
-    private String mapId;
 
 	@Autowired
 	LodgingService lodgingService; 
@@ -49,7 +35,6 @@ public class MainController {
 	
 	@GetMapping("/reserv")
 	public String reserv(Model model) {
-		model.addAttribute("mapId", mapId);
 		return "reserv";
 	}
 

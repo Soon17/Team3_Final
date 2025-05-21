@@ -11,7 +11,6 @@ public class EventController {
 
 	@GetMapping("/detail/{eventId}")
 	public String eventDetail(@PathVariable String eventId) {
-			System.out.println("이벤트 ID: " + eventId);  // 콘솔에 1 출력됨
 			return "event/detail" + eventId;
 	}
 
