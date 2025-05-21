@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>이벤트</title>
+	<style>
+		.event-wrapper {
+			display: flex;
+			justify-content: center;
+			padding: 4rem 1rem;
+			background-color: #f5f6f7;
+		}
+
+		.event-list {
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+			width: 100%;
+			max-width: 500px;
+		}
+
+		.event-card {
+			display: block;
+			border-radius: 1rem;
+			overflow: hidden;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+			background-color: #fff;
+			transition: transform 0.3s ease;
+		}
+
+		.event-card:hover {
+			transform: scale(1.02);
+		}
+
+		.event-card img {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+
+		@media (max-width: 576px) {
+			.event-list {
+				max-width: 90%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<main layout:fragment="content">
+		<div class="event-wrapper">
+			<div class="event-list">
+				<a href="/event/detail/1" class="event-card">
+					<img src="/resources/static/imgs/국내1-리스트.png?v=1" alt="이벤트 1" />
+				</a>
+				<a href="/event/detail/2" class="event-card">
+					<img src="/resources/static/imgs/국내2-리스트.png?v=1" alt="이벤트 1" />
+				</a>
+				<a href="/event/detail/3" class="event-card">
+					<img src="/resources/static/imgs/국내3-리스트.png?v=1" alt="이벤트 1" />
+				</a>
+				<a href="/event/detail/4" class="event-card">
+					<img src="/resources/static/imgs/이벤트리스트1.png?v=1" alt="이벤트 1" />
+				</a>
+				<a href="/event/detail/5" class="event-card">
+					<img src="/resources/static/imgs/이벤트리스트2.png?v=1" alt="이벤트 2" />
+				</a>
+				<a href="/event/detail/6" class="event-card">
+					<img src="/resources/static/imgs/이벤트리스트3.png?v=1" alt="이벤트 3" />
+				</a>
+			</div>
+		</div>
+	</main>
+</body>
+</html>
