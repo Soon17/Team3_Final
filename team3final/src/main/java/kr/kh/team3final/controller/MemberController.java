@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 @RequestMapping("/member")
 public class MemberController {
-	
+
 	@Autowired
 	MemberService memberService;
 
@@ -34,69 +34,70 @@ public class MemberController {
 	@Autowired
 	ReviewService reviewService;
 
-	@GetMapping("/mypage") //마이 페이지
+	@GetMapping("/mypage") // 마이 페이지
 	public String mypage() {
 		return "member/mypage";
 	}
 
-	@GetMapping("/reservation-history") //마이 페이지 -> 예약내역 -> 호텔 탭
+	@GetMapping("/reservation-history") // 마이 페이지 -> 예약내역 -> 호텔 탭
 	public String reservation(Model model) {
 		List<ReservationVO> list = reservationService.selectList();
 		model.addAttribute("reservation", list);
 		return "member/reservation-history";
 	}
-	
+
 	@GetMapping("/view-review")
 	public String view(Model model) {
 		List<Lodging_ReviewDTO> list = reviewService.getSelectReviewList();
-		if(list == null) list = new ArrayList<>();
+		if (list == null)
+			list = new ArrayList<>();
 		model.addAttribute("list", list);
 		return "member/view-review";
 	}
-	
-	@GetMapping("/reservation-hotel") //마이 페이지 -> 호텔 탭
+
+	@GetMapping("/reservation-hotel") // 마이 페이지 -> 호텔 탭
 	public String myHotel(Model model) {
 		List<ReservationVO> latestReservation = reservationService.getLatestReservation();
-			model.addAttribute("reservations", latestReservation);
-			return "member/reservation-hotel";
-		}
+		model.addAttribute("reservations", latestReservation);
+		return "member/reservation-hotel";
+	}
 
-		@GetMapping("/reservation-rent")
-		public String myRent() {
-			return "member/reservation-rent";
-		}
-		
-		@GetMapping("/modify")
-		public String modify() {
-			return "member/modify";
-		}
-		
-		@GetMapping("/signIn")
-		public String getMethodName() {
-			return "member/signIn";
-		}
+	@GetMapping("/reservation-rent")
+	public String myRent() {
+		return "member/reservation-rent";
+	}
 
-		@PostMapping("/check/id")
-		@ResponseBody
-		public boolean checkId(@RequestParam String id) {
-			return memberService.checkId(id);
-		}
-		
-		@PostMapping("/signup")
-		public String signUp(@RequestParam MemberVO member) {
-			
-			return "home";
-		}
+	@GetMapping("/modify")
+	public String modify() {
+		return "member/modify";
+	}
 
-		@GetMapping("/reservation-history-ajax") // 숙소 예약 '제일 최신 일자' '예약완료' 내역 1개
-		@ResponseBody
-		public List<ReservationVO> getReservationHistory() {
-				return reservationService.getLatestReservation();
-		}
-	
-		@GetMapping("/reservation-list-ajax") //숙소 예약 내역 전체 리스트
-		@ResponseBody
-		public List<ReservationVO> getReservationHistoryAjax() {
-				return reservationService.selectList(); // 전체 리스트 반환
-		}
+	@GetMapping("/signIn")
+	public String getMethodName() {
+		return "member/signIn";
+	}
+
+	@PostMapping("/check/id")
+	@ResponseBody
+	public boolean checkId(@RequestParam String id) {
+		return memberService.checkId(id);
+	}
+
+	@PostMapping("/signup")
+	public String signUp(@RequestParam MemberVO member) {
+
+		return "home";
+	}
+
+	@GetMapping("/reservation-history-ajax") // 숙소 예약 '제일 최신 일자' '예약완료' 내역 1개
+	@ResponseBody
+	public List<ReservationVO> getReservationHistory() {
+		return reservationService.getLatestReservation();
+	}
+
+	@GetMapping("/reservation-list-ajax") // 숙소 예약 내역 전체 리스트
+	@ResponseBody
+	public List<ReservationVO> getReservationHistoryAjax() {
+		return reservationService.selectList(); // 전체 리스트 반환
+	}
 }

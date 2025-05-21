@@ -127,44 +127,51 @@
     <div class="section">
       <div class="section-title">결과 내에서 검색</div>
       <div class="search-bar">
-        <input type="text" placeholder="호텔명 혹은 지역명으로 검색">
-        <button>검색</button>
+        <input type="text" id="search-ld-name" placeholder="숙소명으로 검색">
+        <button type="button" id="name-search">검색</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">성급</div>
       <div class="filter-group">
-        <button class="filter-btn">5성급</button>
-        <button class="filter-btn">4성급</button>
-        <button class="filter-btn">3성급</button>
-        <button class="filter-btn">2성급 이하</button>
+        <button class="filter-btn fillter-rating" data-rating="5">5성급</button>
+        <button class="filter-btn fillter-rating" data-rating="4">4성급</button>
+        <button class="filter-btn fillter-rating" data-rating="3">3성급</button>
+        <button class="filter-btn fillter-rating" data-rating="2">2성급 이하</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">평점</div>
       <div class="filter-group">
-        <button class="filter-btn">5.0 이상</button>
-        <button class="filter-btn">4.0 이상</button>
-        <button class="filter-btn">3.0 이상</button>
-        <button class="filter-btn">2.0 이상</button>
-        <button class="filter-btn">1.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="5">5.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="4">4.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="3">3.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="2">2.0 이상</button>
+        <button class="filter-btn fillter-avg" data-avg="1">1.0 이상</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">숙소유형</div>
       <div class="filter-group">
-        <button class="filter-btn">호텔</button>
-        <button class="filter-btn">팬션</button>
-        <button class="filter-btn">모텔</button>
+        <button class="filter-btn fillter-type" data-type="호텔">호텔</button>
+        <button class="filter-btn fillter-type" data-type="펜션">펜션</button>
+        <button class="filter-btn fillter-type" data-type="모텔">모텔</button>
       </div>
     </div>
     <div class="section">
       <div class="section-title">가격</div>
-      <!--가격 스크롤-->
-      <p class="price-range">0원 ~ 206만원</p>
-      <input type="range" min="0" max="100" value="50" class="range-slider">
+      <p class="price-range">0원 ~ 500만원</p>
+      <input type="range" min="0" th:max="500" id="price" th:value="500" class="range-slider">
     </div>
   </div>
+  <script>
+    $(function () {
+      $('.range-slider').on('input', function () {
+        const value = $(this).val(); // 현재 슬라이더 값
+        $('.price-range').text(`0원 ~ ${value}만원`);
+      });
+    });
+  </script>
 </body>
 
 </html>

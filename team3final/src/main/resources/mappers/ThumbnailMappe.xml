@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.ThumbnailDAO">
+	<select id="selectThumbnail" resultType="ThumbnailVO">
+  SELECT * 
+  FROM thumbnail 
+  WHERE th_table = #{th_table}
+    AND th_key = #{th_key}
+	</select>
+</mapper>

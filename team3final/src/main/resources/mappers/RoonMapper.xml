@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.kh.team3final.dao.RegionDAO">
-	<select id="selectRegionList" resultType="RegionVO">
-		select* from region order by rg_name desc; 
+<mapper namespace="kr.kh.team3final.dao.RoomDAO">
+	<select id="selectRoomListByLodging" resultType="RoomVO">
+  	SELECT * FROM room WHERE rm_ld_num = #{ld_num}
 	</select>
-
 </mapper>

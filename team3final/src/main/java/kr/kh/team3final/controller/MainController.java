@@ -19,7 +19,7 @@ public class MainController {
 	RegionService regionService;
 
 	@Autowired
-	LodgingService lodgingService; 
+	LodgingService lodgingService;
 
 	@GetMapping("/")
 	public String main(Model model) {
@@ -27,15 +27,11 @@ public class MainController {
 		model.addAttribute("regionList", list);
 		return "home";
 	}
+
 	@GetMapping("/regionLodging")
-	public String getRegionLodging(Model model ,@RequestParam("rg_num") int rg_num) {
+	public String getRegionLodging(Model model, @RequestParam("rg_num") int rg_num) {
 		List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
 		return "regionLodgingList";
-	}
-	
-	@GetMapping("/reserv")
-	public String reserv(Model model) {
-		return "reserv";
 	}
 
 	@GetMapping("/rent")
