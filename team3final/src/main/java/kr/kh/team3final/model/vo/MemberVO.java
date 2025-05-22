@@ -15,5 +15,6 @@ public class MemberVO {
 	String me_birthday;
 	String me_gender;
 	String me_profile;
+	String me_provider;
 	String me_del;
 }

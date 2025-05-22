@@ -64,8 +64,8 @@ public class MemberService {
 		}
 	}
 
-	public MemberVO getMemberByEmail(String email) {
-		return memberDAO.selectMemberByEmail(email);
+	public MemberVO getMemberByEmailAndProvider(String email, String provider) {
+		return memberDAO.selectMemberByEmailAndProvider(email, provider);
 	}
 
 	public boolean insertMember(MemberVO newUser) {

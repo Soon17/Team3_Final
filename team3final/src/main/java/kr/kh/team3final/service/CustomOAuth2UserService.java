@@ -67,39 +67,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             // System.out.println("번호: " + phoneNumber);
             // System.out.println("프로필사진: " + profileImage);
 
-            // 최초 로그인 시 자동 회원가입
-            MemberVO dbUser = memberService.getMemberByEmail(email);
-
-            if (dbUser == null) {
-                MemberVO newUser = new MemberVO();
-                newUser.setMe_id(id);
-                newUser.setMe_name(name);
-                newUser.setMe_nick(nickname);
-                newUser.setMe_pw("kakao");
-                newUser.setMe_email(email);
-                newUser.setMe_birthday(birth);
-                newUser.setMe_gender(gender);
-                newUser.setMe_number(phoneNumber);
-                newUser.setMe_profile(profileImage);
-
-                boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
-            }
-
-            // 필요한 정보만 attributes로 새롭게 구성하고 리턴
-            Map<String, Object> customAttributes = Map.of(
-                    "id", id,
-                    "name", name,
-                    "nickname", nickname,
-                    "email", email,
-                    "birthday", birth,
-                    "gender", gender,
-                    "phoneNumber", phoneNumber,
-                    "profileImage", profileImage);
-
-            return new DefaultOAuth2User(
-                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                    customAttributes,
-                    "id");
+            return defaultOAuth2User(id, name, nickname, email, birth, gender, phoneNumber, profileImage, provider);
         }
 
         else if ("naver".equals(provider)) {
@@ -130,40 +98,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             // System.out.println("번호: " + phoneNumber);
             // System.out.println("프로필사진: " + profileImage);
 
-            // 최초 로그인 시 자동 회원가입
-            MemberVO dbUser = memberService.getMemberByEmail(email);
-
-            if (dbUser == null) {
-                MemberVO newUser = new MemberVO();
-                newUser.setMe_id(id);
-                newUser.setMe_name(name);
-                newUser.setMe_nick(nickname);
-                newUser.setMe_pw("naver");
-                newUser.setMe_email(email);
-                newUser.setMe_birthday(birth);
-                newUser.setMe_gender(gender);
-                newUser.setMe_number(phoneNumber);
-                newUser.setMe_profile(profileImage);
-
-                boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
-            }
-
-            // 필요한 정보만 attributes로 새롭게 구성하고 리턴
-            Map<String, Object> customAttributes = Map.of(
-                    "id", id,
-                    "name", name,
-                    "nickname", nickname,
-                    "email", email,
-                    "birthday", birth,
-                    "gender", gender,
-                    "phoneNumber", phoneNumber,
-                    "profileImage", profileImage);
-
-            return new DefaultOAuth2User(
-                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                    customAttributes,
-                    "id" // 사용자의 고유 식별자 키
-            );
+            return defaultOAuth2User(id, name, nickname, email, birth, gender, phoneNumber, profileImage, provider);
         }
 
         else if ("google".equals(provider)) {
@@ -209,50 +144,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             gender = convertGender(gender);
 
             // 필드 추출 출력
-            System.out.println("# 구글 로그인");
-            System.out.println("ID: " + id);
-            System.out.println("이름: " + nickname);
-            System.out.println("닉네임: " + name);
-            System.out.println("이메일: " + email);
-            System.out.println("생일: " + birth);
-            System.out.println("성: " + gender);
-            System.out.println("번호: " + phoneNumber);
-            System.out.println("프로필사진: " + profileImage);
+            // System.out.println("# 구글 로그인");
+            // System.out.println("ID: " + id);
+            // System.out.println("이름: " + nickname);
+            // System.out.println("닉네임: " + name);
+            // System.out.println("이메일: " + email);
+            // System.out.println("생일: " + birth);
+            // System.out.println("성: " + gender);
+            // System.out.println("번호: " + phoneNumber);
+            // System.out.println("프로필사진: " + profileImage);
 
-            // 최초 로그인 시 자동 회원가입
-            MemberVO dbUser = memberService.getMemberByEmail(email);
-
-            if (dbUser == null) {
-            MemberVO newUser = new MemberVO();
-            newUser.setMe_id(id);
-            newUser.setMe_name(name);
-            newUser.setMe_nick(nickname);
-            newUser.setMe_pw("google");
-            newUser.setMe_email(email);
-            newUser.setMe_birthday(birth);
-            newUser.setMe_gender(gender);
-            newUser.setMe_number(phoneNumber);
-            newUser.setMe_profile(profileImage);
-
-            boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
-            }
-
-            // 필요한 정보만 attributes로 새롭게 구성하고 리턴
-            Map<String, Object> customAttributes = Map.of(
-                    "id", id,
-                    "name", name,
-                    "nickname", nickname,
-                    "email", email,
-                    "birthday", birth,
-                    "gender", gender,
-                    "phoneNumber", phoneNumber,
-                    "profileImage", profileImage);
-
-            return new DefaultOAuth2User(
-                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                    customAttributes,
-                    "id" // Google의 사용자 고유 식별자 key
-            );
+            return defaultOAuth2User(id, name, nickname, email, birth, gender, phoneNumber, profileImage, provider);
         }
 
         // 다른 OAuth 제공자는 기본 처리
@@ -275,5 +177,50 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     public String convertBirthday(String birthday) {
         return birthday.replaceAll("-", "");
+    }
+
+    public DefaultOAuth2User defaultOAuth2User(
+            String id, String name, String nickname, String email, String birth,
+            String gender, String phoneNumber, String profileImage, String provider) {
+        // 최초 로그인 시 자동 회원가입
+        MemberVO dbUser = memberService.getMemberByEmailAndProvider(email, provider);
+
+        if (dbUser == null) {
+            MemberVO newUser = new MemberVO();
+            newUser.setMe_id(id);
+            newUser.setMe_name(name);
+            newUser.setMe_nick(nickname);
+            newUser.setMe_pw(provider); // 비밀번호를 로그인 api로 설정
+            newUser.setMe_email(email);
+            newUser.setMe_birthday(birth);
+            newUser.setMe_gender(gender);
+            newUser.setMe_number(phoneNumber);
+            newUser.setMe_profile(profileImage);
+            newUser.setMe_provider(provider);
+
+            boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
+            dbUser = newUser; // 회원가입 후에도 로그인 이어서 처리해야 하므로
+        }
+
+        // 권한 설정
+        String role = "ROLE_" + (dbUser.getMe_authority() == null ? "USER" : dbUser.getMe_authority());
+
+        // 필요한 정보만 attributes로 새롭게 구성하고 리턴
+        Map<String, Object> customAttributes = Map.of(
+                "id", dbUser.getMe_id(),
+                "name", dbUser.getMe_name(),
+                "nickname", dbUser.getMe_nick(),
+                "email", dbUser.getMe_email(),
+                "birthday", dbUser.getMe_birthday(),
+                "gender", dbUser.getMe_gender(),
+                "phoneNumber", dbUser.getMe_number(),
+                "profileImage", dbUser.getMe_profile()
+        );
+
+        return new DefaultOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority(role)),
+                customAttributes,
+                "id" // 사용자 고유 식별자 key
+        );
     }
 }
