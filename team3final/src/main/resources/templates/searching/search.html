@@ -375,7 +375,7 @@
             font-size: 12px;
          }
 
-         .mobile-sort-bar button {
+         .mobile-sort-bar button, .mobile-sort-bar select {
             padding: 6px 10px;
             font-size: 12px;
             border: 1px solid #ccc;
@@ -508,8 +508,11 @@
       }
 
       .search-trigger:hover {
-		cursor: pointer;
+		   cursor: pointer;
          background-color: #e9ecef;
+      }
+      #mobile-calendar:hover, #mobile-guest:hover{
+         cursor: pointer;
       }
    </style>
 </head>
@@ -517,6 +520,7 @@
 <body>
 
    <main layout:fragment="content" class="main-container">
+
       <div class="search-bar-wrap">
 
          <div class="search-bar-inner">
@@ -556,20 +560,26 @@
             <i class="uil uil-search-alt"></i> 검색
             </span>
          </div>
+         <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index: 999999999;">
+            <div id="modal-content" style="width:366px; margin:100px auto; background:#fff; padding:20px;">
+
+            </div>
+         </div>
       </div>
       <div class="mobile-sort-bar">
          <div class="sort-top">
             <div class="left-buttons">
-                    <select>
-					<option>추천순</option>
-					<option>가격순</option>
-					<option>평점순</option>
-					<option>성급순</option>
-			   </select>
-               <button>🛠 필터</button>
+               <select name="sort">
+                  <option value="추천순">추천순</option>
+                  <option value="가격순">가격순</option>
+                  <option value="평점순">평점순</option>
+                  <option value="성급순">성급순</option>
+               </select>
+               <button id="openModalBtn">🛠 필터</button>
+
             </div>
             <div class="sort-bottom">
-               <span class="count">숙소 [[${lodgingList.size()}]]개</span>
+               <span id="mobile-loSize"class="count">숙소 [[${lodgingList.size()}]]개</span>
             </div>
          </div>
          <div class="right-map">
@@ -748,6 +758,17 @@
          }
       </script>
       <script>
+         $(document).on('click',".filter-btn",function(){
+            const section = $(this).parents('.section').find('.section-title').text().trim();
+  
+            if (section === '평점') {
+               $(this).siblings().removeClass("active");
+               $(this).attr.toggleClass("active")
+            } else {
+               $(this).toggleClass("active")
+            }  
+             getLodgingList();
+         })         
          $(document).on('click', '#name-search', function () {
             getLodgingList();
          });
@@ -757,13 +778,21 @@
          $(document).on('input', '#price', function () {
             getLodgingList();
          });
-         $(document).on('click', '.filter-btn', function () {
-            getLodgingList();
-         });
+
          $("[name = sort]").on('change', function () {
-            getLodgingList();
+            let obj = {sort : $(this).val()}
+            if($(this).filter("select").length == 0){
+               $("select[name=sort]").val(obj.sort)
+            }else{
+               $("input[name=sort]").each(function(){
+                 if($(this).val() == obj.sort){
+                  $(this).prop("checked", true)
+                 }
+               })
+            }
+            getLodgingList(obj);
          })
-         function getLodgingList() {
+         function getLodgingList(obj) {
             let ld_name = $("#search-ld-name").val();
             let ratings = [];
             $('.filter-btn.fillter-rating.active').each(function () {
@@ -775,7 +804,7 @@
                types.push($(this).data('type'));
             });
             let price = $("#price").val();
-            const sort = $("[name=sort]:checked").val();
+            const sort = obj && obj.sort ? obj.sort : $("[name=sort]:checked").val();
             const checkTime = $("#checkTime").text();
             const rm_person = $("#check-people").text();
             const rg_name = $("#region").val();
@@ -798,38 +827,19 @@
                   $('#hotel_ajx').html(data);
                   const lo_size = $("#lo-size").val();
                   $("#lodging-size").text("숙소 " + lo_size + "개");
+                  $("#mobile-loSize").text("숙소 " + lo_size + "개");
 
                   updateCardLinks();
                },
             });
          }
+
          function toggleDetailAll() {
             $.ajax({
                url: '/searching/find',
                type: 'GET',
                success: function (data) {
                   $('#search-find').html(data);
-                  const buttons = document.querySelectorAll('.filter-btn');
-                  buttons.forEach(btn => {
-                     btn.addEventListener('click', function () {
-                        const section = btn.closest('.section')?.querySelector('.section-title')?.textContent.trim();
-
-                        if (section === '평점') {
-                           const group = btn.closest('.filter-group');
-                           const isActive = btn.classList.contains('active');
-
-                           // 일단 다 비활성화
-                           group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-
-                           // 원래 active 아니었으면 지금 누른 거만 다시 활성화
-                           if (!isActive) {
-                              btn.classList.add('active');
-                           }
-                        } else {
-                           btn.classList.toggle('active');
-                        }
-                     });
-                  });
                },
             });
          }
@@ -1028,6 +1038,29 @@
                $('#hiddenRmPerson').val(`성인${$adultCount.text()}`);
             });
          });         
+      </script>
+      <script>
+         let modalLoaded = false;
+
+         $("#openModalBtn").click(function() {
+            if (!modalLoaded) {
+               $("#modal-content").load("/searching/find", function() {
+                  modalLoaded = true;
+                  $("#modal").show();
+               });
+            } else {
+               $("#modal").show();
+            }
+         });
+
+  // 모달 바깥 클릭 시 닫기
+         $("#modal").click(function (e) {
+            // 클릭된 대상이 #modal-content가 아닌 경우만 닫기
+            if (!$(e.target).closest("#modal-content").length) {
+               $("#modal").hide();
+            }
+         });
+
       </script>
    </main>
 </body>
