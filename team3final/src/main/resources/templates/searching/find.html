@@ -122,13 +122,13 @@
     <div class="section">
       <div class="section-title">지도보기</div>
       <div class="sub-text">지도에서 호텔 위치를 확인해보세요!</div>
-      <button class="btn-map">지도보기</button>
+      <button class="btn-map kakao-loadMap" data-toggle="modal" data-target="#kakaoMapModal">지도보기</button>
     </div>
     <div class="section">
       <div class="section-title">결과 내에서 검색</div>
       <div class="search-bar">
-        <input type="text" id="search-ld-name" placeholder="숙소명으로 검색">
-        <button type="button" id="name-search">검색</button>
+        <input type="text" class="search-ld-name" placeholder="숙소명으로 검색">
+        <button type="button" class="name-search">검색</button>
       </div>
     </div>
     <div class="section">
@@ -161,7 +161,7 @@
     <div class="section">
       <div class="section-title">가격</div>
       <p class="price-range">0원 ~ 500만원</p>
-      <input type="range" min="0" th:max="500" id="price" th:value="500" class="range-slider">
+      <input type="range" min="0" th:max="500" th:value="500" class="range-slider lodging-price">
     </div>
   </div>
   <script>

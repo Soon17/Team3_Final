@@ -296,19 +296,17 @@
 			});
 			function smsSend() {
 				const me_number = $('#me_number').val();
-
-				// $.ajax({
-				// 	async: false,
-				// 	url: '/sms/send',
-				// 	type: 'post',
-				// 	data: { me_number: me_number },
-				// 	success: function (data) {
-				// 	res = data;
-				// 	},
-				// });
-				res = true; //임의 값 = 무조건 참
-
-				let str = res ? "전송 성공!" : "전송 실패!";
+				$.ajax({
+					async: false,
+					url: '/sms/send',
+					type: 'post',
+					data: { me_number: me_number },
+					success: function (data) {
+					if (data) res = true;
+					else res= false;
+					}
+				});
+				let str = res ? "전송 성공!." : "전송 실패ㅠ";
 				$("#smsSend")
 					.text(str)
 					.toggleClass("green", res)

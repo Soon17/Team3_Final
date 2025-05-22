@@ -7,6 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>숙소 소개</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<!--스와이퍼-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<!-- Kakao Maps API -->
 	<!-- <script
 		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
@@ -85,13 +88,6 @@
 			font-weight: 700;
 		}
 
-		.infor-sub {
-			margin-top: 1.5rem;
-			gap: 3.375rem;
-			flex-direction: row-reverse;
-			display: flex;
-		}
-
 		.infor-review {
 			margin-top: 0;
 			width: 100px;
@@ -125,6 +121,39 @@
 			gap: .25rem;
 			font-size: .875rem;
 			font-weight: 700;
+		}
+
+		.review-card {
+			background: #f9f9f9;
+			border-radius: 10px;
+			padding: 16px;
+			width: 240px;
+			height: 160px;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			min-width: 120px;
+			word-break: break-word;
+		}
+
+		.review-header {
+			font-weight: bold;
+			font-size: 15px;
+		}
+
+		.review-content {
+			flex-grow: 1;
+			color: #333;
+			margin: 8px 0;
+			word-break: break-word;
+			white-space: normal;
+		}
+
+		.review-date {
+			text-align: right;
+			font-size: 12px;
+			color: #888;
 		}
 
 		.service-value {
@@ -680,6 +709,61 @@
 		#confirm-btn:hover {
 			background-color: #005bb5;
 		}
+
+		.infor-sub {
+			display: flex;
+			gap: 24px;
+		}
+
+		.review-container {
+			flex: 1 1 auto;
+			overflow: hidden;
+		}
+
+		.review-swiper {
+			width: 100%;
+			height: auto;
+		}
+
+		.review-swiper .swiper-slide {
+			flex-shrink: 0;
+		}
+
+		.review-swiper .swiper-button-prev,
+		.review-swiper .swiper-button-next {
+			display: none;
+		}
+
+		.review-content {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			max-height: 3em;
+			cursor: pointer;
+			word-break: break-all;
+		}
+
+		#modal-content {
+			word-break: break-word;
+			white-space: pre-wrap;
+		}
+
+		.rev {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-break: break-word;
+			max-height: 3em;
+			cursor: pointer;
+			word-break: break-all;
+		}
 	</style>
 </head>
 
@@ -704,12 +788,36 @@
 				<div class="infor-item">
 					<span class="infor-star" th:text="${lodging.ld_rating + '성급'}"></span>
 					<p class="infor-name" th:text="${lodging.ld_name}"></p>
-					<div class="infor-sub">
-						<!-- 지도 호출 부분 -->
-						<div id="map" style="width: 300px; height: 200px; margin: 20px 0;"></div>
-						<!-- 댓글 출력 부분 -->
-						<div class="infor-review">댓글</div>
+					<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 5px;">
+						<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
+						<span style="font-weight: 700; font-size: 14px;" th:text="${avg_rating}">4.0</span>
+						<span style="font-size: 13px; color: #666;" th:text="'(' + ${review_count} + ')'">(3)</span>
+						<i class="fas fa-chevron-right" style="font-size: 10px; color: #aaa; padding-left: 4px;"></i>
 					</div>
+					<div class="infor-sub"
+						style="display: flex; justify-content: space-between; gap: 24px; align-items: flex-start;">
+						<!-- 리뷰 -->
+						<div class="review-container">
+							<div class="swiper review-swiper">
+								<div class="swiper-wrapper">
+									<th:block th:each="review : ${reviewList}">
+										<div class="swiper-slide review-card"
+											th:attr="data-nick=${review.me_nick}, data-content=${review.rv_content}, data-date=${#dates.format(review.rv_date, 'yyyy.MM.dd')}"
+											onclick="handleReviewClick(this)" style="cursor: pointer;">
+											<div class="review-header" th:text="${review.me_nick}">닉네임</div>
+											<div class="review-content" th:text="${review.rv_content}">내용</div>
+											<div class="review-date" th:text="${#dates.format(review.rv_date,'yyyy.MM.dd')}">날짜</div>
+										</div>
+									</th:block>
+								</div>
+							</div>
+						</div>
+						<!-- 지도 -->
+						<div class="homap" style="flex-shrink: 0;">
+							<div id="map" style="width: 280px; height: 200px; border-radius: 10px;"></div>
+						</div>
+					</div>
+
 					<!-- 호텔 편의시설 및 서비스 -->
 					<div class="infor-item2">
 						<div class="infor-service">
@@ -1871,139 +1979,43 @@
 											<!-- 리뷰 리스트 -->
 											<div style="display: flex; flex-direction: column; gap: 1rem;">
 												<div style="display: flex; justify-content: space-between;align-items: center;">
-													<div style="font-size: 1rem; font-weight: bold; color: #494949;">트러스트 리뷰</div>
-													<div
-														style="display: flex; align-items: center; gap: .25rem; cursor: pointer; height: 1.313rem; position: relative;">
-														<div style="font-size: .875rem; color: #666;">평점 높은 순</div>
-													</div>
-													<!-- <div class="list-menu">
-																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
-																	<i class="fas fa-check"></i>
-																	<div style="color: #000; font-size: .875rem;">평점 높은 순</div>
-																</div>
-																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
-																	<i class="fas fa-check"></i>
-																	<div style="color: #000; font-size: .875rem;">평점 낮은 순</div>
-																</div>
-																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
-																	<i class="fas fa-check"></i>
-																	<div style="color: #000; font-size: .875rem;">최신순</div>
-																</div>
-															</div> -->
+													<div style="font-size: 1rem; font-weight: bold; color: #494949;">리뷰</div>
 												</div>
 												<!-- 리뷰 리스트 목록 -->
-												<div
-													style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
-													<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
-														<div style="display: flex; align-items: end; gap: .125rem;">
-															<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
-															<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0
+												<th:block th:each="rev : ${reviewList}">
+													<div
+														style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
+														th:attr="data-nick=${rev.me_nick}, data-content=${rev.rv_content}, data-date=${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
+														onclick="handleReviewClick(this)">
+														<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+															<div style="display: flex; align-items: end; gap: .125rem;">
+																<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
+																<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0
+																</div>
+															</div>
+															<div>
+																<span th:text="${rev.rm_name}"
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">방이름</span>
 															</div>
 														</div>
 														<div>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0
-																| 친절도 5.0 | 만족도 5.0</span>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
-																Room</span>
-														</div>
-													</div>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<i class="fas fa-user"></i>
-														<p
-															style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-															닉네임임. 쨋든 닉네임임</p>
-													</div>
-													<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
-														<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
-													</p>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
-													</div>
-												</div>
-												<div
-													style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
-													<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
-														<div style="display: flex; align-items: end; gap: .125rem;">
-															<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
-															<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0
+															<div style="width: 100%; display: flex; align-items: center;">
+																<i class="fas fa-user"></i>
+																<p th:text="${rev.me_nick}"
+																	style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+																	닉네임</p>
+															</div>
+															<p class="rev"
+																style="margin: 0; width: 40%; font-size: .875rem; line-height: 1.5; color: #666;">
+																<span th:text="${rev.rv_content}">리뷰</span>
+															</p>
+															<div style="width: 100%; display: flex; align-items: center;">
+																<span th:text="${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
+																	style="font-size: .75rem; line-height: 1.5; color: #999;">날짜</span>
 															</div>
 														</div>
-														<div>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0
-																| 친절도 5.0 | 만족도 5.0</span>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
-																Room</span>
-														</div>
 													</div>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<i class="fas fa-user"></i>
-														<p
-															style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-															닉네임임. 쨋든 닉네임임</p>
-													</div>
-													<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
-														<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
-													</p>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
-													</div>
-												</div>
-												<div
-													style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
-													<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
-														<div style="display: flex; align-items: end; gap: .125rem;">
-															<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
-															<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0
-															</div>
-														</div>
-														<div>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0
-																| 친절도 5.0 | 만족도 5.0</span>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
-																Room</span>
-														</div>
-													</div>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<i class="fas fa-user"></i>
-														<p
-															style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-															닉네임임. 쨋든 닉네임임</p>
-													</div>
-													<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
-														<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
-													</p>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
-													</div>
-												</div>
-												<div
-													style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
-													<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
-														<div style="display: flex; align-items: end; gap: .125rem;">
-															<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
-															<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0
-															</div>
-														</div>
-														<div>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도 5.0
-																| 친절도 5.0 | 만족도 5.0</span>
-															<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
-																Room</span>
-														</div>
-													</div>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<i class="fas fa-user"></i>
-														<p
-															style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-															닉네임임. 쨋든 닉네임임</p>
-													</div>
-													<p style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
-														<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
-													</p>
-													<div style="width: 100%; display: flex; align-items: center;">
-														<span style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
-													</div>
-												</div>
+												</th:block>
 												<button style="cursor: pointer; font-size: 1rem; border-radius: .5rem; color: #7b8bab; border: 1px solid #7b8bab; background: rgba(0, 0, 0, 0); gap: .25rem; justify-content: center; align-items: centerdis;
 														display: flex; width: 100%; margin: 1rem 0; padding: 7px 0;">더보기</button>
 											</div>
@@ -2065,6 +2077,21 @@
 						<!-- Modal 푸터 -->
 						<div class="modal-footer justify-content-center">
 							<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 리뷰 모달 -->
+			<div class="modal fade" id="reviewModal" role="dialog">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content p-4">
+						<div class="modal-header">
+							<h5 class="modal-title"><span id="modal-nickname">닉네임</span>님의 리뷰</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<p id="modal-content">내용</p>
+							<p id="modal-date" class="text-muted">날짜</p>
 						</div>
 					</div>
 				</div>
@@ -2405,6 +2432,40 @@
 					});
 
 				});         
+			</script>
+			<script>
+				document.addEventListener("DOMContentLoaded", () => {
+					new Swiper(".review-swiper", {
+						slidesPerView: 2,
+						spaceBetween: 16,
+						navigation: {
+							nextEl: ".swiper-button-next",
+							prevEl: ".swiper-button-prev",
+						},
+						breakpoints: {
+							0: { slidesPerView: 1 },
+							640: { slidesPerView: 1.5 },
+							1024: { slidesPerView: 2 }
+						}
+					});
+				});
+			</script>
+			<!--리뷰 모달-->
+			<script>
+				function showReviewModal(nick, content, date) {
+					document.getElementById('modal-nickname').textContent = nick;
+					document.getElementById('modal-content').textContent = content;
+					document.getElementById('modal-date').textContent = date;
+					$('#reviewModal').modal('show');
+				}
+			</script>
+			<script>
+				function handleReviewClick(el) {
+					const nick = el.dataset.nick;
+					const content = el.dataset.content;
+					const date = el.dataset.date;
+					showReviewModal(nick, content, date);
+				}
 			</script>
 		</main>
 	</div>
