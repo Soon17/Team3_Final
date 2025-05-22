@@ -1984,7 +1984,9 @@
 												<!-- 리뷰 리스트 목록 -->
 												<th:block th:each="rev : ${reviewList}">
 													<div
-														style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+														style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
+														th:attr="data-nick=${rev.me_nick}, data-content=${rev.rv_content}, data-date=${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
+														onclick="handleReviewClick(this)">
 														<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
 															<div style="display: flex; align-items: end; gap: .125rem;">
 																<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
