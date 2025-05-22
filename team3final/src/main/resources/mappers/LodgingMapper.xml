@@ -14,8 +14,9 @@
         (
             SELECT ROUND(AVG(rv_rating), 1)
             FROM review
-            WHERE rv_table_name = 'lodging' 
-              AND rv_number = lodging.LD_NUM
+						join room on rm_num = rv_number
+            WHERE rv_table_name = 'room' 
+              AND rm_ld_num = lodging.LD_NUM
         ) AS avg_rating,
         MIN(t.rm_price) AS min_price 
 		FROM lodging
@@ -80,8 +81,8 @@
 				ORDER BY ld_rating DESC
 			</when>
 			<otherwise>
-				
+
 			</otherwise>
-		</choose>		
+		</choose>
 	</select>
 </mapper>

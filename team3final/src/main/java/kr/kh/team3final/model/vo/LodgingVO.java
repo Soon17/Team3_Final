@@ -18,4 +18,5 @@ public class LodgingVO {
 	int ld_rg_num;
 	Double avg_rating;
 	int min_price;
+	int review_count;
 }
