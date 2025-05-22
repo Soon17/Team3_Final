@@ -1,1010 +1,1212 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+   layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-	<meta charset="UTF-8">
-	<title>카모아 - 국내도 해외도 렌트카</title>
-	<style>
-		.calendar-wrapper {
-			background: white;
-			max-width: 700px;
-			margin: auto;
-			padding: 20px;
-			border-radius: 15px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
-
-		.modal-header {
-			margin-bottom: 20px;
-			font-size: 18px;
-			font-weight: bold;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.calendar-grid {
-			display: grid;
-			grid-template-columns: 1fr;
-			gap: 30px;
-			max-height: 600px;
-			overflow-y: auto;
-			padding-right: 10px;
-		}
-
-		.month {
-			border: 1px solid #ddd;
-			border-radius: 10px;
-			padding: 10px;
-			background: #fff;
-		}
-
-		.month h3 {
-			text-align: center;
-			margin: 0 0 10px;
-		}
-
-		.days {
-			display: grid;
-			grid-template-columns: repeat(7, 1fr);
-			gap: 5px;
-		}
-
-		.day,
-		.day-name {
-			text-align: center;
-			padding: 8px 0;
-		}
-
-		.day:hover {
-			cursor: pointer;
-		}
-
-		.day-name {
-			font-weight: bold;
-			background-color: #f8f8f8;
-		}
-
-		.day.disabled {
-			color: #ccc;
-			cursor: not-allowed;
-		}
-
-		.day.selected {
-			background-color: #007aff;
-			color: white;
-			border-radius: 10px;
-		}
-
-		.day.in-range {
-			background-color: rgba(0, 122, 255, 0.3);
-			border-radius: 10px;
-		}
-
-		.apply-btn {
-			width: 100%;
-			padding: 15px;
-			background-color: #007aff;
-			color: white;
-			font-size: 16px;
-			border: none;
-			margin-top: 20px;
-			border-radius: 10px;
-			cursor: pointer;
-		}
-
-		.main-container {
-			background-color: #f5f6f7;
-			font-family: 'Noto Sans KR', sans-serif;
-			width: 100%;
-			padding: 0;
-		}
-
-		.row {
-			max-width: 1032px;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			margin: 0px auto;
-			padding-top: 40px;
-			padding-bottom: 100px;
-		}
-
-		.search-bar-wrap {
-			width: 100%;
-			background-color: #fff;
-			border-bottom: 1px solid #eee;
-			position: sticky;
-			top: 0;
-			z-index: 1000;
-			transition: transform 0.3s ease;
-			background-color: white;
-			overflow: hidden;
-		}
-
-		.search-bar-inner {
-			padding: 10px 0;
-			display: flex;
-			gap: 20px;
-			height: 80px;
-			align-items: center;
-			box-sizing: border-box;
-			cursor: pointer;
-			justify-content: center;
-		}
-
-		.search-input {
-			width: 300px;
-			padding: 12px 16px;
-			background-color: #f8f8f8;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			font-size: 14px;
-			font-weight: bold;
-		}
-
-		.search-btn {
-			padding: 12px 20px;
-			background-color: #007bff;
-			color: white;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-			font-weight: 600;
-		}
-
-		.search-box-area {
-			width: 100%;
-			max-width: 330px;
-			margin-right: 20px;
-			position: fixed;
-			transition: transform 0.3s ease;
-			top: 0;
-		}
-
-
-		.container-box {
-			background-color: #f5f6f7;
-			border-radius: 10px;
-			width: 100%;
-			max-width: 680px;
-			padding-right: 0;
-		}
-
-		.sort-options {
-			display: flex;
-			gap: 16px;
-			background: white;
-			padding: 5px 15px;
-			border-radius: 30px;
-			justify-content: flex-end;
-		}
-
-		.sort-options label {
-			display: flex;
-			align-items: center;
-			cursor: pointer;
-			font-size: 14px;
-			color: #666;
-			font-weight: 400;
-			font-size: 12px;
-			margin: 0;
-		}
-
-		.sort-options input[type="radio"] {
-			appearance: none;
-			width: 12px;
-			height: 12px;
-			border: 2px solid #ccc;
-			border-radius: 50%;
-			margin-right: 2px;
-			cursor: pointer;
-		}
-
-		.sort-options input[type="radio"]:checked::before {
-			content: '';
-			display: block;
-			width: 100%;
-			height: 100%;
-			background-color: #4564b8;
-			border-radius: 50%;
-		}
-
-		.card-link {
-			display: flex;
-			text-decoration: none;
-			color: inherit;
-			padding: 20px 15px;
-			background-color: #ffffff73;
-			width: 100%;
-			justify-content: space-between;
-		}
-
-		.hotel-location {
-			color: #0d6ffc;
-			font-size: .75rem;
-		}
-
-		.poto {
-			border-radius: 5px;
-			height: 208px;
-			width: 272px;
-
-		}
-
-		.price {
-			color: #9f1f13;
-			font-size: 20px;
-		}
-
-
-		.hotel-price {
-			align-self: flex-end;
-			font-weight: bold;
-			font-size: 15px;
-			margin-top: auto;
-		}
-
-		.hotel-info {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			height: 100%;
-			padding: 10px 30px;
-			padding-top: 0px !important;
-			max-width: 400px;
-			width: 100%;
-		}
-
-		.hotel-up {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			margin-right: 100px;
-		}
-
-		.hotel-grade {
-			display: flex;
-			gap: 4px;
-			align-items: flex-start;
-			flex-direction: row;
-		}
-
-		.card-link:hover {
-			color: inherit !important;
-			text-decoration: none !important;
-		}
-
-		.mobile-header {
-			display: none;
-			padding: 16px;
-			background: #fff;
-			font-size: 14px;
-			border-bottom: 1px solid #eee;
-			flex-direction: column;
-			gap: 4px;
-		}
-
-		.im {
-			display: flex;
-			justify-content: center;
-		}
-
-		.star {
-			width: 16px;
-			height: 16px;
-		}
-
-		.hotel-stars {
-			font-size: 12px;
-		}
-
-		.hotel-name {
-			font-weight: bold;
-		}
-
-		.review-score {
-			font-size: 12px;
-		}
-
-		.mobile-sort-bar {
-			display: none;
-		}
-
-		@media screen and (max-width: 1080px) {
-			header {
-				display: none;
-			}
-
-			.search-bar-wrap {
-				display: none;
-			}
-
-			div.d-flex.justify-content-between.align-items-center.mb-2 {
-				display: none !important;
-			}
-
-			.mobile-header {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				padding: 10px 30px;
-				align-items: center;
-				font-size: 14px;
-			}
-
-			.row {
-				align-content: center;
-				flex-direction: column;
-				padding-top: 10px !important;
-			}
-
-			.container-box {
-				margin-top: 10px;
-				max-width: 970px !important;
-				width: 100% !important;
-			}
-
-			.hotel-info {
-				max-width: 800px !important;
-				width: 100%;
-				padding: 0px 15px !important;
-			}
-
-			.search-box-area {
-				display: none;
-			}
-
-			.poto {
-				width: 272px;
-				height: 208px;
-			}
-
-			.mobile-sort-bar {
-				position: sticky;
-				top: 0;
-				z-index: 999;
-				transition: transform 0.3s ease;
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-between;
-				align-items: flex-start;
-				padding: 10px 30px;
-				background-color: #fff;
-				font-size: 12px;
-			}
-
-			.mobile-sort-bar button {
-				padding: 6px 10px;
-				font-size: 12px;
-				border: 1px solid #ccc;
-				border-radius: 6px;
-				background-color: #fff;
-				white-space: nowrap;
-				margin-bottom: 10px;
-			}
-
-			.mobile-sort-bar .toggle-area {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				font-size: 12px;
-				margin-left: auto;
-			}
-
-			.mobile-sort-bar .count {
-				font-size: 12px;
-				color: #555;
-			}
-
-		}
-
-		@media screen and (max-width: 720px) {
-			.card-link {
-				display: flex;
-				flex-direction: column;
-			}
-
-			.poto {
-				max-width: 650px !important;
-				max-height: 250px !important;
-				height: 100%;
-				width: 100%;
-			}
-
-			.hotel-info {
-				padding: 10px 0px !important;
-			}
-
-		}
-
-		.counter-header {
-			font-size: 20px;
-			font-weight: bold;
-			margin-bottom: 15px;
-		}
-
-		.counter-row {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 15px 0;
-			border-bottom: 1px solid #eee;
-		}
-
-		.counter-row:last-child {
-			border-bottom: none;
-		}
-
-		.counter-label {
-			font-size: 16px;
-		}
-
-		.counter-subtext {
-			font-size: 12px;
-			color: #666;
-			margin-top: 3px;
-		}
-
-		.counter-controls {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
-
-		.counter-btn {
-			width: 32px;
-			height: 32px;
-			line-height: 32px;
-			text-align: center;
-			background: #eee;
-			border-radius: 50%;
-			font-weight: bold;
-			font-size: 22px;
-			user-select: none;
-			cursor: pointer;
-			transition: background 0.3s;
-		}
-
-		.counter-btn:hover {
-			background: #007aff;
-			color: white;
-		}
-
-		.count-value {
-			min-width: 30px;
-			text-align: center;
-			font-size: 16px;
-			user-select: none;
-		}
-
-		#confirm-btn {
-			width: 100%;
-			padding: 14px;
-			margin-top: 25px;
-			border: none;
-			background-color: #007aff;
-			color: white;
-			font-size: 18px;
-			border-radius: 10px;
-			cursor: pointer;
-			user-select: none;
-			transition: background-color 0.3s;
-		}
-
-		#confirm-btn:hover {
-			background-color: #005bb5;
-		}
-	</style>
+   <meta charset="UTF-8">
+   <title>카모아 - 국내도 해외도 렌트카</title>
+   <!-- <script
+   src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
+   <style>
+      .hotel-map-datail {
+         position: relative;
+         overflow: hidden;
+         user-select: none;
+         -webkit-user-drag: none;
+         left: 0px;
+         top: 0px;
+         width: 100%;
+         height: 500px;
+         z-index: 0;
+
+      }
+
+      .calendar-wrapper {
+         background: white;
+         max-width: 700px;
+         margin: auto;
+         padding: 20px;
+         border-radius: 15px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-header {
+         margin-bottom: 20px;
+         font-size: 18px;
+         font-weight: bold;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+      }
+
+      .calendar-grid {
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 30px;
+         max-height: 600px;
+         overflow-y: auto;
+         padding-right: 10px;
+      }
+
+      .month {
+         border: 1px solid #ddd;
+         border-radius: 10px;
+         padding: 10px;
+         background: #fff;
+      }
+
+      .month h3 {
+         text-align: center;
+         margin: 0 0 10px;
+      }
+
+      .days {
+         display: grid;
+         grid-template-columns: repeat(7, 1fr);
+         gap: 5px;
+      }
+
+      .day,
+      .day-name {
+         text-align: center;
+         padding: 8px 0;
+      }
+
+      .day:hover {
+         cursor: pointer;
+      }
+
+      .day-name {
+         font-weight: bold;
+         background-color: #f8f8f8;
+      }
+
+      .day.disabled {
+         color: #ccc;
+         cursor: not-allowed;
+      }
+
+      .day.selected {
+         background-color: #007aff;
+         color: white;
+         border-radius: 10px;
+      }
+
+      .day.in-range {
+         background-color: rgba(0, 122, 255, 0.3);
+         border-radius: 10px;
+      }
+
+      .apply-btn {
+         width: 100%;
+         padding: 15px;
+         background-color: #007aff;
+         color: white;
+         font-size: 16px;
+         border: none;
+         margin-top: 20px;
+         border-radius: 10px;
+         cursor: pointer;
+      }
+
+      .main-container {
+         background-color: #f5f6f7;
+         font-family: 'Noto Sans KR', sans-serif;
+         width: 100%;
+         padding: 0;
+      }
+
+      .row {
+         max-width: 1032px;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: space-between;
+         margin: 0px auto;
+         padding-top: 40px;
+         padding-bottom: 100px;
+      }
+
+      .search-bar-wrap {
+         width: 100%;
+         background-color: #fff;
+         border-bottom: 1px solid #eee;
+         position: sticky;
+         top: 0;
+         z-index: 1000;
+         transition: transform 0.3s ease;
+         background-color: white;
+         overflow: hidden;
+      }
+
+      .search-bar-inner {
+         padding: 10px 0;
+         display: flex;
+         gap: 20px;
+         height: 80px;
+         align-items: center;
+         box-sizing: border-box;
+         cursor: pointer;
+         justify-content: center;
+      }
+
+      .search-input {
+         width: 300px;
+         padding: 12px 16px;
+         background-color: #f8f8f8;
+         border: 1px solid #ddd;
+         border-radius: 5px;
+         font-size: 14px;
+         font-weight: bold;
+      }
+
+      .search-btn {
+         padding: 12px 20px;
+         background-color: #007bff;
+         color: white;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         font-weight: 600;
+      }
+
+      .search-box-area {
+         width: 100%;
+         max-width: 330px;
+         margin-right: 20px;
+         position: fixed;
+         transition: transform 0.3s ease;
+         top: 0;
+      }
+
+
+      .container-box {
+         background-color: #f5f6f7;
+         border-radius: 10px;
+         width: 100%;
+         max-width: 680px;
+         padding-right: 0;
+      }
+
+      .sort-options {
+         display: flex;
+         gap: 16px;
+         background: white;
+         padding: 5px 15px;
+         border-radius: 30px;
+         justify-content: flex-end;
+      }
+
+      .sort-options label {
+         display: flex;
+         align-items: center;
+         cursor: pointer;
+         font-size: 14px;
+         color: #666;
+         font-weight: 400;
+         font-size: 12px;
+         margin: 0;
+      }
+
+      .sort-options input[type="radio"] {
+         appearance: none;
+         width: 12px;
+         height: 12px;
+         border: 2px solid #ccc;
+         border-radius: 50%;
+         margin-right: 2px;
+         cursor: pointer;
+      }
+
+      .sort-options input[type="radio"]:checked::before {
+         content: '';
+         display: block;
+         width: 100%;
+         height: 100%;
+         background-color: #4564b8;
+         border-radius: 50%;
+      }
+
+      .card-link {
+         display: flex;
+         text-decoration: none;
+         color: inherit;
+         padding: 20px 15px;
+         background-color: #ffffff73;
+         width: 100%;
+         justify-content: space-between;
+      }
+
+      .hotel-location {
+         color: #0d6ffc;
+         font-size: .75rem;
+      }
+
+      .poto {
+         border-radius: 5px;
+         height: 208px;
+         width: 272px;
+
+      }
+
+      .price {
+         color: #9f1f13;
+         font-size: 20px;
+      }
+
+
+      .hotel-price {
+         align-self: flex-end;
+         font-weight: bold;
+         font-size: 15px;
+         margin-top: auto;
+      }
+
+      .hotel-info {
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         height: 100%;
+         padding: 10px 30px;
+         padding-top: 0px !important;
+         max-width: 400px;
+         width: 100%;
+      }
+
+      .hotel-up {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+         margin-right: 100px;
+      }
+
+      .hotel-grade {
+         display: flex;
+         gap: 4px;
+         align-items: flex-start;
+         flex-direction: row;
+      }
+
+      .card-link:hover {
+         color: inherit !important;
+         text-decoration: none !important;
+      }
+
+      .mobile-header {
+         display: none;
+         padding: 16px;
+         background: #fff;
+         font-size: 14px;
+         border-bottom: 1px solid #eee;
+         flex-direction: column;
+         gap: 4px;
+      }
+
+      .im {
+         display: flex;
+         justify-content: center;
+      }
+
+      .star {
+         width: 16px;
+         height: 16px;
+      }
+
+      .hotel-stars {
+         font-size: 12px;
+      }
+
+      .hotel-name {
+         font-weight: bold;
+      }
+
+      .review-score {
+         font-size: 12px;
+      }
+
+      .mobile-sort-bar {
+         display: none;
+      }
+
+      @media screen and (max-width: 1080px) {
+         header {
+            display: none;
+         }
+
+         .search-bar-wrap {
+            display: none;
+         }
+
+         div.d-flex.justify-content-between.align-items-center.mb-2 {
+            display: none !important;
+         }
+
+         .mobile-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 30px;
+            align-items: center;
+            font-size: 14px;
+         }
+
+         .row {
+            align-content: center;
+            flex-direction: column;
+            padding-top: 10px !important;
+         }
+
+         .container-box {
+            margin-top: 10px;
+            max-width: 970px !important;
+            width: 100% !important;
+         }
+
+         .hotel-info {
+            max-width: 800px !important;
+            width: 100%;
+            padding: 0px 15px !important;
+         }
+
+         .search-box-area {
+            display: none;
+         }
+
+         .poto {
+            width: 272px;
+            height: 208px;
+         }
+
+         .mobile-sort-bar {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 30px;
+            background-color: #fff;
+            font-size: 12px;
+         }
+
+         .mobile-sort-bar button,
+         .mobile-sort-bar select {
+            padding: 6px 10px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+            white-space: nowrap;
+            margin-bottom: 10px;
+         }
+
+         .mobile-sort-bar .toggle-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            margin-left: auto;
+         }
+
+         .mobile-sort-bar .count {
+            font-size: 12px;
+            color: #555;
+         }
+
+      }
+
+      @media screen and (max-width: 720px) {
+         .card-link {
+            display: flex;
+            flex-direction: column;
+         }
+
+         .poto {
+            max-width: 650px !important;
+            max-height: 250px !important;
+            height: 100%;
+            width: 100%;
+         }
+
+         .hotel-info {
+            padding: 10px 0px !important;
+         }
+
+      }
+
+      .counter-header {
+         font-size: 20px;
+         font-weight: bold;
+         margin-bottom: 15px;
+      }
+
+      .counter-row {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 15px 0;
+         border-bottom: 1px solid #eee;
+      }
+
+      .counter-row:last-child {
+         border-bottom: none;
+      }
+
+      .counter-label {
+         font-size: 16px;
+      }
+
+      .counter-subtext {
+         font-size: 12px;
+         color: #666;
+         margin-top: 3px;
+      }
+
+      .counter-controls {
+         display: flex;
+         align-items: center;
+         gap: 10px;
+      }
+
+      .counter-btn {
+         width: 32px;
+         height: 32px;
+         line-height: 32px;
+         text-align: center;
+         background: #eee;
+         border-radius: 50%;
+         font-weight: bold;
+         font-size: 22px;
+         user-select: none;
+         cursor: pointer;
+         transition: background 0.3s;
+      }
+
+      .counter-btn:hover {
+         background: #007aff;
+         color: white;
+      }
+
+      .count-value {
+         min-width: 30px;
+         text-align: center;
+         font-size: 16px;
+         user-select: none;
+      }
+
+      #confirm-btn {
+         width: 100%;
+         padding: 14px;
+         margin-top: 25px;
+         border: none;
+         background-color: #007aff;
+         color: white;
+         font-size: 18px;
+         border-radius: 10px;
+         cursor: pointer;
+         user-select: none;
+         transition: background-color 0.3s;
+      }
+
+      #confirm-btn:hover {
+         background-color: #005bb5;
+      }
+
+      .search-trigger {
+         padding: 4px 10px;
+         background-color: #f1f3f5;
+         color: #333;
+         font-size: 13px;
+         border-radius: 6px;
+         font-weight: 500;
+         border: 1px solid #ccc;
+         margin-left: 6px;
+      }
+
+      .search-trigger:hover {
+         cursor: pointer;
+         background-color: #e9ecef;
+      }
+
+      #mobile-calendar:hover,
+      #mobile-guest:hover {
+         cursor: pointer;
+      }
+   </style>
 </head>
 
 <body>
 
-	<main layout:fragment="content" class="main-container">
-		<div class="search-bar-wrap">
+   <main layout:fragment="content" class="main-container">
 
-			<div class="search-bar-inner">
-				<select name="rg_name" id="region" class="search-input">
-					<!-- 첫 번째: 서버에서 넘어온 선택 값 -->
-					<option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
+      <div class="search-bar-wrap">
 
-					<!-- 나머지 지역 리스트 -->
-					<option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}"
-						th:text="${rg.rg_name}"></option>
-				</select>
-				<div class="search-input" data-toggle="modal" data-target="#calendarModal">
-					<i class="fas fa-list-alt"></i>
-					<span id="checkTime">[[${checkTime}]]</span>
-				</div>
-				<div class="search-input" data-toggle="modal" data-target="#guestModal">
-					<i class="fas fa-user"></i>
-					<span id="check-people">[[${rm_person}]]</span>
-				</div>
-				<input type="hidden" name="checkTime" id="hiddenCheckTime" th:value="${checkTime}" />
-				<input type="hidden" name="rm_person" id="hiddenRmPerson" th:value="${rm_person}" />
-				<button type="button" class="search-btn">검색</button>
-			</div>
+         <div class="search-bar-inner">
+            <select name="rg_name" id="region" class="search-input">
+               <!-- 첫 번째: 서버에서 넘어온 선택 값 -->
+               <option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
 
-		</div>
-		<!-- 반응형 전용 헤더 -->
-		<div class="mobile-header">
-			<div class="mobile-header-top">
-				<span class="place-name" style="font-weight: bold;">신라 아이파크 몰</span>
-				<i class="fas fa-pen edit-icon" style="font-size: 10px;"></i>
-			</div>
-			<div class="mobile-header-bottom">
-				<span data-toggle="modal" data-target="#calendarModal">05.13 (월) ~ 05.14 (수)</span>
-				<span> | </span>
-				<span data-toggle="modal" data-target="#guestModal">성인2</span>
-			</div>
-		</div>
-		<div class="mobile-sort-bar">
-			<div class="sort-top">
-				<div class="left-buttons">
-					<button>추천순</button>
-					<button>🛠 필터</button>
-				</div>
-				<div class="sort-bottom">
-					<span class="count">숙소 [[${lodgingList.size()}]]개</span>
-				</div>
-			</div>
-			<div class="right-map">
-				<button>🗺 지도</button>
-			</div>
-		</div>
-		<div class="row">
-			<div id="search-find" class="search-box-area" style="position: relative; overflow: visible;">
-				<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
-			</div>
-			<div class="col-md-10 container-box">
-				<div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px;">
-					<div>
-						<h5 class="mb-0">검색결과</h5>
-						<small class="text-muted" id="lodging-size">숙소 [[${lodgingList.size()}]]개</small>
-					</div>
-					<div class="sort-options">
-						<label><input type="radio" name="sort" value="추천순" checked> <span>추천순</span></label>
-						<label><input type="radio" name="sort" value="평점순"> <span>평점순</span></label>
-						<label><input type="radio" name="sort" value="가격순"> <span>가격순</span></label>
-						<label><input type="radio" name="sort" value="성급순"> <span>성급순</span></label>
-						<label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
-					</div>
-				</div>
-				<div id="hotel_ajx">
-					<!-- Ajax로 숙소  처음 검색한 데이터는 있고 다음부터 바뀜-->
-					<div class="im" th:each="ld : ${lodgingList}">
-						<a href="#" class="card-link" th:data-ld-num="${ld.ld_num}" th:data-ld-region="${ld.ld_region}">
-							<div class="hotel-image">
-								<img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
-							</div>
-							<div class="hotel-info">
-								<div class="hotel-up">
-									<div class="hotel-name" th:text="${ld.ld_name}"></div>
-									<div class="hotel-grade">
-										<img class="star" src="/resources/static/imgs/star.svg" alt="star">
-										<span class="review-score" th:text="${ld.avg_rating}"></span>
-										<span class="hotel-stars">· [[${ld.ld_rating}]]성급</span>
-									</div>
-									<div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
-								</div>
-								<div class="hotel-price">
-									<span class="price">[[${ld.min_price}]]원</span> /1박
-								</div>
-							</div>
-						</a>
-					</div>
-				</div>
+               <!-- 나머지 지역 리스트 -->
+               <option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}"
+                  th:text="${rg.rg_name}"></option>
+            </select>
+            <div class="search-input" data-toggle="modal" data-target="#calendarModal">
+               <i class="fas fa-list-alt"></i>
+               <span id="checkTime">[[${checkTime}]]</span>
+            </div>
+            <div class="search-input" data-toggle="modal" data-target="#guestModal">
+               <i class="fas fa-user"></i>
+               <span id="check-people">[[${rm_person}]]</span>
+            </div>
+            <input type="hidden" name="checkTime" id="hiddenCheckTime" th:value="${checkTime}" />
+            <input type="hidden" name="rm_person" id="hiddenRmPerson" th:value="${rm_person}" />
+            <button type="button" class="search-btn">검색</button>
+         </div>
 
-			</div>
-		</div>
-		<div class="modal" id="calendarModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
-						</div>
-						<div class="nights" id="nights"></div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div class="calendar-wrapper">
-							<div id="calendar-grid" class="calendar-grid"></div>
-						</div>
-					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
-						<button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal" id="guestModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span>인원 선택</span>
-						</div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div>
-							<div class="counter-label">성인</div>
-							<div class="counter-subtext">만 18세 이상</div>
-						</div>
-						<div class="counter-controls">
-							<div class="counter-btn" id="adult-minus">−</div>
-							<div class="count-value" id="adult-count">2</div>
-							<div class="counter-btn" id="adult-increase">+</div>
-						</div>
-					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
-						<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal" id="calendarModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
-						</div>
-						<div class="nights" id="nights"></div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div class="calendar-wrapper">
-							<div id="calendar-grid" class="calendar-grid"></div>
-						</div>
-					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
-						<button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal" id="guestModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span>인원 선택</span>
-						</div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div>
-							<div class="counter-label">성인</div>
-							<div class="counter-subtext">만 18세 이상</div>
-						</div>
-						<div class="counter-controls">
-							<div class="counter-btn" id="adult-minus">−</div>
-							<div class="count-value" id="adult-count">2</div>
-							<div class="counter-btn" id="adult-increase">+</div>
-						</div>
-					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
-						<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script>
-			function updateCardLinks() {
-				const region = $('#region').val();
-				const checkTime = $('#checkTime').text().trim();
-				const people = $('#check-people').text().trim();
-				const qR = encodeURIComponent(region);
-				const qT = encodeURIComponent(checkTime);
-				const qP = encodeURIComponent(people);
+      </div>
+      <!-- 반응형 전용 헤더 -->
+      <div class="mobile-header">
+         <div class="mobile-header-top">
+            <span class="place-name" style="font-weight: bold;">신라 아이파크 몰</span>
+            <i class="fas fa-pen edit-icon" style="font-size: 10px;"></i>
+         </div>
+         <div class="mobile-header-bottom">
+            <span id="mobile-calendar" data-toggle="modal" data-target="#calendarModal" th:text="${checkTime}"></span>
+            <span> | </span>
+            <span id="mobile-guest" data-toggle="modal" data-target="#guestModal">성인2</span>
+            <span class="search-trigger" id="mobile">
+               <i class="uil uil-search-alt"></i> 검색
+            </span>
+         </div>
+         <div id="modal"
+            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index: 999999999;">
+            <div id="modal-content" style="width:366px; margin:100px auto; background:#fff; padding:20px;">
 
-				$('.card-link').each(function () {
-					const ld_num = $(this).data('ld-num');
-					const ld_region = encodeURIComponent($(this).data('ld-region'));
+            </div>
+         </div>
+      </div>
+      <div class="mobile-sort-bar">
+         <div class="sort-top">
+            <div class="left-buttons">
+               <select name="sort">
+                  <option value="추천순">추천순</option>
+                  <option value="가격순">가격순</option>
+                  <option value="평점순">평점순</option>
+                  <option value="성급순">성급순</option>
+               </select>
+               <button id="openModalBtn">🛠 필터</button>
 
-					$(this).attr(
-						'href',
-						`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
-					);
-				});
-			}
-		</script>
-		<script>
-			$(document).on('click', '#name-search', function () {
-				getLodgingList();
-			});
-			$(".search-btn").on('click', function () {
-				getLodgingList();
-			})
-			$(document).on('input', '#price', function () {
-				getLodgingList();
-			});
-			$(document).on('click', '.filter-btn', function () {
-				getLodgingList();
-			});
-			$("[name = sort]").on('change', function () {
-				getLodgingList();
-			})
-			function getLodgingList() {
-				let ld_name = $("#search-ld-name").val();
-				let ratings = [];
-				$('.filter-btn.fillter-rating.active').each(function () {
-					ratings.push($(this).data('rating'));
-				});
-				let avg = $('.filter-btn.fillter-avg.active').data('avg');
-				let types = [];
-				$('.filter-btn.fillter-type.active').each(function () {
-					types.push($(this).data('type'));
-				});
-				let price = $("#price").val();
-				const sort = $("[name=sort]:checked").val();
-				const checkTime = $("#checkTime").text();
-				const rm_person = $("#check-people").text();
-				const rg_name = $("#region").val();
-				let cri = {
-					rg_name: rg_name,
-					checkTime: checkTime,
-					rm_person: rm_person,
-					sort: sort,
-					rating: ratings,
-					avg: avg,
-					type: types,
-					price: price,
-					ld_name: ld_name
-				}
-				$.ajax({
-					url: '/searching/lodging',
-					type: 'GET',
-					data: cri,
-					success: function (data) {
-						$('#hotel_ajx').html(data);
-						const lo_size = $("#lo-size").val();
-						$("#lodging-size").text("숙소 " + lo_size + "개");
+            </div>
+            <div class="sort-bottom">
+               <span id="mobile-loSize" class="count">숙소 [[${lodgingList.size()}]]개</span>
+            </div>
+         </div>
+         <div class="right-map">
+            <button type="button" class="kakao-map kakao-loadMap" data-toggle="modal" data-target="#kakaoMapModal">🗺
+               지도</button>
+         </div>
+      </div>
+      <div class="row">
+         <div id="search-find" class="search-box-area" style="position: relative; overflow: visible;">
+            <!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+         </div>
+         <div class="col-md-10 container-box">
+            <div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px;">
+               <div>
+                  <h5 class="mb-0">검색결과</h5>
+                  <small class="text-muted" id="lodging-size">숙소 [[${lodgingList.size()}]]개</small>
+               </div>
+               <div class="sort-options">
+                  <label><input type="radio" name="sort" value="추천순" checked> <span>추천순</span></label>
+                  <label><input type="radio" name="sort" value="평점순"> <span>평점순</span></label>
+                  <label><input type="radio" name="sort" value="가격순"> <span>가격순</span></label>
+                  <label><input type="radio" name="sort" value="성급순"> <span>성급순</span></label>
+                  <label><input type="radio" name="sort" value="거리순"> <span>거리순</span></label>
+               </div>
+            </div>
+            <div id="hotel_ajx">
+               <!-- Ajax로 숙소  처음 검색한 데이터는 있고 다음부터 바뀜-->
+               <div class="im" th:each="ld : ${lodgingList}">
+                  <a href="#" class="card-link" th:data-ld-num="${ld.ld_num}" th:data-ld-region="${ld.ld_region}">
+                     <div class="hotel-image">
+                        <img class="poto" src="/resources/static/imgs/hotel.png" alt="호텔1">
+                     </div>
+                     <div class="hotel-info">
+                        <div class="hotel-up">
+                           <div class="hotel-name" th:text="${ld.ld_name}"></div>
+                           <div class="hotel-grade">
+                              <img class="star" src="/resources/static/imgs/star.svg" alt="star">
+                              <span class="review-score" th:text="${ld.avg_rating}"></span>
+                              <span class="hotel-stars">· [[${ld.ld_rating}]]성급</span>
+                           </div>
+                           <div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
+                        </div>
+                        <div class="hotel-price">
+                           <span class="price">[[${ld.min_price}]]원</span> /1박
+                        </div>
+                     </div>
+                  </a>
+               </div>
+            </div>
 
-						updateCardLinks();
-					},
-				});
-			}
-			function toggleDetailAll() {
-				$.ajax({
-					url: '/searching/find',
-					type: 'GET',
-					success: function (data) {
-						$('#search-find').html(data);
-						const buttons = document.querySelectorAll('.filter-btn');
-						buttons.forEach(btn => {
-							btn.addEventListener('click', function () {
-								const section = btn.closest('.section')?.querySelector('.section-title')?.textContent.trim();
+         </div>
+      </div>
+      <div class="modal" id="kakaoMapModal">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal 헤더 -->
+               <div class="modal-header">
+                  <span>지도보기</span>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <!-- Modal 바디 -->
+               <div class="modal-body hotel-map-datail" id="map1">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="calendarModal">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal 헤더 -->
+               <div class="modal-header">
+                  <div>
+                     <span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
+                  </div>
+                  <div class="nights" id="nights"></div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <!-- Modal 바디 -->
+               <div class="modal-body">
+                  <div class="calendar-wrapper">
+                     <div id="calendar-grid" class="calendar-grid"></div>
+                  </div>
+               </div>
+               <!-- Modal 푸터 -->
+               <div class="modal-footer justify-content-center">
+                  <button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="guestModal">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal 헤더 -->
+               <div class="modal-header">
+                  <div>
+                     <span>인원 선택</span>
+                  </div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <!-- Modal 바디 -->
+               <div class="modal-body">
+                  <div>
+                     <div class="counter-label">성인</div>
+                     <div class="counter-subtext">만 18세 이상</div>
+                  </div>
+                  <div class="counter-controls">
+                     <div class="counter-btn" id="adult-minus">−</div>
+                     <div class="count-value" id="adult-count">2</div>
+                     <div class="counter-btn" id="adult-increase">+</div>
+                  </div>
+               </div>
+               <!-- Modal 푸터 -->
+               <div class="modal-footer justify-content-center">
+                  <button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="calendarModal">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal 헤더 -->
+               <div class="modal-header">
+                  <div>
+                     <span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
+                  </div>
+                  <div class="nights" id="nights"></div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <!-- Modal 바디 -->
+               <div class="modal-body">
+                  <div class="calendar-wrapper">
+                     <div id="calendar-grid" class="calendar-grid"></div>
+                  </div>
+               </div>
+               <!-- Modal 푸터 -->
+               <div class="modal-footer justify-content-center">
+                  <button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="guestModal">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal 헤더 -->
+               <div class="modal-header">
+                  <div>
+                     <span>인원 선택</span>
+                  </div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <!-- Modal 바디 -->
+               <div class="modal-body">
+                  <div>
+                     <div class="counter-label">성인</div>
+                     <div class="counter-subtext">만 18세 이상</div>
+                  </div>
+                  <div class="counter-controls">
+                     <div class="counter-btn" id="adult-minus">−</div>
+                     <div class="count-value" id="adult-count">2</div>
+                     <div class="counter-btn" id="adult-increase">+</div>
+                  </div>
+               </div>
+               <!-- Modal 푸터 -->
+               <div class="modal-footer justify-content-center">
+                  <button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script>
+         function updateCardLinks() {
+            const region = $('#region').val();
+            const checkTime = $('#checkTime').text().trim();
+            const people = $('#check-people').text().trim();
+            const qR = encodeURIComponent(region);
+            const qT = encodeURIComponent(checkTime);
+            const qP = encodeURIComponent(people);
 
-								if (section === '평점') {
-									const group = btn.closest('.filter-group');
-									const isActive = btn.classList.contains('active');
+            $('.card-link').each(function () {
+               const ld_num = $(this).data('ld-num');
+               const ld_region = encodeURIComponent($(this).data('ld-region'));
 
-									// 일단 다 비활성화
-									group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+               $(this).attr(
+                  'href',
+                  `/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
+               );
+            });
+         }
+      </script>
+      <script>
+         $(document).on('click', ".filter-btn", function () {
+            const section = $(this).parents('.section').find('.section-title').text().trim();
+            if (section === '성급') {
+               let dataRating = $(this).data("rating");
+               $this = $(`[data-rating=${dataRating}]`);
+               $this.toggleClass("active")
+            }
+            if (section === '평점') {
+               let dataAvg = $(this).data("avg");
+               $this = $(`[data-avg=${dataAvg}]`);
 
-									// 원래 active 아니었으면 지금 누른 거만 다시 활성화
-									if (!isActive) {
-										btn.classList.add('active');
-									}
-								} else {
-									btn.classList.toggle('active');
-								}
-							});
-						});
-					},
-				});
-			}
+               $this.siblings().removeClass("active");
+               $this.toggleClass("active")
+            }
+            if (section === '숙소유형') {
+               let dataType = $(this).data("type");
+               $this = $(`[data-type=${dataType}]`);
+               $this.toggleClass("active")
+            }
+            getLodgingList();
+         })
+         $(document).on('click', '.name-search', function () {
+            $(".search-ld-name").val($(this).siblings('.search-ld-name').val());
+            getLodgingList();
+         });
+         $(".search-btn").on('click', function () {
+            getLodgingList();
+         })
+         $(document).on('input', '.lodging-price', function () {
+            $(".lodging-price").val($(this).val());
+            getLodgingList();
+         });
 
-			$(document).ready(function () {
-				toggleDetailAll();
-				updateCardLinks();
+         $("[name = sort]").on('change', function () {
+            let obj = { sort: $(this).val() }
+            if ($(this).filter("select").length == 0) {
+               $("select[name=sort]").val(obj.sort)
+            } else {
+               $("input[name=sort]").each(function () {
+                  if ($(this).val() == obj.sort) {
+                     $(this).prop("checked", true)
+                  }
+               })
+            }
+            getLodgingList(obj);
+         })
+         function getLodgingList(obj) {
+            let ld_name = $(".search-ld-name").val();
+            let ratings = [];
+            $('.filter-btn.fillter-rating.active').each(function () {
+               ratings.push($(this).data('rating'));
+            });
+            let avg = $('.filter-btn.fillter-avg.active').data('avg');
+            let types = [];
+            $('.filter-btn.fillter-type.active').each(function () {
+               types.push($(this).data('type'));
+            });
+            let price = $(".lodging-price").val();
+            const sort = obj && obj.sort ? obj.sort : $("[name=sort]:checked").val();
+            const checkTime = $("#checkTime").text();
+            const rm_person = $("#check-people").text();
+            const rg_name = $("#region").val();
+            let cri = {
+               rg_name: rg_name,
+               checkTime: checkTime,
+               rm_person: rm_person,
+               sort: sort,
+               rating: ratings,
+               avg: avg,
+               type: types,
+               price: price,
+               ld_name: ld_name
+            }
+            $.ajax({
+               url: '/searching/lodging',
+               type: 'GET',
+               data: cri,
+               success: function (data) {
+                  $('#hotel_ajx').html(data);
+                  const lo_size = $("#lo-size").val();
+                  $("#lodging-size").text("숙소 " + lo_size + "개");
+                  $("#mobile-loSize").text("숙소 " + lo_size + "개");
 
-				let lastScrollTop = 0;
-				const searchBarWrap = document.querySelector('.search-bar-wrap');
-				const mobileSortBar = document.querySelector('.mobile-sort-bar');
-				const searchBoxArea = document.querySelector('.search-box-area');
+                  updateCardLinks();
+               },
+            });
+         }
 
-				// 초기 진입 시 위치 보정
-				if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+         function toggleDetailAll() {
+            $.ajax({
+               url: '/searching/find',
+               type: 'GET',
+               success: function (data) {
+                  $('#search-find').html(data);
+               },
+            });
+         }
 
-				window.addEventListener('scroll', function () {
-					const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+         $(document).ready(function () {
+            toggleDetailAll();
+            updateCardLinks();
 
-					if (currentScroll === 0) {
-						// 맨 위로 올라가면 원위치 (초기 상태 복귀)
-						searchBarWrap.style.transform = 'translateY(0)';
-						searchBarWrap.style.opacity = '1';
-						if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
-						if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
-					} else if (currentScroll < lastScrollTop) {
-						// 위로 스크롤 → 다시 보임
-						searchBarWrap.style.transform = 'translateY(0)';
-						searchBarWrap.style.opacity = '1';
-						if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
-						if (searchBoxArea) searchBoxArea.style.transform = 'translateY(80px)';
-					} else {
-						// 아래로 스크롤 → 숨김
-						searchBarWrap.style.transform = 'translateY(-100%)';
-						searchBarWrap.style.opacity = '0';
-						if (mobileSortBar) mobileSortBar.style.transform = 'translateY(-100%)';
-						if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0)';
-					}
+            let lastScrollTop = 0;
+            const searchBarWrap = document.querySelector('.search-bar-wrap');
+            const mobileSortBar = document.querySelector('.mobile-sort-bar');
+            const searchBoxArea = document.querySelector('.search-box-area');
 
-					lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-				});
-			});
+            // 초기 진입 시 위치 보정
+            if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
 
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
+            window.addEventListener('scroll', function () {
+               const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-			let selectedStart = null;
-			let selectedEnd = null;
+               if (currentScroll === 0) {
+                  // 맨 위로 올라가면 원위치 (초기 상태 복귀)
+                  searchBarWrap.style.transform = 'translateY(0)';
+                  searchBarWrap.style.opacity = '1';
+                  if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
+                  if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+               } else if (currentScroll < lastScrollTop) {
+                  // 위로 스크롤 → 다시 보임
+                  searchBarWrap.style.transform = 'translateY(0)';
+                  searchBarWrap.style.opacity = '1';
+                  if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
+                  if (searchBoxArea) searchBoxArea.style.transform = 'translateY(80px)';
+               } else {
+                  // 아래로 스크롤 → 숨김
+                  searchBarWrap.style.transform = 'translateY(-100%)';
+                  searchBarWrap.style.opacity = '0';
+                  if (mobileSortBar) mobileSortBar.style.transform = 'translateY(-100%)';
+                  if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0)';
+               }
 
-			function formatDate(date) {
-				const y = date.getFullYear();
-				const m = String(date.getMonth() + 1).padStart(2, '0');
-				const d = String(date.getDate()).padStart(2, '0');
-				const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-				return `${y}.${m}.${d}(${w})`;
-			}
+               lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+         });
 
-			function createCalendar(year, month) {
-				const $monthContainer = $('<div class="month"></div>');
-				const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
-				const $daysGrid = $('<div class="days"></div>');
+         const today = new Date();
+         today.setHours(0, 0, 0, 0);
 
-				const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-				$.each(dayNames, (_, day) => {
-					$daysGrid.append($('<div class="day-name"></div>').text(day));
-				});
+         let selectedStart = null;
+         let selectedEnd = null;
 
-				const firstDay = new Date(year, month, 1);
-				const lastDay = new Date(year, month + 1, 0);
+         function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+            return `${y}.${m}.${d}(${w})`;
+         }
 
-				for (let i = 0; i < firstDay.getDay(); i++) {
-					$daysGrid.append('<div></div>');
-				}
+         function createCalendar(year, month) {
+            const $monthContainer = $('<div class="month"></div>');
+            const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
+            const $daysGrid = $('<div class="days"></div>');
 
-				for (let d = 1; d <= lastDay.getDate(); d++) {
-					const date = new Date(year, month, d);
-					const $dayEl = $('<div class="day"></div>').text(d);
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            $.each(dayNames, (_, day) => {
+               $daysGrid.append($('<div class="day-name"></div>').text(day));
+            });
 
-					if (date < today) {
-						$dayEl.addClass('disabled');
-					} else {
-						$dayEl.on('click', function () {
-							selectDate(date);
-						});
-					}
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
 
-					$daysGrid.append($dayEl);
-				}
+            for (let i = 0; i < firstDay.getDay(); i++) {
+               $daysGrid.append('<div></div>');
+            }
 
-				$monthContainer.append($monthTitle).append($daysGrid);
-				$('#calendar-grid').append($monthContainer);
-			}
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+               const date = new Date(year, month, d);
+               const $dayEl = $('<div class="day"></div>').text(d);
 
-			function renderCalendars() {
-				const startYear = today.getFullYear();
-				const startMonth = today.getMonth();
+               if (date < today) {
+                  $dayEl.addClass('disabled');
+               } else {
+                  $dayEl.on('click', function () {
+                     selectDate(date);
+                  });
+               }
 
-				for (let i = 0; i < 12; i++) {
-					const year = startYear + Math.floor((startMonth + i) / 12);
-					const month = (startMonth + i) % 12;
-					createCalendar(year, month);
-				}
-			}
+               $daysGrid.append($dayEl);
+            }
 
-			function selectDate(date) {
-				if (!selectedStart || (selectedStart && selectedEnd)) {
-					selectedStart = date;
-					selectedEnd = null;
-				} else {
-					if (date < selectedStart) {
-						selectedStart = date;
-						selectedEnd = null;
-					} else {
-						const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
-						if (diff > 30) {
-							alert('최대 30일까지만 선택 가능합니다.');
-							return;
-						}
-						selectedEnd = date;
-					}
-				}
-				updateSelection();
-			}
+            $monthContainer.append($monthTitle).append($daysGrid);
+            $('#calendar-grid').append($monthContainer);
+         }
 
-			function updateSelection() {
-				$('.day').removeClass('selected in-range');
+         function renderCalendars() {
+            const startYear = today.getFullYear();
+            const startMonth = today.getMonth();
 
-				if (selectedStart) {
-					$('.month').each(function () {
-						const [year, month] = $(this).find('h3').text().split('.').map(Number);
-						$(this).find('.day').each(function () {
-							const dayNum = parseInt($(this).text());
-							const date = new Date(year, month - 1, dayNum);
+            for (let i = 0; i < 12; i++) {
+               const year = startYear + Math.floor((startMonth + i) / 12);
+               const month = (startMonth + i) % 12;
+               createCalendar(year, month);
+            }
+         }
 
-							if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
-								$(this).addClass('selected');
-							}
-							if (selectedStart && selectedEnd) {
-								if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
-									$(this).addClass('selected');
-								} else if (date > selectedStart && date < selectedEnd) {
-									$(this).addClass('in-range');
-								}
-							}
-						});
-					});
-				}
+         function selectDate(date) {
+            if (!selectedStart || (selectedStart && selectedEnd)) {
+               selectedStart = date;
+               selectedEnd = null;
+            } else {
+               if (date < selectedStart) {
+                  selectedStart = date;
+                  selectedEnd = null;
+               } else {
+                  const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
+                  if (diff > 30) {
+                     alert('최대 30일까지만 선택 가능합니다.');
+                     return;
+                  }
+                  selectedEnd = date;
+               }
+            }
+            updateSelection();
+         }
 
-				$('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
-				$('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
-				if (selectedStart && selectedEnd) {
-					const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
-					$('#nights').text(`${nights}박`);
-				} else {
-					$('#nights').text('');
-				}
-			}
+         function updateSelection() {
+            $('.day').removeClass('selected in-range');
 
-			function applySelection() {
-				if (selectedStart && selectedEnd) {
-					//아이디를 해당 인풋 아이디로 하시면 도ㅣ요
-					$('#checkTime').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
-					$('#hiddenCheckTime').val(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+            if (selectedStart) {
+               $('.month').each(function () {
+                  const [year, month] = $(this).find('h3').text().split('.').map(Number);
+                  $(this).find('.day').each(function () {
+                     const dayNum = parseInt($(this).text());
+                     const date = new Date(year, month - 1, dayNum);
 
-				} else {
-					alert('날짜를 선택해주세요.');
-				}
-			}
+                     if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
+                        $(this).addClass('selected');
+                     }
+                     if (selectedStart && selectedEnd) {
+                        if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
+                           $(this).addClass('selected');
+                        } else if (date > selectedStart && date < selectedEnd) {
+                           $(this).addClass('in-range');
+                        }
+                     }
+                  });
+               });
+            }
 
-			$(document).ready(function () {
-				renderCalendars();
-			});
-			$(function () {
-				const $adultCount = $('#adult-count');
-				const minAdult = 1;
-				const maxAdult = 10;
+            $('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
+            $('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
+            if (selectedStart && selectedEnd) {
+               const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
+               $('#nights').text(`${nights}박`);
+            } else {
+               $('#nights').text('');
+            }
+         }
 
-				$('#adult-minus').click(function () {
-					let val = parseInt($adultCount.text());
-					if (val > minAdult) {
-						$adultCount.text(val - 1);
-					}
-				});
+         function applySelection() {
+            if (selectedStart && selectedEnd) {
+               //아이디를 해당 인풋 아이디로 하시면 도ㅣ요
+               $('#checkTime').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+               $('#mobile-calendar').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+               $('#hiddenCheckTime').val(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
 
-				$('#adult-increase').click(function () {
-					let val = parseInt($adultCount.text());
-					if (val < maxAdult) {
-						$adultCount.text(val + 1);
-					}
-				});
+            } else {
+               alert('날짜를 선택해주세요.');
+            }
+         }
 
-				$('#confirm-btn').click(function () {
-					$('#check-people').text(`성인${$adultCount.text()}`);
-					$('#hiddenRmPerson').val(`성인${$adultCount.text()}`);
-				});
-			});			
-		</script>
-	</main>
+         $(document).ready(function () {
+            renderCalendars();
+         });
+         $(function () {
+            const $adultCount = $('#adult-count');
+            const minAdult = 1;
+            const maxAdult = 10;
+
+            $('#adult-minus').click(function () {
+               let val = parseInt($adultCount.text());
+               if (val > minAdult) {
+                  $adultCount.text(val - 1);
+               }
+            });
+
+            $('#adult-increase').click(function () {
+               let val = parseInt($adultCount.text());
+               if (val < maxAdult) {
+                  $adultCount.text(val + 1);
+               }
+            });
+
+            $('#confirm-btn').click(function () {
+               $('#check-people').text(`성인${$adultCount.text()}`);
+               $('#mobile-guest').text(`성인${$adultCount.text()}`);
+               $('#hiddenRmPerson').val(`성인${$adultCount.text()}`);
+            });
+         });         
+      </script>
+      <script>
+         $("#modal-content").load("/searching/find");
+         $("#openModalBtn").click(function () {
+            $("#modal").show();
+
+         });
+
+         // 모달 바깥 클릭 시 닫기
+         $("#modal").click(function (e) {
+            // 클릭된 대상이 #modal-content가 아닌 경우만 닫기
+            if (!$(e.target).closest("#modal-content").length) {
+               $("#modal").hide();
+            }
+         });
+
+      </script>
+      <script>
+         $(document).on('click', '.kakao-loadMap', function () {
+            let region = [];
+            $('.card-link').each(function () {
+               //region.push($(this).data('ld-region'));
+
+            });
+            region.push("제주특별자치도 제주시 조천읍 신북로 470", "제주특별자치도 서귀포시 1100로 453-95")
+            console.log(region)
+            kakaoMapLoad(region);
+         });
+
+         function kakaoMapLoad(addresses) {
+
+            var mapContainer = document.getElementById('map1'), // 지도를 표시할 div 
+               mapOption = {
+                  center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                  level: 3 // 지도의 확대 레벨
+               };
+
+            // 지도를 생성합니다    
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 마커 이미지의 이미지 주소입니다
+            var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+            var geocoder = new kakao.maps.services.Geocoder();
+            for (var i = 0; i < addresses.length; i++) {
+
+               geocoder.addressSearch(addresses[i], function (result, status) {
+
+                  if (status === kakao.maps.services.Status.OK) {
+                     // 주소를 좌표로 변환한 결과
+                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                     console.log(result)
+                     // 지도 옵션
+                     var options = {
+                        center: coords,  // 변환된 좌표로 중심을 설정
+                        level: 3
+                     };
+
+                     // 마커 이미지의 이미지 크기 입니다
+                     var imageSize = new kakao.maps.Size(24, 35);
+
+                     // 마커 이미지를 생성합니다    
+                     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                     // 마커를 생성합니다
+                     var marker = new kakao.maps.Marker({
+                        map: map, // 마커를 표시할 지도
+                        position: result[0].latlng, // 마커를 표시할 위치
+                        title: addresses[i], // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                        image: markerImage // 마커 이미지 
+                     });
+                  } else {
+                     console.error("주소 검색에 실패했습니다.");
+                  }
+               });
+
+
+            }
+            // kakao.maps.load(function () {
+            //    // 지도 정보를 배열로 관리
+            //    const mapData = [
+            //       { id: 'map1', address: '경기도 안산시 단원구 중앙대로 869', lat: 0, lng: 0 }  // 주소로 변경
+            //    ];
+
+            //    // 각 지도 생성
+            //    mapData.forEach((mapInfo) => {
+            //       var container = document.getElementById(mapInfo.id);
+            //       if (container) {  // 해당 ID의 div가 있을 때만 지도 생성
+
+            //          // 주소로 좌표 변환
+            //          var geocoder = new kakao.maps.services.Geocoder();
+            //          geocoder.addressSearch(mapInfo.address, function (result, status) {
+            //             if (status === kakao.maps.services.Status.OK) {
+            //                // 주소를 좌표로 변환한 결과
+            //                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            //                // 지도 옵션
+            //                var options = {
+            //                   center: coords,  // 변환된 좌표로 중심을 설정
+            //                   level: 3
+            //                };
+
+            //                // 지도 생성
+            //                var map = new kakao.maps.Map(container, options);
+
+            //                // 마커 생성
+            //                var marker = new kakao.maps.Marker({
+            //                   position: coords
+            //                });
+            //                marker.setMap(map);
+
+            //                // 크기 갱신 (필요 시)
+            //                setTimeout(() => map.relayout(), 100);
+            //             } else {
+            //                console.error("주소 검색에 실패했습니다.");
+            //             }
+            //          });
+            //       }
+            //    });
+            // });
+         }
+      </script>
+   </main>
 </body>
 
 </html>
