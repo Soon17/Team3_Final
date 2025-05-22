@@ -173,8 +173,8 @@
 			<div class="modify-header">내정보</div>
 
 			<div class="user-profile">
-				<h2>학교가는자존심</h2>
-				<p>acejsh77@gmail.com</p>
+				<h2 th:text="${user.me_nick}">학교가는자존심</h2>
+				<p th:text="${user.me_email}">acejsh77@gmail.com</p>
 			</div>
 
 			<div class="info-box">
@@ -184,7 +184,7 @@
 						<span class="badge success">인증완료</span>
 					</div>
 					<span class="value">
-						<span id="myEmail">acejsh77@gmail.com</span>
+						<span id="myEmail" th:text="${user.me_email}">acejsh77@gmail.com</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
@@ -195,14 +195,14 @@
 						<span class="badge warning">미인증</span>
 					</div>
 					<span class="value">
-						<span id="myNum">010-1111-1111</span>
+						<span id="myNum" th:text="${user.me_number}">010-1111-1111</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
 				<div class="info-item info-another" data-toggle="modal" data-target="#nickModal">
 					<span class="label">닉네임</span>
 					<span class="value">
-						<span id="myNick">학교가는자존심</span>
+						<span id="myNick" th:text="${user.me_nick}">학교가는자존심</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
@@ -218,7 +218,7 @@
 				<div class="info-item info-birthAndGender" data-toggle="modal" data-target="#birthAndGenderModal">
 					<span class="label">성별</span>
 					<span class="value">
-						<span id="myGender">남자</span>
+						<span id="myGender" th:text="${user.me_gender}">남자</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
@@ -361,7 +361,7 @@
 			</div>
 
 			<div class="footer-links">
-				<a href="#">로그아웃</a>
+				<a href="/logout">로그아웃</a>
 				<a href="#">회원탈퇴</a>
 			</div>
 		</div>

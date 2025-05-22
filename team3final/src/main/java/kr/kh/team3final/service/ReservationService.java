@@ -14,13 +14,14 @@ public class ReservationService {
 	@Autowired
 	ReservationDAO reservationDAO;
 
-	public List<ReservationVO> selectList() {
+	public List<ReservationVO> selectList(int meNum) {
 		
-		return reservationDAO.selectList();
+		return reservationDAO.selectList(meNum);
 	}
 	
-	public List<ReservationVO> getLatestReservation() {
+	public List<ReservationVO> getLatestReservation(int meNum) {
 		
-    return reservationDAO.selectLatestReservation();
+    return reservationDAO.selectLatestReservation(meNum);
 	}
+
 }
