@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html
-	lang="en" 
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout.html}">
+
 <head>
 	<meta charset="UTF-8">
 	<title>마이페이지</title>
@@ -23,15 +21,18 @@
 			align-items: flex-start;
 			margin-bottom: 10px;
 		}
+
 		.user-info .username {
 			font-size: 18px;
 			font-weight: bold;
 		}
+
 		.user-info .email {
 			display: block;
 			font-size: 13px;
 			color: #777;
 		}
+
 		.family-btn {
 			font-size: 12px;
 			background: #f1f1f1;
@@ -47,6 +48,7 @@
 			justify-content: space-between;
 			margin: 20px 0;
 		}
+
 		.summary-item {
 			flex: 1;
 			background: #fafafa;
@@ -58,10 +60,12 @@
 			color: gray;
 			cursor: pointer;
 		}
+
 		.summary-item:hover {
 			text-decoration: none;
-  			color: inherit;
+			color: inherit;
 		}
+
 		.summary-item i {
 			font-size: 20px;
 			color: #aaa;
@@ -82,12 +86,14 @@
 			border-bottom: 1px solid #eee;
 			margin-bottom: 20px;
 		}
+
 		.tab {
 			padding: 10px;
 			font-size: 14px;
 			color: #aaa;
 			cursor: pointer;
 		}
+
 		.tab.active {
 			color: #007bff;
 			border-bottom: 2px solid #007bff;
@@ -99,19 +105,23 @@
 			text-align: center;
 			color: #444;
 		}
+
 		.empty-box img {
 			width: 100px;
 			margin-bottom: 20px;
 		}
+
 		.main-text {
 			font-size: 16px;
 			font-weight: bold;
 		}
+
 		.sub-text {
 			font-size: 14px;
 			color: #777;
 			margin: 10px 0 20px;
 		}
+
 		.primary-btn {
 			border: 1px solid #007bff;
 			background: none;
@@ -120,9 +130,11 @@
 			border-radius: 10px;
 			cursor: pointer;
 		}
+
 		.primary-btn:hover {
 			text-decoration: none;
 		}
+
 		.link-btn {
 			display: block;
 			margin-top: 15px;
@@ -130,6 +142,7 @@
 			color: #666;
 			text-decoration: underline;
 		}
+
 		.btn-modify {
 			border-color: gray;
 			font-size: 12px;
@@ -150,6 +163,7 @@
 		}
 	</style>
 </head>
+
 <body>
 	<main layout:fragment="content">
 		<div class="mypage bg-light">
@@ -231,4 +245,5 @@
 			</script>
 	</main>
 </body>
+
 </html>

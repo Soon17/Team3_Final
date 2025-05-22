@@ -19,7 +19,6 @@ import kr.kh.team3final.service.ReservationService;
 import kr.kh.team3final.service.ReviewService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/member")
@@ -76,17 +75,23 @@ public class MemberController {
 	public String getMethodName() {
 		return "member/signIn";
 	}
-
-	@PostMapping("/check/id")
+	@GetMapping("/check/id")
 	@ResponseBody
 	public boolean checkId(@RequestParam String id) {
 		return memberService.checkId(id);
 	}
-
-	@PostMapping("/signup")
-	public String signUp(@RequestParam MemberVO member) {
-
-		return "home";
+	
+	@PostMapping("/signInPost")
+	public String signIn(Model model, MemberVO member) {
+		if(memberService.signIn(member)){
+			model.addAttribute("msg", "회원가입이 완료되었습니다!");
+		}
+		else {
+			model.addAttribute("msg", "회원가입에 실패하였습니다!");
+		}
+		model.addAttribute("url", "/member/signIn");
+		
+		return "msg";
 	}
 
 	@GetMapping("/reservation-history-ajax") // 숙소 예약 '제일 최신 일자' '예약완료' 내역 1개
