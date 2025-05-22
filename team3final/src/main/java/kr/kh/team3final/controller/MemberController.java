@@ -21,6 +21,8 @@ import kr.kh.team3final.service.ReviewService;
 import kr.kh.team3final.utils.CustomUser;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/member")
@@ -139,4 +141,11 @@ public class MemberController {
 		int meNum = user.getUser().getMe_num();
 		return reservationService.selectList(meNum); // 전체 리스트 반환
 	}
+
+	@PostMapping("/modify")
+	public String updateUser(@RequestBody String entity) {
+		
+		return entity;
+	}
+	
 }
