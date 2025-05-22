@@ -14,7 +14,7 @@
         (
             SELECT ROUND(AVG(rv_rating), 1)
             FROM review
-						join room on rm_num = rv_number
+			join room on rm_num = rv_number
             WHERE rv_table_name = 'room' 
               AND rm_ld_num = lodging.LD_NUM
         ) AS avg_rating,
