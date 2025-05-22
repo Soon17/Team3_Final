@@ -23,23 +23,25 @@ public class SmsService {
     @Value("${solapi.sender}")
     private String sender;
 
-    public void sendSms(String phone, String code) throws IOException {
+    public boolean sendSms(String phone, String code) throws IOException {
         DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.solapi.com");
         // Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요
         Message message = new Message();
         message.setFrom(sender);
         message.setTo(phone);
         message.setText("[호텔고? 렌트고?] 인증번호 [" + code + "] 를 입력해주세요 :)");
-
         try {
         // send 메소드로 ArrayList<Message> 객체를 넣어도 동작합니다!
         messageService.send(message);
+        return true;
         } catch (NurigoMessageNotReceivedException exception) {
         // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
         System.out.println(exception.getFailedMessageList());
-        System.out.println(exception.getMessage());
+       System.out.println(exception.getMessage());
+        return false;
         } catch (Exception exception) {
         System.out.println(exception.getMessage());
+        return false;
         }
     }
 }

@@ -25,8 +25,10 @@ public class SmsController {
         session.setAttribute("smsCode", code);
         session.setMaxInactiveInterval(300); // 5분 유효
         try {
-            smsService.sendSms(me_number, code);
-			return true;			
+            if(smsService.sendSms(me_number, code)){
+                return true;
+            }
+			return false;			
         } catch (Exception e) {
 			return false;
         }
