@@ -2198,11 +2198,11 @@
 					document.querySelectorAll('.hotel-reserve-btn').forEach(btn => {
 						btn.addEventListener('click', function () {
 							const checkTime = this.dataset.checkTime;
-							const rmPerson = this.dataset.rmPerson;
+							const rmPerson = $("#check-people").text();
 							const ldNum = this.dataset.ldNum;
 							const rmNum = this.dataset.rmNum;
-
-							const url = `/pay/payment?checkTime=${encodeURIComponent(checkTime)}&rm_person=${encodeURIComponent(rmPerson)}&ld_num=${ldNum}&rm_num=${rmNum}`;
+							console.log(rmPerson);
+							const url = `/pay/payment?checkTime=${encodeURIComponent(checkTime)}&rm_person=`+rmPerson+`&ld_num=${ldNum}&rm_num=${rmNum}`;
 							location.href = url;
 						});
 					});

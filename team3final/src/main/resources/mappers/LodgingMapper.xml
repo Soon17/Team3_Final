@@ -85,4 +85,7 @@
 			</otherwise>
 		</choose>
 	</select>
+	<select id="selectLodging" resultType="LodgingVO">
+		select* from lodging where ld_num = #{ld_num}
+	</select>
 </mapper>

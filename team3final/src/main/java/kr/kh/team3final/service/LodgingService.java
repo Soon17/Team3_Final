@@ -45,4 +45,8 @@ public class LodgingService {
 		String EndTime = dates[1].trim().replace(".", "-");
 		return EndTime;
 	}
+
+	public LodgingVO getLodging(int ld_num) {
+		return lodgingDao.selectLodging(ld_num);
+	}
 }
