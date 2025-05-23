@@ -46,7 +46,7 @@
                                 </a>
                             </li>
                             <li class="nav-item" sec:authorize="hasRole('OWNER')">
-                                <a href="#" class="btn btn-outline-dark btn-login">업체 등록</a>
+                                <a href="/owner/uploadLodging" class="btn btn-outline-dark btn-login">숙소 등록</a>
                             </li>
                             <li class="nav-item" sec:authorize="isAnonymous()">
                                 <a href="/member/signIn" class="btn btn-outline-dark btn-login">로그인</a>

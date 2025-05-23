@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>숙소 소개</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<!-- <script src="/test"></script> -->
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"> -->
+	<!-- Kakao Maps API -->
+	<script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
+	<script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
+	<!-- jQuery, Popper.js, Bootstrap JS -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script> -->
+	<style>
+		.container {
+			display: block;
+			border-radius: 5px;
+			padding: 0px;
+			margin: auto;
+			position: relative;
+		}
+
+		.reserv-img {
+			display: flex;
+			gap: 10px;
+			justify-items: center;
+		}
+
+		.reserv-img img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 8px;
+			border: 1px solid #ddd;
+		}
+
+		.img-gallary {
+			display: grid;
+			gap: 1px;
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+		}
+
+		.reserv-img img:first-child {
+			grid-column: 1/3;
+			grid-row: 1/3;
+		}
+
+		.infor-container {
+			box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.6);
+			margin-top: 1rem;
+		}
+
+		.infor-item {
+			padding: 2rem;
+			background-color: #fff;
+			border-radius: 5px;
+		}
+
+		.img-all {
+			position: absolute;
+			display: flex;
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 2px;
+			bottom: 0.625rem;
+			right: 0.625rem;
+			cursor: pointer;
+			padding: 0.25rem 0.5rem;
+		}
+
+		.img-all .img-all2 {
+			font-weight: 700;
+			color: white;
+			font-size: 0.725rem;
+		}
+
+		.infor-star {
+			font-size: .875rem;
+			color: #999;
+		}
+
+		.infor-name {
+			margin: 0;
+			font-size: 1.25rem;
+			font-weight: 700;
+		}
+
+		.infor-sub {
+			margin-top: 1.5rem;
+			gap: 3.375rem;
+			flex-direction: row-reverse;
+			display: flex;
+		}
+
+		.infor-review {
+			margin-top: 0;
+			width: 100px;
+			flex-direction: row-reverse;
+			flex: 1.6 1;
+			overflow: hidden;
+		}
+
+		/* .infor-map{
+			display: flex; height: 100px; width: 200px; flex: 1 1;
+		} */
+		.infor-item2 {
+			flex-direction: row-reverse;
+			gap: 3.375rem;
+			display: flex;
+		}
+
+		.infor-item2:last-child {
+			margin-top: 2rem;
+		}
+
+		.infor-service {
+			display: block;
+			flex: 1.6 1;
+			cursor: pointer;
+			transition: all .3s ease;
+		}
+
+		.infor-title {
+			display: flex;
+			gap: .25rem;
+			font-size: .875rem;
+			font-weight: 700;
+		}
+
+		.service-value {
+			line-height: 1.5625;
+			margin-top: .75rem;
+			display: flex;
+			flex-wrap: wrap;
+			gap: .5rem;
+		}
+
+		.service-name {
+			align-items: center;
+			display: flex;
+			gap: .25rem;
+			font-size: .875rem;
+		}
+
+		.hotel-menu {
+			position: relative;
+		}
+
+		.menu-button {
+			padding: 0 2rem;
+			position: sticky;
+			background-color: #fff;
+			z-index: 10;
+			display: flex;
+			align-items: center;
+		}
+
+		.button-menu {
+			border: 0;
+			border-bottom: 2px solid rgba(0, 0, 0, 0);
+			padding: 1rem 0 calc(1rem - 2px);
+			flex: 1 1;
+			background: rgba(0, 0, 0, 0);
+			cursor: pointer;
+			transition: all .3s ease;
+		}
+
+		.button-menu:first-child {
+			border-color: #0d6ffc;
+		}
+
+		.button-name {
+			position: relative;
+			font-size: .875rem;
+			font-weight: 600;
+			color: #494949;
+		}
+
+		.hotel-value {
+			margin-bottom: .5rem;
+		}
+
+		.hotel-date {
+			display: flex;
+			padding: 1rem 2rem;
+			gap: .5rem;
+			background-color: #fff;
+		}
+
+		.date-btn {
+			flex: 1 1;
+			border-radius: .5rem;
+			padding: 0 1.5rem;
+			overflow: hidden;
+			border: 1px solid #f3f3f3;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			background: #f8f8f8;
+		}
+
+		.date-box {
+			align-items: center;
+			display: flex;
+			justify-content: space-between;
+			overflow: hidden;
+		}
+
+		.date-item {
+			display: flex;
+			color: #494949;
+			flex: 1 1;
+			padding: .75rem;
+		}
+
+		.date-write {
+			font-size: .875rem;
+			font-weight: bold;
+			text-align: left;
+			color: #494949;
+			cursor: pointer;
+		}
+
+		.list-box {
+			padding: 1.5rem 2rem;
+			display: flex;
+			justify-content: space-between;
+			background-color: #fff;
+		}
+
+		.fillter-box {
+			padding: 0 2rem;
+			margin-bottom: .5rem;
+			background-color: #fff;
+		}
+
+		.fillter-item {
+			border: 1px solid #f8f8f8;
+			border-radius: .5rem;
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: .5rem;
+		}
+
+		.fillter-menu {
+			border: 1px solid #f3f3f3;
+			border-radius: 4px;
+			padding: .25rem .375rem;
+			background-color: #fff;
+			display: flex;
+			gap: 2px;
+			font-size: .875rem;
+			color: #666;
+			line-height: 1.5;
+			cursor: pointer;
+			transition: all 3s ease;
+		}
+
+		.hotel-box {
+			padding: 1rem 2rem 1.5rem;
+			display: flex;
+			align-items: flex-start;
+			gap: 1rem;
+			background-color: #fff;
+		}
+
+		.hotel-img {
+			flex: 1 1;
+			width: 100%;
+			max-width: 312px;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.img-sub {
+			display: flex;
+			width: 100%;
+			gap: .5rem;
+			margin-top: .5rem;
+		}
+
+		.img-sub img {
+			border-radius: .375rem;
+			width: 0;
+			flex: 1 1;
+			aspect-ratio: 1.63 / 1;
+			height: 100%;
+			object-fit: cover;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+			display: block;
+		}
+
+		.hotel-price-list {
+			margin-top: 0;
+			margin-bottom: 2.5rem;
+			flex: 1 1;
+			display: flex;
+			flex-direction: column;
+			gap: .5rem;
+		}
+
+		.price-none {
+			font-size: .875rem;
+			padding: .125rem;
+			border-radius: .25rem;
+			align-items: center;
+			display: flex;
+			font-weight: 700;
+			position: relative;
+			color: #ff6362;
+			background-color: #fff3f3;
+			white-space: nowrap;
+		}
+
+		.price-detail {
+			font-size: .875rem;
+			display: flex;
+			cursor: pointer;
+			color: #494949;
+			font-weight: 700;
+			line-height: 1.5;
+		}
+
+		.hotel-content {
+			font-size: .875rem;
+			color: #666;
+			line-height: 1.5;
+		}
+
+		.hotel-more {
+			cursor: pointer;
+			color: #666;
+			padding: 0;
+			background: rgba(0, 0, 0, 0);
+			border: 0;
+			line-height: 1.5;
+			font-size: .875rem;
+			gap: .125rem;
+			align-items: center;
+			margin-top: .25rem;
+			display: flex;
+		}
+
+		.reserv-btn {
+			cursor: pointer;
+			display: block;
+			color: #fff;
+			background-color: #0d6ffc;
+			border: 0;
+			line-height: 1.4;
+			font-size: 1rem;
+			font-weight: 700;
+			flex: 0 1 138px;
+			height: fit-content;
+			padding: .875rem;
+			border-radius: .25rem;
+		}
+
+		.hotel-map {
+			background-color: #fff;
+			padding: 1rem;
+			margin: 0;
+			padding-left: 2rem;
+			padding-right: 2rem;
+			padding-top: 2rem;
+			margin-top: 0;
+		}
+
+		.hotel-map-datail {
+			position: relative;
+			overflow: hidden;
+			user-select: none;
+			-webkit-user-drag: none;
+			left: 0px;
+			top: 0px;
+			width: 968px;
+			height: 150px;
+			z-index: 0;
+
+		}
+
+		.sub-infor {
+			font-size: 1rem;
+			border: 0;
+			border-radius: 4px;
+			padding: .375rem .75rem;
+			white-space: nowrap;
+			cursor: pointer;
+			transition: all 2s ease-in-out;
+		}
+
+		.btn-map {
+			cursor: pointer;
+			font-size: 1rem;
+			border-radius: .5rem;
+			color: #7b8bab;
+			border: 1px solid #7b8bab;
+			background: rgba(0, 0, 0, 0);
+			padding: .5rem;
+			width: 100%;
+			max-width: 22rem;
+			margin: 0 auto;
+			display: block;
+		}
+
+		.hotel-service {
+			background-color: #fff;
+
+			padding-top: 2rem;
+			margin: 0;
+			display: block;
+
+			padding-right: 2rem;
+		}
+
+		.hotel-detail {
+
+			background-color: #fff;
+			padding-top: 2rem;
+			margin: 0;
+
+			padding-right: 2rem;
+		}
+
+		.hotel-rule {
+
+			background-color: #fff;
+			padding-top: 2rem;
+			margin: 0;
+
+			padding-right: 2rem;
+		}
+
+		.hotel-rivew {
+			padding: 1rem;
+			background-color: #fff;
+			padding-top: 2rem;
+			margin: 0;
+			padding-left: 2rem;
+			padding-right: 2rem;
+		}
+
+		.list-menu {
+			display: block;
+			position: absolute;
+			top: 1.313rem;
+			right: 0;
+			width: 14.25rem;
+			background-color: #fff;
+			box-shadow: 0 4px 10px 0 rgba(0, 0, 0, .1);
+			border-radius: 12px;
+			backdrop-filter: blur(50px);
+			font-size: .875rem;
+			color: #000;
+			transition: all .3s;
+		}
+
+		/* #map{
+			background-color: red;
+		} */
+	</style>
+</head>
+
+<body style="background-color: #f5f6f7;">
+	<div class="main" style="background-color: #fff;">
+		<main layout:fragment="content">
+			<div class="container">
+				<div class="reserv-img">
+					<div class="img-gallary">
+						<img src="/resources/static/img/호텔.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔2.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔3.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔4.jpg" alt="이미지 없음">
+						<img src="/resources/static/img/호텔.jpg" alt="이미지 없음">
+					</div>
+					<div class="img-all">
+						<span class="img-all2">모두보기</span>
+					</div>
+				</div>
+			</div>
+			<div class="infor-container container">
+				<div class="infor-item">
+					<span class="infor-star">5성급</span>
+					<p class="infor-name">KH호텔</p>
+					<div class="infor-sub">
+						<!-- 지도 호출 부분 -->
+						<div id="map" style="width: 300px; height: 200px; margin: 20px 0;"></div>
+						<!-- 댓글 출력 부분 -->
+						<div class="infor-review">댓글</div>
+					</div>
+					<!-- 호텔 편의시설 및 서비스 -->
+					<div class="infor-item2">
+						<div class="infor-service">
+							<div class="infor-title">
+								<span>호텔 편의시설 및 서비스</span>
+							</div>
+							<div class="service-value">
+								<div class="service-name">
+									<i class="fas fa-wifi"></i>
+									<span>무료 유선 인터넷</span>
+								</div>
+								<div class="service-name">
+									<i class="fas fa-utensils"></i>
+									<span>아침 식사 가능(요금 별도)</span>
+								</div>
+								<div class="service-name">
+									<i class="fas fa-newspaper"></i>
+									<span>로비의 신문(요금 별도)</span>
+								</div>
+								<div class="service-name">
+									<i class="fas fa-cart-flatbed-suitcase"></i>
+									<span>짐 보관 서비스</span>
+								</div>
+								<div class="service-name">
+									<i class="fas fa-check"></i>
+									<span>점자표지</span>
+								</div>
+								<div class="service-name">
+									<i class="fas fa-ban-smoking"></i>
+									<span>금연 숙박 시설</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 숙소 상세 정보 버튼 -->
+				<div class="hotel-menu container">
+					<div class="menu-button">
+						<button class="button-menu">
+							<span class="button-name">객실 목록</span>
+						</button>
+						<button class="button-menu">
+							<span class="button-name">호텔정보</span>
+						</button>
+						<button class="button-menu">
+							<span class="button-name">리뷰</span>
+						</button>
+					</div>
+					<!-- 날짜 및 인원 검색 -->
+					<div>
+						<div class="hotel-value">
+							<div class="hotel-date">
+								<button class="date-btn">
+									<div class="date-box">
+										<div class="date-item">
+											<div>
+												<i class="fas fa-square-list"></i>
+												<span class="date-write">5.9(금)</span>
+												<span class="date-write">></span>
+												<span class="date-write">5.10(토)</span>
+											</div>
+										</div>
+								</button>
+								<button class="date-btn">
+									<div class="date-item">
+										<div>
+											<i class="fas fa-user"></i>
+											<span class="date-write">성인 2</span>
+										</div>
+									</div>
+								</button>
+							</div>
+							<div class="list-box">
+								<span
+									style="font-size: 1.25rem; color: #494949; line-height: 1.4; font-weight: 700;">객실목록</span>
+							</div>
+							<div class="fillter-box">
+								<div class="fillter-item">
+									<h3
+										style="margin: 0; padding: 0; font-size: .875rem; font-weight: bold; line-height: 150%; color: #494949;">
+										필터</h3>
+									<div class="fillter-list"
+										style="display: flex; flex-wrap: wrap; column-gap: .25rem; row-gap: .75rem;">
+										<div class="fillter-menu">필터메뉴1</div>
+										<div class="fillter-menu">필터메뉴2</div>
+										<div class="fillter-menu">필터메뉴3</div>
+										<div class="fillter-menu">필터메뉴4</div>
+									</div>
+								</div>
+							</div>
+							<!-- 숙소 방 정보 리스트 -->
+							<div class="hotel-box">
+								<div class="hotel-img">
+									<div class="img1"
+										style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
+										<img src="/resources/static/img/호텔2.jpg" alt=""
+											style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+									</div>
+									<div class="img-sub">
+										<img src="/resources/static/img/호텔3.jpg" alt="">
+										<img src="/resources/static/img/호텔4.jpg" alt="">
+									</div>
+									<div style="margin-top: 1rem;">
+										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">
+											디럭스 프리미엄룸</div>
+										<div style="margin-top: .25rem;">
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 인원 최대 2명</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 킹사이즈침대 1개</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 시내 전망</p>
+										</div>
+									</div>
+								</div>
+								<div class="hotel-price-list">
+									<div
+										style="padding: 1.5rem; width: 100%; border: 1px solid #f3f3f3; border-radius: 6px;">
+										<div style="margin-top: 0; flex-direction: row; display: flex; gap: 1.5rem;">
+											<div style="flex: 1 1;">
+												<div style="margin-bottom: .25rem; align-items: center;">
+													<div
+														style="display: flex; align-items: center; gap: .25rem; display: flex; justify-content: space-between;">
+														<div class="price-none">환불불가</div>
+														<div class="price-detail">자세히보기></div>
+													</div>
+												</div>
+												<div class="hotel-content">
+													<p style="margin: 0;">· 체크인 15:00 ~ 자정, 체크아웃 11:00 까지</p>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 세차</p>
+													</div>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 WiFi</p>
+													</div>
+													<button class="hotel-more">시설 및 서비스 더보기></button>
+												</div>
+												<div
+													style="align-items: flex-end; display: flex; justify-content: flex-end;">
+													<div
+														style="font-size: .875rem; display: flex; flex-direction: column; gap: .125rem;">
+														<div
+															style="flex-wrap: wrap; display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="align-items: center; display: flex; color: #666;">
+																	예약가&nbsp;
+																</span>
+															</div>
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;">100,000원</span>
+																<span
+																	style="align-items: center; display: flex; color: #666;">/1박</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<button class="reserv-btn">호텔 바로 예약</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="hotel-box">
+								<div class="hotel-img">
+									<div class="img1"
+										style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
+										<img src="/resources/static/img/호텔2.jpg" alt=""
+											style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+									</div>
+									<div class="img-sub">
+										<img src="/resources/static/img/호텔3.jpg" alt="">
+										<img src="/resources/static/img/호텔4.jpg" alt="">
+									</div>
+									<div style="margin-top: 1rem;">
+										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">
+											디럭스 프리미엄룸</div>
+										<div style="margin-top: .25rem;">
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 인원 최대 2명</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 킹사이즈침대 1개</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 시내 전망</p>
+										</div>
+									</div>
+								</div>
+								<div class="hotel-price-list">
+									<div
+										style="padding: 1.5rem; width: 100%; border: 1px solid #f3f3f3; border-radius: 6px;">
+										<div style="margin-top: 0; flex-direction: row; display: flex; gap: 1.5rem;">
+											<div style="flex: 1 1;">
+												<div style="margin-bottom: .25rem; align-items: center;">
+													<div
+														style="display: flex; align-items: center; gap: .25rem; display: flex; justify-content: space-between;">
+														<div class="price-none">환불불가</div>
+														<div class="price-detail">자세히보기></div>
+													</div>
+												</div>
+												<div class="hotel-content">
+													<p style="margin: 0;">· 체크인 15:00 ~ 자정, 체크아웃 11:00 까지</p>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 세차</p>
+													</div>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 WiFi</p>
+													</div>
+													<button class="hotel-more">시설 및 서비스 더보기></button>
+												</div>
+												<div
+													style="align-items: flex-end; display: flex; justify-content: flex-end;">
+													<div
+														style="font-size: .875rem; display: flex; flex-direction: column; gap: .125rem;">
+														<div
+															style="flex-wrap: wrap; display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="align-items: center; display: flex; color: #666;">
+																	예약가&nbsp;
+																</span>
+															</div>
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;">100,000원</span>
+																<span
+																	style="align-items: center; display: flex; color: #666;">/1박</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<button class="reserv-btn">호텔 바로 예약</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="hotel-box">
+								<div class="hotel-img">
+									<div class="img1"
+										style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
+										<img src="/resources/static/img/호텔2.jpg" alt=""
+											style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+									</div>
+									<div class="img-sub">
+										<img src="/resources/static/img/호텔3.jpg" alt="">
+										<img src="/resources/static/img/호텔4.jpg" alt="">
+									</div>
+									<div style="margin-top: 1rem;">
+										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">
+											디럭스 프리미엄룸</div>
+										<div style="margin-top: .25rem;">
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 인원 최대 2명</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 킹사이즈침대 1개</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 시내 전망</p>
+										</div>
+									</div>
+								</div>
+								<div class="hotel-price-list">
+									<div
+										style="padding: 1.5rem; width: 100%; border: 1px solid #f3f3f3; border-radius: 6px;">
+										<div style="margin-top: 0; flex-direction: row; display: flex; gap: 1.5rem;">
+											<div style="flex: 1 1;">
+												<div style="margin-bottom: .25rem; align-items: center;">
+													<div
+														style="display: flex; align-items: center; gap: .25rem; display: flex; justify-content: space-between;">
+														<div class="price-none">환불불가</div>
+														<div class="price-detail">자세히보기></div>
+													</div>
+												</div>
+												<div class="hotel-content">
+													<p style="margin: 0;">· 체크인 15:00 ~ 자정, 체크아웃 11:00 까지</p>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 세차</p>
+													</div>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 WiFi</p>
+													</div>
+													<button class="hotel-more">시설 및 서비스 더보기></button>
+												</div>
+												<div
+													style="align-items: flex-end; display: flex; justify-content: flex-end;">
+													<div
+														style="font-size: .875rem; display: flex; flex-direction: column; gap: .125rem;">
+														<div
+															style="flex-wrap: wrap; display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="align-items: center; display: flex; color: #666;">
+																	예약가&nbsp;
+																</span>
+															</div>
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;">100,000원</span>
+																<span
+																	style="align-items: center; display: flex; color: #666;">/1박</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<button class="reserv-btn">호텔 바로 예약</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="hotel-box">
+								<div class="hotel-img">
+									<div class="img1"
+										style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
+										<img src="/resources/static/img/호텔2.jpg" alt=""
+											style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+									</div>
+									<div class="img-sub">
+										<img src="/resources/static/img/호텔3.jpg" alt="">
+										<img src="/resources/static/img/호텔4.jpg" alt="">
+									</div>
+									<div style="margin-top: 1rem;">
+										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">
+											디럭스 프리미엄룸</div>
+										<div style="margin-top: .25rem;">
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 인원 최대 2명</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 킹사이즈침대 1개</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 시내 전망</p>
+										</div>
+									</div>
+								</div>
+								<div class="hotel-price-list">
+									<div
+										style="padding: 1.5rem; width: 100%; border: 1px solid #f3f3f3; border-radius: 6px;">
+										<div style="margin-top: 0; flex-direction: row; display: flex; gap: 1.5rem;">
+											<div style="flex: 1 1;">
+												<div style="margin-bottom: .25rem; align-items: center;">
+													<div
+														style="display: flex; align-items: center; gap: .25rem; display: flex; justify-content: space-between;">
+														<div class="price-none">환불불가</div>
+														<div class="price-detail">자세히보기></div>
+													</div>
+												</div>
+												<div class="hotel-content">
+													<p style="margin: 0;">· 체크인 15:00 ~ 자정, 체크아웃 11:00 까지</p>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 세차</p>
+													</div>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 WiFi</p>
+													</div>
+													<button class="hotel-more">시설 및 서비스 더보기></button>
+												</div>
+												<div
+													style="align-items: flex-end; display: flex; justify-content: flex-end;">
+													<div
+														style="font-size: .875rem; display: flex; flex-direction: column; gap: .125rem;">
+														<div
+															style="flex-wrap: wrap; display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="align-items: center; display: flex; color: #666;">
+																	예약가&nbsp;
+																</span>
+															</div>
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;">100,000원</span>
+																<span
+																	style="align-items: center; display: flex; color: #666;">/1박</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<button class="reserv-btn">호텔 바로 예약</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="hotel-box">
+								<div class="hotel-img">
+									<div class="img1"
+										style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
+										<img src="/resources/static/img/호텔2.jpg" alt=""
+											style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
+									</div>
+									<div class="img-sub">
+										<img src="/resources/static/img/호텔3.jpg" alt="">
+										<img src="/resources/static/img/호텔4.jpg" alt="">
+									</div>
+									<div style="margin-top: 1rem;">
+										<div style="font-size: 1.125rem; margin: 0; color: #494949; font-weight: 700;">
+											디럭스 프리미엄룸</div>
+										<div style="margin-top: .25rem;">
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 인원 최대 2명</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 킹사이즈침대 1개</p>
+											<p
+												style="font-size: .875rem; color: #666; line-height: 1.25rem; margin: 0;">
+												· 시내 전망</p>
+										</div>
+									</div>
+								</div>
+								<div class="hotel-price-list">
+									<div
+										style="padding: 1.5rem; width: 100%; border: 1px solid #f3f3f3; border-radius: 6px;">
+										<div style="margin-top: 0; flex-direction: row; display: flex; gap: 1.5rem;">
+											<div style="flex: 1 1;">
+												<div style="margin-bottom: .25rem; align-items: center;">
+													<div
+														style="display: flex; align-items: center; gap: .25rem; display: flex; justify-content: space-between;">
+														<div class="price-none">환불불가</div>
+														<div class="price-detail">자세히보기></div>
+													</div>
+												</div>
+												<div class="hotel-content">
+													<p style="margin: 0;">· 체크인 15:00 ~ 자정, 체크아웃 11:00 까지</p>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 세차</p>
+													</div>
+													<div style="display: flex;">
+														<span>·&nbsp;</span>
+														<p style="margin: 0;">무료 WiFi</p>
+													</div>
+													<button class="hotel-more">시설 및 서비스 더보기></button>
+												</div>
+												<div
+													style="align-items: flex-end; display: flex; justify-content: flex-end;">
+													<div
+														style="font-size: .875rem; display: flex; flex-direction: column; gap: .125rem;">
+														<div
+															style="flex-wrap: wrap; display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="align-items: center; display: flex; color: #666;">
+																	예약가&nbsp;
+																</span>
+															</div>
+															<div
+																style="display: flex; align-items: center; justify-content: flex-end; gap: .125rem;">
+																<span
+																	style="display: flex; align-items: center; color: #9f1f13; font-size: 1.125rem; font-weight: 700; line-height: 22.4px;">100,000원</span>
+																<span
+																	style="align-items: center; display: flex; color: #666;">/1박</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<button class="reserv-btn">호텔 바로 예약</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div>
+								<div>
+									<!-- 호텔 정보 배너 -->
+									<div class="hotel-map">
+										<div style="height: 100%; position: relative; overflow: hidden;">
+											<div
+												style="position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
+												<!-- 지도 호출 부분 -->
+												<div class="hotel-map-datail" id="map1"></div>
+											</div>
+										</div>
+										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+											<div style="flex: 1 1;">
+												<h4
+													style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+													주소</h4>
+												<div
+													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+													<p style="margin: 0; display: flex; align-items: center;">경기도 안산시
+														단원구 중앙대로 869</p>
+												</div>
+											</div>
+										</div>
+										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+											<div style="flex: 1 1;">
+												<h4
+													style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+													전화</h4>
+												<div
+													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+													+82-31-4132222</div>
+											</div>
+										</div>
+									</div>
+									<!-- 호텔 주변 시설 -->
+									<div class="hotel-map">
+										<h3
+											style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
+											호텔 주변시설</h3>
+										<div>
+											<div style="margin-top: 0; display: flex; gap: .375rem;">
+												<button class="sub-infor"
+													style="background: #677c9b; color: #fff;">대중교통</button>
+												<button class="sub-infor">명소</button>
+												<button class="sub-infor">전기차충전소</button>
+											</div>
+											<div style="margin-top: 1rem;">
+												<div
+													style="align-items: center; display: flex; justify-content: space-between;">
+													<p
+														style="margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.4;">
+														대중교통</p>
+												</div>
+												<div
+													style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
+													<div style="margin: 0 1rem 0 .25rem;">
+														<p style="margin: 0; color: #666;">지하철역</p>
+														<p style="margin: 0; color: #494949; font-weight: 700;">중앙역</p>
+													</div>
+													<p
+														style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">
+														585m</p>
+												</div>
+												<div
+													style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
+													<div style="margin: 0 1rem 0 .25rem;">
+														<p style="margin: 0; color: #666;">지하철역</p>
+														<p style="margin: 0; color: #494949; font-weight: 700;">고잔역</p>
+													</div>
+													<p
+														style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">
+														872m</p>
+												</div>
+												<div
+													style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
+													<div style="margin: 0 1rem 0 .25rem;">
+														<p style="margin: 0; color: #666;">지하철역</p>
+														<p style="margin: 0; color: #494949; font-weight: 700;">한대앞역</p>
+													</div>
+													<p
+														style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">
+														2.0km</p>
+												</div>
+												<div
+													style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
+													<div style="margin: 0 1rem 0 .25rem;">
+														<p style="margin: 0; color: #666;">지하철역</p>
+														<p style="margin: 0; color: #494949; font-weight: 700;">초지역</p>
+													</div>
+													<p
+														style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">
+														2.4km</p>
+												</div>
+												<div
+													style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
+													<div style="margin: 0 1rem 0 .25rem;">
+														<p style="margin: 0; color: #666;">지하철역</p>
+														<p style="margin: 0; color: #494949; font-weight: 700;">상록수역</p>
+													</div>
+													<p
+														style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">
+														3.4km</p>
+												</div>
+											</div>
+											<button class="btn-map">지도로 보기</button>
+										</div>
+										<!-- 호텔 주변 시설 및 호텔 서비스 목록 -->
+										<div class="hotel-service">
+											<h3
+												style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
+												호텔 편의시설 및 서비스</h3>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<div style="display: flex; align-items: center; gap: 0.5rem;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															인터넷</h4>
+														<i class="fas fa-wifi"></i>
+													</div>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div
+															style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
+															<div style="flex: 1 1 49%; width: 49%;">무료 유선 인터넷</div>
+															<div style="flex: 1 1 49%; width: 49%;">무료 WiFi</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<div style="display: flex; align-items: center; gap: 0.5rem;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															식사 및 음료</h4>
+														<i class="fas fa-utensils"></i>
+													</div>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div
+															style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
+															<div style="flex: 1 1 49%; width: 49%;">아침 식사 가능(요금 별도)
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<div style="display: flex; align-items: center; gap: 0.5rem;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															편의시설</h4>
+														<i class="fas fa-newspaper"></i>
+													</div>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div
+															style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
+															<div style="flex: 1 1 49%; width: 49%;">커피숍/카페 수 - 1</div>
+															<div style="flex: 1 1 49%; width: 49%;">로비의 신문(요금 별도)</div>
+															<div style="flex: 1 1 49%; width: 49%;">엘리베이터</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<div style="display: flex; align-items: center; gap: 0.5rem;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															리셉션 서비스</h4>
+														<i class="fas fa-cart-flatbed-suitcase"></i>
+													</div>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div
+															style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
+															<div style="flex: 1 1 49%; width: 49%;">짐 보관 서비스</div>
+															<div style="flex: 1 1 49%; width: 49%;">24시간 운영 프론트 데스크
+															</div>
+															<div style="flex: 1 1 49%; width: 49%;">드라이 클리닝/세탁 서비스</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<div style="display: flex; align-items: center; gap: 0.5rem;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															장애인 편의시설</h4>
+														<i class="fas fa-check"></i>
+													</div>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div
+															style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
+															<div style="flex: 1 1 49%; width: 49%;">점자표지</div>
+															<div style="flex: 1 1 49%; width: 49%;">휠체어로 이용 가능한 주차장
+															</div>
+															<div style="flex: 1 1 49%; width: 49%;">휠체어로 이동 가능한 통로</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<div style="display: flex; align-items: center; gap: 0.5rem;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															기타</h4>
+														<i class="fas fa-check"></i>
+													</div>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div
+															style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
+															<div style="flex: 1 1 49%; width: 49%;">금연 숙박 시설</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+										</div>
+										<div class="hotel-detail">
+											<h3
+												style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
+												호텔 상세 정보</h3>
+											<div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															위치정보</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<p
+																style="margin: 0; margin-bottom: .25rem; font-size: .875rem; color: #677c9b; font-weight: bold; letter-spacing: -0.28px;">
+																안산 문화 예술의 전당 부근에 위치</p>
+															<div style="line-height: 1.5;">
+																안산에 위치한 엠블던 호텔의 경우 차로 5분 이내 거리에 안산 문화 예술의 전당 및 안산 와~
+																스타디움 등이 있습니다. 이 호텔에서 송도 컨벤시아
+																컨벤션센터까지는 26.5km 떨어져 있으며, 28km 거리에는 송도 센트럴 파크도 있습니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div
+													style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															객실정보</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																에어컨이 설치된 401개의 객실에는 바닥 난방/온돌 및 평면 TV도 갖추어져 있어 편하게 머무실 수
+																있습니다. 유선 및 무선 인터넷이 무료로 제공되며 케이블
+																채널 프로그램도 구비되어 있어 지루하지 않게 시간을 보내실 수 있습니다. 편의 시설/서비스로는 금고
+																및 책상 등이 있으며 객실 정돈 서비스는 매일 제공됩니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div
+													style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															식사정보</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																호텔에 있는 커피숍/카페에서는 간단하고 맛있는 음식을 즐기실 수 있습니다. 아침 식사(뷔페)를 매일
+																07:00 ~ 09:00에 유료로 이용하실 수 있습니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div
+													style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															공인등급</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																고객 편의를 위해 저희 등급 시스템을 기준으로 해당 정보를 제공했습니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div
+													style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															비즈니스 편의시설</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																대표적인 편의 시설과 서비스로는 무료 유선 인터넷, 드라이클리닝/세탁 서비스, 24시간 운영되는
+																프런트 데스크 등이 있습니다.
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div
+													style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															위치정보</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																거리는 0.1km 단위로 최대한 가깝게 표시됩니다.
+																<br>
+																<p style="margin: 0;">
+																	안산 문화 예술의 전당 - 1.4km
+																	<br>
+																	안산 와~ 스타디움 - 1.5km
+																	<br>
+																	단홍볼링장 - 2.2km
+																	<br>
+																	경기 현대 미술관 - 2.4km
+																	<br>
+																	화랑유원지 - 2.6km
+																	<br>
+																	성호 기념관 - 3.1km
+																	<br>
+																	안산 식물원 - 3.8km
+																	<br>
+																	화림선원 - 4.2km
+																	<br>
+																	오아시스 볼링장 - 4.2km
+																	<br>
+																	88 탁구클럽 - 4.8km
+																	<br>
+																	안산 갈대습지공원 - 5.3km
+																	<br>
+																	반월공단 - 6.1km
+																	<br>
+																	시화공단 - 11.9km
+																	<br>
+																	안양베네스트골프클럽 - 13.1km
+																	<br>
+																	월곳 항구 - 13.8km
+																	<br>
+																</p>
+																<p style="margin: 0;">
+																	가장 가까운 공항:
+																	<br>
+																	김포국제공항 (GMP) - 46.5km
+																	<br>
+																	인천국제공항 (ICN) - 52.8km
+																	<br>
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div>
+												<div
+													style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															서비스 지원 언어</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																중국어(만다린어)
+																<br>
+																한국어
+																<br>
+																영어
+																<br>
+																일본어
+																<br>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="hotel-rule">
+											<h3
+												style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
+												호텔 정책</h3>
+											<div>
+												<span
+													style="margin: 0 0 .75rem 0; font-size: 1rem; font-weight: bold; color: #494949; letter-spacing: -0.32px;">
+													체크인
+													/
+													체크아웃
+												</span>
+												<div
+													style="margin-top: .75rem; margin-bottom: 1rem; padding: .75rem; border: 1px solid #e9e9e9; border-radius: 6px; display: flex; align-items: flex-start;">
+													<div
+														style="width: 50%; flex: 1 1 50%; display: flex; flex-direction: column; align-items: center;">
+														<span
+															style="font-size: .875rem; color: #666; font-weight: 600;">체크인</span>
+														<p
+															style="font-size: 1rem; color: #677c9b; font-weight: 600; margin: 0;">
+															15:00 ~ 자정</p>
+													</div>
+													<div
+														style="width: 50%; flex: 1 1 50%; display: flex; flex-direction: column; align-items: center;">
+														<span
+															style="font-size: .875rem; color: #666; font-weight: 600;">체크아웃</span>
+														<p
+															style="font-size: 1rem; color: #677c9b; font-weight: 600; margin: 0;">
+															11:00 까지</p>
+													</div>
+												</div>
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<h4
+														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+														특별 체크인 지침</h4>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div style="line-height: 1.5;">
+															· 도착하시면 프런트 데스크 직원이 안내해 드립니다.
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<!-- 호텔 주요/상세 정보 -->
+											<div>
+												<h3
+													style="margin: 0 0 .75rem 0; font-size: 1rem; font-weight: bold; color: #494949; letter-spacing: -0.32px;">
+													중요 정보</h3>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															주요 안내사항</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																<ul style="margin: 0; padding: 0 0 0 1.5rem;">
+																	<li>추가 인원에 대한 요금이 부과될 수 있으며, 이는 숙박 시설 정책에 따라 다릅니다.
+																	</li>
+																	<li>체크인 시 부대 비용 발생에 대비해 정부에서 발급한 사진이 부착된 신분증과 신용카드,
+																		직불카드 또는 현금으로 보증금이 필요할 수 있습니다.</li>
+																	<li>특별 요청 사항은 체크인 시 이용 상황에 따라 제공 여부가 달라질 수 있으며 추가
+																		요금이 부과될 수 있습니다. 또한, 반드시 보장되지는 않습니다.
+																	</li>
+																	<li>이 숙박 시설에서는 신용카드로 결제하실 수 있습니다. 현금은 받지 않습니다.</li>
+																	<li>고객 정책과 문화적 기준이나 규범은 국가 및 숙박 시설에 따라 다를 수 있습니다.
+																		명시된 정책은 숙박 시설에서 제공했습니다.</li>
+																	<li>외부 음식의 시설 내 반입은 허용되지 않습니다.</li>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
+											</div>
+											<div>
+												<h3
+													style="margin: 0 0 .75rem 0; font-size: 1rem; font-weight: bold; color: #494949; letter-spacing: -0.32px;">
+													부가 정보</h3>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															추가 안내사항</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																간이/추가 침대 이용 불가
+															</div>
+														</div>
+													</div>
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															기타 선택사항</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																<ul style="margin: 0; padding: 0 0 0 1.5rem;">
+																	<li>뷔페아침 식사 요금: 성인 KRW 28000, 어린이 KRW 15000(대략적인 금액)
+																	</li>
+																</ul>
+																<p style="margin: 0;">위 목록에 명시되지 않은 다른 항목이 있을 수 있습니다. 요금
+																	및 보증금은 세전 금액일 수 있으며 변경될 수 있습니다.
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															현장 결제 유형 및 수단</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																<p style="margin: 0;">· 직불카드 결제 불가</p>
+																<p style="margin: 0;">· 현금 결제 불가</p>
+																<p style="margin: 0;">· Visa</p>
+																<p style="margin: 0;">· Mastercard</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div
+													style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+													<div style="flex: 1 1;">
+														<h4
+															style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+															반려동물</h4>
+														<div
+															style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+															<div style="line-height: 1.5;">
+																반려동물 동반 불가
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="hotel-rule">
+											<h3
+												style="margin: 0 0 .75rem 0; font-size: 1rem; font-weight: bold; color: #494949; letter-spacing: -0.32px;">
+												취소규정 및 유의사항</h3>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<h4
+														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+														취소규정</h4>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div style="line-height: 1.5;">
+															객실 상품에 따라 취소규정이 다르므로, 자세한 사항은 객실정보를 통해 확인 바랍니다.
+														</div>
+													</div>
+												</div>
+											</div>
+											<div
+												style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
+												<div style="flex: 1 1;">
+													<h4
+														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
+														유의사항</h4>
+													<div
+														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
+														<div style="line-height: 1.5;">
+															취소문의는 Team3 고객센터(1234-4321)로 문의 바랍니다.
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div>
+										<div class="hotel-rivew">
+											<h3
+												style="margin: 0 0 .75rem 0; font-size: 1rem; font-weight: bold; color: #494949; letter-spacing: -0.32px;">
+												호텔 리뷰</h3>
+											<div style="display: flex; flex-direction: column; gap: 1.5rem;">
+												<div style="flex-direction: row; gap: 0; display: flex;">
+													<div
+														style="flex: 1 1 50%; width: 50%; padding-right: 1rem; display: flex; flex-direction: column; gap: 1.5rem;">
+														<div
+															style="display: flex; justify-content: space-between; align-items: center;">
+															<div
+																style="font-size: 1rem; font-weight: bold; color: #494949;">
+																평점</div>
+															<div style="display: flex; align-items: center;">
+																<div
+																	style="font-size: 1.25rem; font-weight: bold; color: #0d6ffc;">
+																	0.0</div>
+																<div style="font-size: 1.25rem; color: #d4d4d4;">/ 5.0
+																</div>
+															</div>
+														</div>
+														<div
+															style="row-gap: 1rem; display: flex; flex-direction: column; gap: .5rem; line-height: 1.5;">
+															<div style="display: flex; justify-content: space-between;">
+																<div style="font-size: 1rem; color: #494949;">시설 청결도
+																</div>
+																<div
+																	style="gap: .313rem; align-items: center; display: flex;">
+																	<div class="progress"
+																		style="width: 7.906rem; height: .25rem; border-color: #d4d4d4; border-radius: 10px;">
+																		<div class="progress-bar"
+																			style="width: 5%; height: .25rem; border-radius: 10px; border-color: #0d6ffc;">
+																		</div>
+																	</div>
+																	<div
+																		style="font-size: .875rem; font-weight: bold; color: #0d6ffc; width: 1.2rem;">
+																		0.0
+																	</div>
+																</div>
+															</div>
+															<div style="display: flex; justify-content: space-between;">
+																<div style="font-size: 1rem; color: #494949;">직원 친절도
+																</div>
+																<div
+																	style="gap: .313rem; align-items: center; display: flex;">
+																	<div class="progress"
+																		style="width: 7.906rem; height: .25rem; border-color: #d4d4d4; border-radius: 10px;">
+																		<div class="progress-bar"
+																			style="width: 5%; height: .25rem; border-radius: 10px; border-color: #0d6ffc;">
+																		</div>
+																	</div>
+																	<div
+																		style="font-size: .875rem; font-weight: bold; color: #0d6ffc; width: 1.2rem;">
+																		0.0
+																	</div>
+																</div>
+															</div>
+															<div style="display: flex; justify-content: space-between;">
+																<div style="font-size: 1rem; color: #494949;">이용 만족도
+																</div>
+																<div
+																	style="gap: .313rem; align-items: center; display: flex;">
+																	<div class="progress"
+																		style="width: 7.906rem; height: .25rem; border-color: #d4d4d4; border-radius: 10px;">
+																		<div class="progress-bar"
+																			style="width: 5%; height: .25rem; border-radius: 10px; border-color: #0d6ffc;">
+																		</div>
+																	</div>
+																	<div
+																		style="font-size: .875rem; font-weight: bold; color: #0d6ffc; width: 1.2rem;">
+																		0.0
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<!-- 댓글 스와이프 -->
+													<div
+														style="position: relative; margin-left: 0; padding-left: 1rem; width: 50%; flex: 1 1 50%;">
+														<div style="padding: 0 .5rem !important;">
+
+														</div>
+													</div>
+												</div>
+												<!-- 리뷰 리스트 -->
+												<div style="display: flex; flex-direction: column; gap: 1rem;">
+													<div
+														style="display: flex; justify-content: space-between;align-items: center;">
+														<div
+															style="font-size: 1rem; font-weight: bold; color: #494949;">
+															트러스트 리뷰</div>
+														<div
+															style="display: flex; align-items: center; gap: .25rem; cursor: pointer; height: 1.313rem; position: relative;">
+															<div style="font-size: .875rem; color: #666;">평점 높은 순</div>
+														</div>
+														<!-- <div class="list-menu">
+																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
+																	<i class="fas fa-check"></i>
+																	<div style="color: #000; font-size: .875rem;">평점 높은 순</div>
+																</div>
+																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
+																	<i class="fas fa-check"></i>
+																	<div style="color: #000; font-size: .875rem;">평점 낮은 순</div>
+																</div>
+																<div style="display: flex; align-items: center; height: 2.125rem; padding: 0 1rem; border-bottom: solid .5px rgba(17, 17, 17, .25);">
+																	<i class="fas fa-check"></i>
+																	<div style="color: #000; font-size: .875rem;">최신순</div>
+																</div>
+															</div> -->
+													</div>
+													<!-- 리뷰 리스트 목록 -->
+													<div
+														style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+														<div
+															style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+															<div style="display: flex; align-items: end; gap: .125rem;">
+																<div
+																	style="font-size: 1.5rem; font-weight: bold; color: #333;">
+																	5.0</div>
+																<div
+																	style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">
+																	/ 5.0
+																</div>
+															</div>
+															<div>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도
+																	5.0
+																	| 친절도 5.0 | 만족도 5.0</span>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
+																	Room</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<i class="fas fa-user"></i>
+															<p
+																style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+																닉네임임. 쨋든 닉네임임</p>
+														</div>
+														<p
+															style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+															<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+														</p>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<span
+																style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+														</div>
+													</div>
+													<div
+														style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+														<div
+															style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+															<div style="display: flex; align-items: end; gap: .125rem;">
+																<div
+																	style="font-size: 1.5rem; font-weight: bold; color: #333;">
+																	5.0</div>
+																<div
+																	style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">
+																	/ 5.0
+																</div>
+															</div>
+															<div>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도
+																	5.0
+																	| 친절도 5.0 | 만족도 5.0</span>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
+																	Room</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<i class="fas fa-user"></i>
+															<p
+																style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+																닉네임임. 쨋든 닉네임임</p>
+														</div>
+														<p
+															style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+															<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+														</p>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<span
+																style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+														</div>
+													</div>
+													<div
+														style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+														<div
+															style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+															<div style="display: flex; align-items: end; gap: .125rem;">
+																<div
+																	style="font-size: 1.5rem; font-weight: bold; color: #333;">
+																	5.0</div>
+																<div
+																	style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">
+																	/ 5.0
+																</div>
+															</div>
+															<div>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도
+																	5.0
+																	| 친절도 5.0 | 만족도 5.0</span>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
+																	Room</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<i class="fas fa-user"></i>
+															<p
+																style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+																닉네임임. 쨋든 닉네임임</p>
+														</div>
+														<p
+															style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+															<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+														</p>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<span
+																style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+														</div>
+													</div>
+													<div
+														style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;">
+														<div
+															style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+															<div style="display: flex; align-items: end; gap: .125rem;">
+																<div
+																	style="font-size: 1.5rem; font-weight: bold; color: #333;">
+																	5.0</div>
+																<div
+																	style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">
+																	/ 5.0
+																</div>
+															</div>
+															<div>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">청결도
+																	5.0
+																	| 친절도 5.0 | 만족도 5.0</span>
+																<span
+																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">Deluxe
+																	Room</span>
+															</div>
+														</div>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<i class="fas fa-user"></i>
+															<p
+																style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+																닉네임임. 쨋든 닉네임임</p>
+														</div>
+														<p
+															style="margin: 0; width: 100%; font-size: .875rem; line-height: 1.5; color: #666;">
+															<span>리뷰리리리리리ㅣ리리릴뷰부부뷰</span>
+														</p>
+														<div style="width: 100%; display: flex; align-items: center;">
+															<span
+																style="font-size: .75rem; line-height: 1.5; color: #999;">2025.05.12</span>
+														</div>
+													</div>
+													<button style="cursor: pointer; font-size: 1rem; border-radius: .5rem; color: #7b8bab; border: 1px solid #7b8bab; background: rgba(0, 0, 0, 0); gap: .25rem; justify-content: center; align-items: centerdis;
+														display: flex; width: 100%; margin: 1rem 0; padding: 7px 0;">더보기</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <script id="test"></script>
+		<script>
+			$.ajax({
+				async : false,
+				url : "/test",
+				success : function(data){
+					$("#test").html(data);
+					console.log(data)
+				}
+			})
+		</script> -->
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+					kakao.maps.load(function () {
+						// 지도 정보를 배열로 관리
+						const mapData = [
+							{ id: 'map', address: '경기도 안산시 단원구 중앙대로 869', lat: 0, lng: 0 },  // 주소로 변경
+							{ id: 'map1', address: '경기도 안산시 단원구 중앙대로 869', lat: 0, lng: 0 }  // 주소로 변경
+						];
+
+						// 각 지도 생성
+						mapData.forEach((mapInfo) => {
+							var container = document.getElementById(mapInfo.id);
+							if (container) {  // 해당 ID의 div가 있을 때만 지도 생성
+
+								// 주소로 좌표 변환
+								var geocoder = new kakao.maps.services.Geocoder();
+								geocoder.addressSearch(mapInfo.address, function (result, status) {
+									if (status === kakao.maps.services.Status.OK) {
+										// 주소를 좌표로 변환한 결과
+										var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+										// 지도 옵션
+										var options = {
+											center: coords,  // 변환된 좌표로 중심을 설정
+											level: 3
+										};
+
+										// 지도 생성
+										var map = new kakao.maps.Map(container, options);
+
+										// 마커 생성
+										var marker = new kakao.maps.Marker({
+											position: coords
+										});
+										marker.setMap(map);
+
+										// 크기 갱신 (필요 시)
+										setTimeout(() => map.relayout(), 100);
+									} else {
+										console.error("주소 검색에 실패했습니다.");
+									}
+								});
+							}
+						});
+					});
+				});
+
+			</script>
+	</div>
+	</main>
+	</div>
+</body>
