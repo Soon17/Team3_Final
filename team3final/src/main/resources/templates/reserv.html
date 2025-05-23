@@ -11,8 +11,8 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<!-- Kakao Maps API -->
-	<!-- <script
-		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
+	<script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ad16376e4af261fc1e62afc32792b67a&libraries=services,clusterer,drawing"></script>
 
 	<style>
 		.container {
@@ -764,6 +764,53 @@
 			cursor: pointer;
 			word-break: break-all;
 		}
+
+		#review-more-btn {
+			cursor: pointer;
+			font-size: 1rem;
+			border-radius: .5rem;
+			color: #7b8bab;
+			border: 1px solid #7b8bab;
+			background: transparent;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			margin: 1rem 0;
+			padding: 7px 0;
+		}
+
+		.modal-footer .btn {
+			padding: 1rem 0;
+			font-size: 1rem;
+			font-weight: 600;
+			color: #333;
+			background-color: #f8f9fa;
+		}
+
+		.modal-footer .btn.border-left {
+			border-left: 1px solid #e0e0e0;
+		}
+
+		.modal-footer .btn:focus,
+		.modal-footer .btn:active {
+			outline: none !important;
+			box-shadow: none !important;
+		}
+
+		[id^="roomDetailModal__"] .modal-footer .hotel-reserve-btn {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			border-radius: 0.5rem;
+			font-size: 1.125rem !important;
+			width: 85%;
+			transition: background 0.2s;
+		}
+
+		[id^="roomDetailModal__"] .modal-footer .hotel-reserve-btn:hover {
+			background-color: #007bff;
+		}
 	</style>
 </head>
 
@@ -779,9 +826,6 @@
 						</th:block>
 
 					</div>
-					<div class="img-all">
-						<span class="img-all2">모두보기</span>
-					</div>
 				</div>
 			</div>
 			<div class="infor-container container">
@@ -792,7 +836,8 @@
 						<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
 						<span style="font-weight: 700; font-size: 14px;" th:text="${avg_rating}">4.0</span>
 						<span style="font-size: 13px; color: #666;" th:text="'(' + ${review_count} + ')'">(3)</span>
-						<i class="fas fa-chevron-right" style="font-size: 10px; color: #aaa; padding-left: 4px;"></i>
+						<i class="fas fa-chevron-right go-to-review" data-target=".hotel-rivew"
+							style="font-size: 10px; color: #aaa; padding-left: 4px; cursor: pointer;"></i>
 					</div>
 					<div class="infor-sub"
 						style="display: flex; justify-content: space-between; gap: 24px; align-items: flex-start;">
@@ -804,7 +849,11 @@
 										<div class="swiper-slide review-card"
 											th:attr="data-nick=${review.me_nick}, data-content=${review.rv_content}, data-date=${#dates.format(review.rv_date, 'yyyy.MM.dd')}"
 											onclick="handleReviewClick(this)" style="cursor: pointer;">
-											<div class="review-header" th:text="${review.me_nick}">닉네임</div>
+											<div style="display: flex; align-items: center;">
+												<div class="review-header" th:text="${review.me_nick}">닉네임</div>
+												<span th:text="${review.rm_name}"
+													style="display: block; margin-left: 5px; font-size: .75rem; line-height: 1.5; color: #999;">방이름</span>
+											</div>
 											<div class="review-content" th:text="${review.rv_content}">내용</div>
 											<div class="review-date" th:text="${#dates.format(review.rv_date,'yyyy.MM.dd')}">날짜</div>
 										</div>
@@ -814,7 +863,8 @@
 						</div>
 						<!-- 지도 -->
 						<div class="homap" style="flex-shrink: 0;">
-							<div id="map" style="width: 280px; height: 200px; border-radius: 10px;"></div>
+							<div class="open-map" onclick="openMapModal()" id="map"
+								style="width: 280px; height: 200px; border-radius: 10px;"></div>
 						</div>
 					</div>
 
@@ -1004,7 +1054,7 @@
 													<!-- 정보 -->
 													<div class="p-3">
 														<h5 th:text="${room.rm_name}">방 이름</h5>
-														<p th:text="'인원 ' + ${room.rm_person} + '명 가능'" style="margin-bottom: 0;"></p>
+														<p th:text="'인원 최대 ' + ${room.rm_person} + '명 가능'" style="margin-bottom: 0;"></p>
 
 														<!-- 예약가 /1박 -->
 														<div style="display: flex; align-items: center; justify-content: flex-end; gap: .25rem;">
@@ -1145,105 +1195,8 @@
 															<h3
 																style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
 																호텔 상세 정보</h3>
-															<div>
-																<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-																	<div style="flex: 1 1;">
-																		<h4
-																			style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-																			객실정보</h4>
-																		<div
-																			style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-																			<div style="line-height: 1.5;">
-																				에어컨이 설치된 401개의 객실에는 바닥 난방/온돌 및 평면 TV도 갖추어져 있어 편하게 머무실 수 있습니다. 유선 및 무선 인터넷이 무료로
-																				제공되며 케이블
-																				채널 프로그램도 구비되어 있어 지루하지 않게 시간을 보내실 수 있습니다. 편의 시설/서비스로는 금고 및 책상 등이 있으며 객실 정돈 서비스는
-																				매일
-																				제공됩니다.
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div>
-																<div
-																	style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
-																</div>
-																<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-																	<div style="flex: 1 1;">
-																		<h4
-																			style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-																			식사정보</h4>
-																		<div
-																			style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-																			<div style="line-height: 1.5;">
-																				호텔에 있는 커피숍/카페에서는 간단하고 맛있는 음식을 즐기실 수 있습니다. 아침 식사(뷔페)를 매일 07:00 ~ 09:00에 유료로 이용하실
-																				수
-																				있습니다.
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div>
-																<div
-																	style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
-																</div>
-																<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-																	<div style="flex: 1 1;">
-																		<h4
-																			style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-																			공인등급</h4>
-																		<div
-																			style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-																			<div style="line-height: 1.5;">
-																				고객 편의를 위해 저희 등급 시스템을 기준으로 해당 정보를 제공했습니다.
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div>
-																<div
-																	style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
-																</div>
-																<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-																	<div style="flex: 1 1;">
-																		<h4
-																			style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-																			비즈니스 편의시설</h4>
-																		<div
-																			style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-																			<div style="line-height: 1.5;">
-																				대표적인 편의 시설과 서비스로는 무료 유선 인터넷, 드라이클리닝/세탁 서비스, 24시간 운영되는 프런트 데스크 등이 있습니다.
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div>
-																<div
-																	style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;">
-																</div>
-																<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-																	<div style="flex: 1 1;">
-																		<h4
-																			style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-																			서비스 지원 언어</h4>
-																		<div
-																			style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-																			<div style="line-height: 1.5;">
-																				중국어(만다린어)
-																				<br>
-																				한국어
-																				<br>
-																				영어
-																				<br>
-																				일본어
-																				<br>
-																			</div>
-																		</div>
-																	</div>
-																</div>
+															<div th:text="${lodging.ld_infor}"
+																style="font-weight: normal; color: #666; white-space: pre-line; line-height: 1.6; font-size: .875rem;">
 															</div>
 														</div>
 														<div class="hotel-rule">
@@ -1421,10 +1374,14 @@
 												</div>
 
 											</div>
-											<div class="modal-footer border-top-0">
-												<button class="btn btn-primary btn-block" style="height: 50px; font-size: 20px;"
-													th:text="${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원 바로 예약하기'"></button>
+
+											<div class="modal-footer border-top-0" style="display: flex; justify-content: center;">
+												<button class="btn btn-primary hotel-reserve-btn" style="height: 50px; font-size: 20px;"
+													th:text="${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원 바로 예약하기'"
+													th:attr="data-check-time=${checkTime}, data-rm-person=${room.rm_person}, data-ld-num=${lodging.ld_num}"
+													th:attrappend="data-rm-num=${room.rm_num}"></button>
 											</div>
+
 										</div>
 									</div>
 								</div>
@@ -1439,7 +1396,7 @@
 										<div
 											style="position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
 											<!-- 지도 호출 부분 -->
-											<div class="hotel-map-datail" id="map1"></div>
+											<div onclick="openMapModal()" class="hotel-map-datail" id="map1"></div>
 										</div>
 									</div>
 									<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
@@ -1449,7 +1406,8 @@
 												주소</h4>
 											<div
 												style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-												<p style="margin: 0; display: flex; align-items: center;">경기도 안산시 단원구 중앙대로 869</p>
+												<p th:text="${lodging.ld_region}" style="margin:0; display:flex; align-items:center;">
+												</p>
 											</div>
 										</div>
 									</div>
@@ -1459,8 +1417,9 @@
 												style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
 												전화</h4>
 											<div
-												style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-												+82-31-4132222</div>
+												style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;"
+												th:text="${lodging.ld_number}">
+											</div>
 										</div>
 									</div>
 								</div>
@@ -1520,235 +1479,20 @@
 												<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">3.4km</p>
 											</div>
 										</div>
-										<button class="btn-map">지도로 보기</button>
+										<button class="btn btn-outline-primary btn-map" onclick="openAroundMapModal()">지도로 보기</button>
 									</div>
+
 									<!-- 호텔 주변 시설 및 호텔 서비스 목록 -->
 									<div class="hotel-service">
 										<h3
 											style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
-											호텔 편의시설 및 서비스</h3>
-										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-											<div style="flex: 1 1;">
-												<div style="display: flex; align-items: center; gap: 0.5rem;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														인터넷</h4>
-													<i class="fas fa-wifi"></i>
-												</div>
-												<div
-													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-													<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
-														<div style="flex: 1 1 49%; width: 49%;">무료 유선 인터넷</div>
-														<div style="flex: 1 1 49%; width: 49%;">무료 WiFi</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-											<div style="flex: 1 1;">
-												<div style="display: flex; align-items: center; gap: 0.5rem;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														식사 및 음료</h4>
-													<i class="fas fa-utensils"></i>
-												</div>
-												<div
-													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-													<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
-														<div style="flex: 1 1 49%; width: 49%;">아침 식사 가능(요금 별도)</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-											<div style="flex: 1 1;">
-												<div style="display: flex; align-items: center; gap: 0.5rem;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														편의시설</h4>
-													<i class="fas fa-newspaper"></i>
-												</div>
-												<div
-													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-													<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
-														<div style="flex: 1 1 49%; width: 49%;">커피숍/카페 수 - 1</div>
-														<div style="flex: 1 1 49%; width: 49%;">로비의 신문(요금 별도)</div>
-														<div style="flex: 1 1 49%; width: 49%;">엘리베이터</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-											<div style="flex: 1 1;">
-												<div style="display: flex; align-items: center; gap: 0.5rem;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														리셉션 서비스</h4>
-													<i class="fas fa-cart-flatbed-suitcase"></i>
-												</div>
-												<div
-													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-													<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
-														<div style="flex: 1 1 49%; width: 49%;">짐 보관 서비스</div>
-														<div style="flex: 1 1 49%; width: 49%;">24시간 운영 프론트 데스크</div>
-														<div style="flex: 1 1 49%; width: 49%;">드라이 클리닝/세탁 서비스</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-											<div style="flex: 1 1;">
-												<div style="display: flex; align-items: center; gap: 0.5rem;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														장애인 편의시설</h4>
-													<i class="fas fa-check"></i>
-												</div>
-												<div
-													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-													<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
-														<div style="flex: 1 1 49%; width: 49%;">점자표지</div>
-														<div style="flex: 1 1 49%; width: 49%;">휠체어로 이용 가능한 주차장</div>
-														<div style="flex: 1 1 49%; width: 49%;">휠체어로 이동 가능한 통로</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-										<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-											<div style="flex: 1 1;">
-												<div style="display: flex; align-items: center; gap: 0.5rem;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														기타</h4>
-													<i class="fas fa-check"></i>
-												</div>
-												<div
-													style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-													<div style="flex-direction: row; flex-wrap: wrap; display: flex; flex-wrap: wrap;">
-														<div style="flex: 1 1 49%; width: 49%;">금연 숙박 시설</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-									</div>
-									<div class="hotel-detail">
-										<h3
-											style="margin: .5rem 0 1rem; font-size: 1.25rem; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
-											호텔 상세 정보</h3>
-										<div>
-											<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-												<div style="flex: 1 1;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														위치정보</h4>
-													<div
-														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-														<p
-															style="margin: 0; margin-bottom: .25rem; font-size: .875rem; color: #677c9b; font-weight: bold; letter-spacing: -0.28px;">
-															안산 문화 예술의 전당 부근에 위치</p>
-														<div style="line-height: 1.5;">
-															안산에 위치한 엠블던 호텔의 경우 차로 5분 이내 거리에 안산 문화 예술의 전당 및 안산 와~ 스타디움 등이 있습니다. 이 호텔에서 송도 컨벤시아
-															컨벤션센터까지는 26.5km 떨어져 있으며, 28km 거리에는 송도 센트럴 파크도 있습니다.
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-											<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-												<div style="flex: 1 1;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														객실정보</h4>
-													<div
-														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-														<div style="line-height: 1.5;">
-															에어컨이 설치된 401개의 객실에는 바닥 난방/온돌 및 평면 TV도 갖추어져 있어 편하게 머무실 수 있습니다. 유선 및 무선 인터넷이 무료로 제공되며 케이블
-															채널 프로그램도 구비되어 있어 지루하지 않게 시간을 보내실 수 있습니다. 편의 시설/서비스로는 금고 및 책상 등이 있으며 객실 정돈 서비스는 매일 제공됩니다.
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-											<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-												<div style="flex: 1 1;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														식사정보</h4>
-													<div
-														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-														<div style="line-height: 1.5;">
-															호텔에 있는 커피숍/카페에서는 간단하고 맛있는 음식을 즐기실 수 있습니다. 아침 식사(뷔페)를 매일 07:00 ~ 09:00에 유료로 이용하실 수 있습니다.
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-											<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-												<div style="flex: 1 1;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														공인등급</h4>
-													<div
-														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-														<div style="line-height: 1.5;">
-															고객 편의를 위해 저희 등급 시스템을 기준으로 해당 정보를 제공했습니다.
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-											<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-												<div style="flex: 1 1;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														비즈니스 편의시설</h4>
-													<div
-														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-														<div style="line-height: 1.5;">
-															대표적인 편의 시설과 서비스로는 무료 유선 인터넷, 드라이클리닝/세탁 서비스, 24시간 운영되는 프런트 데스크 등이 있습니다.
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div>
-											<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-											<div style="padding-bottom: .75rem; display: flex; align-items: flex-start;">
-												<div style="flex: 1 1;">
-													<h4
-														style="margin: 0; font-size: .875rem; color: #494949; font-weight: bold; letter-spacing: -0.28px;">
-														서비스 지원 언어</h4>
-													<div
-														style="margin-top: .25rem; font-size: .875rem; font-weight: normal; color: #666; letter-spacing: -0.28px;">
-														<div style="line-height: 1.5;">
-															중국어(만다린어)
-															<br>
-															한국어
-															<br>
-															영어
-															<br>
-															일본어
-															<br>
-														</div>
-													</div>
-												</div>
-											</div>
+											호텔 편의시설 및 서비스
+										</h3>
+										<div th:text="${lodging.ld_infor}"
+											style="font-weight: normal; color: #666; white-space: pre-line; line-height: 1.6; font-size: .875rem;">
 										</div>
 									</div>
+
 									<div class="hotel-rule">
 										<h3
 											style="margin: .5rem 0 1rem; font-size: 16px; color: #494949; font-weight: bold; letter-spacing: -0.4px; line-height: 140%;">
@@ -1919,59 +1663,46 @@
 											호텔 리뷰</h3>
 										<div style="display: flex; flex-direction: column; gap: 1.5rem;">
 											<div style="flex-direction: row; gap: 0; display: flex;">
-												<div
-													style="flex: 1 1 50%; width: 50%; padding-right: 1rem; display: flex; flex-direction: column; gap: 1.5rem;">
-													<div style="display: flex; justify-content: space-between; align-items: center;">
-														<div style="font-size: 1rem; font-weight: bold; color: #494949;">평점</div>
-														<div style="display: flex; align-items: center;">
-															<div style="font-size: 1.25rem; font-weight: bold; color: #0d6ffc;">0.0</div>
-															<div style="font-size: 1.25rem; color: #d4d4d4;">/ 5.0</div>
+
+												<!-- 전체 컨테이너 -->
+												<div class="hotel-rating-stats"
+													style="flex:1 1 50%; width:50%; padding-right:1rem; display:flex; flex-direction:column;gap:1.5rem;">
+
+													<!-- 평균 점수 -->
+													<div style="display:flex;justify-content:space-between;align-items:center;">
+														<div style="font-size:1rem;font-weight:bold;color:#494949;">평점</div>
+														<div style="display:flex;align-items:baseline;gap:.25rem;">
+															<div style="font-size:2rem;font-weight:bold;color:#0d6ffc;" th:text="${avg_rating}">0.0
+															</div>
+															<div style="font-size:1rem;color:#d4d4d4;">/ 5.0</div>
 														</div>
 													</div>
-													<div
-														style="row-gap: 1rem; display: flex; flex-direction: column; gap: .5rem; line-height: 1.5;">
-														<div style="display: flex; justify-content: space-between;">
-															<div style="font-size: 1rem; color: #494949;">시설 청결도</div>
-															<div style="gap: .313rem; align-items: center; display: flex;">
-																<div class="progress"
-																	style="width: 7.906rem; height: .25rem; border-color: #d4d4d4; border-radius: 10px;">
-																	<div class="progress-bar"
-																		style="width: 5%; height: .25rem; border-radius: 10px; border-color: #0d6ffc;">
-																	</div>
+
+													<!-- 점수 분포 -->
+													<div th:with="total=${review_count}"
+														style="display:flex;flex-direction:column;gap:.5rem;line-height:1.5;">
+
+														<th:block th:each="i : ${#numbers.sequence(5,1,-1)}" th:with="
+															key=${i.intValue()},
+															count=${ratingCounts.get(key)},
+															percent=${count != null ? (count * 100.0 / total) : 0}
+															">
+															<div style="display:flex;align-items:center;gap:.75rem;">
+																<!-- 점수 라벨 -->
+																<div style="font-size:.9rem;font-weight:bold;color:#494949;" th:text="${key} + '점'">점수
 																</div>
-																<div style="font-size: .875rem; font-weight: bold; color: #0d6ffc; width: 1.2rem;">0.0
+																<!-- 바 배경 -->
+																<div
+																	style="flex:1; height:.5rem; background:#e5e7eb; border-radius:999px; overflow:hidden;">
+																	<div th:style="|width:${percent}%; height:100%; background:#0d6ffc;|"></div>
 																</div>
+																<!-- 인원 수 -->
+																<div style="width:2rem;text-align:right;font-size:.9rem;color:#333;"
+																	th:text="${count != null ? count : 0} + '명'">몇명</div>
 															</div>
-														</div>
-														<div style="display: flex; justify-content: space-between;">
-															<div style="font-size: 1rem; color: #494949;">직원 친절도</div>
-															<div style="gap: .313rem; align-items: center; display: flex;">
-																<div class="progress"
-																	style="width: 7.906rem; height: .25rem; border-color: #d4d4d4; border-radius: 10px;">
-																	<div class="progress-bar"
-																		style="width: 5%; height: .25rem; border-radius: 10px; border-color: #0d6ffc;">
-																	</div>
-																</div>
-																<div style="font-size: .875rem; font-weight: bold; color: #0d6ffc; width: 1.2rem;">0.0
-																</div>
-															</div>
-														</div>
-														<div style="display: flex; justify-content: space-between;">
-															<div style="font-size: 1rem; color: #494949;">이용 만족도</div>
-															<div style="gap: .313rem; align-items: center; display: flex;">
-																<div class="progress"
-																	style="width: 7.906rem; height: .25rem; border-color: #d4d4d4; border-radius: 10px;">
-																	<div class="progress-bar"
-																		style="width: 5%; height: .25rem; border-radius: 10px; border-color: #0d6ffc;">
-																	</div>
-																</div>
-																<div style="font-size: .875rem; font-weight: bold; color: #0d6ffc; width: 1.2rem;">0.0
-																</div>
-															</div>
-														</div>
+														</th:block>
 													</div>
 												</div>
-												<!-- 댓글 스와이프 -->
 												<div style="position: relative; margin-left: 0; padding-left: 1rem; width: 50%; flex: 1 1 50%;">
 													<div style="padding: 0 .5rem !important;"></div>
 												</div>
@@ -1983,7 +1714,7 @@
 												</div>
 												<!-- 리뷰 리스트 목록 -->
 												<th:block th:each="rev : ${reviewList}">
-													<div
+													<div class="review-item"
 														style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
 														th:attr="data-nick=${rev.me_nick}, data-content=${rev.rv_content}, data-date=${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
 														onclick="handleReviewClick(this)">
@@ -2016,8 +1747,7 @@
 														</div>
 													</div>
 												</th:block>
-												<button style="cursor: pointer; font-size: 1rem; border-radius: .5rem; color: #7b8bab; border: 1px solid #7b8bab; background: rgba(0, 0, 0, 0); gap: .25rem; justify-content: center; align-items: centerdis;
-														display: flex; width: 100%; margin: 1rem 0; padding: 7px 0;">더보기</button>
+												<button id="review-more-btn">더보기</button>
 											</div>
 										</div>
 									</div>
@@ -2096,55 +1826,278 @@
 					</div>
 				</div>
 			</div>
+			<!-- 지도 모달 -->
+			<div class="modal fade" id="mapModal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 700px;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">호텔 지도 보기</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body p-0">
+							<div id="modal-map" style="width: 100%; height: 400px;"></div>
+							<div class="p-3" style="font-size: 0.9rem; color: #666; display: flex; justify-content: center;"
+								id="map-address"></div>
+						</div>
+						<div class="modal-footer p-0">
+							<div class="d-flex w-100">
+								<button type="button" id="route-btn" class="flex-fill btn btn-light rounded-0">
+									길찾기
+								</button>
+								<button type="button" id="copy-addr-btn" class="flex-fill btn btn-light rounded-0 border-left">
+									주소 복사
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 주변시설 모달 수정된 HTML 구조 -->
+			<div class="modal fade" id="aroundMapModal" tabindex="-1">
+				<div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 900px;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">호텔 주변시설</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
 
-			<script>
+						<!-- 탭 버튼 -->
+						<div class="d-flex gap-2 px-4 pt-3">
+							<button class="btn btn-outline-secondary around-tab-btn active" data-cat="SW8">대중교통</button>
+							<button class="btn btn-outline-secondary around-tab-btn" data-cat="AT4">명소</button>
+							<button class="btn btn-outline-secondary around-tab-btn" data-cat="OL7">전기차충전소</button>
+						</div>
+
+						<!-- 본문 -->
+						<div class="modal-body p-0 d-flex" style="height: 500px;">
+							<!-- 왼쪽 리스트 -->
+							<div id="modal-place-list"
+								style="width: 30%; overflow-y: auto; padding: 1rem; border-right: 1px solid #eee;">
+								<!-- 동적 주입 -->
+							</div>
+							<!-- 오른쪽 지도 -->
+							<div id="modal-map-around" style="width: 70%; height: 100%;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<script th:inline="javascript">
+				// 전역 큐와 캐시 저장소 선언
+				let mapQueue = [];
+				const coordsCache = {};
+
+				// 주소 → 좌표 변환 + 캐시
+				function getCoords(address, cb) {
+					if (coordsCache[address]) {
+						return cb(coordsCache[address]);
+					}
+					const geocoder = new kakao.maps.services.Geocoder();
+					geocoder.addressSearch(address, (result, status) => {
+						if (status === kakao.maps.services.Status.OK) {
+							const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+							coordsCache[address] = coords;
+							cb(coords);
+						} else {
+							console.error("주소 검색 실패:", status);
+						}
+					});
+				}
+
+				// 큐에서 하나씩 꺼내 지도 생성
+				function processQueue() {
+					if (mapQueue.length === 0) return;
+					const { id, address } = mapQueue.shift();
+					const container = document.getElementById(id);
+					if (!container) {
+						// 컨테이너가 없으면 바로 다음
+						return setTimeout(processQueue, 100);
+					}
+
+					// 캐시된 좌표 재사용 또는 API 호출
+					getCoords(address, coords => {
+						const map = new kakao.maps.Map(container, {
+							center: coords,
+							level: 3
+						});
+						new kakao.maps.Marker({ position: coords, map: map });
+						// 크기 재계산 (기존 relayout)
+						setTimeout(() => map.relayout(), 100);
+						// 다음 큐 실행은 100ms 뒤
+						setTimeout(processQueue, 100);
+					});
+				}
+
+				// 페이지 로드 시 map, map1 순차 실행 시작
 				document.addEventListener("DOMContentLoaded", function () {
-
 					kakao.maps.load(function () {
-						// 지도 정보를 배열로 관리
-						const mapData = [
-							{ id: 'map', address: '경기도 안산시 단원구 중앙대로 869', lat: 0, lng: 0 },  // 주소로 변경
-							{ id: 'map1', address: '경기도 안산시 단원구 중앙대로 869', lat: 0, lng: 0 }  // 주소로 변경
+						const address = /*[[${lodging.ld_region}]]*/ "";
+
+						mapQueue = [
+							{ id: 'map', address },
+							{ id: 'map1', address }
 						];
+						processQueue();
+					});
+				});
+			</script>
 
-						// 각 지도 생성
-						mapData.forEach((mapInfo) => {
-							var container = document.getElementById(mapInfo.id);
-							if (container) {  // 해당 ID의 div가 있을 때만 지도 생성
+			<!-- 모달 지도 -->
+			<script th:inline="javascript">
+				const address = /*[[${lodging.ld_region}]]*/ "";
 
-								// 주소로 좌표 변환
-								var geocoder = new kakao.maps.services.Geocoder();
-								geocoder.addressSearch(mapInfo.address, function (result, status) {
-									if (status === kakao.maps.services.Status.OK) {
-										// 주소를 좌표로 변환한 결과
-										var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+				function openMapModal() {
+					$('#mapModal').modal('show');
+					$('#map-address').text(address);
 
-										// 지도 옵션
-										var options = {
-											center: coords,  // 변환된 좌표로 중심을 설정
-											level: 3
-										};
+					$('#mapModal').on('shown.bs.modal', function () {
+						const container = document.getElementById('modal-map');
 
-										// 지도 생성
-										var map = new kakao.maps.Map(container, options);
+						// 모달에서도 캐시된 좌표 재사용
+						getCoords(address, coords => {
+							const map = new kakao.maps.Map(container, {
+								center: coords,
+								level: 3
+							});
+							new kakao.maps.Marker({ position: coords, map: map });
+						});
 
-										// 마커 생성
-										var marker = new kakao.maps.Marker({
-											position: coords
-										});
-										marker.setMap(map);
+						// 한 번만 실행
+						$(this).off('shown.bs.modal');
+					});
+				}
+			</script>
 
-										// 크기 갱신 (필요 시)
-										setTimeout(() => map.relayout(), 100);
-									} else {
-										console.error("주소 검색에 실패했습니다.");
-									}
-								});
-							}
+			<!--모달 길찾기 복사-->
+			<script>
+				document.addEventListener("DOMContentLoaded", () => {
+					$('#mapModal').on('shown.bs.modal', () => {
+						const addr = $('#map-address').text().trim();
+						document.getElementById('route-btn').onclick = () => {
+							// 주소 검색 결과로 이동
+							const url = "https://map.kakao.com/link/search/" + encodeURIComponent(addr);
+							window.open(url, "_blank");
+						};
+						document.getElementById('copy-addr-btn').onclick = () => {
+							navigator.clipboard.writeText(addr).then(() => alert("주소가 복사되었습니다."));
+						};
+					});
+				});
+			</script>
+
+			<!-- 주변시설 -->
+			<script th:inline="javascript">
+				let aroundMap; // 지도 인스턴스 저장용
+				let aroundMarkers = []; // 기존 마커 제거용
+				let selectedCategory = 'SW8'; // 기본값: 지하철
+
+				// 주소를 좌표로 변환 (재사용 가능)
+				function getCoordsFromAddress(address, callback) {
+					const geocoder = new kakao.maps.services.Geocoder();
+					geocoder.addressSearch(address, function (result, status) {
+						if (status === kakao.maps.services.Status.OK) {
+							const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+							callback(coords);
+						} else {
+							alert("주소를 좌표로 변환할 수 없습니다.");
+						}
+					});
+				}
+
+				// 주변 카테고리 검색 실행
+				function searchNearbyPlaces(coords, categoryCode) {
+					const places = new kakao.maps.services.Places(aroundMap);
+
+					const cb = (data, status) => {
+						if (status !== kakao.maps.services.Status.OK) return;
+
+						// 기존 마커 제거
+						aroundMarkers.forEach(marker => marker.setMap(null));
+						aroundMarkers = [];
+
+						// 리스트 갱신
+						const listEl = document.getElementById('modal-place-list');
+						listEl.innerHTML = '';
+
+						data.forEach(place => {
+							// 리스트 추가
+							const item = document.createElement('div');
+							item.className = 'mb-3';
+							item.innerHTML = `
+					<div style="font-weight: 600; color: #222;">${place.place_name}</div>
+					<div style="font-size: 0.85rem; color: #888;">${Math.round(place.distance)}m</div>
+				`;
+							listEl.appendChild(item);
+
+							// 마커 추가
+							const marker = new kakao.maps.Marker({
+								position: new kakao.maps.LatLng(place.y, place.x),
+								map: aroundMap
+							});
+							aroundMarkers.push(marker);
+						});
+					};
+
+					places.categorySearch(categoryCode, cb, {
+						location: coords,
+						radius: 2000
+					});
+				}
+
+				// 모달 열기
+				function openAroundMapModal() {
+					const address = /*[[${lodging.ld_region}]]*/ "";
+
+					$('#aroundMapModal').modal('show');
+
+					$('#aroundMapModal').on('shown.bs.modal', function () {
+						getCoordsFromAddress(address, coords => {
+							const container = document.getElementById('modal-map-around');
+							aroundMap = new kakao.maps.Map(container, {
+								center: coords,
+								level: 4
+							});
+
+							// 기준점 마커는 호텔 이미지로
+							new kakao.maps.Marker({
+								position: coords,
+								map: aroundMap,
+								image: new kakao.maps.MarkerImage(
+									"/resources/static/imgs/mak.svg",
+									new kakao.maps.Size(45, 45),
+									new kakao.maps.Point(16, 32)
+								)
+							});
+
+							searchNearbyPlaces(coords, selectedCategory);
+						});
+
+						$(this).off('shown.bs.modal'); // 1회 실행
+					});
+				}
+
+				// 탭 클릭 처리
+				document.addEventListener("DOMContentLoaded", function () {
+					document.querySelectorAll('.around-tab-btn').forEach((btn, idx) => {
+						btn.addEventListener('click', function () {
+							document.querySelectorAll('.around-tab-btn').forEach(b => b.classList.remove('active'));
+							this.classList.add('active');
+
+							const address = /*[[${lodging.ld_region}]]*/ "";
+
+							let category = this.dataset.cat;
+							selectedCategory = category;
+
+							getCoordsFromAddress(address, coords => {
+								searchNearbyPlaces(coords, category);
+							});
 						});
 					});
 				});
 			</script>
+
 			<script>
 				document.addEventListener('DOMContentLoaded', function () {
 					// 메뉴 스크롤 이동 버튼
@@ -2174,6 +2127,17 @@
 
 							window.scrollTo({ top: y, behavior: 'smooth' });
 						});
+						// 상단리뷰 평점 화살표 이동
+						document.querySelector('.go-to-review')?.addEventListener('click', function () {
+							const targetSelector = this.dataset.target;
+							const target = document.querySelector(targetSelector);
+							if (!target) return;
+
+							const headerOffset = 80;
+							const y = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+							window.scrollTo({ top: y, behavior: 'smooth' });
+						});
+
 					});
 
 					// info-tab 내부 탭 전환 기능
@@ -2198,11 +2162,11 @@
 					document.querySelectorAll('.hotel-reserve-btn').forEach(btn => {
 						btn.addEventListener('click', function () {
 							const checkTime = this.dataset.checkTime;
-							const rmPerson = this.dataset.rmPerson;
+							const rmPerson = $("#check-people").text();
 							const ldNum = this.dataset.ldNum;
 							const rmNum = this.dataset.rmNum;
-
-							const url = `/pay/payment?checkTime=${encodeURIComponent(checkTime)}&rm_person=${encodeURIComponent(rmPerson)}&ld_num=${ldNum}&rm_num=${rmNum}`;
+							console.log(rmPerson);
+							const url = `/pay/payment?checkTime=${encodeURIComponent(checkTime)}&rm_person=` + rmPerson + `&ld_num=${ldNum}&rm_num=${rmNum}`;
 							location.href = url;
 						});
 					});
@@ -2457,6 +2421,7 @@
 					document.getElementById('modal-content').textContent = content;
 					document.getElementById('modal-date').textContent = date;
 					$('#reviewModal').modal('show');
+					document.querySelector('#reviewModal .modal-body').scrollTop = 0;
 				}
 			</script>
 			<script>
@@ -2467,6 +2432,36 @@
 					showReviewModal(nick, content, date);
 				}
 			</script>
+
+			<script>
+				document.addEventListener('DOMContentLoaded', function () {
+					// 리뷰 항목
+					const reviews = document.querySelectorAll('.review-item');
+
+					// 더보기 버튼
+					const moreBtn = document.getElementById('review-more-btn');
+
+					const showCount = 3;
+
+					// 리뷰가 3개 이하면 버튼 숨김
+					if (reviews.length <= showCount) {
+						moreBtn.style.display = 'none';
+						return;
+					}
+
+					// 처음엔 4번째 이후 리뷰들 숨기기
+					reviews.forEach((el, idx) => {
+						if (idx >= showCount) el.style.display = 'none';
+					});
+
+					// 클릭 시 나머지 리뷰 모두 보여주고 버튼 숨기기
+					moreBtn.addEventListener('click', function () {
+						reviews.forEach(el => el.style.display = 'block');
+						moreBtn.style.display = 'none';
+					});
+				});
+			</script>
+
 		</main>
 	</div>
 </body>

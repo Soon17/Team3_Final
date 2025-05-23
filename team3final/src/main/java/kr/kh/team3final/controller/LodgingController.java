@@ -1,6 +1,8 @@
 package kr.kh.team3final.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,10 +56,19 @@ public class LodgingController {
     List<ThumbnailVO> thumbList = thumbnailService.selectThumbnail("lodging", ld_num);
     List<Lodging_ReviewDTO> reviewList = reviewService.selectReview("room", ld_num);
     LodgingVO stats = reviewService.selectLodgingReviewStats(ld_num);
+    List<Map<String, Object>> raw = reviewService.selectRatingCounts(ld_num);
 
     for (RoomVO room : roomList) {
       List<ThumbnailVO> roomThumbList = thumbnailService.selectThumbnail("room", room.getRm_num());
       room.setThumbList(roomThumbList);
+    }
+
+    Map<Integer, Integer> ratingCounts = new HashMap<>();
+    for (Map<String, Object> row : raw) {
+      Integer score = ((Number) row.get("rv_rating")).intValue();
+      Integer cnt = ((Number) row.get("cnt")).intValue();
+
+      ratingCounts.put(score, cnt);
     }
 
     model.addAttribute("regionList", list);
@@ -69,6 +80,7 @@ public class LodgingController {
     model.addAttribute("reviewList", reviewList);
     model.addAttribute("avg_rating", stats.getAvg_rating());
     model.addAttribute("review_count", stats.getReview_count());
+    model.addAttribute("ratingCounts", ratingCounts);
 
     return "reserv";
   }

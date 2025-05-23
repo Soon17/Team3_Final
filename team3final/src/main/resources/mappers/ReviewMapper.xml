@@ -43,4 +43,13 @@
         WHERE rv_table_name = 'room'
             AND rm_ld_num = #{ld_num}
     </select>
+    <select id="selectRatingCounts" resultType="map">
+        SELECT rv_rating, COUNT(*) AS cnt
+        FROM review r
+        JOIN room rm ON r.rv_number = rm.rm_num
+        WHERE r.rv_table_name = 'room'
+            AND rm.rm_ld_num = #{ld_num}
+        GROUP BY rv_rating
+    </select>
+
 </mapper>
