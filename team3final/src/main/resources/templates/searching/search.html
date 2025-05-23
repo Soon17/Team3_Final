@@ -5,9 +5,12 @@
 <head>
    <meta charset="UTF-8">
    <title>카모아 - 국내도 해외도 렌트카</title>
-   <!-- <script
-   src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
+   <script
+   src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
    <style>
+      .marker-title-div{
+         border-radius: 20px;
+      }
       .hotel-map-datail {
          position: relative;
          overflow: hidden;
@@ -1100,69 +1103,7 @@
                $("#modal").hide();
             }
          });
-
-      </script>
-      <script>
-         $(document).on('click', '.kakao-loadMap', function () {
-            let region = [];
-            $('.card-link').each(function () {
-               //region.push($(this).data('ld-region'));
-
-            });
-            region.push("제주특별자치도 제주시 조천읍 신북로 470", "제주특별자치도 서귀포시 1100로 453-95")
-            console.log(region)
-            kakaoMapLoad(region);
-         });
-
-         function kakaoMapLoad(addresses) {
-
-            var mapContainer = document.getElementById('map1'), // 지도를 표시할 div 
-               mapOption = {
-                  center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                  level: 3 // 지도의 확대 레벨
-               };
-
-            // 지도를 생성합니다    
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-
-            // 마커 이미지의 이미지 주소입니다
-            var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-            var geocoder = new kakao.maps.services.Geocoder();
-            for (var i = 0; i < addresses.length; i++) {
-
-               geocoder.addressSearch(addresses[i], function (result, status) {
-
-                  if (status === kakao.maps.services.Status.OK) {
-                     // 주소를 좌표로 변환한 결과
-                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                     console.log(result)
-                     // 지도 옵션
-                     var options = {
-                        center: coords,  // 변환된 좌표로 중심을 설정
-                        level: 3
-                     };
-
-                     // 마커 이미지의 이미지 크기 입니다
-                     var imageSize = new kakao.maps.Size(24, 35);
-
-                     // 마커 이미지를 생성합니다    
-                     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-                     // 마커를 생성합니다
-                     var marker = new kakao.maps.Marker({
-                        map: map, // 마커를 표시할 지도
-                        position: result[0].latlng, // 마커를 표시할 위치
-                        title: addresses[i], // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                        image: markerImage // 마커 이미지 
-                     });
-                  } else {
-                     console.error("주소 검색에 실패했습니다.");
-                  }
-               });
-
-
-            }
-            // kakao.maps.load(function () {
+  // kakao.maps.load(function () {
             //    // 지도 정보를 배열로 관리
             //    const mapData = [
             //       { id: 'map1', address: '경기도 안산시 단원구 중앙대로 869', lat: 0, lng: 0 }  // 주소로 변경
@@ -1204,6 +1145,78 @@
             //       }
             //    });
             // });
+      </script>
+      <script>
+         $(document).on('click', '.kakao-loadMap', function () {
+            let region = [];
+            $('.card-link').each(function () {
+               //region.push($(this).data('ld-region'));
+            });
+            let ld_name=[];
+            $('.hotel-name').each(function () {
+               ld_name.push($(this).text());
+            });
+            console.log(ld_name)
+            region.push("제주특별자치도 제주시 조천읍 신북로 470", "제주특별자치도 서귀포시 1100로 453-95")
+            kakaoMapLoad(region,ld_name);
+         });
+
+         function kakaoMapLoad(addresses,ld_name) {
+
+            var mapContainer = document.getElementById('map1'), // 지도를 표시할 div 
+               mapOption = {
+                  center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                  level: 3 // 지도의 확대 레벨
+               };
+
+            // 지도를 생성합니다    
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 마커 이미지의 이미지 주소입니다
+            var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+            var geocoder = new kakao.maps.services.Geocoder();
+            for (let i = 0; i < addresses.length; i++) {
+
+               geocoder.addressSearch(addresses[i], function (result, status) {
+
+                  if (status === kakao.maps.services.Status.OK) {
+                     // 주소를 좌표로 변환한 결과
+                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                     // 지도 옵션
+                     var options = {
+                        center: coords,  // 변환된 좌표로 중심을 설정
+                        level: 3
+                     };
+
+                     // 마커 이미지의 이미지 크기 입니다
+                     var imageSize = new kakao.maps.Size(24, 35);
+
+                     // 마커 이미지를 생성합니다    
+                     var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                     // 마커를 생성합니다
+                     var marker = new kakao.maps.Marker({
+                        map: map, // 마커를 표시할 지도
+                        position: coords, // 마커를 표시할 위치
+                        title: addresses[i], // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                        image: markerImage // 마커 이미지 
+                     });
+                     marker.myTitle = ld_name[i];
+                     var iwContent = '<div class="marker-title">'+marker.myTitle +'</div>';
+                     var infowindow = new kakao.maps.InfoWindow({
+                           content :  iwContent // 인포윈도우에 표시할 내용
+                     });
+                     console.log(marker.myTitle);
+                     // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+                     // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+                     // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                     infowindow.open(map, marker);
+                     $(".marker-title").parent().addClass('marker-title-div'); 
+                  } else {
+                     console.error("주소 검색에 실패했습니다.");
+                  }
+               });
+            }         
          }
       </script>
    </main>
