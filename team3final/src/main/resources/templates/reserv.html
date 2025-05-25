@@ -11,8 +11,8 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<!-- Kakao Maps API -->
-	<script
-		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ad16376e4af261fc1e62afc32792b67a&libraries=services,clusterer,drawing"></script>
+	<!-- <script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ad16376e4af261fc1e62afc32792b67a&libraries=services,clusterer,drawing"></script> -->
 
 	<style>
 		.container {
@@ -811,6 +811,20 @@
 		[id^="roomDetailModal__"] .modal-footer .hotel-reserve-btn:hover {
 			background-color: #007bff;
 		}
+
+		#backToHotelBtn {
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+			background: #9cb5cf;
+			border: 1px solid #ddd;
+			border-radius: 20px;
+			padding: 6px 12px;
+			font-size: 13px;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			z-index: 10;
+			display: none;
+		}
 	</style>
 </head>
 
@@ -937,6 +951,12 @@
 							</div>
 
 							<!-- 숙소 방 정보 리스트 -->
+							<div th:if="${#lists.isEmpty(roomList)}"
+								style="text-align: center; padding: 3rem 1rem; background-color: #fff;">
+								<h5 style="font-weight: bold; color: #333;">해당 날짜에 예약 가능한 객실이 없습니다</h5>
+								<p style="color: #888; font-size: 0.9rem;">선택한 날짜를 기준으로<br>예약가능 날짜를 확인해보세요</p>
+							</div>
+
 							<th:block th:each="room, iterStat : ${roomList}">
 								<div class="hotel-box">
 									<div class="hotel-img">
@@ -1430,55 +1450,18 @@
 										호텔 주변시설</h3>
 									<div>
 										<div id="info-tab" style="margin-top: 0; display: flex; gap: .375rem;">
-											<button class="sub-infor active">대중교통</button>
-											<button class="sub-infor">명소</button>
-											<button class="sub-infor">전기차충전소</button>
+											<button class="sub-infor active" data-cat="SW8">대중교통</button>
+											<button class="sub-infor" data-cat="AT4">명소</button>
+											<button class="sub-infor" data-cat="PK6">전기차충전소</button>
 										</div>
 										<div style="margin-top: 1rem;">
 											<div style="align-items: center; display: flex; justify-content: space-between;">
-												<p style="margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.4;">대중교통</p>
+												<p id="transport-title" style="margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.4;">
+													대중교통</p>
 											</div>
-											<div
-												style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
-												<div style="margin: 0 1rem 0 .25rem;">
-													<p style="margin: 0; color: #666;">지하철역</p>
-													<p style="margin: 0; color: #494949; font-weight: 700;">중앙역</p>
-												</div>
-												<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">585m</p>
-											</div>
-											<div
-												style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
-												<div style="margin: 0 1rem 0 .25rem;">
-													<p style="margin: 0; color: #666;">지하철역</p>
-													<p style="margin: 0; color: #494949; font-weight: 700;">고잔역</p>
-												</div>
-												<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">872m</p>
-											</div>
-											<div
-												style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
-												<div style="margin: 0 1rem 0 .25rem;">
-													<p style="margin: 0; color: #666;">지하철역</p>
-													<p style="margin: 0; color: #494949; font-weight: 700;">한대앞역</p>
-												</div>
-												<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">2.0km</p>
-											</div>
-											<div
-												style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
-												<div style="margin: 0 1rem 0 .25rem;">
-													<p style="margin: 0; color: #666;">지하철역</p>
-													<p style="margin: 0; color: #494949; font-weight: 700;">초지역</p>
-												</div>
-												<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">2.4km</p>
-											</div>
-											<div
-												style="padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;">
-												<div style="margin: 0 1rem 0 .25rem;">
-													<p style="margin: 0; color: #666;">지하철역</p>
-													<p style="margin: 0; color: #494949; font-weight: 700;">상록수역</p>
-												</div>
-												<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">3.4km</p>
-											</div>
+											<div id="transport-list-detail"></div>
 										</div>
+
 										<button class="btn btn-outline-primary btn-map" onclick="openAroundMapModal()">지도로 보기</button>
 									</div>
 
@@ -1828,14 +1811,16 @@
 			</div>
 			<!-- 지도 모달 -->
 			<div class="modal fade" id="mapModal" tabindex="-1" role="dialog">
-				<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 700px;">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 750px;">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title">호텔 지도 보기</h5>
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 						</div>
 						<div class="modal-body p-0">
-							<div id="modal-map" style="width: 100%; height: 400px;"></div>
+							<div style="height: 70vh; max-height: 800px;">
+								<div id="modal-map" style="width: 100%; height: 100%;"></div>
+							</div>
 							<div class="p-3" style="font-size: 0.9rem; color: #666; display: flex; justify-content: center;"
 								id="map-address"></div>
 						</div>
@@ -1862,38 +1847,45 @@
 						</div>
 
 						<!-- 탭 버튼 -->
-						<div class="d-flex gap-2 px-4 pt-3">
+						<div class="d-flex gap-2 px-4 py-2">
 							<button class="btn btn-outline-secondary around-tab-btn active" data-cat="SW8">대중교통</button>
-							<button class="btn btn-outline-secondary around-tab-btn" data-cat="AT4">명소</button>
-							<button class="btn btn-outline-secondary around-tab-btn" data-cat="OL7">전기차충전소</button>
+							<button class="btn btn-outline-secondary around-tab-btn ml-2" data-cat="AT4">명소</button>
+							<button class="btn btn-outline-secondary around-tab-btn ml-2" data-cat="OL7">전기차충전소</button>
 						</div>
 
 						<!-- 본문 -->
-						<div class="modal-body p-0 d-flex" style="height: 500px;">
+						<div class="modal-body p-0 d-flex" style=" height: 70vh; max-height: 800px;">
 							<!-- 왼쪽 리스트 -->
 							<div id="modal-place-list"
-								style="width: 30%; overflow-y: auto; padding: 1rem; border-right: 1px solid #eee;">
+								style="cursor: pointer; width: 30%; overflow-y: auto; padding: 1rem; border-right: 1px solid #eee;">
 								<!-- 동적 주입 -->
 							</div>
+							<button id="backToHotelBtn">
+								호텔 위치로 돌아가기
+							</button>
 							<!-- 오른쪽 지도 -->
-							<div id="modal-map-around" style="width: 70%; height: 100%;"></div>
+							<div id="modal-map-around" style="width: 100%; height: 100%;"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-
-
 			<script th:inline="javascript">
 				// 전역 큐와 캐시 저장소 선언
 				let mapQueue = [];
 				const coordsCache = {};
+				let initialCategory = 'SW8';
+				let listCache = {}; // 카테고리별 리스트 캐싱용
+
+				const categoryTitleMap = {
+					SW8: "대중교통",
+					AT4: "명소",
+					PK6: "전기차충전소"
+				};
 
 				// 주소 → 좌표 변환 + 캐시
 				function getCoords(address, cb) {
-					if (coordsCache[address]) {
-						return cb(coordsCache[address]);
-					}
+					if (coordsCache[address]) return cb(coordsCache[address]);
 					const geocoder = new kakao.maps.services.Geocoder();
 					geocoder.addressSearch(address, (result, status) => {
 						if (status === kakao.maps.services.Status.OK) {
@@ -1906,26 +1898,74 @@
 					});
 				}
 
+				// 리스트 렌더링 (5개만)
+				function renderTransportList(data, category) {
+					const container = document.getElementById('transport-list-detail');
+					if (!container) return;
+
+					container.innerHTML = '';
+
+					// 타이틀 변경
+					const title = categoryTitleMap[category] || '';
+					document.querySelector('#info-tab + div > div > p').textContent = title;
+
+					data
+						.sort((a, b) => a.distance - b.distance)
+						.slice(0, 5)
+						.forEach(place => {
+							const distanceText = place.distance >= 1000
+								? (place.distance / 1000).toFixed(1) + 'km'
+								: Math.round(place.distance) + 'm';
+
+							const div = document.createElement('div');
+							div.style = "padding: .5rem 0; align-items: flex-start; display: flex; cursor: pointer; justify-content: space-between;";
+							div.innerHTML = `
+				<div style="margin: 0 1rem 0 .25rem;">
+					<p style="margin: 0; color: #666;">${place.category_group_name || '장소'}</p>
+					<p style="margin: 0; color: #494949; font-weight: 700;">${place.place_name}</p>
+				</div>
+				<p style="margin-top: auto; margin: 0; color: #999; font-size: .875rem;">${distanceText}</p>
+			`;
+							container.appendChild(div);
+						});
+				}
+
 				// 큐에서 하나씩 꺼내 지도 생성
 				function processQueue() {
 					if (mapQueue.length === 0) return;
 					const { id, address } = mapQueue.shift();
 					const container = document.getElementById(id);
-					if (!container) {
-						// 컨테이너가 없으면 바로 다음
-						return setTimeout(processQueue, 100);
-					}
+					if (!container) return setTimeout(processQueue, 100);
 
-					// 캐시된 좌표 재사용 또는 API 호출
 					getCoords(address, coords => {
 						const map = new kakao.maps.Map(container, {
 							center: coords,
 							level: 3
 						});
 						new kakao.maps.Marker({ position: coords, map: map });
-						// 크기 재계산 (기존 relayout)
+
+						if (id === 'map') {
+							const places = new kakao.maps.services.Places();
+
+							// 각 카테고리에 대해 검색 & 캐시 & 렌더
+							Object.keys(categoryTitleMap).forEach(catCode => {
+								places.categorySearch(catCode, (data, status) => {
+									if (status === kakao.maps.services.Status.OK) {
+										listCache[catCode] = data;
+
+										// 초기 로딩시 기본 카테고리만 렌더링
+										if (catCode === initialCategory) {
+											renderTransportList(data, catCode);
+										}
+									}
+								}, {
+									location: coords,
+									radius: 2000
+								});
+							});
+						}
+
 						setTimeout(() => map.relayout(), 100);
-						// 다음 큐 실행은 100ms 뒤
 						setTimeout(processQueue, 100);
 					});
 				}
@@ -1940,6 +1980,19 @@
 							{ id: 'map1', address }
 						];
 						processQueue();
+
+						// 탭 클릭 시 캐시된 리스트로 렌더링
+						document.querySelectorAll('#info-tab .sub-infor').forEach((btn, idx) => {
+							btn.addEventListener('click', function () {
+								document.querySelectorAll('#info-tab .sub-infor').forEach(b => b.classList.remove('active'));
+								this.classList.add('active');
+
+								const category = ['SW8', 'AT4', 'PK6'][idx];
+								if (listCache[category]) {
+									renderTransportList(listCache[category], category);
+								}
+							});
+						});
 					});
 				});
 			</script>
@@ -1992,6 +2045,10 @@
 				let aroundMap; // 지도 인스턴스 저장용
 				let aroundMarkers = []; // 기존 마커 제거용
 				let selectedCategory = 'SW8'; // 기본값: 지하철
+				let hotelCoords = null; //호텔
+				let openedInfoWindow = null; //현재마커
+				let openedInfoTarget = null; //다시 클릭할때 마커
+				let selectedListItem = null; //색변경용		
 
 				// 주소를 좌표로 변환 (재사용 가능)
 				function getCoordsFromAddress(address, callback) {
@@ -2017,26 +2074,83 @@
 						aroundMarkers.forEach(marker => marker.setMap(null));
 						aroundMarkers = [];
 
-						// 리스트 갱신
+						// 인포윈도우 초기화
+						if (openedInfoWindow) {
+							openedInfoWindow.close();
+							openedInfoWindow = null;
+							openedInfoTarget = null;
+						}
+
+						// 리스트 초기화
 						const listEl = document.getElementById('modal-place-list');
 						listEl.innerHTML = '';
 
 						data.forEach(place => {
-							// 리스트 추가
 							const item = document.createElement('div');
 							item.className = 'mb-3';
 							item.innerHTML = `
-					<div style="font-weight: 600; color: #222;">${place.place_name}</div>
-					<div style="font-size: 0.85rem; color: #888;">${Math.round(place.distance)}m</div>
-				`;
-							listEl.appendChild(item);
+								<div style="font-weight: 600; color: #222;">${place.place_name}</div>
+								<div style="font-size: 0.85rem; color: #888;">${Math.round(place.distance)}m</div>
+							`;
 
-							// 마커 추가
+							const distanceText = place.distance >= 1000
+								? (place.distance / 1000).toFixed(1) + 'km'
+								: Math.round(place.distance) + 'm';
+
+							item.innerHTML = `
+								<div style="font-weight: 600; color: #222;">${place.place_name}</div>
+								<div style="font-size: 0.85rem; color: #888;">${distanceText}</div>
+							`;
+
+							const latlng = new kakao.maps.LatLng(place.y, place.x);
+
 							const marker = new kakao.maps.Marker({
-								position: new kakao.maps.LatLng(place.y, place.x),
+								position: latlng,
 								map: aroundMap
 							});
 							aroundMarkers.push(marker);
+
+							// 🔗 마커에 대응 리스트 DOM 연결
+							marker._listItem = item;
+
+							const infoWindow = new kakao.maps.InfoWindow({
+								content: `<div style="padding:5px; font-size:13px;">${place.place_name}</div>`
+							});
+
+							// 리스트 클릭
+							item.addEventListener('click', () => {
+								aroundMap.setCenter(latlng);
+								aroundMap.setLevel(3);
+
+								if (openedInfoWindow) openedInfoWindow.close();
+								infoWindow.open(aroundMap, marker);
+								openedInfoWindow = infoWindow;
+
+								if (selectedListItem) {
+									selectedListItem.style.backgroundColor = '';
+									selectedListItem.style.color = '';
+								}
+								item.style.backgroundColor = '#f0f0f0';
+								item.style.color = '#222';
+								selectedListItem = item;
+							});
+
+							//  마커 클릭 시 리스트 강조 적용
+							kakao.maps.event.addListener(marker, 'click', function () {
+								if (openedInfoWindow) openedInfoWindow.close();
+								infoWindow.open(aroundMap, marker);
+								openedInfoWindow = infoWindow;
+
+								if (selectedListItem) {
+									selectedListItem.style.backgroundColor = '';
+									selectedListItem.style.color = '';
+								}
+								this._listItem.style.backgroundColor = '#f0f0f0';
+								this._listItem.style.color = '#222';
+								selectedListItem = this._listItem;
+							});
+
+							listEl.appendChild(item);
 						});
 					};
 
@@ -2054,13 +2168,14 @@
 
 					$('#aroundMapModal').on('shown.bs.modal', function () {
 						getCoordsFromAddress(address, coords => {
+							hotelCoords = coords; // 호텔 좌표 저장
+
 							const container = document.getElementById('modal-map-around');
 							aroundMap = new kakao.maps.Map(container, {
 								center: coords,
 								level: 4
 							});
 
-							// 기준점 마커는 호텔 이미지로
 							new kakao.maps.Marker({
 								position: coords,
 								map: aroundMap,
@@ -2071,12 +2186,26 @@
 								)
 							});
 
+							document.getElementById('backToHotelBtn').style.display = 'block'; // 버튼 보이기
+
 							searchNearbyPlaces(coords, selectedCategory);
 						});
 
 						$(this).off('shown.bs.modal'); // 1회 실행
 					});
 				}
+
+				// 호텔로 돌아가기
+				document.addEventListener('DOMContentLoaded', function () {
+					const backBtn = document.getElementById('backToHotelBtn');
+					if (backBtn) {
+						backBtn.addEventListener('click', function () {
+							if (hotelCoords && aroundMap) {
+								aroundMap.setCenter(hotelCoords);
+							}
+						});
+					}
+				});
 
 				// 탭 클릭 처리
 				document.addEventListener("DOMContentLoaded", function () {

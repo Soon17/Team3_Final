@@ -13,8 +13,8 @@ public class RoomService {
 	@Autowired
 	RoomDAO roomDao;
 
-	public List<RoomVO> selectRoomListByLodging(int ld_num) {
-		return roomDao.selectRoomListByLodging(ld_num);
+	public List<RoomVO> getAvailableRooms(int ld_num, String checkin, String checkout, int person) {
+		return roomDao.getAvailableRooms(ld_num, checkin, checkout, person);
 	}
 
 }
