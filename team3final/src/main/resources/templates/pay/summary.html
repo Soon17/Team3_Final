@@ -4,6 +4,8 @@
 
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
+  <!-- <script src="https://cdn.iamport.kr/v1/iamport.js"></script> -->
   <style>
     .pay-summary-box {
       position: fixed;
@@ -82,12 +84,12 @@
     <div class="col-md-5 col-12">
       <div class="pay-summary-box">
         <h5 class="mb-4">결제 정보</h5>
-
+        
         <!-- 화살표 포함 총 상품금액 영역 -->
         <div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
           <div class="text-muted">총 상품금액</div>
           <div class="d-flex align-items-center" style="gap: 4px;">
-            <div class="font-weight-bold">66,000원</div>
+            <div class="font-weight-bold total-price" data-total="10">66,000원</div>
             <img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
           </div>
         </div>
@@ -116,86 +118,6 @@
     </div>
   </div>
 
-  <script>
-    function toggleDetailAll() {
-      const $details = $(".priceDetail");
-      const $arrows = $(".arrowImg");
-
-      detailVisible = !detailVisible;
-
-      if (detailVisible) {
-        $details.slideDown(200);
-        $arrows.attr("src", "/resources/static/imgs/small-up.png");
-      } else {
-        $details.slideUp(200);
-        $arrows.attr("src", "/resources/static/imgs/small-down.png");
-      }
-    }
-
-    $(document).ready(function () {
-      $(".priceDetail").slideDown(0);
-      $(".arrowImg").attr("src", "/resources/static/imgs/small-up.png");
-
-      // 모바일 하단 금액 텍스트 자동 반영
-      const total = $(".pay-summary-box strong").last().text();
-      $(".mobile-pay-footer strong").text(`${total} 바로 결제하기`);
-
-      $(".btn.btn-primary, .mobile-pay-button").on("click", function (e) {
-        let hasError = false;
-
-        const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
-        const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
-
-        const reserverName = $("input[name='reserverName']");
-        const reserverPhone = $("input[name='reserverPhone']");
-        const guestName = $("input[name='guestName']");
-        const guestPhone = $("input[name='guestPhone']");
-        const sameInfo = $("#sameInfo").is(":checked");
-
-        // 예약자 이름
-        if (!nameRegex.test(reserverName.val().trim())) {
-          alert("[예약자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
-          reserverName.addClass("is-invalid").focus();
-          e.preventDefault();
-          return;
-        } else {
-          reserverName.removeClass("is-invalid");
-        }
-
-        // 예약자 번호
-        if (!phoneRegex.test(reserverPhone.val().trim())) {
-          alert("[예약자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
-          reserverPhone.addClass("is-invalid").focus();
-          e.preventDefault();
-          return;
-        } else {
-          reserverPhone.removeClass("is-invalid");
-        }
-
-        if (!sameInfo) {
-          // 숙박자 이름
-          if (!nameRegex.test(guestName.val().trim())) {
-            alert("[숙박자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
-            guestName.addClass("is-invalid").focus();
-            e.preventDefault();
-            return;
-          } else {
-            guestName.removeClass("is-invalid");
-          }
-
-          // 숙박자 번호
-          if (!phoneRegex.test(guestPhone.val().trim())) {
-            alert("[숙박자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
-            guestPhone.addClass("is-invalid").focus();
-            e.preventDefault();
-            return;
-          } else {
-            guestPhone.removeClass("is-invalid");
-          }
-        }
-      });
-    });
-  </script>
 </body>
 
 </html>
