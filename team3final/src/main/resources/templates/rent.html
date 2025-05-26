@@ -28,9 +28,9 @@
 		}
 
 		.link img {
-			width: 1032px;
-			max-height: 100%;
 			max-width: 1032px;
+			max-height: 100%;
+			width: 100%;
 			object-fit: fill;
 		}
 
@@ -219,59 +219,6 @@
 			cursor: pointer;
 		}
 
-		.counter-header {
-			font-size: 20px;
-			font-weight: bold;
-			margin-bottom: 15px;
-		}
-
-		.counter-row {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 15px 0;
-			border-bottom: 1px solid #eee;
-		}
-
-		.counter-row:last-child {
-			border-bottom: none;
-		}
-
-		.counter-label {
-			font-size: 16px;
-		}
-
-		.counter-subtext {
-			font-size: 12px;
-			color: #666;
-			margin-top: 3px;
-		}
-
-		.counter-controls {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
-
-		.counter-btn {
-			width: 32px;
-			height: 32px;
-			line-height: 32px;
-			text-align: center;
-			background: #eee;
-			border-radius: 50%;
-			font-weight: bold;
-			font-size: 22px;
-			user-select: none;
-			cursor: pointer;
-			transition: background 0.3s;
-		}
-
-		.counter-btn:hover {
-			background: #007aff;
-			color: white;
-		}
-
 		.count-value {
 			min-width: 30px;
 			text-align: center;
@@ -325,35 +272,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal" id="guestModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<!-- Modal 헤더 -->
-					<div class="modal-header">
-						<div>
-							<span>인원 선택</span>
-						</div>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-					<!-- Modal 바디 -->
-					<div class="modal-body">
-						<div>
-							<div class="counter-label">성인</div>
-							<div class="counter-subtext">만 18세 이상</div>
-						</div>
-						<div class="counter-controls">
-							<div class="counter-btn" id="adult-minus">−</div>
-							<div class="count-value" id="adult-count">2</div>
-							<div class="counter-btn" id="adult-increase">+</div>
-						</div>
-					</div>
-					<!-- Modal 푸터 -->
-					<div class="modal-footer justify-content-center">
-						<button type="button" id="confirm-btn" data-dismiss="modal">적용하기</button>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div>
 			<div class="swiper event-swiper d-md-flex">
 				<div class="swiper-wrapper">
@@ -399,9 +317,6 @@
 						<input type="text" id="check-time" name="checkTime" data-toggle="modal" data-target="#calendarModal"
 							placeholder="날짜를 입력해주세요" readonly
 							style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
-						<input type="text" readonly id="check-people" name="rm_person" data-toggle="modal" data-target="#guestModal"
-							value="성인2"
-							style="flex: 1; min-width: 180px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
 						<div>
 							<button type="submit" id="search-btn"
 								style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
@@ -418,7 +333,8 @@
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
 							th:text="${rg.rg_name}"></button>
 					</div>
-					<div class="container region-text" style="margin-top: 20px; position: relative;">
+					<div class="container region-text"
+						style="margin-top: 20px; position: relative; max-width: 1032px; width: 100%;">
 
 						<div class="swiper lodging-swiper">
 							<div class="swiper-wrapper swiper-lodging">
@@ -709,29 +625,6 @@
 				renderCalendars();
 			});
 
-			$(function () {
-				const $adultCount = $('#adult-count');
-				const minAdult = 1;
-				const maxAdult = 10;
-
-				$('#adult-minus').click(function () {
-					let val = parseInt($adultCount.text());
-					if (val > minAdult) {
-						$adultCount.text(val - 1);
-					}
-				});
-
-				$('#adult-increase').click(function () {
-					let val = parseInt($adultCount.text());
-					if (val < maxAdult) {
-						$adultCount.text(val + 1);
-					}
-				});
-
-				$('#confirm-btn').click(function () {
-					$('#check-people').val(`성인${$adultCount.text()}`);
-				});
-			});
 		</script>
 	</div>
 </body>

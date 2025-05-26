@@ -424,7 +424,7 @@
 					<div class=" container region-text">
 						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(리뷰 평점 좋은 순)</h3>
 					</div>
-					<div class="container region-text region-btn-box">
+					<div class="container region-text region-btn-box" data-sw="review">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
 							th:text="${rg.rg_name}"></button>
 					</div>
@@ -511,7 +511,7 @@
 					<div class=" container region-text">
 						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 가성비 숙소!!(가격 싼 순)</h3>
 					</div>
-					<div class="container region-text region-btn-box">
+					<div class="container region-text region-btn-box" data-sw="price">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
 							th:text="${rg.rg_name}"></button>
 					</div>
@@ -598,7 +598,7 @@
 					<div class=" container region-text">
 						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(예약순)</h3>
 					</div>
-					<div class="container region-text region-btn-box">
+					<div class="container region-text region-btn-box" data-sw="reservation">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
 							th:text="${rg.rg_name}"></button>
 					</div>
@@ -858,6 +858,7 @@
 					prevEl: ".booking-prev"
 				}
 			});
+			//에이젝스
 			$(document).ready(function () {
 				$('.region-btn').click(function () {
 					$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
@@ -878,6 +879,7 @@
 					$(this).children().first().trigger("click")
 				});
 			});
+
 			$(function () {
 				const $adultCount = $('#adult-count');
 				const minAdult = 1;
