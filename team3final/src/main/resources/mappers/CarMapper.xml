@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.CarDAO">
+	<select id="selectSearchCarList" resultType="CarVO">
+		SELECT 
+			c.*, 
+			ct.ct_name, 
+			ct.ct_type, 
+			ct.ct_thumbnail
+		FROM car c
+		JOIN car_type ct ON c.ct_key = ct.ct_key
+		JOIN rental r ON c.cr_re_num = r.re_num
+		JOIN region rg ON r.re_ct_num = rg.rg_num
+		WHERE rg.rg_name = #{cri.rg_name}
+
+		<if test="cri.ct_type != null and cri.ct_type.length > 0">
+			AND ct.ct_type IN
+			<foreach collection="cri.ct_type" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+
+		<if test="cri.ct_name != null and cri.ct_name != ''">
+			AND ct.ct_name LIKE CONCAT('%', #{cri.ct_name}, '%')
+		</if>
+
+		<if test="cri.price > 0">
+			AND cr_price &lt;= #{cri.price} * 10000
+		</if>
+
+		<choose>
+			<when test="cri.sort == '가격순'">
+				ORDER BY cr_price ASC
+			</when>
+			<when test="cri.sort == '신차순'">
+				ORDER BY cr_year DESC
+			</when>
+			<otherwise>
+				ORDER BY cr_id DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

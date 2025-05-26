@@ -11,8 +11,8 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<!-- Kakao Maps API -->
-	<script
-		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
+	<!-- <script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
 
 	<style>
 		.container {
@@ -1026,8 +1026,10 @@
 																<!--총 금액  -->
 															</div>
 															<div style="text-align: right; font-size: 0.8rem; color: #666; margin-top: 4px;">
-																<small th:text="'총' + ${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"
-																	style="font-size: 13px;"></small>
+																<small
+																	th:text="'총 ' + ${#numbers.formatInteger(room.rm_price * nights, 3, 'COMMA')} + '원 (' + ${nights} + '박)'"
+																	style="font-size: 13px;">
+																</small>
 															</div>
 														</div>
 													</div>
@@ -1086,8 +1088,10 @@
 
 														<!-- 총 금액 한 줄 아래로 -->
 														<div style="text-align: right; font-size: 0.8rem; color: #666; margin-top: 4px;">
-															<small th:text="'총' + ${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"
-																style="font-size: 13px;"></small>
+															<small
+																th:text="'총 ' + ${#numbers.formatInteger(room.rm_price * nights, 3, 'COMMA')} + '원 (' + ${nights} + '박)'"
+																style="font-size: 13px;">
+															</small>
 														</div>
 													</div>
 													<div class="hotel-service p-2">
@@ -2227,6 +2231,7 @@
 				});
 			</script>
 
+			<!--상단 탭 이동-->
 			<script>
 				document.addEventListener('DOMContentLoaded', function () {
 					// 메뉴 스크롤 이동 버튼

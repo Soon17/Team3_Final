@@ -59,8 +59,8 @@
 
 		.event-next::after,
 		.event-prev::after,
-		.lodging-next::after,
-		.lodging-prev::after,
+		.car-next::after,
+		.car-prev::after,
 		.money-next::after,
 		.money-prev::after,
 		.booking-next::after,
@@ -69,7 +69,7 @@
 		}
 
 		.event-next,
-		.lodging-next,
+		.car-next,
 		.money-next,
 		.booking-next {
 			right: calc(50% - 516px - 2.5rem);
@@ -90,7 +90,7 @@
 		}
 
 		.event-prev,
-		.lodging-prev,
+		.car-prev,
 		.money-prev,
 		.booking-prev {
 			border-radius: 2.5rem;
@@ -109,7 +109,7 @@
 			background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSByPSIyMCIgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMjAgMjApIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjkiLz4KPHBhdGggZD0iTTIyIDE0TDE2IDIwTDIyIDI2IiBzdHJva2U9IiM5OTk5OTkiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K);
 		}
 
-		.region-lodging {
+		.region-car {
 			margin-top: 100px;
 		}
 
@@ -219,29 +219,9 @@
 			cursor: pointer;
 		}
 
-		.count-value {
-			min-width: 30px;
-			text-align: center;
-			font-size: 16px;
-			user-select: none;
-		}
-
-		#confirm-btn {
-			width: 100%;
-			padding: 14px;
-			margin-top: 25px;
-			border: none;
-			background-color: #007aff;
-			color: white;
-			font-size: 18px;
-			border-radius: 10px;
-			cursor: pointer;
-			user-select: none;
-			transition: background-color 0.3s;
-		}
-
-		#confirm-btn:hover {
-			background-color: #005bb5;
+		.card {
+			max-width: 280px;
+			margin: 0 auto;
 		}
 	</style>
 </head>
@@ -308,7 +288,7 @@
 						</div>
 					</div>
 					<!-- 입력 박스 -->
-					<form th:action="@{/searching/search}" method="get"
+					<form th:action="@{/searching/carsearch}" method="get"
 						style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; position: relative;">
 						<select name="rg_name" id="region"
 							style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
@@ -325,9 +305,9 @@
 						</div>
 					</form>
 				</div>
-				<div class="container region-lodging">
+				<div class="container region-car">
 					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 국내 인기 차량</h3>
+						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 인기 차량(리뷰 평점 좋은 순)</h3>
 					</div>
 					<div class="container region-text region-btn-box">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
@@ -336,13 +316,13 @@
 					<div class="container region-text"
 						style="margin-top: 20px; position: relative; max-width: 1032px; width: 100%;">
 
-						<div class="swiper lodging-swiper">
-							<div class="swiper-wrapper swiper-lodging">
+						<div class="swiper car-swiper">
+							<div class="swiper-wrapper swiper-car">
 								<!-- 카드 반복 시작 -->
 								<div class="swiper-slide">
 									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
 										<img src="/resources/static/imgs/K-3 2세대 FL.png" class="card-img-top"
-											style="width: 240px; height: 240px;" alt="썸네일">
+											style=" width: 100%; height: auto; object-fit: contain;" alt="썸네일">
 										<div class="card-body p-2">
 											<h6 class="mb-1 fw-bold">K-3 2세대 F/L</h6>
 											<div>
@@ -354,8 +334,8 @@
 								</div>
 								<div class="swiper-slide">
 									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/K-5 3세대.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
+										<img src="/resources/static/imgs/K-5 3세대.png"
+											style=" width: 100%; height: auto; object-fit: contain;" class="card-img-top" alt="썸네일">
 										<div class="card-body p-2">
 											<h6 class="mb-1 fw-bold">K-5 3세대</h6>
 											<div>
@@ -367,8 +347,8 @@
 								</div>
 								<div class="swiper-slide">
 									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/쏘나타 DN8 엣지.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
+										<img src="/resources/static/imgs/쏘나타 DN8 엣지.png"
+											style=" width: 100%; height: auto; object-fit: contain;" class="card-img-top" alt="썸네일">
 										<div class="card-body p-2">
 											<h6 class="mb-1 fw-bold">쏘나타 DN8 엣지</h6>
 											<div>
@@ -380,8 +360,8 @@
 								</div>
 								<div class="swiper-slide">
 									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/아반떼 CN7.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
+										<img src="/resources/static/imgs/아반떼 CN7.png"
+											style=" width: 100%; height: auto; object-fit: contain;" class="card-img-top" alt="썸네일">
 										<div class="card-body p-2">
 											<h6 class="mb-1 fw-bold">아반떼 CN7</h6>
 											<div>
@@ -393,7 +373,7 @@
 								</div>
 								<div class="swiper-slide">
 									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/아이오닉5.png" style="width: 240px; height: 240px;"
+										<img src="/resources/static/imgs/아이오닉5.png" style=" width: 100%; height: auto; object-fit: contain;"
 											class="card-img-top" alt="썸네일">
 										<div class="card-body p-2">
 											<h6 class="mb-1 fw-bold">아이오닉5</h6>
@@ -406,8 +386,8 @@
 								</div>
 								<div class="swiper-slide">
 									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/코나 2세대.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
+										<img src="/resources/static/imgs/코나 2세대.png"
+											style=" width: 100%; height: auto; object-fit: contain;" class="card-img-top" alt="썸네일">
 										<div class="card-body p-2">
 											<h6 class="mb-1 fw-bold">코나 2세대</h6>
 											<div>
@@ -422,8 +402,8 @@
 
 							<!-- 슬라이드 화살표 -->
 						</div>
-						<div class="swiper-button-next lodging-next"></div>
-						<div class="swiper-button-prev lodging-prev"></div>
+						<div class="swiper-button-next car-next"></div>
+						<div class="swiper-button-prev car-prev"></div>
 					</div>
 				</div>
 
@@ -441,13 +421,18 @@
 					prevEl: ".event-prev"
 				}
 			});
-			const swiper2 = new Swiper(".lodging-swiper", {
+			const swiper2 = new Swiper(".car-swiper", {
 				slidesPerView: 4,
 				spaceBetween: 10,
 				slidesPerGroup: 1,
 				navigation: {
-					nextEl: ".lodging-next",
-					prevEl: ".lodging-prev"
+					nextEl: ".car-next",
+					prevEl: ".car-prev"
+				},
+				breakpoints: {
+					1200: { slidesPerView: 4 },
+					980: { slidesPerView: 3 },
+					480: { slidesPerView: 2 }
 				}
 			});
 			const swiper3 = new Swiper(".money-swiper", {
@@ -457,6 +442,11 @@
 				navigation: {
 					nextEl: ".money-next",
 					prevEl: ".money-prev"
+				},
+				breakpoints: {
+					1200: { slidesPerView: 4 },
+					980: { slidesPerView: 3 },
+					480: { slidesPerView: 2 }
 				}
 			});
 			const swiper4 = new Swiper(".booking-swiper", {
@@ -466,6 +456,11 @@
 				navigation: {
 					nextEl: ".booking-next",
 					prevEl: ".booking-prev"
+				},
+				breakpoints: {
+					1200: { slidesPerView: 4 },
+					980: { slidesPerView: 3 },
+					480: { slidesPerView: 2 }
 				}
 			});
 			$(document).ready(function () {
@@ -476,7 +471,7 @@
 					var $target = $(this).parent().next().find(".swiper")
 					$.ajax({
 						async: false,
-						url: "/regionLodging",
+						url: "/regioncar",
 						type: 'GET',
 						data: { rg_num: rg_num },
 						success: function (data) {

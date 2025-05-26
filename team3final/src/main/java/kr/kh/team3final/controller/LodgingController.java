@@ -1,5 +1,8 @@
 package kr.kh.team3final.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +66,13 @@ public class LodgingController {
     int person = Integer.parseInt(rm_person.replaceAll("[^0-9]", ""));
     List<RoomVO> roomList = roomService.getAvailableRooms(ld_num, checkin, checkout, person);
 
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+    LocalDate in = LocalDate.parse(checkin, fmt);
+    LocalDate out = LocalDate.parse(checkout, fmt);
+    long nights = ChronoUnit.DAYS.between(in, out);
+    if (nights < 1)
+      nights = 1;
+
     for (RoomVO room : roomList) {
       List<ThumbnailVO> roomThumbList = thumbnailService.selectThumbnail("room", room.getRm_num());
       room.setThumbList(roomThumbList);
@@ -86,6 +96,7 @@ public class LodgingController {
     model.addAttribute("avg_rating", stats.getAvg_rating());
     model.addAttribute("review_count", stats.getReview_count());
     model.addAttribute("ratingCounts", ratingCounts);
+    model.addAttribute("nights", nights);
 
     return "reserv";
   }
