@@ -7,149 +7,156 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>숙소 등록</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-	<!--스와이퍼-->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<style>
-		.swiper {
-			width: 100%;
-			padding: 20px 10px;
+		.main-container {
+			max-width: 800px;
+			margin: 40px auto;
+			padding: 30px;
+			background-color: #fdfdfd;
+			border-radius: 16px;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			font-family: 'Segoe UI', sans-serif;
 		}
 
-		.swiper-slide {
-			width: 240px;
-			height: 160px;
-			border-radius: 10px;
-			background-color: #e0e0e0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: relative;
+		.title {
+			font-size: 28px;
+			font-weight: bold;
+			color: #2c3e50;
+			margin-bottom: 30px;
+			text-align: center;
+		}
+
+		.form-section {
+			margin-bottom: 30px;
+		}
+
+		.form-group {
+			margin-bottom: 18px;
+		}
+
+		.form-label {
+			display: block;
+			font-weight: 600;
+			color: #34495e;
+			margin-bottom: 6px;
+		}
+
+		.form-input,
+		.form-select {
+			width: 100%;
+			padding: 10px 12px;
+			font-size: 15px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-sizing: border-box;
+		}
+
+		.form-file {
+			margin-top: 8px;
+		}
+
+		.button {
+			display: inline-block;
+			background-color: #5dade2;
+			color: white;
+			padding: 10px 18px;
+			font-size: 15px;
+			border: none;
+			border-radius: 8px;
 			cursor: pointer;
-			overflow: hidden;
+			transition: background-color 0.3s ease;
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 		}
 
-		.swiper-slide img {
+		.button:hover {
+			background-color: #3498db;
+		}
+
+		.room-box {
+			margin-bottom: 30px;
+			padding: 20px;
+			background-color: #f4f6f7;
+			border: 1px dashed #bbb;
+			border-radius: 12px;
+		}
+
+		.room-title {
+			font-size: 18px;
+			font-weight: bold;
+			margin-bottom: 15px;
+			color: #2e4053;
+		}
+
+		.image-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-rows: repeat(2, 150px);
+			gap: 10px;
+			max-width: 800px;
+			margin: auto;
+			padding: 20px;
+		}
+
+		.image-grid.room-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(2, 150px);
+			gap: 10px;
+		}
+
+		.image-grid.room-grid .image-main {
+			grid-column: 1 / span 2;
+			grid-row: 1;
+			/* 1행만 차지 */
+		}
+
+		.image-box {
+			position: relative;
+			background-color: #e0e0e0;
+			border-radius: 8px;
+			overflow: hidden;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.image-box img {
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
+			object-fit: contain;
+			/* ✅ 이미지 전체를 박스에 맞춤 */
+			object-position: center;
+			/* ✅ 중앙 정렬 */
+			background-color: #f0f0f0;
+			/* ✅ 비어 있는 영역 배경색 (선택) */
 		}
 
-		.plus-sign {
-			font-size: 48px;
-			color: #aaa;
-		}
-
-		input[type="file"] {
+		.image-box input[type="file"] {
 			display: none;
 		}
 
-		.infor-title {
+		.plus-sign {
+			font-size: 40px;
+			color: #aaa;
+			z-index: 1;
+		}
+
+		/* 메인 이미지 (2x2 병합) */
+		.image-main {
+			grid-column: 1 / span 2;
+			grid-row: 1 / span 2;
+		}
+
+		.close-room-btn {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			background: transparent;
+			border: none;
 			font-size: 20px;
-			color: #494949;
-			line-height: 1.4;
-			font-weight: 700;
-		}
-
-		.container {
-			display: block;
-			border-radius: 5px;
-			padding: 0px;
-			margin: auto;
-			position: relative;
-		}
-
-		.infor-container {
-			box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.6);
-			margin-top: 1rem;
-		}
-		
-		.infor-item {
-			padding: 2rem;
-			background-color: #fff;
-			border-radius: 5px;
-		}
-
-		.room-card {
-			border-radius: 10px;
-			background-color: #e0e0e0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: relative;
 			cursor: pointer;
-			overflow: hidden;
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-		}
-
-		/* ************************ */
-
-
-
-		.hotel-box {
-			padding: 1rem 2rem 1.5rem;
-			display: flex;
-			align-items: flex-start;
-			gap: 1rem;
-			background-color: #fff;
-		}
-
-		.hotel-img {
-			flex: 1 1;
-			width: 100%;
-			max-width: 312px;
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-		}
-
-		.img-sub {
-			display: flex;
-			width: 100%;
-			gap: .5rem;
-			margin-top: .5rem;
-		}
-
-		.img-sub img {
-			border-radius: .375rem;
-			width: 0;
-			flex: 1 1;
-			aspect-ratio: 1.63 / 1;
-			height: 100%;
-			object-fit: cover;
-			background-size: cover;
-			background-repeat: no-repeat;
-			background-position: center;
-			display: block;
-		}
-
-		.hotel-price-list {
-			margin-top: 0;
-			margin-bottom: 2.5rem;
-			flex: 1 1;
-			display: flex;
-			flex-direction: column;
-			gap: .5rem;
-		}
-
-		.price-none {
-			font-size: .875rem;
-			padding: .125rem;
-			border-radius: .25rem;
-			align-items: center;
-			display: flex;
-			font-weight: 700;
-			position: relative;
-			color: #ff6362;
-			background-color: #fff3f3;
-			white-space: nowrap;
-		}
-
-		.hotel-content {
-			font-size: .875rem;
-			color: #666;
-			line-height: 1.5;
+			color: #888;
 		}
 	</style>
 </head>
@@ -158,135 +165,163 @@
 	<div class="main" style="background-color: #fff;">
 		<main layout:fragment="content">
 
-			<div class="infor-container container">
+			<div class="main-container">
+				<div class="title">🏨 숙소 등록</div>
 
-				<!-- 숙소 정보 -->
-				<div class="infor-item">
-					<div class="infor-title mb-3">성급</div>
+				<div class="form-section" id="hotelForm">
 
-					<div class="infor-title mb-3">호텔이름</div>
-
-					<div class="infor-title mb-3">숙소 사진 등록(5장)</div>
-					<!-- 썸네일 5개(lodging) -->
-					<div class="swiper container mb-3" style="padding: 0px 32px;">
-						<div class="swiper-wrapper" id="thumb-container">
-							<div class="swiper-slide" onclick="triggerFileInput(this)">
+					<div class="lodging-box form-group col-12">
+						<label class="form-label" for="photos">숙소 사진 (5장)</label>
+						<div class="image-grid">
+							<!-- 이미지 박스 1번: 메인 (2x2) -->
+							<div class="image-box image-main" data-index="1">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" multiple onchange="handleFileChange(event, this)">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')">
+							</div>
+
+							<!-- 2~5번: 서브 이미지 -->
+							<div class="image-box" data-index="2">
+								<span class="plus-sign">+</span>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')">
+							</div>
+							<div class="image-box" data-index="3">
+								<span class="plus-sign">+</span>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')">
+							</div>
+							<div class="image-box" data-index="4">
+								<span class="plus-sign">+</span>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')">
+							</div>
+							<div class="image-box" data-index="5">
+								<span class="plus-sign">+</span>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')">
 							</div>
 						</div>
 					</div>
 
-					<!-- 호텔 정보 배너 -->
-					<div class="infor-title mb-3">주소</div>
-					<div class="infor-title mb-3">전화번호</div>
-				</div>
+					<div class="d-flex">
+						<div class="form-group col-3">
+							<label class="form-label" for="rating">성급 (1~5)</label>
+							<select class="form-select" id="rating" name="rating">
+								<option value="1">1성</option>
+								<option value="2">2성</option>
+								<option value="3">3성</option>
+								<option value="4">4성</option>
+								<option value="5">5성</option>
+							</select>
+						</div>
 
-				<!-- 룸 정보 -->
-				<div class="infor-item">
-					<div class="infor-title mb-3">룸 유형</div>
-					<div class="infor-title mb-3">최대 인원</div>
-					<div class="infor-title mb-3">가격</div>
-					<div class="infor-title mb-3">룸 사진 등록(3장)</div>
-
-					<div class="hotel-box">
-
-						<!-- 세부 썸네일 3개, 정보 -->
-						<div class="hotel-img">
-
-							<!-- 메인 이미지 (첫 번째 이미지) -->
-							<div class="img1"
-								style="position: relative; cursor: pointer; width: 100%; aspect-ratio: 1.63 / 1; height: fit-content;">
-								<img src="/resources/static/img/ho1.jpg" alt="대표 이미지"
-									style="border-radius: .375rem; width: 100%; height: 100%; position: relative;">
-							</div>
-							<!-- 서브 이미지 (두 번째, 세 번째 이미지) -->
-							<div class="img-sub">
-								<img src="/resources/static/img/ho1.jpg" alt="서브 이미지">
-								<img src="/resources/static/img/ho1.jpg" alt="서브 이미지">
-							</div>
+						<div class="form-group col-9">
+							<label class="form-label" for="name">숙소 이름</label>
+							<input type="text" class="form-input" id="name" name="name">
 						</div>
 					</div>
+
+					<div class="form-group col-12">
+						<label class="form-label" for="address">주소</label>
+						<input type="text" class="form-input" id="address" name="address">
+					</div>
+
+					<div class="form-group col-12">
+						<label class="form-label" for="phone">전화번호</label>
+						<input type="text" class="form-input" id="phone" name="phone">
+					</div>
+
+					<div id="roomsContainer"></div>
+
+					<button class="button" onclick="addRoomBox()">+ 방 등록하기</button>
 				</div>
+
 			</div>
 
 			<script>
-				const max_lodgingImages = 5;
+				let roomCount = 0;
 
-				// Swiper 초기화
-				const swiper = new Swiper('.swiper', {
-					slidesPerView: 'auto', // 자동 너비로 슬라이드 생성
-					spaceBetween: 16,      // 슬라이드 간 간격
-					freeMode: true,        // 자연스러운 스크롤
-					grabCursor: true       // 마우스 커서 변경
+				function addRoomBox() {
+					roomCount++;
+					const roomBox = $(`
+						<div class="room-box position-relative">
+							<!-- ❌ 닫기 버튼 -->
+							<button type="button" class="close-room-btn" title="삭제">×</button>
+
+							<div class="room-title">🛏️ 방 ${roomCount}</div>
+
+							<div class="form-group">
+								<label class="form-label">사진 (3장)</label>
+								<div class="image-grid room-grid">
+									<!-- index 1: 가로 2칸 이미지 -->
+									<div class="image-box image-main" data-index="1">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'room')">
+									</div>
+
+									<!-- index 2 -->
+									<div class="image-box" data-index="2">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'room')">
+									</div>
+
+									<!-- index 3 -->
+									<div class="image-box" data-index="3">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'room')">
+									</div>
+								</div>
+
+							</div>
+
+							<div class="form-group col-12">
+								<label class="form-label">룸 유형</label>
+								<input type="text" class="form-input" name="room_type_${roomCount}">
+							</div>
+							<div class="d-flex">
+								<div class="form-group col-3">
+									<label class="form-label">최대 인원</label>
+									<input type="number" class="form-input" name="max_people_${roomCount}" min="1">
+								</div>
+	
+								<div class="form-group col-9">
+									<label class="form-label">가격 (원)</label>
+									<input type="number" class="form-input" name="price_${roomCount}" min="0">
+								</div>
+							</div>
+						</div>
+					`);
+
+					$('#roomsContainer').append(roomBox);
+				}
+
+				// 단일 이미지 업로드 및 미리보기 처리
+				function handleSingleImage($input, index, type) {
+					const file = $input[0].files[0];
+					if (!file) return;
+
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						let $switchBox;
+						if (type === 'lodging') {
+							$switchBox = $input.closest('.lodging-box');
+						} else if (type === 'room') {
+							$switchBox = $input.closest('.room-box');
+						}
+						const $box = $switchBox.find(`.image-box[data-index='${index}']`);
+						$box.html(`<img src="${e.target.result}" alt="image">`);
+					};
+					reader.readAsDataURL(file);
+				}
+
+				// 이미지 박스를 클릭하면 파일 입력창 열기
+				$(document).on('click', '.image-box', function (e) {
+					const $input = $(this).find('input[type="file"]');
+					if (e.target === $input[0]) return;
+					$input.trigger('click');
 				});
 
-				// 파일 업로드 카드 클릭시 실행
-				function triggerFileInput(box) {
-					const $input = $(box).find('input[type="file"]')[0];
-					if (!$input) return;
+				$(document).on('click', '.close-room-btn', function () {
+					$(this).closest('.room-box').remove();
+					roomCount--;
+				});
 
-					// 만약 input이 클릭되어 호출된 거라면 무시
-					if (event?.target === $input) return;
-
-					$input.click();
-				}
-
-				// 파일 업로드 시 미리보기 넣기
-				function handleFileChange(event, input) {
-					const $container = $('#thumb-container');
-					const files = Array.from(event.target.files);
-					const existingImages = $container.find('img').length;
-					const filesToAdd = files.slice(0, max_lodgingImages - existingImages);
-					const $plusBox = $(input).closest('.swiper-slide');
-
-					filesToAdd.forEach((file, index) => {
-						const reader = new FileReader();
-						reader.onload = function (e) {
-							if (index === 0 && $plusBox.find('img').length === 0) {
-								// 첫 번째 이미지는 기존 박스에 넣음
-								$plusBox.html(`<img src="${e.target.result}">`);
-							} else {
-								// 나머지는 새 박스 생성
-								const $newBox = $('<div class="swiper-slide"></div>');
-								$newBox.html(`<img src="${e.target.result}">`);
-								$container.append($newBox);
-								swiper.appendSlide($newBox[0]); // DOM element로 넘겨야 함
-							}
-						};
-						reader.readAsDataURL(file);
-					});
-
-					// 이미지 추가 후 +박스 추가 여부 판단
-					setTimeout(() => {
-						const totalImages = $container.find('img').length;
-						const $existingPlus = $container.find('.plus-sign').closest('.swiper-slide');
-
-						if (totalImages < max_lodgingImages) {
-							if ($existingPlus.length === 0) {
-								const $newAddBox = $('<div class="swiper-slide"></div>');
-								$newAddBox.on('click', function () {
-									triggerFileInput(this);
-								});
-								$newAddBox.html(`
-									<span class="plus-sign">+</span>
-									<input type="file" accept="image/*" multiple onchange="handleFileChange(event, this)">
-								`);
-								$container.append($newAddBox);
-								swiper.appendSlide($newAddBox[0]);
-							} else {
-								swiper.update();
-							}
-						} else {
-							if ($existingPlus.length > 0) {
-								swiper.removeSlide(swiper.slides.length - 1);
-								$existingPlus.remove();
-							}
-						}
-
-						swiper.update();
-					}, 100);
-				}
 			</script>
 		</main>
 	</div>
