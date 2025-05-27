@@ -89,7 +89,7 @@
         <div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
           <div class="text-muted">총 상품금액</div>
           <div class="d-flex align-items-center" style="gap: 4px;">
-            <div class="font-weight-bold total-price" data-total="10">66,000원</div>
+            <div class="font-weight-bold summary-total-price" data-total="10"></div>
             <img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
           </div>
         </div>
@@ -98,26 +98,34 @@
         <div class="priceDetail" style="display: none; font-size: 13px;">
           <div class="d-flex justify-content-between bg-light p-2 rounded mb-2">
             <div class="text-muted">1박 숙박 요금</div>
-            <div class="text-muted">33,000원</div>
+            <div class="text-muted summary-room-price"></div>
           </div>
         </div>
         <hr>
         <div class="d-flex justify-content-between mt-3 mb-3">
           <strong>총 결제금액</strong>
-          <strong>66,000원</strong>
+          <strong class="summary-st-price"></strong>
         </div>
-        <button class="btn btn-primary btn-block">결제하기</button>
+        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="PaymentModal">결제하기</button>
       </div>
     </div>
   </main>
 
   <!-- 하단 고정 모바일 결제 박스 -->
   <div class="mobile-pay-footer">
-    <div class="mobile-pay-button" onclick="goPayment()">
-      <strong>267,810원 바로 결제하기</strong>
+    <div class="mobile-pay-button">
+      <strong class="mobile-room-price"></strong>
     </div>
   </div>
-
+  <script>
+    $(document).ready(function () {
+      let t= $(".room-total-price").text();
+      $(".summary-total-price").text(t);
+      $(".mobile-room-price").text(t);
+      $(".summary-st-price").text(t);
+      $(".summary-room-price").text($(".room-rm-price").text());
+    })
+  </script>
 </body>
 
 </html>

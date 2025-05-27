@@ -124,7 +124,7 @@
 						</div>
 						<div class="d-flex align-items-center border-bottom py-3">
 							<div style="font-weight: bold; margin-right: 100px;">객실정보</div>
-							<div class="rm-name">Deluxe Double City</div>
+							<div class="rm-name" th:text="${room.rm_name}"></div>
 						</div>
 						<div class="d-flex align-items-center pt-3">
 							<div style="font-weight: bold; margin-right: 128px;">인원</div>
@@ -163,11 +163,11 @@
 					<form>
 						<h5 class="mt-5 mb-3">호텔 요청사항</h5>
 						<div class="d-flex flex-wrap">
-							<div class="form-check mb-2" style="width: 50%;">
-								<input class="form-check-input" type="checkbox" id="opt1">
-								<label class="option-label" for="opt1">옵션 1</label>
+							<div class="form-check mb-2" style="width: 50%;" th:each="choice : ${choiceOptions}">
+								<input class="form-check-input choice-check" type="checkbox"  th:value="${choice.co_num}" th:data-co-do-name="${choice.co_do_name}">
+								<label class="option-label"  th:text="${choice.co_do_name}"></label>
 							</div>
-							<div class="form-check mb-2" style="width: 50%;">
+							<!-- <div class="form-check mb-2" style="width: 50%;">
 								<input class="form-check-input" type="checkbox" id="opt2">
 								<label class="option-label" for="opt2">옵션 2</label>
 							</div>
@@ -186,7 +186,7 @@
 							<div class="form-check mb-2" style="width: 50%;">
 								<input class="form-check-input" type="checkbox" id="opt6">
 								<label class="option-label" for="opt6">옵션 6</label>
-							</div>
+							</div> -->
 						</div>
 					</form>
 					<!-- 호텔 요청사항 쪽 끝-->
@@ -210,9 +210,7 @@
 									line-height: 1.5;
 									white-space: pre-line;
 									word-break: keep-all;
-								">이곳은 DB에서 가져온 안내사항 문자열이 들어갈 자리입니다.
-									• 추가 인원에 대한 요금이 부과될 수 있으며..
-									• 체크인 시 신분증과 보증금이 필요할 수 있습니다.
+								" th:text="${room.rm_infor}">
 								</div>
 							</div>
 						</div>
@@ -223,7 +221,7 @@
 						<div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
 							<div class="text-muted">총 상품금액</div>
 							<div class="d-flex align-items-center" style="gap: 4px;">
-								<div style="font-weight: bold;">66,000원</div>
+								<div style="font-weight: bold;" class="room-total-price" th:text="${room.rm_price}"></div>
 								<img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
 							</div>
 						</div>
@@ -231,14 +229,14 @@
 						<div class="priceDetail" style="display: none; font-size: 13px;">
 							<div class="d-flex justify-content-between bg-light p-2 rounded mb-1">
 								<div class="text-muted">1박 숙박 요금</div>
-								<div class="text-muted">33,000원</div>
+								<div class="text-muted room-rm-price" th:text="${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"></div>
 							</div>
 						</div>
 						<hr>
 						<!-- 총 결제금액 -->
 						<div class="d-flex justify-content-between mt-3">
-							<strong>총 결제금액</strong>
-							<strong>66,000원</strong>
+							<strong >총 결제금액</strong>
+							<strong class="st-total-price">66,000원</strong>
 						</div>
 					</form>
 				</div>
@@ -246,6 +244,7 @@
 				<div class="col-md-5" id="payment-summary-container" style="position: relative; overflow: visible;">
 					<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
 				</div>
+				
 			</div>
 		</div>
 		
@@ -270,9 +269,11 @@
 				// 날짜 차이 계산
 				const diffTime = checkOutDate - checkInDate;
 				const diffDays = diffTime / (1000 * 60 * 60 * 24); // ms → days
-
 				// .badge 안에 텍스트로 n박 입력
 				$('.night').text(`${diffDays}박`);
+				let total = $(".room-total-price").text()* diffDays;
+				$(".room-total-price").text(total.toLocaleString()+"원");
+				$(".st-total-price").text(total.toLocaleString()+"원");
 			});
 
 
@@ -410,127 +411,145 @@
 				});
 			});
 		</script>
-		  <script>
-    function toggleDetailAll() {
-      const $details = $(".priceDetail");
-      const $arrows = $(".arrowImg");
+		<script>
+			function toggleDetailAll() {
+			const $details = $(".priceDetail");
+			const $arrows = $(".arrowImg");
 
-      detailVisible = !detailVisible;
+			detailVisible = !detailVisible;
 
-      if (detailVisible) {
-        $details.slideDown(200);
-        $arrows.attr("src", "/resources/static/imgs/small-up.png");
-      } else {
-        $details.slideUp(200);
-        $arrows.attr("src", "/resources/static/imgs/small-down.png");
-      }
-    }
+			if (detailVisible) {
+				$details.slideDown(200);
+				$arrows.attr("src", "/resources/static/imgs/small-up.png");
+			} else {
+				$details.slideUp(200);
+				$arrows.attr("src", "/resources/static/imgs/small-down.png");
+			}
+			}
 
-    $(document).ready(function () {
-      $(".priceDetail").slideDown(0);
-      $(".arrowImg").attr("src", "/resources/static/imgs/small-up.png");
+			$(document).ready(function () {
+			$(".priceDetail").slideDown(0);
+			$(".arrowImg").attr("src", "/resources/static/imgs/small-up.png");
 
-      // 모바일 하단 금액 텍스트 자동 반영
-      const total = $(".pay-summary-box strong").last().text();
-      $(".mobile-pay-footer strong").text(`${total} 바로 결제하기`);
+			// 모바일 하단 금액 텍스트 자동 반영
+			const total = $(".pay-summary-box strong").last().text();
+			$(".mobile-pay-footer strong").text(`${total} 바로 결제하기`);
 
-      $(document).on("click", ".btn.btn-primary, .mobile-pay-button", function (e) {
+			$(document).on("click", ".btn.btn-primary, .mobile-pay-button", function (e) {
 
-        const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
-        const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+				const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
+				const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
 
-        const reserverName = $("input[name='reserverName']");
-        const reserverPhone = $("input[name='reserverPhone']");
-        const guestName = $("input[name='guestName']");
-        const guestPhone = $("input[name='guestPhone']");
-        const sameInfo = $("#sameInfo").is(":checked");
+				const reserverName = $("input[name='reserverName']");
+				const reserverPhone = $("input[name='reserverPhone']");
+				const guestName = $("input[name='guestName']");
+				const guestPhone = $("input[name='guestPhone']");
+				const sameInfo = $("#sameInfo").is(":checked");
 
-        // 예약자 이름
-        if (!nameRegex.test(reserverName.val().trim())) {
-          alert("[예약자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
-          reserverName.addClass("is-invalid").focus();
-          e.preventDefault();
-          return;
-        } else {
-          reserverName.removeClass("is-invalid");
-        }
+				// 예약자 이름
+				if (!nameRegex.test(reserverName.val().trim())) {
+				alert("[예약자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
+				reserverName.addClass("is-invalid").focus();
+				e.preventDefault();
+				return;
+				} else {
+				reserverName.removeClass("is-invalid");
+				}
 
-        // 예약자 번호
-        if (!phoneRegex.test(reserverPhone.val().trim())) {
-          alert("[예약자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
-          reserverPhone.addClass("is-invalid").focus();
-          e.preventDefault();
-          return;
-        } else {
-          reserverPhone.removeClass("is-invalid");
-        }
+				// 예약자 번호
+				if (!phoneRegex.test(reserverPhone.val().trim())) {
+				alert("[예약자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
+				reserverPhone.addClass("is-invalid").focus();
+				e.preventDefault();
+				return;
+				} else {
+				reserverPhone.removeClass("is-invalid");
+				}
 
-        if (!sameInfo) {
-          // 숙박자 이름
-          if (!nameRegex.test(guestName.val().trim())) {
-            alert("[숙박자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
-            guestName.addClass("is-invalid").focus();
-            e.preventDefault();
-            return;
-          } else {
-            guestName.removeClass("is-invalid");
-          }
+				if (!sameInfo) {
+				// 숙박자 이름
+					if (!nameRegex.test(guestName.val().trim())) {
+						alert("[숙박자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
+						guestName.addClass("is-invalid").focus();
+						e.preventDefault();
+						return;
+					} else {
+						guestName.removeClass("is-invalid");
+					}
 
-          // 숙박자 번호
-          if (!phoneRegex.test(guestPhone.val().trim())) {
-            alert("[숙박자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
-            guestPhone.addClass("is-invalid").focus();
-            e.preventDefault();
-            return;
-          } else {
-            guestPhone.removeClass("is-invalid");
-          }         
-        }
-        //카카오결제
-        $.ajax({
-          async : true,
-          url : '/pay/kakao/apiKey', 
-          type : 'post', 
-          success : function (data){
-            let channelKey = data.channel
-            let storeId= data.store
-            requestPayment(channelKey,storeId)
-          }
-        });
-      });
-    });
-    //카카오페이
-    async function requestPayment(channelKey,storeId) {
-      const totlaPrice = $(".total-price").data('total');
-      const rm_name = $(".rm-Name").val();
-      const response = await PortOne.requestPayment({
-        // Store ID 설정
-        storeId: storeId,
-        // 채널 키 설정
-        channelKey: channelKey,
-        paymentId: `payment-${crypto.randomUUID()}`,
-        orderName: rm_name,
-        totalAmount: totlaPrice,
-        currency: "CURRENCY_KRW",
-        payMethod: 'EASY_PAY',
-      });
-      console.log(response)
-      if (response.code !== undefined) {
-        // 오류 발생
-        return alert(response.message);
-      }
-      let 
-      // /payment/complete 엔드포인트를 구현해야 합니다. 다음 목차에서 설명합니다.
-      const notified = await fetch(`localhost:8080/pay/kakao/complete`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // paymentId와 주문 정보를 서버에 전달합니다
-        body: JSON.stringify({
-          lr_total_price:totalAmount
-        }),
-      });
-    }   
-  </script>
+					// 숙박자 번호
+					if (!phoneRegex.test(guestPhone.val().trim())) {
+						alert("[숙박자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
+						guestPhone.addClass("is-invalid").focus();
+						e.preventDefault();
+						return;
+					} else {
+						guestPhone.removeClass("is-invalid");
+					}         
+				}
+				
+			});
+			// //카카오결제
+			// $.ajax({
+			// async : true,
+			// url : '/pay/kakao/apiKey', 
+			// type : 'post', 
+			// success : function (data){
+			// 	let channelKey = data.channel
+			// 	let storeId= data.store
+			// 	requestPayment(channelKey,storeId)
+			// }
+			// });
+			// async function requestPayment(channelKey,storeId) {
+			// 	// const tPriceText = $(".summary-total-price").text(); // "100,000원" 찐 코드
+			// 	// const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
+			// 	const totlaPrice = $(".summary-total-price").data('total');//테스트 코드 10원
+			// 	const rm_name = $(".rm-name").text();
+			// 	const reserverName = $("[name = 'reserverName']").text();
+			// 	const guestName = $("[name = 'guestName']").text();
+			// 	const guestPhone = $("[name = 'guestPhone']").text();
+			// 	let checkNums = [];
+			// 	let mealState = false;
+			// 	$('.choice-check:checked').each(function () {
+			// 		checkNums.push($(this).val());
+			// 		if($(this).data('co-do-name')===("조식")){
+			// 			mealState=true;
+			// 		}
+			// 	});
+			// 	const response = await PortOne.requestPayment({
+			// 	// Store ID 설정
+			// 	storeId: storeId,
+			// 	// 채널 키 설정
+			// 	channelKey: channelKey,
+			// 	paymentId: `payment-${crypto.randomUUID()}`,
+			// 	orderName: rm_name,
+			// 	totalAmount: totlaPrice,
+			// 	currency: "CURRENCY_KRW",
+			// 	payMethod: 'EASY_PAY',
+			// 	});
+			// 	if (response.code !== undefined) {
+			// 	// 오류 발생
+			// 	return alert(response.message);
+			// 	}
+			// 	let 
+			// 	// /payment/complete 엔드포인트를 구현해야 합니다. 다음 목차에서 설명합니다.
+			// 	const notified = await fetch(`localhost:8080/pay/kakao/complete`, {
+			// 	method: "POST",
+			// 	headers: { "Content-Type": "application/json" },
+			// 	// paymentId와 주문 정보를 서버에 전달합니다
+			// 	body: JSON.stringify({
+			// 		lr_total_price:totalAmount,
+			// 		lr_booker_name:reserverName,
+			// 		lr_guest_name:guestName,
+			// 		lr_guest_number:guestPhone,
+			// 		lr_meal_state:mealState,
+			// 		checkNums:checkNums
+			// 	}),
+			// 	});
+			// }   
+			});
+			//카카오페이
+		</script>
 	</main>
 </body>
 

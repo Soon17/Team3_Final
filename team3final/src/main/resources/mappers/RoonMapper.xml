@@ -4,4 +4,7 @@
 	<select id="selectRoomListByLodging" resultType="RoomVO">
   	SELECT * FROM room WHERE rm_ld_num = #{ld_num}
 	</select>
+	<select id="selectRoom" resultType="RoomVO">
+		select* from room where rm_num= #{rm_num}
+	</select>
 </mapper>

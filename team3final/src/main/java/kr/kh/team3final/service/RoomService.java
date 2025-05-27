@@ -17,4 +17,8 @@ public class RoomService {
 		return roomDao.selectRoomListByLodging(ld_num);
 	}
 
+	public RoomVO getRoom(int rm_num) {
+		return roomDao.selectRoom(rm_num);
+	}
+
 }
