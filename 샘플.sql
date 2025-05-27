@@ -18,7 +18,7 @@ ALTER TABLE review AUTO_INCREMENT = 1;
 
 
 INSERT INTO region(RG_NAME) VALUES
-("서울"),("경기"),("부산");
+("서울"),("경기"),("부산"),("제주");
 
 INSERT INTO lodging(LD_NAME,LD_REGION,LD_TYPE,LD_NUMBER,LD_RATING,LD_INFOR,LD_MEAL_PRICE,LD_ME_NUM,LD_RG_NUM) VALUES
 ("안좋아영","서울특별시 강남구 테헤란로 130","모텔","010-0000-0000",1,

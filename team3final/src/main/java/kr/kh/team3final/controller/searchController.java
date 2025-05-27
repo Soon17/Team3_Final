@@ -46,18 +46,31 @@ public class SearchController {
 	}
 
 	@GetMapping("/carsearch")
-	public String carsearch(
-			Model model,
-			SearchCriteria cri) {
+	public String carsearch(Model model, SearchCriteria cri) {
+		// 지역 목록
 		List<RegionVO> list = regionService.getRegionList();
 		model.addAttribute("regionList", list);
+
+		// 조건값 전달
 		model.addAttribute("rg_name", cri.getRg_name());
 		model.addAttribute("checkTime", cri.getCheckTime());
-		List<CarVO> carList = carService.getSearchCarList(cri);
-
-		model.addAttribute("carList", carList);
 		model.addAttribute("cri", cri);
+
+		// 차량 목록 조회
+		List<CarVO> carList = carService.getSearchCarList(cri);
+		model.addAttribute("carList", carList);
+
 		return "searching/carsearch";
+	}
+
+	@GetMapping("/find")
+	public String find() {
+		return "searching/find";
+	}
+
+	@GetMapping("/carfind")
+	public String carfind() {
+		return "searching/carfind";
 	}
 
 	@GetMapping("/lodging")
@@ -73,9 +86,17 @@ public class SearchController {
 		return "searching/searchLodging";
 	}
 
-	@GetMapping("/find")
-	public String find() {
-		return "searching/find";
+	@GetMapping("/car")
+	public String searchCar(
+			Model model,
+			SearchCriteria cri) {
+
+		List<CarVO> carList = carService.getSearchCarList(cri);
+
+		model.addAttribute("carList", carList);
+		model.addAttribute("cri", cri);
+
+		return "searching/searchCar";
 	}
 
 }

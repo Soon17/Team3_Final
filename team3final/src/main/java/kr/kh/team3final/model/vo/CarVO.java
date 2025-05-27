@@ -11,9 +11,10 @@ public class CarVO {
 	int cr_price;
 	int cr_count;
 	int cr_re_num;
-	Double avg_rating;
 	int min_price;
-	int review_count;
 
-	private CarTypeVO carType;
+	int ct_key;
+	String ct_name;
+	String ct_type;
+	String ct_thumbnail;
 }
