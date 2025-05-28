@@ -101,18 +101,18 @@ public class PaymentController {
 	@PostMapping("/kakao/complete")
 	public String insertLoReservation(HttpSession session,@RequestBody LoResrvationVO lr,
 	@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-		if(user != null){
-			int lr_me_num = user.getUser().getMe_num();
-			lr_me_num = oauth2user.getName();
-		}
-		String[] par =(String[])session.getAttribute("parts");
-		int rm_num = (int)session.getAttribute("rm_num");
-		String lr_checkIn = formatDate(par[0]);
-		String lr_checkOut = formatDate(par[1]);
-		lr.setLr_checkIn(lr_checkIn);
-		lr.setLr_checkOut(lr_checkOut);
-		lr.setLr_rm_num(rm_num);
-		System.out.println(lr);
+		// if(user != null){
+		// 	int lr_me_num = user.getUser().getMe_num();
+		// 	lr_me_num = oauth2user.getName();
+		// }
+		// String[] par =(String[])session.getAttribute("parts");
+		// int rm_num = (int)session.getAttribute("rm_num");
+		// String lr_checkIn = formatDate(par[0]);
+		// String lr_checkOut = formatDate(par[1]);
+		// lr.setLr_checkIn(lr_checkIn);
+		// lr.setLr_checkOut(lr_checkOut);
+		// lr.setLr_rm_num(rm_num);
+		// System.out.println(lr);
 		return "member/mypage";
 	}
 	public static String formatDate(String dateStr) {

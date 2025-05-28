@@ -86,9 +86,9 @@ public class MemberController {
 	public String viewReview(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2User) {
 		Integer meNum = null;
 		if(user != null) {
-				meNum = user.getUser().getMe_num();
+			meNum = user.getUser().getMe_num();
 		} else if(oauth2User != null) {
-				Object meNumObj = oauth2User.getAttribute("meNum");
+			Object meNumObj = oauth2User.getAttribute("meNum");
 				if(meNumObj instanceof Integer) {
 						meNum = (Integer) meNumObj;
 				} else if(meNumObj instanceof String) {
@@ -98,7 +98,7 @@ public class MemberController {
 
 		List<Lodging_ReviewDTO> list = new ArrayList<>();
 		if(meNum != null) {
-				list = reviewService.getSelectReviewList(meNum);
+			list = reviewService.getSelectReviewList(meNum);
 		}
 		
 		model.addAttribute("list", list);
@@ -249,23 +249,23 @@ public class MemberController {
 	
 	@PostMapping("/delete")
 	public String deleteMember(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-			MemberVO member = null;
+		MemberVO member = null;
 
-			if (user != null) {
-					member = user.getUser();
-			} else if (oauth2user != null) {
-					String email = (String) oauth2user.getAttributes().get("email");
-					String provider = (String) oauth2user.getAttributes().getOrDefault("provider", "NORMAL");
-					member = memberService.getMemberByEmailAndProvider(email, provider);
-			}
+		if (user != null) {
+				member = user.getUser();
+		} else if (oauth2user != null) {
+				String email = (String) oauth2user.getAttributes().get("email");
+				String provider = (String) oauth2user.getAttributes().getOrDefault("provider", "NORMAL");
+				member = memberService.getMemberByEmailAndProvider(email, provider);
+		}
 
-			if (member != null) {
-					member.setMe_del("Y");
-					memberService.updateMemberDel(member.getMe_num());
-					SecurityContextHolder.clearContext(); // 로그아웃
-			}
+		if (member != null) {
+				member.setMe_del("Y");
+				memberService.updateMemberDel(member.getMe_num());
+				SecurityContextHolder.clearContext(); // 로그아웃
+		}
 
-			return "redirect:/member/signIn";
+		return "redirect:/member/signIn";
 	}
 	
 }
