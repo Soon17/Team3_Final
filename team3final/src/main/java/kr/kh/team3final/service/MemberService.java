@@ -76,5 +76,13 @@ public class MemberService {
 		return memberDAO.insertMemberByIp(newUser);
 	}
 
+	public boolean updateUser(MemberVO member) {
+		return memberDAO.updateUser(member);
+	}
+
+	public int updateMemberDel(int member) {
+		return memberDAO.deleteUser(member);
+	}
+
 	
 }

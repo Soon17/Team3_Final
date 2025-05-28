@@ -29,6 +29,8 @@
             room rm ON r.LR_RM_NUM = rm.RM_NUM
         JOIN 
             lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
+        where
+            r.lr_me_num = #{meNum}
     </select>
 
     <!-- 최신 예약완료 내역 1개 -->
@@ -61,6 +63,8 @@
             lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
         WHERE
             r.LR_STATE = '예약완료'
+        and 
+            r.lr_me_num = #{meNum}
         ORDER BY
             r.LR_DATE DESC
         LIMIT 1

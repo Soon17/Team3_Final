@@ -10,6 +10,7 @@ import kr.kh.team3final.model.vo.LodgingVO;
 
 public interface ReviewDAO {
 
+<<<<<<< HEAD
 	List<Lodging_ReviewDTO> getSelectReviewList();
 
 	List<Lodging_ReviewDTO> selectReview(@Param("rv_table_name") String rv_table_name, @Param("ld_num") int ld_num);
@@ -18,4 +19,8 @@ public interface ReviewDAO {
 
 	List<Map<String, Object>> selectRatingCounts(@Param("ld_num") int ld_num);
 
+=======
+	List<Lodging_ReviewDTO> getSelectReviewList(int meNum);
+	
+>>>>>>> origin/hdj
 }
