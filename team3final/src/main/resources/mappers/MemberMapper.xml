@@ -16,7 +16,7 @@
 		from member
 		where me_email = #{me_email} and me_provider = #{me_provider}
 	</select>
-	<insert id="insertMemberByIp">
+	<insert id="insertMemberByIp" useGeneratedKeys="true" keyProperty="me_num">
 		insert into member(me_id, me_pw, me_email, me_number, me_name, me_nick, me_birthday, me_gender, me_profile, me_provider)
 		value(#{me_id},#{me_pw},#{me_email},#{me_number}, #{me_name}, #{me_nick}, #{me_birthday}, #{me_gender}, #{me_profile}, #{me_provider})
 	</insert>

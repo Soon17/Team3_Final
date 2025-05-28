@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.LoResrvationDAO">
+	<insert id="insertLoReservation" useGeneratedKeys="true" keyProperty="lr_num">
+		insert into lo_reservation (lr_checkin,lr_checkout,lr_count,lr_total_price
+		,lr_date,lr_booker_name,lr_guest_name,lr_guest_number,lr_meal_state,
+		lr_me_num,lr_rm_num)
+		values (#{lr_checkIn},#{lr_checkOut},#{lr_count},#{lr_total_price},now(),#{lr_booker_name},
+		#{lr_guest_name},#{lr_guest_number},#{lr_meal_state},#{lr_me_num},#{lr_rm_num})
+	</insert>
+	<insert id="insertUserOption">
+		insert into user_choice_option (uc_co_num,uc_lr_num)
+		values
+		<foreach collection="choice_option_nums" item="coNum" separator=",">
+			(#{coNum},#{lr_num})
+		</foreach>
+	</insert>
+</mapper>

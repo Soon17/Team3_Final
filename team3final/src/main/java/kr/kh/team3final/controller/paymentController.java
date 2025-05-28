@@ -99,21 +99,25 @@ public class PaymentController {
 		return map;
 	}
 	@PostMapping("/kakao/complete")
-	public String insertLoReservation(HttpSession session,@RequestBody LoResrvationVO lr,
+	@ResponseBody
+	public Map<String, Object> insertLoReservation(Model model,HttpSession session,@RequestBody LoResrvationVO lr,
 	@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-		// if(user != null){
-		// 	int lr_me_num = user.getUser().getMe_num();
-		// 	lr_me_num = oauth2user.getName();
-		// }
-		// String[] par =(String[])session.getAttribute("parts");
-		// int rm_num = (int)session.getAttribute("rm_num");
-		// String lr_checkIn = formatDate(par[0]);
-		// String lr_checkOut = formatDate(par[1]);
-		// lr.setLr_checkIn(lr_checkIn);
-		// lr.setLr_checkOut(lr_checkOut);
-		// lr.setLr_rm_num(rm_num);
-		// System.out.println(lr);
-		return "member/mypage";
+		if(oauth2user != null){
+			lr.setLr_me_num((int)oauth2user.getAttributes().get("num"));
+		}else if(user != null){
+			lr.setLr_me_num(user.getUser().getMe_num());
+		}
+		String[] par =(String[])session.getAttribute("parts");
+		int rm_num = (int)session.getAttribute("rm_num");
+		String lr_checkIn = formatDate(par[0]);
+		String lr_checkOut = formatDate(par[1]);
+		lr.setLr_checkIn(lr_checkIn);
+		lr.setLr_checkOut(lr_checkOut);
+		lr.setLr_rm_num(rm_num);
+		loResrvationService.insertLoReservation(lr);
+		Map<String, Object> map = new HashMap<>();
+		map.put("ok", true);
+		return map;
 	}
 	public static String formatDate(String dateStr) {
 		// 괄호 앞까지 자르고 점(.)을 하이픈(-)으로 교체

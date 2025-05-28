@@ -235,14 +235,14 @@ public class MemberController {
 		}
 
 		member.setMe_number(dto.getMe_number());
-    member.setMe_nick(dto.getMe_nick());
-    member.setMe_birthday(dto.getMe_birthday());
-    member.setMe_gender(dto.getMe_gender());
+		member.setMe_nick(dto.getMe_nick());
+		member.setMe_birthday(dto.getMe_birthday());
+		member.setMe_gender(dto.getMe_gender());
 
 		boolean updateUser = memberService.updateUser(member);
 
 		model.addAttribute("msg", updateUser ? "회원 정보가 성공적으로 수정되었습니다." : "회원 정보 수정에 실패했습니다.");
-    model.addAttribute("url", "/member/mypage");
+		model.addAttribute("url", "/member/mypage");
 		
 		return "msg";
 	}

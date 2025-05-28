@@ -581,12 +581,6 @@
 							mealState="Y";
 						}
 					});
-					alert("reserverName = " + reserverName);
-					alert("guestName = " + guestName);
-					alert("guestPhone = " + guestPhone);
-					alert("choice_option_nums = " + choice_option_nums);
-					alert("lr_count = " + lr_count);
-					alert("mealStates = " + mealState);
 					const response = await PortOne.requestPayment({
 					// Store ID 설정
 					storeId: storeId,
@@ -617,6 +611,13 @@
 						lr_count:lr_count
 					}),
 					});
+					if (notified.ok) {
+						// 예: 결제 완료 화면으로 이동
+						alert("결제 성공!");
+						window.location.href = "/member/mypage";
+					} else {
+						alert("결제 처리 실패!");
+					}
 				}   
 			})
 			});
