@@ -19,4 +19,13 @@
 		insert into member(me_id, me_pw, me_email, me_number, me_name, me_nick, me_birthday, me_gender, me_profile, me_provider)
 		value(#{me_id},#{me_pw},#{me_email},#{me_number}, #{me_name}, #{me_nick}, #{me_birthday}, #{me_gender}, #{me_profile}, #{me_provider})
 	</insert>
+	<update id="updateUser">
+		UPDATE member
+    SET
+			ME_NUMBER = #{me_number},
+      ME_NICK = #{me_nick},
+      ME_BIRTHDAY = #{me_birthday},
+      ME_GENDER = #{me_gender}
+    WHERE ME_NUM = #{me_num}
+	</update>
 </mapper>

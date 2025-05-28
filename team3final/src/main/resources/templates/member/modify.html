@@ -181,18 +181,18 @@
 				<div class="info-item info-another" data-toggle="modal" data-target="#emailModal">
 					<div>
 						<span class="label">이메일 계정</span>
-						<span class="badge success">인증완료</span>
+						<!-- <span class="badge success">인증완료</span> -->
 					</div>
 					<span class="value">
 						<span id="myEmail" th:text="${user.me_email}">acejsh77@gmail.com</span>
-						<div class="dimmed mx-3">&gt;</div>
+						<!-- <div class="dimmed mx-3">&gt;</div> -->
 					</span>
 				</div>
 
 				<div class="info-item info-another" data-toggle="modal" data-target="#numModal">
 					<div>
 						<span class="label">휴대폰 번호</span>
-						<span class="badge warning">미인증</span>
+						<!-- <span class="badge warning">미인증</span> -->
 					</div>
 					<span class="value">
 						<span id="myNum" th:text="${user.me_number}">010-1111-1111</span>
@@ -209,9 +209,9 @@
 				<div class="info-item info-birthAndGender" data-toggle="modal" data-target="#birthAndGenderModal">
 					<span class="label">생년월일</span>
 					<span class="value">
-						<span id="myYear">2000</span>.
-						<span id="myMonth">5</span>.
-						<span id="myDay">13</span>
+						<span id="myYear" th:text="${year}">2000</span>.
+						<span id="myMonth" th:text="${month}">5</span>.
+						<span id="myDay" th:text="${day}">13</span>
 						<div class="dimmed mx-3">&gt;</div>
 					</span>
 				</div>
@@ -227,26 +227,26 @@
 			<!------------------------------ Modal ------------------------------>
 
 			<!-- 이메일 Modal -->
-			<div class="modal" id="emailModal">
+			<!-- <div class="modal" id="emailModal">
 				<div class="modal-dialog modal-custom">
-					<div class="modal-content">
+					<div class="modal-content"> -->
 						<!-- Modal 헤더 -->
-						<div class="modal-header">
+						<!-- <div class="modal-header">
 							<h4 class="modal-title">내 정보 수정</h4>
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
+						</div> -->
 						<!-- Modal 바디 -->
-						<div class="modal-body">
+						<!-- <div class="modal-body">
 							10초 이메일 연결 시 예약 확인에 꼭 필요한 바우처부터 회원 전용 소식까지 모두 받아보실 수 있습니다.
 							<input type="email" class="input-box mt-3" id="input-email">
-						</div>
+						</div> -->
 						<!-- Modal 푸터 -->
-						<div class="modal-footer justify-content-center">
+						<!-- <div class="modal-footer justify-content-center">
 							<button type="button" class="btn btn-danger btn-email" data-dismiss="modal">이메일 인증</button>
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- 폰번호 Modal -->
 			<div class="modal" id="numModal">
@@ -351,7 +351,7 @@
 					<span style="color: #0b85c4;">연동중</span>
 				</div>
 				<div class="linked-item">
-					<span><img src="/resources/static/img/apple.png" alt="apple">Apple</span>
+					<span><img src="/resources/static/img/google.png" alt="apple">Google</span>
 					<button class="button">연동하기</button>
 				</div>
 				<div class="linked-item">
