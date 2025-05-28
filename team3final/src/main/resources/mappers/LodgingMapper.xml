@@ -14,7 +14,7 @@
         (
             SELECT ROUND(AVG(rv_rating), 1)
             FROM review
-						join room on rm_num = rv_number
+			join room on rm_num = rv_number
             WHERE rv_table_name = 'room' 
               AND rm_ld_num = lodging.LD_NUM
         ) AS avg_rating,
@@ -87,5 +87,11 @@
 	</select>
 	<select id="selectDefaultOptions" resultType="String">
 		select do_name from default_option
+	</select>
+	<select id="selectLodging" resultType="LodgingVO">
+		select* from lodging where ld_num = #{ld_num}
+	</select>
+	<select id="getMealPrice" resultType="int">
+		select ld_meal_price from lodging where  ld_num = #{ld_num}
 	</select>
 </mapper>

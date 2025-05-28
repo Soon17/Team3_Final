@@ -50,4 +50,12 @@ public class LodgingService {
 		List<String> defaultOptions = lodgingDao.selectDefaultOptions();
 		return defaultOptions;
 	}
+	
+	public LodgingVO getLodging(int ld_num) {
+		return lodgingDao.selectLodging(ld_num);
+	}
+
+	public int getMealPrice(int ldNum) {
+		return lodgingDao.getMealPrice(ldNum);
+	}
 }

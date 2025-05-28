@@ -16,8 +16,8 @@ public class ReviewService {
 	@Autowired
 	ReviewDAO reviewDAO;
 
-	public List<Lodging_ReviewDTO> getSelectReviewList() {
-		return reviewDAO.getSelectReviewList();
+	public List<Lodging_ReviewDTO> getSelectReviewList(int meNum) {
+		return reviewDAO.getSelectReviewList(meNum);
 	}
 
 	public List<Lodging_ReviewDTO> selectReview(String rv_table_name, int ld_num) {

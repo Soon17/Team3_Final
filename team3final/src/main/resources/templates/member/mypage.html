@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout.html}">
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <head>
 	<meta charset="UTF-8">
 	<title>마이페이지</title>
@@ -168,10 +168,10 @@
 	<main layout:fragment="content">
 		<div class="mypage bg-light">
 			<!-- 사용자 정보 -->
-			<div class="user-header">
+			<div class="user-header" th:if="${logIn}">
 				<div class="user-info">
-					<strong class="username">학교가는자존심님</strong>
-					<span class="email">acejsh77@gmail.com</span>
+					<strong class="username" th:text="${user.me_nick}">학교가는자존심님</strong>
+					<span class="email" th:text="${user.me_email}">acejsh77@gmail.com</span>
 				</div>
 				<a class="btn btn-modify" href="/member/modify">내 정보 관리</a>
 				</div>
@@ -230,6 +230,7 @@
 
 						// 호텔 예약 내역을 불러오는 함수
 						function loadHotelReservation() {
+							
 								$.ajax({
 										url: '/member/reservation-hotel',
 										method: 'GET',

@@ -1,6 +1,6 @@
 package kr.kh.team3final.service;
 
-import java.util.List;
+
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +74,14 @@ public class MemberService {
 
 	public boolean insertMemberByIp(MemberVO newUser) {
 		return memberDAO.insertMemberByIp(newUser);
+	}
+
+	public boolean updateUser(MemberVO member) {
+		return memberDAO.updateUser(member);
+	}
+
+	public int updateMemberDel(int member) {
+		return memberDAO.deleteUser(member);
 	}
 
 	

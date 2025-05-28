@@ -17,5 +17,9 @@ public interface LodgingDAO {
 			String lr_checkin, String lr_checkout, int rm_person, SearchCriteria cri);
 
 	List<String> selectDefaultOptions();
+	
+	LodgingVO selectLodging(int ld_num);
+
+	int getMealPrice(int ldNum);
 
 }
