@@ -20,16 +20,20 @@ public class SavePreviousUrlFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpSession session = request.getSession();
 
-		String uri = request.getRequestURI();
+		String url = request.getRequestURL().toString();
+		String query = request.getQueryString();
+		if (query != null) {
+			url += "?" + query;
+		}
 
 		// 확장자 검사
-		boolean isStatic = uri.matches(".*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff2?)$");
+		boolean isStatic = url.matches(".*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff2?)$");
 		boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-		boolean isProtected = uri.matches("^/(pay|error).*");
-		boolean isToolingRequest = uri.startsWith("/.well-known");
+		boolean isProtected = url.matches("^/(pay|error).*");
+		boolean isToolingRequest = url.startsWith("/.well-known");
 
 		if (!isStatic && !isAjax && !isProtected && !isToolingRequest) {
-			request.getSession().setAttribute("prevPage", uri);
+			session.setAttribute("prevPage", url);
 		}
 
 		chain.doFilter(req, res);
