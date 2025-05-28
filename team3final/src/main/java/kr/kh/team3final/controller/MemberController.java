@@ -90,9 +90,9 @@ public class MemberController {
 		} else if(oauth2User != null) {
 			Object meNumObj = oauth2User.getAttribute("meNum");
 				if(meNumObj instanceof Integer) {
-						meNum = (Integer) meNumObj;
+					meNum = (Integer) meNumObj;
 				} else if(meNumObj instanceof String) {
-						meNum = Integer.valueOf((String) meNumObj);
+					meNum = Integer.valueOf((String) meNumObj);
 				}
 		}
 
