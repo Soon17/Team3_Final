@@ -68,8 +68,16 @@
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 		}
 
+		.btn-submit {
+			background-color: #03b80c;
+		}
+
 		.button:hover {
 			background-color: #3498db;
+		}
+
+		.btn-submit:hover {
+			background-color: #037c09;
 		}
 
 		.room-box {
@@ -165,13 +173,15 @@
 	<div class="main" style="background-color: #fff;">
 		<main layout:fragment="content">
 
-			<div class="main-container">
-				<div class="title">🏨 숙소 등록</div>
+			<form class="main-container" action="/owner/uploadLodgingPost" method="post">
+				<div class="title">
+					<i class="fas fa-hotel"> 신규 호텔 등록</i>
+				</div>
 
 				<div class="form-section" id="hotelForm">
 
 					<div class="lodging-box form-group col-12">
-						<label class="form-label" for="photos">숙소 사진 (5장)</label>
+						<label class="form-label" for="photos">호텔 사진 (5장)</label>
 						<div class="image-grid">
 							<!-- 이미지 박스 1번: 메인 (2x2) -->
 							<div class="image-box image-main" data-index="1">
@@ -212,8 +222,32 @@
 						</div>
 
 						<div class="form-group col-9">
-							<label class="form-label" for="name">숙소 이름</label>
+							<label class="form-label" for="name">호텔 이름</label>
 							<input type="text" class="form-input" id="name" name="name">
+						</div>
+					</div>
+
+					<div class="form-group col-12">
+						<label class="form-label mb-2">제공 옵션</label>
+
+						<!-- 체크박스 컨테이너 -->
+						<div class="d-flex flex-wrap gap-3">
+							<div th:each="opt : ${defaultOptions}" class="form-check d-flex align-items-center"
+								style="width: 24%;">
+								<input class="form-check-input me-2" type="checkbox" th:id="'option-' + ${opt}"
+									th:name="options" th:value="${opt}" />
+								<label class="form-check-label" th:for="'option-' + ${opt}" th:text="${opt}"></label>
+							</div>
+							<!-- 기타 입력 항목 -->
+							<div class="form-check d-flex align-items-center" style="width: 48%;">
+								<input type="checkbox" class="form-check-input me-2" id="option-etc"
+									onchange="toggleEtcInput(this)">
+								<label class="form-check-label me-2" for="option-etc" style="min-width: 40px;">기타</label>
+								<input type="text" id="etc-input" class="form-control form-control-sm"
+									placeholder="옵션1, 옵션2, ..." disabled oninput="syncEtcToHidden()">
+								<!-- 실제 전송될 hidden 필드 -->
+								<input type="hidden" name="options" id="etc-hidden" />
+							</div>
 						</div>
 					</div>
 
@@ -229,10 +263,13 @@
 
 					<div id="roomsContainer"></div>
 
-					<button class="button" onclick="addRoomBox()">+ 방 등록하기</button>
+					<div class="d-flex justify-content-between">
+						<button type="button" class="button" onclick="addRoomBox()">+ 룸 추가하기</button>
+						<button type="submit" class="button btn-submit">호텔 등록</button>
+					</div>
 				</div>
 
-			</div>
+			</form>
 
 			<script>
 				let roomCount = 0;
@@ -244,7 +281,9 @@
 							<!-- ❌ 닫기 버튼 -->
 							<button type="button" class="close-room-btn" title="삭제">×</button>
 
-							<div class="room-title">🛏️ 방 ${roomCount}</div>
+							<div class="room-title">
+								<i class="fas fa-home"></i> 룸 ${roomCount}
+							</div>
 
 							<div class="form-group">
 								<label class="form-label">사진 (3장)</label>
@@ -322,6 +361,26 @@
 					roomCount--;
 				});
 
+				function toggleEtcInput(checkbox) {
+					const input = $('#etc-input');
+					const hidden = $('#etc-hidden');
+
+					if (checkbox.checked) {
+						input.prop('disabled', false);
+						input.focus();
+						hidden.val(input.val());
+					} else {
+						input.prop('disabled', true);
+						input.val('');
+						hidden.val('');
+					}
+				}
+
+				function syncEtcToHidden() {
+					const input = $('#etc-input');
+					const hidden = $('#etc-hidden');
+					hidden.val(input.val());
+				}
 			</script>
 		</main>
 	</div>

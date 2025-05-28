@@ -16,4 +16,6 @@ public interface LodgingDAO {
 	List<LodgingVO> selectRegionSwitchLodgingList(
 			String lr_checkin, String lr_checkout, int rm_person, SearchCriteria cri);
 
+	List<String> selectDefaultOptions();
+
 }

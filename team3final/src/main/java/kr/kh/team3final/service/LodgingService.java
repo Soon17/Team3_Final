@@ -45,4 +45,9 @@ public class LodgingService {
 		String EndTime = dates[1].trim().replace(".", "-");
 		return EndTime;
 	}
+
+	public List<String> getDefaultOptions() {
+		List<String> defaultOptions = lodgingDao.selectDefaultOptions();
+		return defaultOptions;
+	}
 }

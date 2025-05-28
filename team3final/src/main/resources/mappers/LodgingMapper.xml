@@ -85,4 +85,7 @@
 			</otherwise>
 		</choose>
 	</select>
+	<select id="selectDefaultOptions" resultType="String">
+		select do_name from default_option
+	</select>
 </mapper>
