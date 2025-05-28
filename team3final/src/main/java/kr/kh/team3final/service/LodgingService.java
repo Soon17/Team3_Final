@@ -49,4 +49,8 @@ public class LodgingService {
 	public LodgingVO getLodging(int ld_num) {
 		return lodgingDao.selectLodging(ld_num);
 	}
+
+	public int getMealPrice(int ldNum) {
+		return lodgingDao.getMealPrice(ldNum);
+	}
 }

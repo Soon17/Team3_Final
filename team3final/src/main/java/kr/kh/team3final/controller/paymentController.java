@@ -6,9 +6,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,8 +26,7 @@ import kr.kh.team3final.service.ChoiceOptionService;
 import kr.kh.team3final.service.LoResrvationService;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RoomService;
-
-import org.springframework.web.bind.annotation.PostMapping;
+import kr.kh.team3final.utils.CustomUser;
 
 
 
@@ -58,10 +61,8 @@ public class PaymentController {
 		String[] parts = checkTime.split(" ~ ");
 		String checkIn = parseDate(parts[0]);
 		String checkOut = parseDate(parts[1]);
-
-		sesssion.setAttribute("checkIn", checkIn);
-		sesssion.setAttribute("checkOut", checkOut);
-		sesssion.setAttribute("rm_person", rm_person);
+		sesssion.setAttribute("ld_num", ld_num);
+		sesssion.setAttribute("parts", parts);
 		sesssion.setAttribute("rm_num", rm_num);
 		model.addAttribute("lodging", lodging);
 		model.addAttribute("room", room);
@@ -96,10 +97,25 @@ public class PaymentController {
 		return map;
 	}
 	@PostMapping("/kakao/complete")
-	public String insertLoReservation(LoResrvationVO loResrvationVO) {
-		
-		
-		return null;
+	public String insertLoReservation(HttpSession session,@RequestBody LoResrvationVO lr,
+	@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+		// if(user != null){
+		// 	int lr_me_num = user.getUser().getMe_num();
+		// 	lr_me_num = oauth2user.getName();
+		// }
+		// String[] par =(String[])session.getAttribute("parts");
+		// int rm_num = (int)session.getAttribute("rm_num");
+		// String lr_checkIn = formatDate(par[0]);
+		// String lr_checkOut = formatDate(par[1]);
+		// lr.setLr_checkIn(lr_checkIn);
+		// lr.setLr_checkOut(lr_checkOut);
+		// lr.setLr_rm_num(rm_num);
+		// System.out.println(lr);
+		return "member/mypage";
 	}
-	
+	public static String formatDate(String dateStr) {
+		// 괄호 앞까지 자르고 점(.)을 하이픈(-)으로 교체
+		String dateOnly = dateStr.split("\\(")[0];
+		return dateOnly.replace(".", "-");
+    }
 }

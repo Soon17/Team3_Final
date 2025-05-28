@@ -1,13 +1,17 @@
 package kr.kh.team3final.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpSession;
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.RegionVO;
@@ -19,6 +23,9 @@ import kr.kh.team3final.service.RegionService;
 import kr.kh.team3final.service.ReviewService;
 import kr.kh.team3final.service.RoomService;
 import kr.kh.team3final.service.ThumbnailService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class LodgingController {
@@ -72,5 +79,14 @@ public class LodgingController {
 
     return "reserv";
   }
-
+  @PostMapping("/meal/price")
+  @ResponseBody
+  public Map<String, Object> getMealPrice(HttpSession session){
+    int ldNum = (int)session.getAttribute("ld_num");
+    Map<String, Object> map = new HashMap<String, Object>();
+    int mealPrice = lodgingService.getMealPrice(ldNum);
+    map.put("mealPrice", mealPrice);
+    return map;
+  }
+  
 }

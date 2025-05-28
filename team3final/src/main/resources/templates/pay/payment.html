@@ -7,6 +7,28 @@
 	<title>결제</title>
 	
 	<style>
+		.payment-images {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 30px; /* 이미지 사이 간격 */
+			flex-wrap: wrap; /* 화면 작을 때 줄바꿈 */
+		}
+
+		.payment-images img {
+			max-width: 150px; /* 이미지 최대 너비 제한 */
+			height: auto;
+			transition: transform 0.3s ease;
+			cursor: pointer;
+		}
+
+		.payment-images img:hover {
+			transform: scale(1.05); /* 마우스 올렸을 때 약간 확대 */
+		}
+		.toss-pay {
+			border-radius: 30px;
+			background-color: #e6f0ff; /* 토스 느낌의 연한 파랑 배경 */
+		}
 		.main-container {
 			background-color: #f5f6f7;
 			font-family: 'Noto Sans KR', sans-serif;
@@ -96,9 +118,6 @@
 
 <body>
 	<main layout:fragment="content" class="main-container">
-		<input type="hidden" class="lr-checkIn" th:value="${checkIn}">
-		<input type="hidden" class="lr-checkOut" th:value="${checkOut}">
-		<input type="hidden" class="rm_person" th:value="${rm_person}">
 		<div class="container mb-5">
 			<!-- 왼쪽 데이터 시작-->
 			<div class="row">
@@ -128,7 +147,7 @@
 						</div>
 						<div class="d-flex align-items-center pt-3">
 							<div style="font-weight: bold; margin-right: 128px;">인원</div>
-							<div>[[${rm_person}]]명</div>
+							<div class="lr-rm-person">[[${rm_person}]]명</div>
 						</div>
 					</form>
 					<form id="reservationForm">
@@ -210,7 +229,7 @@
 									line-height: 1.5;
 									white-space: pre-line;
 									word-break: keep-all;
-								" th:text="${room.rm_infor}">
+								" th:text="${lodging.ld_infor}">
 								</div>
 							</div>
 						</div>
@@ -246,9 +265,28 @@
 				</div>
 				
 			</div>
+			<div class="modal" id="paymentModal">
+				<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<!-- Modal 헤더 -->
+					<div class="modal-header">
+						<span>결제하기</span>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal 바디 -->
+					<div class="modal-body" id="map1">
+						<div class="payment-images">
+							<img class="kakao-pay" src="/resources/static/imgs/payment_kakao.png" alt="카카오페이">
+							<img class="toss-pay" src="/resources/static/imgs/payment_toss.png" alt="토스페이">
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>  
 		</div>
 		
 		<script>
+			let total;
 			$(document).ready(function () {
 				// 날짜 텍스트 가져오기
 				const checkInText = $('.check-in').text().trim();   // 예: "5/23/금"
@@ -271,7 +309,7 @@
 				const diffDays = diffTime / (1000 * 60 * 60 * 24); // ms → days
 				// .badge 안에 텍스트로 n박 입력
 				$('.night').text(`${diffDays}박`);
-				let total = $(".room-total-price").text()* diffDays;
+				total = $(".room-total-price").text()* diffDays;
 				$(".room-total-price").text(total.toLocaleString()+"원");
 				$(".st-total-price").text(total.toLocaleString()+"원");
 			});
@@ -412,6 +450,26 @@
 			});
 		</script>
 		<script>
+			let loMeal;
+			$('.choice-check').on('change', function () {
+				if ($(this).is(':checked')) {
+					if($(this).data('co-do-name')==="조식"){
+						$.ajax({
+							async : true,
+							url : '/meal/price', 
+							type : 'post', 
+							success : function (data){
+								loMeal = data.mealPrice
+								total += loMeal;
+								$('.room-total-price, .st-total-price, .summary-total-price, .summary-st-price, .mobile-room-price').text(total.toLocaleString()+"원");
+							}
+						});												
+					}
+				} else {
+					total -= loMeal;
+					$('.room-total-price, .st-total-price, .summary-total-price, .summary-st-price, .mobile-room-price').text(total.toLocaleString()+"원");					
+				}
+			});
 			function toggleDetailAll() {
 			const $details = $(".priceDetail");
 			const $arrows = $(".arrowImg");
@@ -436,7 +494,8 @@
 			$(".mobile-pay-footer strong").text(`${total} 바로 결제하기`);
 
 			$(document).on("click", ".btn.btn-primary, .mobile-pay-button", function (e) {
-
+				let shouldOpenModal = false;
+				
 				const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
 				const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
 
@@ -487,66 +546,79 @@
 						guestPhone.removeClass("is-invalid");
 					}         
 				}
-				
+				shouldOpenModal = true;
+				if (shouldOpenModal) {
+					$('#paymentModal').modal('show');
+				}								
 			});
-			// //카카오결제
-			// $.ajax({
-			// async : true,
-			// url : '/pay/kakao/apiKey', 
-			// type : 'post', 
-			// success : function (data){
-			// 	let channelKey = data.channel
-			// 	let storeId= data.store
-			// 	requestPayment(channelKey,storeId)
-			// }
-			// });
-			// async function requestPayment(channelKey,storeId) {
-			// 	// const tPriceText = $(".summary-total-price").text(); // "100,000원" 찐 코드
-			// 	// const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
-			// 	const totlaPrice = $(".summary-total-price").data('total');//테스트 코드 10원
-			// 	const rm_name = $(".rm-name").text();
-			// 	const reserverName = $("[name = 'reserverName']").text();
-			// 	const guestName = $("[name = 'guestName']").text();
-			// 	const guestPhone = $("[name = 'guestPhone']").text();
-			// 	let checkNums = [];
-			// 	let mealState = false;
-			// 	$('.choice-check:checked').each(function () {
-			// 		checkNums.push($(this).val());
-			// 		if($(this).data('co-do-name')===("조식")){
-			// 			mealState=true;
-			// 		}
-			// 	});
-			// 	const response = await PortOne.requestPayment({
-			// 	// Store ID 설정
-			// 	storeId: storeId,
-			// 	// 채널 키 설정
-			// 	channelKey: channelKey,
-			// 	paymentId: `payment-${crypto.randomUUID()}`,
-			// 	orderName: rm_name,
-			// 	totalAmount: totlaPrice,
-			// 	currency: "CURRENCY_KRW",
-			// 	payMethod: 'EASY_PAY',
-			// 	});
-			// 	if (response.code !== undefined) {
-			// 	// 오류 발생
-			// 	return alert(response.message);
-			// 	}
-			// 	let 
-			// 	// /payment/complete 엔드포인트를 구현해야 합니다. 다음 목차에서 설명합니다.
-			// 	const notified = await fetch(`localhost:8080/pay/kakao/complete`, {
-			// 	method: "POST",
-			// 	headers: { "Content-Type": "application/json" },
-			// 	// paymentId와 주문 정보를 서버에 전달합니다
-			// 	body: JSON.stringify({
-			// 		lr_total_price:totalAmount,
-			// 		lr_booker_name:reserverName,
-			// 		lr_guest_name:guestName,
-			// 		lr_guest_number:guestPhone,
-			// 		lr_meal_state:mealState,
-			// 		checkNums:checkNums
-			// 	}),
-			// 	});
-			// }   
+			$(document).on("click", ".kakao-pay", function (e) {
+				//카카오결제
+				$.ajax({
+				async : true,
+				url : '/pay/kakao/apiKey', 
+				type : 'post', 
+				success : function (data){
+					let channelKey = data.channel
+					let storeId= data.store
+					requestPayment(channelKey,storeId)
+				}
+				});			
+				async function requestPayment(channelKey,storeId) {
+					// const tPriceText = $(".summary-total-price").text(); // "100,000원" 찐 코드
+					// const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
+					const totlaPrice = $(".summary-total-price").data('total');//테스트 코드 10원
+					const rm_name = $(".rm-name").text();
+					const reserverName = $("[name = 'reserverName']").val();
+					const guestName = $("[name = 'guestName']").val();
+					const guestPhone = $("[name = 'guestPhone']").val();
+					let choice_option_nums = [];
+					let mealState = "N";
+					let lrText = $('.lr-rm-person').text(); // 예: "성인 2명"
+					let lr_count = lrText.match(/\d+/)[0];
+					$('.choice-check:checked').each(function () {
+						choice_option_nums.push($(this).val());
+						if($(this).data('co-do-name')===("조식")){
+							mealState="Y";
+						}
+					});
+					alert("reserverName = " + reserverName);
+					alert("guestName = " + guestName);
+					alert("guestPhone = " + guestPhone);
+					alert("choice_option_nums = " + choice_option_nums);
+					alert("lr_count = " + lr_count);
+					alert("mealStates = " + mealState);
+					const response = await PortOne.requestPayment({
+					// Store ID 설정
+					storeId: storeId,
+					// 채널 키 설정
+					channelKey: channelKey,
+					paymentId: `payment-${crypto.randomUUID()}`,
+					orderName: rm_name,
+					totalAmount: totlaPrice,
+					currency: "CURRENCY_KRW",
+					payMethod: 'EASY_PAY',
+					});
+					if (response.code !== undefined) {
+					// 오류 발생
+					return alert(response.message);
+					}
+					// /payment/complete 엔드포인트를 구현해야 합니다. 다음 목차에서 설명합니다.
+					const notified = await fetch(`http://localhost:8080/pay/kakao/complete`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					// paymentId와 주문 정보를 서버에 전달합니다
+					body: JSON.stringify({
+						lr_total_price:totlaPrice,
+						lr_booker_name:reserverName,
+						lr_guest_name:guestName,
+						lr_guest_number:guestPhone,
+						lr_meal_state:mealState,
+						choice_option_nums:choice_option_nums,
+						lr_count:lr_count
+					}),
+					});
+				}   
+			})
 			});
 			//카카오페이
 		</script>

@@ -18,4 +18,6 @@ public interface LodgingDAO {
 
 	LodgingVO selectLodging(int ld_num);
 
+	int getMealPrice(int ldNum);
+
 }
