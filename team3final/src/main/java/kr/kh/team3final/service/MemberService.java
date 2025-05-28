@@ -80,5 +80,9 @@ public class MemberService {
 		return memberDAO.updateUser(member);
 	}
 
+	public int updateMemberDel(int member) {
+		return memberDAO.deleteUser(member);
+	}
+
 	
 }

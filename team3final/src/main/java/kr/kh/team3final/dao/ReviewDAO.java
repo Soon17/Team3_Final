@@ -6,6 +6,6 @@ import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 
 public interface ReviewDAO {
 
-	List<Lodging_ReviewDTO> getSelectReviewList();
+	List<Lodging_ReviewDTO> getSelectReviewList(int meNum);
 	
 }

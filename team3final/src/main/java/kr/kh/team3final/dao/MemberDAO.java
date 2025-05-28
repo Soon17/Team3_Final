@@ -16,4 +16,6 @@ public interface MemberDAO {
 
 	boolean updateUser(MemberVO member);
 
+	int deleteUser(@Param("me_num")int me_num);
+
 }

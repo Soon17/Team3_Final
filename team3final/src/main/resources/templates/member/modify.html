@@ -264,7 +264,7 @@
 						</div>
 						<!-- Modal 푸터 -->
 						<div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-danger btn-num" data-dismiss="modal">인증번호 받기</button>
+							<button type="button" class="btn btn-danger btn-num" data-dismiss="modal">설정 완료</button>
 						</div>
 					</div>
 				</div>
@@ -344,119 +344,189 @@
 
 			<!------------------------------------------------------------------->
 
-			<div class="section-title">계정연동</div>
+			<div class="section-title">로그인 상태</div>
 			<div class="info-box">
 				<div class="linked-item">
 					<span><img src="/resources/static/img/kakaotalk.png" alt="kakaotalk">카카오톡</span>
-					<span style="color: #0b85c4;">연동중</span>
+					<span th:if="${user.me_provider == 'KAKAO'}" style="color: #0b85c4;">로그인 중</span>
+					<span th:unless="${user.me_provider == 'KAKAO'}">-</span>
 				</div>
+
 				<div class="linked-item">
-					<span><img src="/resources/static/img/google.png" alt="apple">Google</span>
-					<button class="button">연동하기</button>
+					<span><img src="/resources/static/img/google.png" alt="google">Google</span>
+					<span th:if="${user.me_provider == 'GOOGLE'}" style="color: #0b85c4;">로그인 중</span>
+					<span th:unless="${user.me_provider == 'GOOGLE'}">-</span>
 				</div>
+
 				<div class="linked-item">
 					<span><img src="/resources/static/img/naver.png" alt="naver">네이버</span>
-					<button class="button">연동하기</button>
+					<span th:if="${user.me_provider == 'NAVER'}" style="color: #0b85c4;">로그인 중</span>
+					<span th:unless="${user.me_provider == 'NAVER'}">-</span>
+				</div>
+
+				<div class="linked-item">
+					<span><img src="/resources/static/img/user.png" alt="user">일반 로그인</span>
+					<span th:if="${user.me_provider == 'NORMAL'}" style="color: #0b85c4;">로그인 중</span>
+					<span th:unless="${user.me_provider == 'NORMAL'}">-</span>
 				</div>
 			</div>
-
+			
 			<div class="footer-links">
 				<a href="/logout">로그아웃</a>
-				<a href="#">회원탈퇴</a>
+
+				<form th:action="@{/member/delete}" method="post" th:onsubmit="return confirm('정말 탈퇴하시겠습니까?')" style="display:inline;">
+					<button type="submit" style="all:unset; cursor:pointer;">
+						회원탈퇴
+					</button>
+				</form>
 			</div>
 		</div>
 
 		<script>
-			/**************************************************/
+		/**************************************************/
 
-			// 임의의 정보 아이템 요소를 클릭 시 동작
-			$(".info-another").click(function () {
-				const modal = $(this).data("target");				//해당 요소와 연결된 모달
-				const val = $(this).find(".value>span").text();		//해당 요소의 텍스트 값
-				$(modal).find("input").val(val);					//모달의 input태그에 넣기
+		// 임의의 정보 아이템 요소를 클릭 시 동작
+		$(".info-another").click(function () {
+			const modal = $(this).data("target");        //해당 요소와 연결된 모달
+			const val = $(this).find(".value>span").text();    //해당 요소의 텍스트 값
+			$(modal).find("input").val(val);              //모달의 input태그에 넣기
+		});
+
+		// 생일/성별 정보 아이템 요소를 클릭 시 동작
+		$(".info-birthAndGender").click(function () {
+			const gender = $("#myGender").text();
+			const year = $("#myYear").text();
+			const month = $("#myMonth").text();
+			const day = $("#myDay").text();
+
+			if (gender === "남자") $('#male').prop('checked', true);
+			if (gender === "여자") $('#female').prop('checked', true);
+
+			$('#select-year option[value="' + year + '"]').prop('selected', true);
+			$('#select-month option[value="' + month + '"]').prop('selected', true);
+			$('#select-day option[value="' + day + '"]').prop('selected', true);
+		});
+
+		/**************************************************/
+
+		// 번호 - 수정 버튼 클릭 시 동작
+		$('.btn-num').click(function () {
+			const numInput = $("#input-num").val().trim();
+			if (!numInput) {
+				alert('번호를 입력해주세요.');
+				return;
+			}
+
+			// AJAX 요청: 서버에 번호 수정 요청 보내기
+			fetch('/member/modify', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				body: JSON.stringify({
+					me_number: numInput
+				})
 			})
-
-			// 생일/성별 정보 아이템 요소를 클릭 시 동작
-			$(".info-birthAndGender").click(function () {
-				const gender = $("#myGender").text();
-				const year = $("#myYear").text();
-				const month = $("#myMonth").text();
-				const day = $("#myDay").text();
-
-				if (gender === "남자") $('#male').prop('checked', true);
-				if (gender === "여자") $('#female').prop('checked', true);
-
-				$('#select-year option[value="' + year + '"]').prop('selected', true);
-				$('#select-month option[value="' + month + '"]').prop('selected', true);
-				$('#select-day option[value="' + day + '"]').prop('selected', true);
+			.then(response => response.text())
+			.then(data => {
+				$('#myNum').text(numInput);
+				$('#numModal').modal('hide');
+				alert('번호가 성공적으로 수정되었습니다.');
 			})
-
-			/**************************************************/
-
-			// 이메일 - 수정 버튼 클릭 시 동작
-			$('.btn-email').click(function () {
-				const emailInput = $("#input-email").val().trim();
-				if (emailInput) {
-					$('#myEmail').text(emailInput);
-					$('#emailModal').modal('hide');
-				} else {
-					alert('이메일을 입력해주세요.');
-				}
+			.catch(error => {
+				console.error('번호 수정 실패:', error);
+				alert('번호 수정에 실패했습니다. 다시 시도해주세요.');
 			});
+		});
 
-			// 번호 - 수정 버튼 클릭 시 동작
-			$('.btn-num').click(function () {
-				const numInput = $("#input-num").val().trim();
-				if (numInput) {
-					$('#myNum').text(numInput);
-					$('#numModal').modal('hide');
-				} else {
-					alert('번호를 입력해주세요.');
-				}
+		// 닉네임 - 수정 버튼 클릭 시 동작
+		$('.btn-nick').click(function () {
+			const nickInput = $("#input-nick").val().trim();
+			if (!nickInput) {
+				alert('닉네임을 입력해주세요.');
+				return;
+			}
+
+			fetch('/member/modify', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				body: JSON.stringify({
+					me_nick: nickInput
+				})
+			})
+			.then(response => response.text())
+			.then(data => {
+				$('#myNick').text(nickInput);
+				$('#nickModal').modal('hide');
+				alert('닉네임이 성공적으로 수정되었습니다.');
+			})
+			.catch(error => {
+				console.error('닉네임 수정 실패:', error);
+				alert('닉네임 수정에 실패했습니다. 다시 시도해주세요.');
 			});
+		});
 
-			// 닉네임 - 수정 버튼 클릭 시 동작
-			$('.btn-nick').click(function () {
-				const nickInput = $("#input-nick").val().trim();
-				if (nickInput) {
-					$('#myNick').text(nickInput);
-					$('#nickModal').modal('hide');
-				} else {
-					alert('닉네임을 입력해주세요.');
-				}
-			});
+		// 생일/성별 - 수정 버튼 클릭 시 동작
+		$('.btn-birthAndGender').click(function () {
+			const checkedGender = $('[name=gender]:checked').val();
+			const selectedYear = $('#select-year option:selected').val();
+			const selectedMonth = $('#select-month option:selected').val();
+			const selectedDay = $('#select-day option:selected').val();
 
-			// 생일/성별 - 수정 버튼 클릭 시 동작
-			$('.btn-birthAndGender').click(function () {
-				const checkedGender = $('[name=gender]:checked').val();
-				const selectedYear = $('#select-year option:selected').val();
-				const selectedMonth = $('#select-month option:selected').val();
-				const selectedDay = $('#select-day option:selected').val();
+			// 생년월일을 'YYYYMMDD' 형태로 합치기
+			const birthday = selectedYear + 
+											(selectedMonth.length === 1 ? '0' + selectedMonth : selectedMonth) + 
+											(selectedDay.length === 1 ? '0' + selectedDay : selectedDay);
+
+			fetch('/member/modify', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				body: JSON.stringify({
+					me_gender: checkedGender,
+					me_birthday: birthday
+				})
+			})
+			.then(response => response.text())
+			.then(data => {
 				$("#myGender").text(checkedGender);
 				$("#myYear").text(selectedYear);
 				$("#myMonth").text(selectedMonth);
 				$("#myDay").text(selectedDay);
+
+				$('#birthAndGenderModal').modal('hide');
+				alert('생년월일 및 성별이 성공적으로 수정되었습니다.');
+			})
+			.catch(error => {
+				console.error('생일/성별 수정 실패:', error);
+				alert('생일/성별 수정에 실패했습니다. 다시 시도해주세요.');
 			});
+		});
 
-			// 연도 선택 생성(J쿼리 방식, 아래와 동일)
-			const $yearSelect = $('#select-year');
-			for (let y = 1900; y <= 2005; y++) {
-				$yearSelect.append($('<option>', {
-					value: y,
-					text: y
-				}));
-			}
+		// 연도 선택 생성
+		const $yearSelect = $('#select-year');
+		for (let y = 1900; y <= 2005; y++) {
+			$yearSelect.append($('<option>', {
+				value: y,
+				text: y
+			}));
+		}
 
-			// 일 선택 생성(document방식, 위와 동일)
-			const daySelect = document.getElementById('select-day');
-			for (let d = 1; d <= 31; d++) {
-				const option = document.createElement('option');
-				option.value = d;
-				option.textContent = d;
-				daySelect.appendChild(option);
-			}
-		</script>
+		// 일 선택 생성
+		const daySelect = document.getElementById('select-day');
+		for (let d = 1; d <= 31; d++) {
+			const option = document.createElement('option');
+			option.value = d;
+			option.textContent = d;
+			daySelect.appendChild(option);
+		}
+	</script>
 	</main>
 </body>
-
 </html>
