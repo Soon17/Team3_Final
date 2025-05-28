@@ -11,14 +11,16 @@
 <body>
   <input type="hidden" id="car-size" th:value="${carList.size()}">
   <div class="im" th:each="cr : ${carList}">
-    <a href="#" class="card-link" th:data-ld-num="${cr.cr_id}">
+    <a href="#" class="card-link" th:data-ct-key="${cr.ct_key}">
       <div class="car-thumbnail">
         <img class="poto" th:src="@{'/resources/static/imgs/' + ${cr.ct_thumbnail}}" alt="차량 이미지">
       </div>
       <div class="car-info">
         <div class="car-up">
           <span class="car-name" th:text="${cr.ct_name}">차종명</span>
-          <span th:text="${cr.cr_year + '년식 / ' + cr.cr_fuel_type + ' / ' + cr.cr_trans}">정보</span>
+          <div>
+            <span th:text="${cr.cr_year + '년식 / ' + cr.cr_fuel_type + ' / ' + cr.cr_trans}">정보</span>
+          </div>
         </div>
         <div class="car-price">
           <span class="price" th:text="${cr.cr_price + '원'}">0원</span>/1박

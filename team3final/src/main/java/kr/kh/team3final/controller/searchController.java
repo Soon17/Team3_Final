@@ -1,12 +1,14 @@
 package kr.kh.team3final.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.kh.team3final.model.vo.RegionVO;
 import kr.kh.team3final.service.RegionService;
@@ -86,17 +88,18 @@ public class SearchController {
 		return "searching/searchLodging";
 	}
 
-	@GetMapping("/car")
-	public String searchCar(
-			Model model,
-			SearchCriteria cri) {
+	@GetMapping("/rentsearch")
+	public String rentSearch(
+			@RequestParam("ct_key") int ctKey,
+			Model model) {
 
-		List<CarVO> carList = carService.getSearchCarList(cri);
+		List<RegionVO> list = regionService.getRegionList();
+		Map<String, Object> carTop = carService.getCarInfo(ctKey);
 
-		model.addAttribute("carList", carList);
-		model.addAttribute("cri", cri);
+		model.addAttribute("carTop", carTop);
+		model.addAttribute("regionList", list);
 
-		return "searching/searchCar";
+		return "searching/rentsearch";
 	}
 
 }

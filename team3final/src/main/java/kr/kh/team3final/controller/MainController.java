@@ -39,11 +39,12 @@ public class MainController {
 		return "home";
 	}
 
-	@GetMapping("/regionLodging")
-	public String getRegionLodging(Model model, @RequestParam("rg_num") int rg_num) {
-		List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
-		return "regionLodgingList";
-	}
+	// @GetMapping("/regionLodging")
+	// public String getRegionLodging(Model model, @RequestParam("rg_num") int
+	// rg_num) {
+	// List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
+	// return "regionLodgingList";
+	// }
 
 	@GetMapping("/rent")
 	public String rent(Model model) {

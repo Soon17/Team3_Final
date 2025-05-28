@@ -844,7 +844,8 @@
 			</div>
 			<div class="infor-container container">
 				<div class="infor-item">
-					<span class="infor-star" th:text="${lodging.ld_rating + '성급'}"></span>
+					<span class="infor-star" th:text="${lodging.ld_type == '호텔' ? lodging.ld_rating + '성급' : lodging.ld_type}">
+					</span>
 					<p class="infor-name" th:text="${lodging.ld_name}"></p>
 					<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 5px;">
 						<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">

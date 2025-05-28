@@ -61,6 +61,16 @@
 		</choose>
 	</select>
 
+	<select id="selectCarInfo" parameterType="int" resultType="map">
+    SELECT 
+        CONCAT(ct.ct_name, ' ', MAX(c.cr_year)) AS carName,
+        MIN(c.cr_price) AS minPrice,
+        MAX(c.cr_price) AS maxPrice,
+        ct.ct_thumbnail AS thumbnail
+    FROM car c
+    JOIN car_type ct ON c.ct_key = ct.ct_key
+    WHERE ct.ct_key = #{ct_key}
+	</select>
 
 
 </mapper>

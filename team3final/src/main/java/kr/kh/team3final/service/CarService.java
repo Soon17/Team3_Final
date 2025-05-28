@@ -1,6 +1,7 @@
 package kr.kh.team3final.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,9 @@ public class CarService {
 		str = str.replaceAll("\\(.*?\\)", "").trim();
 		String[] dates = str.split("~");
 		return dates[1].trim().replace(".", "-");
+	}
+
+	public Map<String, Object> getCarInfo(int ct_key) {
+		return carDao.selectCarInfo(ct_key);
 	}
 }
