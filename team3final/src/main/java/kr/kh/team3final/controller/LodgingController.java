@@ -57,14 +57,28 @@ public class LodgingController {
 
     List<RegionVO> list = regionService.getRegionList();
     LodgingVO lodging = lodgingService.allLodgingList(ld_num);
-    List<RoomVO> roomList = roomService.selectRoomListByLodging(ld_num);
     List<ThumbnailVO> thumbList = thumbnailService.selectThumbnail("lodging", ld_num);
     List<Lodging_ReviewDTO> reviewList = reviewService.selectReview("room", ld_num);
     LodgingVO stats = reviewService.selectLodgingReviewStats(ld_num);
+    List<Map<String, Object>> raw = reviewService.selectRatingCounts(ld_num);
+
+    String[] times = checkTime.split("~");
+    String checkin = times[0].trim().replaceAll("\\(.*?\\)", "").trim();
+    String checkout = times[1].trim().replaceAll("\\(.*?\\)", "").trim();
+    int person = Integer.parseInt(rm_person.replaceAll("[^0-9]", ""));
+    List<RoomVO> roomList = roomService.getAvailableRooms(ld_num, checkin, checkout, person);
 
     for (RoomVO room : roomList) {
       List<ThumbnailVO> roomThumbList = thumbnailService.selectThumbnail("room", room.getRm_num());
       room.setThumbList(roomThumbList);
+    }
+
+    Map<Integer, Integer> ratingCounts = new HashMap<>();
+    for (Map<String, Object> row : raw) {
+      Integer score = ((Number) row.get("rv_rating")).intValue();
+      Integer cnt = ((Number) row.get("cnt")).intValue();
+
+      ratingCounts.put(score, cnt);
     }
 
     model.addAttribute("regionList", list);
@@ -76,6 +90,7 @@ public class LodgingController {
     model.addAttribute("reviewList", reviewList);
     model.addAttribute("avg_rating", stats.getAvg_rating());
     model.addAttribute("review_count", stats.getReview_count());
+    model.addAttribute("ratingCounts", ratingCounts);
 
     return "reserv";
   }

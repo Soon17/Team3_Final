@@ -30,6 +30,8 @@ import kr.kh.team3final.utils.CustomUser;
 
 
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/pay")
 public class PaymentController {
@@ -71,6 +73,7 @@ public class PaymentController {
 		model.addAttribute("checkOut", checkOut);
 		model.addAttribute("rm_person", rm_person);
 		return "pay/payment";
+		
 	}
 
 	@GetMapping("/summary")

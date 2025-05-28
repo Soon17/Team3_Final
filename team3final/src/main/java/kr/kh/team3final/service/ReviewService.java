@@ -1,6 +1,7 @@
 package kr.kh.team3final.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,7 @@ public class ReviewService {
 		return reviewDAO.selectLodgingReviewStats(ld_num);
 	}
 
+	public List<Map<String, Object>> selectRatingCounts(int ld_num) {
+		return reviewDAO.selectRatingCounts(ld_num);
+	}
 }

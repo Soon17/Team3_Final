@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.RoomDAO">
-	<select id="selectRoomListByLodging" resultType="RoomVO">
-  	SELECT * FROM room WHERE rm_ld_num = #{ld_num}
+	<select id="getAvailableRooms" resultType="RoomVO">
+		SELECT r.*
+		FROM room r
+		LEFT JOIN (
+			SELECT LR_RM_NUM, COUNT(*) AS reserved_count
+			FROM lo_reservation
+			WHERE LR_STATE = '예약완료'
+				AND (LR_CHECKIN &lt; #{checkout} AND LR_CHECKOUT &gt; #{checkin})
+			GROUP BY LR_RM_NUM
+		) res ON r.RM_NUM = res.LR_RM_NUM
+		WHERE r.RM_LD_NUM = #{ld_num}
+			AND (r.RM_ROOMCOUNT - IFNULL(res.reserved_count, 0)) &gt; 0
+			AND r.RM_PERSON &gt;= #{person}
 	</select>
 	<select id="selectRoom" resultType="RoomVO">
 		select* from room where rm_num= #{rm_num}
