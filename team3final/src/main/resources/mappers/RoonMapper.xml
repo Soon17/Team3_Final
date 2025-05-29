@@ -15,4 +15,7 @@
 			AND (r.RM_ROOMCOUNT - IFNULL(res.reserved_count, 0)) &gt; 0
 			AND r.RM_PERSON &gt;= #{person}
 	</select>
+	<select id="selectRoom" resultType="RoomVO">
+		select* from room where rm_num= #{rm_num}
+	</select>
 </mapper>

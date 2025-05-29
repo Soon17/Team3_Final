@@ -1875,6 +1875,7 @@
 				</div>
 			</div>
 
+			<!-- 주변 시설 -->
 			<script th:inline="javascript">
 				// 전역 큐와 캐시 저장소 선언
 				let mapQueue = [];
@@ -2045,7 +2046,7 @@
 				});
 			</script>
 
-			<!-- 주변시설 -->
+			<!-- 주변시설 모달-->
 			<script th:inline="javascript">
 				let aroundMap; // 지도 인스턴스 저장용
 				let aroundMarkers = []; // 기존 마커 제거용
@@ -2232,7 +2233,7 @@
 				});
 			</script>
 
-			<!--상단 탭 이동-->
+			<!-- 자동 탭 추적 기능 -->
 			<script>
 				document.addEventListener('DOMContentLoaded', function () {
 					// 메뉴 스크롤 이동 버튼
@@ -2291,6 +2292,7 @@
 					});
 				});
 			</script>
+
 			<!--호텔 예약 -->
 			<script>
 				document.addEventListener('DOMContentLoaded', function () {
@@ -2308,6 +2310,7 @@
 				});
 			</script>
 
+			<!-- 날짜 모달 -->
 			<script>
 				const today = new Date();
 				today.setHours(0, 0, 0, 0);
@@ -2532,6 +2535,7 @@
 
 				});         
 			</script>
+
 			<!--리뷰 스와이퍼 상단-->
 			<script>
 				document.addEventListener("DOMContentLoaded", () => {
@@ -2550,6 +2554,7 @@
 					});
 				});
 			</script>
+
 			<!--리뷰 모달-->
 			<script>
 				function showReviewModal(nick, content, date) {
@@ -2559,8 +2564,7 @@
 					$('#reviewModal').modal('show');
 					document.querySelector('#reviewModal .modal-body').scrollTop = 0;
 				}
-			</script>
-			<script>
+
 				/**
 				 * @param {object} el 몰라
 				 */
@@ -2572,6 +2576,7 @@
 				}
 			</script>
 
+			<!-- 리뷰 목록 -->
 			<script>
 				document.addEventListener('DOMContentLoaded', function () {
 					// 리뷰 항목

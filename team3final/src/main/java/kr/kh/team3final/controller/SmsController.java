@@ -20,18 +20,19 @@ public class SmsController {
 
     @PostMapping("/send")
     @ResponseBody
-    public Boolean sendSms(@RequestParam String me_number, HttpSession session, Model model) {
+    public boolean sendSms(@RequestParam String me_number, HttpSession session, Model model) {
         String code = String.valueOf((int)(Math.random() * 900000) + 100000); // 6자리 랜덤 숫자
         session.setAttribute("smsCode", code);
         session.setMaxInactiveInterval(300); // 5분 유효
-        try {
-            if(smsService.sendSms(me_number, code)){
-                return true;
-            }
-			return false;			
-        } catch (Exception e) {
-			return false;
-        }
+        // try {
+        //     if(smsService.sendSms(me_number, code)){
+        //         return true;
+        //     }
+		// 	return false;			
+        // } catch (Exception e) {
+		// 	return false;
+        // }
+        return true;
     }
     @PostMapping("/check")
     @ResponseBody

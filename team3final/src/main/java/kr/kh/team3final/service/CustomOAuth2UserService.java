@@ -180,47 +180,61 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     public DefaultOAuth2User defaultOAuth2User(
-            String id, String name, String nickname, String email, String birth,
-            String gender, String phoneNumber, String profileImage, String provider) {
-        // 최초 로그인 시 자동 회원가입
-        MemberVO dbUser = memberService.getMemberByEmailAndProvider(email, provider);
+        String id, String name, String nickname, String email, String birth,
+        String gender, String phoneNumber, String profileImage, String provider) {
 
+        // 1. 이메일 + provider로 회원 조회
+        MemberVO dbUser = memberService.getMemberByEmailAndProvider(email, provider.toUpperCase());
+
+        // 2. 없으면 새로 가입
         if (dbUser == null) {
             MemberVO newUser = new MemberVO();
             newUser.setMe_id(id);
             newUser.setMe_name(name);
             newUser.setMe_nick(nickname);
-            newUser.setMe_pw(provider); // 비밀번호를 로그인 api로 설정
+            newUser.setMe_pw(provider); // 임시 비밀번호
             newUser.setMe_email(email);
             newUser.setMe_birthday(birth);
             newUser.setMe_gender(gender);
             newUser.setMe_number(phoneNumber);
             newUser.setMe_profile(profileImage);
-            newUser.setMe_provider(provider);
+            newUser.setMe_provider(provider.toUpperCase());
+            newUser.setMe_authority("USER");
+            newUser.setMe_del("N");
 
-            boolean insertMemberByIp = memberService.insertMemberByIp(newUser);
-            dbUser = newUser; // 회원가입 후에도 로그인 이어서 처리해야 하므로
+            boolean success = memberService.insertMemberByIp(newUser);
+            if (!success) {
+                throw new RuntimeException("소셜 로그인 회원가입 실패");
+            }
+
+            dbUser = newUser;
         }
 
-        // 권한 설정
-        String role = "ROLE_" + (dbUser.getMe_authority() == null ? "USER" : dbUser.getMe_authority());
+        // 3. 권한 설정
+        if (dbUser.getMe_authority() == null) {
+            dbUser.setMe_authority("USER");
+        }
+        String role = "ROLE_" + dbUser.getMe_authority();
 
-        // 필요한 정보만 attributes로 새롭게 구성하고 리턴
+        // 4. 사용자 정보 맵 구성
         Map<String, Object> customAttributes = Map.of(
-                "id", dbUser.getMe_id(),
-                "name", dbUser.getMe_name(),
-                "nickname", dbUser.getMe_nick(),
-                "email", dbUser.getMe_email(),
-                "birthday", dbUser.getMe_birthday(),
-                "gender", dbUser.getMe_gender(),
-                "phoneNumber", dbUser.getMe_number(),
-                "profileImage", dbUser.getMe_profile()
+            "id", dbUser.getMe_id(),
+            "name", dbUser.getMe_name(),
+            "nickname", dbUser.getMe_nick(),
+            "email", dbUser.getMe_email(),
+            "birthday", dbUser.getMe_birthday(),
+            "gender", dbUser.getMe_gender(),
+            "phoneNumber", dbUser.getMe_number(),
+            "profileImage", dbUser.getMe_profile(),
+            "provider", dbUser.getMe_provider(),
+            "num", dbUser.getMe_num()
         );
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(role)),
-                customAttributes,
-                "id" // 사용자 고유 식별자 key
+            Collections.singleton(new SimpleGrantedAuthority(role)),
+            customAttributes,
+            "id"
         );
+
     }
 }

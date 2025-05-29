@@ -5,6 +5,7 @@
 		select*
 		from member
 		where me_id = #{me_id}
+		and me_del = 'N'
 	</select>
 	<insert id="insertMember">
 		insert into member(me_id, me_pw, me_email, me_number, me_name, me_nick, me_birthday)
@@ -15,8 +16,31 @@
 		from member
 		where me_email = #{me_email} and me_provider = #{me_provider}
 	</select>
-	<insert id="insertMemberByIp">
+	<insert id="insertMemberByIp" useGeneratedKeys="true" keyProperty="me_num">
 		insert into member(me_id, me_pw, me_email, me_number, me_name, me_nick, me_birthday, me_gender, me_profile, me_provider)
 		value(#{me_id},#{me_pw},#{me_email},#{me_number}, #{me_name}, #{me_nick}, #{me_birthday}, #{me_gender}, #{me_profile}, #{me_provider})
 	</insert>
+	<update id="updateUser">
+		UPDATE member
+		<set>
+			<if test="me_number != null">
+				ME_NUMBER = #{me_number},
+			</if>
+			<if test="me_nick != null">
+				ME_NICK = #{me_nick},
+			</if>
+			<if test="me_birthday != null">
+				ME_BIRTHDAY = #{me_birthday},
+			</if>
+			<if test="me_gender != null">
+				ME_GENDER = #{me_gender},
+			</if>
+		</set>
+		WHERE ME_NUM = #{me_num}
+	</update>
+	<update id="deleteUser">
+		UPDATE MEMBER
+		SET ME_DEL = 'Y'
+		WHERE ME_NUM = #{me_num}
+	</update>
 </mapper>

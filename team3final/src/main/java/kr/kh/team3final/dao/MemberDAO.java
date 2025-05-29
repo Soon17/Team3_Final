@@ -14,4 +14,8 @@ public interface MemberDAO {
 
 	boolean insertMemberByIp(MemberVO newUser);
 
+	boolean updateUser(MemberVO member);
+
+	int deleteUser(@Param("me_num")int me_num);
+
 }

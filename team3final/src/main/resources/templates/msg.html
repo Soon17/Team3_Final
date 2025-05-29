@@ -7,8 +7,10 @@
 </head>
 <body>
 	<script th:inline="javascript">
-		alert([[${msg}]]);
-		location.href = [[${url}]];
+		setTimeout(function(){
+			alert([[${msg}]]);
+			location.href = [[${url}]];
+		}, 100)
 	</script>
 </body>
 </html>

@@ -24,7 +24,7 @@
 </head>
 <body>
 	<main layout:fragment="content">
-		<div class="container">
+		<div class="container" th:if="${!#lists.isEmpty(reservations)}">
 				<h3 class="text-center">최근 호텔 예약 내역</h3>
 				<table class="table table-striped text-center">
 						<thead>
