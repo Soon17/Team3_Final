@@ -223,6 +223,19 @@
 			max-width: 280px;
 			margin: 0 auto;
 		}
+
+		@media screen and (max-width: 1080px) {
+
+			.event-swiper {
+				height: auto !important;
+				min-height: 220px;
+			}
+
+			.event-next,
+			.car-next {
+				display: none;
+			}
+		}
 	</style>
 </head>
 
@@ -291,12 +304,12 @@
 					<form th:action="@{/searching/carsearch}" method="get"
 						style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; position: relative;">
 						<select name="rg_name" id="region"
-							style="flex: 1; min-width: 180px; padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
+							style="flex: 1;  padding: 0.75rem 1rem; background-color: #f8f8f8;border: 2px solid #000; border-radius: 0.5rem;">
 							<option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}">
 						</select>
 						<input type="text" id="check-time" name="checkTime" data-toggle="modal" data-target="#calendarModal"
 							placeholder="날짜를 입력해주세요" readonly
-							style="flex: 1; min-width: 360px; padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
+							style="flex: 1;  padding: 0.75rem 1rem;border: 2px solid #000; background-color: #f8f8f8; border-radius: 0.5rem;" />
 						<div>
 							<button type="submit" id="search-btn"
 								style="background-color: #007aff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">
