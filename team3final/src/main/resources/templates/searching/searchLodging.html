@@ -26,7 +26,7 @@
           <div class="hotel-location">서울특별시 - 잠실역에서 355m</div>
         </div>
         <div class="hotel-price">
-          <span class="price">[[${ld.min_price}]]원</span> /1박
+          <span class="price" th:text="${#numbers.formatInteger(ld.min_price, 3, 'COMMA')} + '원'"></span> /1박
         </div>
       </div>
     </a>

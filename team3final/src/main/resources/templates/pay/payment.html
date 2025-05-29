@@ -466,8 +466,10 @@
 						});												
 					}
 				} else {
-					total -= loMeal;
-					$('.room-total-price, .st-total-price, .summary-total-price, .summary-st-price, .mobile-room-price').text(total.toLocaleString()+"원");					
+					if($(this).data('co-do-name')==="조식"){
+						total -= loMeal;
+						$('.room-total-price, .st-total-price, .summary-total-price, .summary-st-price, .mobile-room-price').text(total.toLocaleString()+"원");					
+					}
 				}
 			});
 			function toggleDetailAll() {
@@ -568,9 +570,8 @@
 				}
 				});			
 				async function requestPayment(channelKey,storeId) {
-					// const tPriceText = $(".summary-total-price").text(); // "100,000원" 찐 코드
-					// const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
-					const totlaPrice = $(".summary-total-price").data('total');//테스트 코드 10원
+					const tPriceText = $(".summary-total-price").text(); // "100,000원" 
+					const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
 					const rm_name = $(".rm-name").text();
 					const reserverName = $("[name = 'reserverName']").val();
 					const guestName = $("[name = 'guestName']").val();

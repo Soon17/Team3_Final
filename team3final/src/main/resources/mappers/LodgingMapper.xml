@@ -1,11 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.LodgingDAO">
-	<select id="selectRegionLodgingList" resultType="LodgingVO">
-		 select* from region; 
+	<select id="selectReviewLodgingList" resultType="LodgingVO">
+		select lodging.*,
+		(
+			SELECT ROUND(AVG(rv_rating), 1)
+			FROM review
+			join room on rm_num = rv_number
+			WHERE rv_table_name = 'room' 
+			AND rm_ld_num = lodging.LD_NUM
+		) AS avg_rating,
+		MIN(rm_price) as min_price
+		from lodging
+		join room on rm_ld_num = ld_num
+		where LD_RG_NUM = #{rg_num}
+		group by ld_num
+		order by avg_rating desc
+		limit 7; 
+	</select>
+	<select id="selectPriceLodgingList" resultType="LodgingVO">
+		select lodging.*,
+		(
+			SELECT ROUND(AVG(rv_rating), 1)
+			FROM review
+			join room on rm_num = rv_number
+			WHERE rv_table_name = 'room' 
+			AND rm_ld_num = lodging.LD_NUM
+		) AS avg_rating,
+		MIN(rm_price) as min_price
+		from lodging
+		join room on rm_ld_num = ld_num
+		where LD_RG_NUM = #{rg_num}
+		group by ld_num
+		order by min_price
+		limit 7;
+	</select>
+	<select id="selectReservationLodgingList"  resultType="LodgingVO">
+		select lodging.*,
+		(
+			select round(avg(rv_rating), 1)
+			from review
+			join room on rm_num = rv_number
+			where rv_table_name = 'room' 
+			and rm_ld_num = lodging.ld_num
+		) as avg_rating,
+		min(rm_price) as min_price,
+		count(lo_reservation.lr_num) as reservation_count
+		from lodging 
+		join room on rm_ld_num = ld_num
+		join lo_reservation on rm_num = lr_rm_num
+		where ld_rg_num = #{rg_num}
+		group by lodging.ld_num
+		order by reservation_count desc;
 	</select>
 	<select id="allLodgingList" resultType="LodgingVO">
-  SELECT * FROM lodging WHERE ld_num = #{ld_num}
+ 		 SELECT * FROM lodging WHERE ld_num = #{ld_num}
 	</select>
 
 	<select id="selectRegionSwitchLodgingList" resultType="LodgingVO">
@@ -36,6 +85,10 @@
 						LR_CHECKIN BETWEEN #{lr_checkin} 
 						AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY)
 					)
+				OR(
+					LR_CHECKIN &lt;= #{lr_checkin}
+                    and LR_CHECKOUT &gt;= #{lr_checkout}
+                )
 				AND LR_STATE = '예약완료'
 				GROUP BY lr_rm_num
 			) AS tmp_lo_reservation ON lr_rm_num = rm_num

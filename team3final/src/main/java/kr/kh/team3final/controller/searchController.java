@@ -14,7 +14,6 @@ import kr.kh.team3final.service.RegionService;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.SearchCriteria;
 import kr.kh.team3final.service.LodgingService;
-import kr.kh.team3final.service.RegionService;
 
 @Controller
 @RequestMapping("/searching")

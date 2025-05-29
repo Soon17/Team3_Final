@@ -9,6 +9,16 @@
 	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<style>
+		.lodging-name {
+			display: block;          
+			width: 100%;          
+			white-space: nowrap;    
+			overflow: hidden;       
+			text-overflow: ellipsis;
+			font-size: 18px;
+			font-weight: 700;
+			color: #494949;
+		}
 		.calendar-wrapper {
 			background: white;
 			max-width: 700px;
@@ -106,7 +116,9 @@
 		.swiper-slide {
 			position: relative;
 		}
-
+		.swiper-slide .card:hover{
+			text-decoration: none;
+		}
 		.link {
 			display: flex;
 			justify-content: center;
@@ -431,77 +443,7 @@
 					<div class="container region-text" style="margin-top: 20px; position: relative;">
 
 						<div class="swiper lodging-swiper">
-							<div class="swiper-wrapper swiper-lodging">
-								<!-- 카드 반복 시작 -->
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="/reserv">
-										<img src="/resources/static/imgs/hotel.png" class="card-img-top"
-											style="width: 240px; height: 240px;" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">신라 호텔</h6>
-											<div>
-												<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
-												<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
-											</div>
-											<p class="mb-0 text-muted">85,764원</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
 
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<!-- 카드 반복 끝 -->
-							</div>
-
-							<!-- 슬라이드 화살표 -->
 						</div>
 						<div class="swiper-button-next lodging-next"></div>
 						<div class="swiper-button-prev lodging-prev"></div>
@@ -518,77 +460,7 @@
 					<div class="container region-text" style="margin-top: 20px; position: relative;">
 
 						<div class="swiper money-swiper">
-							<div class="swiper-wrapper swiper-lodging">
-								<!-- 카드 반복 시작 -->
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" class="card-img-top"
-											style="width: 240px; height: 240px;" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">신라 호텔</h6>
-											<div>
-												<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
-												<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
-											</div>
-											<p class="mb-0 text-muted">85,764원</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
 
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<!-- 카드 반복 끝 -->
-							</div>
-
-							<!-- 슬라이드 화살표 -->
 						</div>
 						<div class="swiper-button-next money-next"></div>
 						<div class="swiper-button-prev money-prev"></div>
@@ -605,77 +477,7 @@
 					<div class="container region-text" style="margin-top: 20px; position: relative;">
 
 						<div class="swiper  booking-swiper">
-							<div class="swiper-wrapper swiper-lodging">
-								<!-- 카드 반복 시작 -->
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" class="card-img-top"
-											style="width: 240px; height: 240px;" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">신라 호텔</h6>
-											<div>
-												<img src="/resources/static/imgs/rating.jpg" style=" width: 16px; height: 16px;">
-												<span class="mb-0 text-muted" style="font-size: 14px;">4.3 | 4성급</span>
-											</div>
-											<p class="mb-0 text-muted">85,764원</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0;overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px; border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<div class="swiper-slide">
-									<a class="card" style="border-radius: 16px;border: 0; overflow: hidden;" href="#">
-										<img src="/resources/static/imgs/hotel.png" style="width: 240px; height: 240px;"
-											class="card-img-top" alt="썸네일">
-										<div class="card-body p-2">
-											<h6 class="mb-1 fw-bold">${cl.me_name}</h6>
-											<p class="mb-0 text-muted" style="font-size: 14px;">${cl.cl_title}</p>
-										</div>
-									</a>
-								</div>
-								<!-- 카드 반복 끝 -->
-							</div>
-
-							<!-- 슬라이드 화살표 -->
+							
 						</div>
 						<div class="swiper-button-next booking-next"></div>
 						<div class="swiper-button-prev booking-prev"></div>
@@ -684,6 +486,7 @@
 			</div>
 		</div>
 		<script>
+			let regionName;
 			$('#search-btn').on('click', function (e) {
 				const time = $('#check-time').val();
 				if (time.trim().length == 0) {
@@ -818,9 +621,27 @@
 
 			$(document).ready(function () {
 				renderCalendars();
+					selectedStart = new Date(today); // 오늘
+					selectedEnd = new Date(today);   // 오늘 + 1일
+					selectedEnd.setDate(selectedEnd.getDate() + 1);
+
+					updateSelection();
+					applySelection();
+				
 			});
 
-			const swiper = new Swiper(".event-swiper", {
+			// const swiper = new Swiper(".event-swiper", {
+			// 	loop: true,
+			// 	autoplay: {
+			// 		delay: 5000,
+			// 		disableOnInteraction: false
+			// 	},
+			// 	navigation: {
+			// 		nextEl: ".event-next",
+			// 		prevEl: ".event-prev"
+			// 	}
+			// });
+			var swiperOption = {
 				loop: true,
 				autoplay: {
 					delay: 5000,
@@ -830,8 +651,10 @@
 					nextEl: ".event-next",
 					prevEl: ".event-prev"
 				}
-			});
-			const swiper2 = new Swiper(".lodging-swiper", {
+			}
+			var swiper = reloadSwiper(swiper, ".event-swiper", swiperOption);
+
+			var swiperOption2 = {
 				slidesPerView: 4,
 				spaceBetween: 10,
 				slidesPerGroup: 1,
@@ -839,8 +662,8 @@
 					nextEl: ".lodging-next",
 					prevEl: ".lodging-prev"
 				}
-			});
-			const swiper3 = new Swiper(".money-swiper", {
+			};
+			var swiperOption3 = {
 				slidesPerView: 4,
 				spaceBetween: 10,
 				slidesPerGroup: 1,
@@ -848,8 +671,8 @@
 					nextEl: ".money-next",
 					prevEl: ".money-prev"
 				}
-			});
-			const swiper4 = new Swiper(".booking-swiper", {
+			};
+			var swiperOption4 = {
 				slidesPerView: 4,
 				spaceBetween: 10,
 				slidesPerGroup: 1,
@@ -857,21 +680,39 @@
 					nextEl: ".booking-next",
 					prevEl: ".booking-prev"
 				}
-			});
+			};
+			var swiper2, swiper3, swiper4;
 			//에이젝스
 			$(document).ready(function () {
 				$('.region-btn').click(function () {
 					$(this).siblings().removeClass('active'); // 모든 버튼에서 active 제거
 					$(this).addClass('active'); // 클릭한 버튼만 active 추가
+					const type = $(this).parent().data('sw');
 					const rg_num = $(this).data('id');
+					regionName = $(this).text().trim();
 					var $target = $(this).parent().next().find(".swiper")
 					$.ajax({
 						async: false,
 						url: "/regionLodging",
 						type: 'GET',
-						data: { rg_num: rg_num },
+						data: { 
+							rg_num: rg_num,
+							type : type
+						},
 						success: function (data) {
 							$target.html(data);
+							switch(type){
+								case 'review':
+									swiper2 = reloadSwiper(swiper2, ".lodging-swiper", swiperOption2); 
+									break;
+								case 'price':
+									swiper3 = reloadSwiper(swiper3, ".money-swiper", swiperOption3);
+									break;
+								case 'reservation':
+									swiper4 = reloadSwiper(swiper4, ".booking-swiper", swiperOption4);
+									break;
+							}
+							updateCardLinks();
 						}
 					});
 				});
@@ -879,7 +720,12 @@
 					$(this).children().first().trigger("click")
 				});
 			});
-
+			function reloadSwiper(swiper, selector, option){
+				if (swiper) {
+					swiper.destroy(true, true);
+				}
+				swiper = new Swiper(selector, option);
+			}
 			$(function () {
 				const $adultCount = $('#adult-count');
 				const minAdult = 1;
@@ -903,6 +749,24 @@
 					$('#check-people').val(`성인${$adultCount.text()}`);
 				});
 			});
+
+			function updateCardLinks() {
+				
+				const checkTime = $('#check-time').val()
+				const people = $('#check-people').val()
+				const qR = encodeURIComponent(regionName);
+				const qT = encodeURIComponent(checkTime);
+				const qP = encodeURIComponent(people);
+
+				$('.reserv-link').each(function () {
+				const ld_num = $(this).data('ld-num');
+				const ld_region = encodeURIComponent($(this).data('ld-region'));
+				$(this).attr(
+					'href',
+					`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
+				);
+				});
+        	 }
 		</script>
 	</div>
 </body>
