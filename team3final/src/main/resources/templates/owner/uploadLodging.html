@@ -228,6 +228,13 @@
 								<option value="5">5성</option>
 							</select>
 						</div>
+						<div class="form-group col-3">
+							<label class="form-label" for="region">지역</label>
+							<select class="form-select" id="region" name="region">
+								<option value="">-- 선택 --</option>
+								<option th:each="region : ${regions}" th:value="${region.rg_name}" th:text="${region.rg_name}"></option>
+							</select>
+						</div>
 					</div>
 					<div class="form-group col-12">
 						<label class="form-label" for="name">숙소 이름</label>
@@ -239,12 +246,20 @@
 
 						<!-- 체크박스 컨테이너 -->
 						<div class="d-flex flex-wrap gap-3">
+							<!-- 기본 옵션들 -->
 							<div th:each="opt : ${defaultOptions}" class="form-check d-flex align-items-center"
-								style="width: 24%;">
+								style="width: 48%;">
 								<input class="form-check-input me-2" type="checkbox" th:id="'option-' + ${opt}"
 									th:name="options" th:value="${opt}" />
-								<label class="form-check-label" th:for="'option-' + ${opt}" th:text="${opt}"></label>
+								<label class="form-check-label me-2" th:for="'option-' + ${opt}"
+									th:text="${opt}"></label>
+
+								<!-- "조식"일 때만 가격 입력 필드 출력 -->
+								<input type="number" class="form-control form-control-sm ml-2 col-8"
+									th:if="${opt == '조식'}" id="breakfast-price" name="breakfastPrice"
+									placeholder="조식 가격 (원)" disabled min="0" step="1000">
 							</div>
+
 							<!-- 기타 입력 항목 -->
 							<div class="form-check d-flex align-items-center" style="width: 48%;">
 								<input type="checkbox" class="form-check-input me-2" id="option-etc"
@@ -253,7 +268,6 @@
 									style="min-width: 40px;">기타</label>
 								<input type="text" id="etc-input" class="form-control form-control-sm"
 									placeholder="옵션1, 옵션2, ..." disabled oninput="syncEtcToHidden()">
-								<!-- 실제 전송될 hidden 필드 -->
 								<input type="hidden" name="options" id="etc-hidden" />
 							</div>
 						</div>
@@ -324,9 +338,15 @@
 
 							</div>
 
-							<div class="form-group col-12">
-								<label class="form-label">룸 유형</label>
-								<input type="text" class="form-input" name="room_type_${roomCount}">
+							<div class="d-flex">
+								<div class="form-group col-8">
+									<label class="form-label">룸 이름</label>
+									<input type="text" class="form-input" name="room_name_${roomCount}">
+								</div>
+								<div class="form-group col-4">
+									<label class="form-label">룸 개수</label>
+									<input type="number" class="form-input" name="max_room_${roomCount}" min="1">
+								</div>
 							</div>
 							<div class="d-flex">
 								<div class="form-group col-3">
@@ -336,8 +356,13 @@
 	
 								<div class="form-group col-9">
 									<label class="form-label">가격 (원)</label>
-									<input type="number" class="form-input" name="price_${roomCount}" min="0">
+									<input type="number" class="form-input" name="price_${roomCount}" min="0" step="1000">
 								</div>
+							</div>
+
+							<div class="form-group col-12">
+								<label class="form-label">룸 정보</label>
+								<textarea class="form-input" name="info_${roomCount}" style="height: 100px;"></textarea>
 							</div>
 						</div>
 					`);
@@ -376,35 +401,45 @@
 					roomCount--;
 				});
 
-				function toggleEtcInput(checkbox) {
-					const input = $('#etc-input');
-					const hidden = $('#etc-hidden');
-
-					if (checkbox.checked) {
-						input.prop('disabled', false);
-						input.focus();
-						hidden.val(input.val());
-					} else {
-						input.prop('disabled', true);
-						input.val('');
-						hidden.val('');
-					}
-				}
-
-				function syncEtcToHidden() {
-					const input = $('#etc-input');
-					const hidden = $('#etc-hidden');
-					hidden.val(input.val());
-				}
-
 				$(document).ready(function () {
-					function toggleRating() {
-						const selected = $('#type').val();
-						$('#rating').prop('disabled', selected !== '호텔');
-					}
+					// 1. 숙소 유형 변경 시 성급 select 활성화/비활성화
+					$('#type').on('change', function () {
+						const selected = $(this).val();
+						if (selected === '호텔') {
+							$('#rating').prop('disabled', false);
+						} else {
+							$('#rating').prop('disabled', true).val('');
+						}
+					});
 
-					$('#type').on('change', toggleRating);
-					toggleRating(); // 초기 상태도 적용
+					$('#type').trigger('change'); // 폼 로드시 초기 상태 반영
+
+					// 2. 기타 옵션 체크 시 입력 필드 활성화/비활성화
+					$('#option-etc').on('change', function () {
+						if ($(this).is(':checked')) {
+							$('#etc-input').prop('disabled', false);
+						} else {
+							$('#etc-input').val('').prop('disabled', true);
+							$('#etc-hidden').val('');
+						}
+					});
+
+					// 기타 옵션 입력값을 hidden 필드에 반영
+					$('#etc-input').on('input', function () {
+						$('#etc-hidden').val($(this).val());
+					});
+
+					// 1. 조식 체크박스 찾기 (value가 '조식'인 input)
+					const $breakfastCheckbox = $("input[type='checkbox'][name='options'][value='조식']");
+
+					// 2. 조식 체크 상태 변화 시 가격 입력 필드 토글
+					$breakfastCheckbox.on('change', function () {
+						if ($(this).is(':checked')) {
+							$('#breakfast-price').prop('disabled', false);
+						} else {
+							$('#breakfast-price').val('').prop('disabled', true);
+						}
+					});
 				});
 			</script>
 		</main>

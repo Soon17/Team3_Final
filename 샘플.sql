@@ -9,6 +9,7 @@ DELETE FROM lodging;
 DELETE FROM room;
 DELETE FROM thumbnail;
 DELETE FROM review;
+DELETE FROM default_option;
 
 ALTER TABLE region AUTO_INCREMENT = 1;
 ALTER TABLE lodging AUTO_INCREMENT = 1;
@@ -22,7 +23,7 @@ INSERT INTO region(RG_NAME) VALUES
 ("서울"),("경기"),("부산");
 
 INSERT INTO default_option(DO_NAME) VALUES
-("금연 호텔"),("조식 제공"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰");
+("금연 호텔"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰"),("취사 가능"),("조식");
 
 INSERT INTO lodging(LD_NAME,LD_REGION,LD_TYPE,LD_NUMBER,LD_RATING,LD_INFOR,LD_MEAL_PRICE,LD_ME_NUM,LD_RG_NUM) VALUES
 ("안좋아영","서울특별시 강남구 테헤란로 130","모텔","010-0000-0000",1,
