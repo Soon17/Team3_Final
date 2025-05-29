@@ -276,8 +276,8 @@
 					<!-- Modal 바디 -->
 					<div class="modal-body" id="map1">
 						<div class="payment-images">
-							<img class="kakao-pay" src="/resources/static/imgs/payment_kakao.png" alt="카카오페이">
-							<img class="toss-pay" src="/resources/static/imgs/payment_toss.png" alt="토스페이">
+							<img class="pay-type"  src="/resources/static/imgs/payment_kakao.png" alt="카카오페이" data-type="kakao">
+							<img class="pay-type" src="/resources/static/imgs/payment_toss.png" alt="토스페이" data-type="toss">
 						</div>
 					</div>
 				</div>
@@ -551,11 +551,15 @@
 					$('#paymentModal').modal('show');
 				}								
 			});
-			$(document).on("click", ".kakao-pay", function (e) {
-				//카카오결제
+			$(document).on("click", ".pay-type", function (e) {
+				let type=$(this).data('type');
+				payments(type);
+			})
+			function payments(type){
 				$.ajax({
 				async : true,
 				url : '/pay/kakao/apiKey', 
+				data : {type : type},
 				type : 'post', 
 				success : function (data){
 					let channelKey = data.channel
@@ -619,7 +623,9 @@
 						alert("결제 처리 실패!");
 					}
 				}   
-			})
+
+			}
+			//카카오결제
 			});
 			//카카오페이
 		</script>

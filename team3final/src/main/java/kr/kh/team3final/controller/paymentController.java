@@ -39,8 +39,10 @@ public class PaymentController {
     private String store;
 
 	@Value("${kakao.pay-channel}")
-    private String channel;
+    private String kakaoChannel;
 
+	@Value("${toss.pay-channel}")
+    private String tossChannel;
 	@Autowired
 	LodgingService lodgingService;
 
@@ -92,9 +94,18 @@ public class PaymentController {
     }
 	@PostMapping("/kakao/apiKey")
 	@ResponseBody
-	public Map<String, Object> getApi(){
+	public Map<String, Object> getApi(@RequestParam String type){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("channel", channel);
+		switch (type) {
+			case "kakao":
+				map.put("channel", kakaoChannel);
+				break;
+		
+			case "toss":
+				map.put("channel", tossChannel);
+				break;
+		}
+		
 		map.put("store", store);
 		return map;
 	}
