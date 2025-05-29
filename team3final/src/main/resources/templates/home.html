@@ -10,15 +10,16 @@
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<style>
 		.lodging-name {
-			display: block;          
-			width: 100%;          
-			white-space: nowrap;    
-			overflow: hidden;       
+			display: block;
+			width: 100%;
+			white-space: nowrap;
+			overflow: hidden;
 			text-overflow: ellipsis;
 			font-size: 18px;
 			font-weight: 700;
 			color: #494949;
 		}
+
 		.calendar-wrapper {
 			background: white;
 			max-width: 700px;
@@ -116,9 +117,11 @@
 		.swiper-slide {
 			position: relative;
 		}
-		.swiper-slide .card:hover{
+
+		.swiper-slide .card:hover {
 			text-decoration: none;
 		}
+
 		.link {
 			display: flex;
 			justify-content: center;
@@ -434,7 +437,7 @@
 				</div>
 				<div class="container region-lodging">
 					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(리뷰 평점 좋은 순)</h3>
+						<h3 style="font-size: 24px;">🌼 지역별 레전더리 숙소!!(리뷰 평점 좋은 순)</h3>
 					</div>
 					<div class="container region-text region-btn-box" data-sw="review">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
@@ -451,7 +454,7 @@
 				</div>
 				<div class="container region-lodging">
 					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 가성비 숙소!!(가격 싼 순)</h3>
+						<h3 style="font-size: 24px;">🌼 지역별 가성비 숙소!!(가격 싼 순)</h3>
 					</div>
 					<div class="container region-text region-btn-box" data-sw="price">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
@@ -468,7 +471,7 @@
 				</div>
 				<div class="container region-lodging">
 					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 레전더리 숙소!!(예약순)</h3>
+						<h3 style="font-size: 24px;">🌼 지역별 레전더리 숙소!!(예약순)</h3>
 					</div>
 					<div class="container region-text region-btn-box" data-sw="reservation">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
@@ -477,7 +480,7 @@
 					<div class="container region-text" style="margin-top: 20px; position: relative;">
 
 						<div class="swiper  booking-swiper">
-							
+
 						</div>
 						<div class="swiper-button-next booking-next"></div>
 						<div class="swiper-button-prev booking-prev"></div>
@@ -621,13 +624,13 @@
 
 			$(document).ready(function () {
 				renderCalendars();
-					selectedStart = new Date(today); // 오늘
-					selectedEnd = new Date(today);   // 오늘 + 1일
-					selectedEnd.setDate(selectedEnd.getDate() + 1);
+				selectedStart = new Date(today); // 오늘
+				selectedEnd = new Date(today);   // 오늘 + 1일
+				selectedEnd.setDate(selectedEnd.getDate() + 1);
 
-					updateSelection();
-					applySelection();
-				
+				updateSelection();
+				applySelection();
+
 			});
 
 			// const swiper = new Swiper(".event-swiper", {
@@ -695,15 +698,15 @@
 						async: false,
 						url: "/regionLodging",
 						type: 'GET',
-						data: { 
+						data: {
 							rg_num: rg_num,
-							type : type
+							type: type
 						},
 						success: function (data) {
 							$target.html(data);
-							switch(type){
+							switch (type) {
 								case 'review':
-									swiper2 = reloadSwiper(swiper2, ".lodging-swiper", swiperOption2); 
+									swiper2 = reloadSwiper(swiper2, ".lodging-swiper", swiperOption2);
 									break;
 								case 'price':
 									swiper3 = reloadSwiper(swiper3, ".money-swiper", swiperOption3);
@@ -720,7 +723,7 @@
 					$(this).children().first().trigger("click")
 				});
 			});
-			function reloadSwiper(swiper, selector, option){
+			function reloadSwiper(swiper, selector, option) {
 				if (swiper) {
 					swiper.destroy(true, true);
 				}
@@ -751,7 +754,7 @@
 			});
 
 			function updateCardLinks() {
-				
+
 				const checkTime = $('#check-time').val()
 				const people = $('#check-people').val()
 				const qR = encodeURIComponent(regionName);
@@ -759,14 +762,14 @@
 				const qP = encodeURIComponent(people);
 
 				$('.reserv-link').each(function () {
-				const ld_num = $(this).data('ld-num');
-				const ld_region = encodeURIComponent($(this).data('ld-region'));
-				$(this).attr(
-					'href',
-					`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
-				);
+					const ld_num = $(this).data('ld-num');
+					const ld_region = encodeURIComponent($(this).data('ld-region'));
+					$(this).attr(
+						'href',
+						`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
+					);
 				});
-        	 }
+			}
 		</script>
 	</div>
 </body>

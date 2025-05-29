@@ -114,7 +114,9 @@
 		}
 
 		.region-text {
-			width: 1032px;
+			width: 100%;
+			max-width: 1032px;
+			margin: 0 auto;
 		}
 
 		.region-btn {
@@ -320,7 +322,7 @@
 				</div>
 				<div class="container region-car">
 					<div class=" container region-text">
-						<h3 style="font-size: 24px; width: 1032px;">🌼 지역별 인기 차량(리뷰 평점 좋은 순)</h3>
+						<h3 style="font-size: 24px;">🌼 지역별 인기 차량(리뷰 평점 좋은 순)</h3>
 					</div>
 					<div class="container region-text region-btn-box">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
