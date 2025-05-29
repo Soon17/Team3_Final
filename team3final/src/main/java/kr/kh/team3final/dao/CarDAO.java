@@ -14,6 +14,10 @@ public interface CarDAO {
       @Param("checkout") String checkout,
       @Param("cri") SearchCriteria cri);
 
-  Map<String, Object> selectCarInfo(@Param("ct_key") int ct_key);
+  Map<String, Object> selectCarInfo(
+      @Param("ct_key") int ct_key,
+      @Param("cr_year") int cr_year,
+      @Param("cr_fuel_type") String cr_fuel_type,
+      @Param("cr_trans") String cr_trans);
 
 }

@@ -3,6 +3,7 @@ package kr.kh.team3final.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,12 @@ public class CarService {
 		return dates[1].trim().replace(".", "-");
 	}
 
-	public Map<String, Object> getCarInfo(int ct_key) {
-		return carDao.selectCarInfo(ct_key);
+	public Map<String, Object> selectCarInfo(
+			@Param("ct_key") int ct_key,
+			@Param("cr_year") int cr_year,
+			@Param("cr_fuel_type") String cr_fuel_type,
+			@Param("cr_trans") String cr_trans) {
+		return carDao.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans);
 	}
+
 }

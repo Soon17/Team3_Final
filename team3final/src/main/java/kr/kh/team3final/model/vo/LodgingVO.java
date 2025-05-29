@@ -16,6 +16,7 @@ public class LodgingVO {
 	int ld_meal_price;
 	int ld_me_num;
 	int ld_rg_num;
+
 	Double avg_rating;
 	int min_price;
 	int review_count;

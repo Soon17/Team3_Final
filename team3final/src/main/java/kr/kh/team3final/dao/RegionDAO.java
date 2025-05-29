@@ -7,5 +7,5 @@ import kr.kh.team3final.model.vo.RegionVO;
 public interface RegionDAO {
 
 	List<RegionVO> selectRegionList();
-	
+
 }

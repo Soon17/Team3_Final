@@ -682,112 +682,45 @@
                   <span>~</span>
                   <span th:text="${#numbers.formatInteger(carTop.maxPrice, 3, 'COMMA')} + '원'">0원</span>
                </div>
+               <div class="car-etc"
+                  th:text="${carTop.cr_year + '년식 · ' + carTop.cr_fuel_type + ' · ' + carTop.cr_trans}">
+                  차량 조건
+               </div>
             </div>
          </div>
       </div>
 
-
       <div class="row">
          <div class="container-box">
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
+
+            <!-- 결과가 없을 때 -->
+            <th:block th:if="${#lists.isEmpty(rentalList)}">
+               <div class="empty-box" style="text-align: center; padding: 40px 0;">
+                  <p style="font-size: 18px; color: #888;">검색 결과가 없습니다.</p>
                </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
+            </th:block>
+            <!-- 결과가 있을 때 -->
+            <th:block th:each="car : ${rentalList}">
+               <div class="company-box">
+                  <div class="company-info">
+                     <span class="company-name" th:text="${car.rentalName}">업체이름</span>
+                     <span class="company-rating">
+                        <img src="/resources/static/imgs/star.svg" alt="별"
+                           style="width: 14px; height: 14px; vertical-align: middle; margin-right: 3px;">
+                        <span th:text="${car.avgRating != null ? car.avgRating : '0.0'}">0.0</span>
+                        리뷰 <span th:text="${car.reviewCount}">0</span>
+                     </span>
+                  </div>
+                  <div class="cp"
+                     style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                     <span class="car-details"
+                        th:text="${car.carYear + '년식 · ' + car.carFuel + ' · 만 20세 이상'}">차량조건</span>
+                     <span class="price"
+                        th:text="${#numbers.formatInteger(car.carPrice, 3, 'COMMA') + '원 / 1박'}">가격</span>
+                  </div>
                </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
-            <div class="company-box">
-               <div class="company-info">
-                  <span class="company-name">조이렌트카 본사</span>
-                  <span class="company-rating">⭐ 4.7 예약수 2300+</span>
-               </div>
-               <div class="cp"
-                  style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                  <span class="car-details">2022년식 · 휘발유 · 만 26세 이상</span>
-                  <span class="price">11,712원 / 1박</span>
-               </div>
-            </div>
+            </th:block>
+
          </div>
       </div>
 
@@ -999,8 +932,6 @@
 
             // 이미 있는 함수들 유지
             renderCalendars();
-            toggleDetailAll();
-            updateCardLinks();
          });
 
       </script>

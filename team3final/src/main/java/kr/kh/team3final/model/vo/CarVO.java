@@ -11,8 +11,8 @@ public class CarVO {
 	int cr_price;
 	int cr_count;
 	int cr_re_num;
-	int min_price;
 
+	int min_price;
 	int ct_key;
 	String ct_name;
 	String ct_type;

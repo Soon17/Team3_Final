@@ -10,4 +10,7 @@ public class RentalVO {
 	String reRegion;
 	int reMeNum;
 	int reRgNum;
+
+	Double avg_rating;
+	int review_count;
 }

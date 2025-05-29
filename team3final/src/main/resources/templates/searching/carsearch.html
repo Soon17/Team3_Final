@@ -604,7 +604,8 @@
             <div id="car_ajx">
                <!-- Ajax로 숙소  처음 검색한 데이터는 있고 다음부터 바뀜-->
                <div class="im" th:each="cr : ${carList}">
-                  <a href="#" class="card-link" th:data-ct-key="${cr.ct_key}">
+                  <a href="#" class="card-link" th:data-cr-year="${cr.cr_year}" th:data-cr-fuel="${cr.cr_fuel_type}"
+                     th:data-cr-trans="${cr.cr_trans}" th:data-ct-key="${cr.ct_key}">
                      <!-- 이미지 왼쪽 -->
                      <div class="car-thumbnail">
                         <img class="poto" th:src="@{'/resources/static/imgs/' + ${cr.ct_thumbnail}}" alt="차량 이미지">
@@ -653,19 +654,27 @@
          </div>
       </div>
 
-      <!--url이동동-->
+      <!--url이동-->
       <script>
          function updateCardLinks() {
             const region = $('#region').val();
             const checkTime = $('#checkTime').text().trim();
-            const qR = encodeURIComponent(region);
-            const qT = encodeURIComponent(checkTime);
+            const qR = encodeURIComponent(region || '');
+            const qT = encodeURIComponent(checkTime || '');
 
             $('.card-link').each(function () {
                const ctKey = $(this).data('ct-key');
+               const year = $(this).data('cr-year');
+               const fuel = encodeURIComponent($(this).data('cr-fuel'));
+               const trans = encodeURIComponent($(this).data('cr-trans'));
 
                $(this).attr('href',
-                  `/searching/rentsearch?rg_name=${qR}` + `&checkTime=${qT}` + `&ct_key=${ctKey}`
+                  `/searching/rentsearch?rg_name=${qR}` +
+                  `&checkTime=${qT}` +
+                  `&ct_key=${ctKey}` +
+                  `&cr_year=${year}` +
+                  `&cr_fuel_type=${fuel}` +
+                  `&cr_trans=${trans}`
                );
             });
          }
@@ -894,6 +903,35 @@
             }
             updateSelection();
          }
+
+         //달력에 날짜 표시
+         function parseDate(dateStr) {
+            if (!dateStr || !dateStr.includes('.')) return null;
+
+            const [ymd] = dateStr.split('(');
+            const [y, m, d] = ymd.split('.').map(Number);
+            return new Date(y, m - 1, d);
+         }
+
+         $(document).ready(function () {
+            renderCalendars();
+
+            // URL 파라미터로부터 초기값 설정
+            const params = new URLSearchParams(window.location.search);
+            const checkTime = params.get("checkTime");
+
+            if (checkTime) {
+               const [startStr, endStr] = checkTime.split("~").map(s => s.trim());
+               $('#start-date').text(startStr);
+               $('#end-date').text(endStr);
+
+               selectedStart = parseDate(startStr);
+               selectedEnd = parseDate(endStr);
+
+               // 달력에 선택 표시
+               updateSelection();
+            }
+         });
 
          function updateSelection() {
             $('.day').removeClass('selected in-range');
