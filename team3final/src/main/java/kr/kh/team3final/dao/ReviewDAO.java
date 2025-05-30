@@ -21,7 +21,7 @@ public interface ReviewDAO {
 
 	int insertReview(ReviewVO review);
 
-	ReviewVO detailReview(@Param("rv_num") int rvNumber, @Param("me_num") int me_num);
+	ReviewVO detailReview(@Param("rv_num") int rvNumber, @Param("me_num") int me_num, @Param("tableName")String tableName);
 
 	int updateReview(ReviewVO review);
 

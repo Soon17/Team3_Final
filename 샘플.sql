@@ -16,7 +16,6 @@ ALTER TABLE room AUTO_INCREMENT = 1;
 ALTER TABLE thumbnail AUTO_INCREMENT = 1;
 ALTER TABLE review AUTO_INCREMENT = 1;
 
-
 INSERT INTO region(RG_NAME) VALUES
 ("서울"),("경기"),("부산"),("제주");
 

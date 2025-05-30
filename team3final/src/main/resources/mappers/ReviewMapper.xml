@@ -77,6 +77,7 @@
         SELECT * FROM review 
         WHERE rv_me_num = #{me_num} 
         AND rv_number = #{rv_num}
+        AND rv_table_name = #{tableName}
     </select>
     <update id="updateReview">
     UPDATE review 

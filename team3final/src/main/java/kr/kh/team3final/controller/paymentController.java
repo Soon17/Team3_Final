@@ -40,6 +40,7 @@ public class PaymentController {
 
 	@Value("${toss.pay-channel}")
 	private String tossChannel;
+	
 	@Autowired
 	LodgingService lodgingService;
 

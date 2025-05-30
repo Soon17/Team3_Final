@@ -70,7 +70,7 @@ public class ReviewController {
 
 	@GetMapping("/detail")
 	@ResponseBody
-	public ReviewVO getReview(@RequestParam("rv_number") int rvNumber, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+	public ReviewVO getReview(@RequestParam("rv_number") int rvNumber, @RequestParam("rv_table_name") String tableName, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
 		MemberVO member = null;
 		if(user != null){
 			member = user.getUser();
@@ -79,7 +79,7 @@ public class ReviewController {
 		} else {
 			return null;
 		}
-		return reviewService.detailReview(rvNumber, member.getMe_num());
+		return reviewService.detailReview(rvNumber, member.getMe_num(),tableName);
 	}
 
 	@PostMapping("/update")
