@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 import kr.kh.team3final.model.vo.LodgingVO;
+import kr.kh.team3final.model.vo.ReviewVO;
 
 public interface ReviewDAO {
 
@@ -17,5 +18,13 @@ public interface ReviewDAO {
 	LodgingVO selectLodgingReviewStats(@Param("ld_num") int ld_num);
 
 	List<Map<String, Object>> selectRatingCounts(@Param("ld_num") int ld_num);
+
+	int insertReview(ReviewVO review);
+
+	ReviewVO detailReview(@Param("rv_num")int rvNumber, @Param("me_num")int me_num);
+
+	int updateReview(ReviewVO review);
+
+	int deleteReview(@Param("rv_num")int rvNumber, @Param("me_num")int me_num);
 
 }

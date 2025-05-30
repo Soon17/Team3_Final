@@ -52,5 +52,45 @@
             AND rm.rm_ld_num = #{ld_num}
         GROUP BY rv_rating
     </select>
-
+    <insert id="insertReview" parameterType="kr.kh.team3final.model.vo.ReviewVO" useGeneratedKeys="true" keyProperty="rv_num">
+    INSERT INTO review
+    (
+      rv_rating,
+      rv_content,
+      rv_date,
+      rv_table_name,
+      rv_number,
+      rv_me_num
+    )
+    VALUES
+    (
+      #{rv_rating},
+      #{rv_content},
+      NOW(),
+      #{rv_table_name},
+      #{rv_number},
+      #{rv_me_num}
+    )
+    </insert>
+    <select id="detailReview" resultType="ReviewVO">
+        SELECT * FROM review 
+        WHERE rv_me_num = #{me_num} 
+        AND rv_number = #{rv_num}
+    </select>
+    <update id="updateReview">
+    UPDATE review 
+    SET 
+        rv_rating = #{rv_rating},
+        rv_content = #{rv_content},
+        rv_date = NOW()
+    WHERE 
+        rv_me_num = #{rv_me_num}
+        AND rv_table_name = #{rv_table_name}
+        AND rv_number = #{rv_number}
+    </update>
+    <delete id="deleteReview">
+        DELETE FROM review
+        WHERE rv_number = #{rv_num}
+        and rv_me_num = #{me_num} 
+    </delete>
 </mapper>

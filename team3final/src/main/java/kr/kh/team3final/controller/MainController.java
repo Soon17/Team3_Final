@@ -14,6 +14,7 @@ import kr.kh.team3final.model.vo.RegionVO;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RegionService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController {
@@ -33,11 +34,12 @@ public class MainController {
 		return "home";
 	}
 
-	@GetMapping("/regionLodging")
-	public String getRegionLodging(Model model, @RequestParam("rg_num") int rg_num) {
-		List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
-		return "regionLodgingList";
-	}
+	// @GetMapping("/regionLodging")
+	// @ResponseBody
+	// public String getRegionLodging(Model model, @RequestParam(value = "rg_num", required = false) Integer rg_num) {
+	// 	List<LodgingVO> lodgingList = lodgingService.getRegionLodgingList(rg_num);
+	// 	return "regionLodgingList";
+	// }
 
 	@GetMapping("/rent")
 	public String rent(Model model) {
