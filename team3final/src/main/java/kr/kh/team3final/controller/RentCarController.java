@@ -2,12 +2,11 @@ package kr.kh.team3final.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
 import kr.kh.team3final.service.CarService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 @RequestMapping("/rent")
@@ -17,14 +16,15 @@ public class RentCarController {
 	CarService carService;
 
 	@GetMapping("/detail")
-	public String rentCarDetail() {
+	public String rentCarDetail(Model model) {
 
 		return "rent/detail";
 	}
 	
 	@GetMapping("/detailSummary")
-	public String detailSummary(@RequestParam String param) {
-		return new String();
+	public String detailSummary(Model model) {
+		
+		return "rent/detailSummary";
 	}
 	
 }
