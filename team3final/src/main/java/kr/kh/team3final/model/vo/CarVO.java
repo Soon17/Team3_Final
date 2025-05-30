@@ -17,4 +17,5 @@ public class CarVO {
 	int ct_key;
 	String ct_name;
 	String ct_type;
+	int reservation_count;
 }

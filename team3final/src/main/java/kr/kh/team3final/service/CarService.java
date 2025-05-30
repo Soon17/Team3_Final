@@ -41,12 +41,12 @@ public class CarService {
 
 
 	public List<CarVO> getRegionCarList(int rg_num, String type) {
-		// if(type.equals("rent-trend")){
-		// 	return carDao.selectTrendCarList(rg_num);
-		// }else{
-		// 	return carDao.selectPriceCarList(rg_num);
-		// }
-		return null;
+		if(type.equals("rent-trend")){
+			return carDao.selectTrendCarList(rg_num);
+			
+		}else{
+			return carDao.selectPriceCarList(rg_num);
+		}
 	}
 
 }

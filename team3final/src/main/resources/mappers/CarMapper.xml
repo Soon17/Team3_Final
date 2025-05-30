@@ -90,6 +90,30 @@
 			c.cr_fuel_type,
 			c.cr_trans
 	</select>
+	<select id="selectTrendCarList" resultType="CarVO">
+		select 
+			car.*,
+			ct_name,
+			count(rr_num) as reservation_count
+		from car
+		join car_type on ct_key = cr_ct_key
+		join rental on re_num = cr_re_num
+		join region on rg_num =  re_rg_num
+		join car_package on cp_cr_id = cr_id
+		join re_reservation on rr_cp_num = cp_num
+		where rg_num = #{rg_num}
+		group by cr_id
+		order by reservation_count desc
+		limit 7;
+	</select>
 
-
+	<select id="selectPriceCarList" resultType="CarVO">
+		select  car.*,ct_name from car
+		join car_type on ct_key = cr_ct_key
+		join rental on re_num = cr_re_num
+		join region on rg_num =  re_rg_num
+		where rg_num = #{rg_num}
+		order by cr_price
+		limit 7;
+	</select>
 </mapper>

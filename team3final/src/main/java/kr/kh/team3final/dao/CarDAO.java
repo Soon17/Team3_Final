@@ -20,4 +20,8 @@ public interface CarDAO {
             @Param("cr_fuel_type") String cr_fuel_type,
             @Param("cr_trans") String cr_trans);
 
+	List<CarVO> selectTrendCarList(int rg_num);
+
+	List<CarVO> selectPriceCarList(int rg_num);
+
 }
