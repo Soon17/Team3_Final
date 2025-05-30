@@ -516,6 +516,7 @@
          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
          border: 1px solid #f1f1f1;
          flex-direction: column;
+         color: inherit;
       }
 
       .company-info {
@@ -701,7 +702,7 @@
             </th:block>
             <!-- 결과가 있을 때 -->
             <th:block th:each="car : ${rentalList}">
-               <div class="company-box">
+               <a href="#" class="company-box" style="text-decoration: none;">
                   <div class="company-info">
                      <span class="company-name" th:text="${car.rentalName}">업체이름</span>
                      <span class="company-rating">
@@ -718,7 +719,7 @@
                      <span class="price"
                         th:text="${#numbers.formatInteger(car.carPrice, 3, 'COMMA') + '원 / 1박'}">가격</span>
                   </div>
-               </div>
+               </a>
             </th:block>
 
          </div>
