@@ -10,7 +10,9 @@
 			WHERE rv_table_name = 'room' 
 			AND rm_ld_num = lodging.LD_NUM
 		) AS avg_rating,
-		MIN(rm_price) as min_price
+		MIN(rm_price) as min_price,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
 		from lodging
 		join room on rm_ld_num = ld_num
 		where LD_RG_NUM = #{rg_num}
@@ -27,7 +29,9 @@
 			WHERE rv_table_name = 'room' 
 			AND rm_ld_num = lodging.LD_NUM
 		) AS avg_rating,
-		MIN(rm_price) as min_price
+		MIN(rm_price) as min_price,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
 		from lodging
 		join room on rm_ld_num = ld_num
 		where LD_RG_NUM = #{rg_num}
@@ -45,7 +49,9 @@
 			and rm_ld_num = lodging.ld_num
 		) as avg_rating,
 		min(rm_price) as min_price,
-		count(lo_reservation.lr_num) as reservation_count
+		count(lo_reservation.lr_num) as reservation_count,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
 		from lodging 
 		join room on rm_ld_num = ld_num
 		join lo_reservation on rm_num = lr_rm_num
@@ -67,7 +73,9 @@
             WHERE rv_table_name = 'room' 
               AND rm_ld_num = lodging.LD_NUM
         ) AS avg_rating,
-        MIN(t.rm_price) AS min_price 
+        MIN(t.rm_price) AS min_price,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
 		FROM lodging
 		JOIN (
 			SELECT *
