@@ -19,4 +19,5 @@ public class Lodging_ReviewDTO {
 	String ld_region;
 	String me_nick;
 	String rm_name;
+	int lr_num;
 }

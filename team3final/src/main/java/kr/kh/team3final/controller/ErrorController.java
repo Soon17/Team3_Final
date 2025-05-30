@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
 @Controller
 @RequestMapping("/error")
 public class ErrorController {
@@ -17,7 +16,8 @@ public class ErrorController {
 		String msg = (String) request.getAttribute("msg");
 		String url = (String) request.getAttribute("url");
 
-		if (url == null) url = "/";
+		if (url == null)
+			url = "/";
 
 		System.out.println(url);
 		model.addAttribute("msg", msg);

@@ -28,7 +28,6 @@ import kr.kh.team3final.service.RoomService;
 import kr.kh.team3final.service.ThumbnailService;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @Controller
 public class LodgingController {
 

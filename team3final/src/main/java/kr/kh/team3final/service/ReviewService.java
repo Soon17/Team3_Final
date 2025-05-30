@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import kr.kh.team3final.dao.ReviewDAO;
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 import kr.kh.team3final.model.vo.LodgingVO;
+import kr.kh.team3final.model.vo.ReviewVO;
 
 @Service
 public class ReviewService {
@@ -30,5 +31,21 @@ public class ReviewService {
 
 	public List<Map<String, Object>> selectRatingCounts(int ld_num) {
 		return reviewDAO.selectRatingCounts(ld_num);
+	}
+
+	public int insertReview(ReviewVO review) {
+		return reviewDAO.insertReview(review);
+	}
+
+	public ReviewVO detailReview(int rvNumber, int me_num) {
+		return reviewDAO.detailReview(rvNumber, me_num);
+	}
+
+	public int updateReview(ReviewVO review) {
+		return reviewDAO.updateReview(review);
+	}
+
+	public int deleteReview(int rvNumber, int me_num) {
+		return reviewDAO.deleteReview(rvNumber, me_num);
 	}
 }

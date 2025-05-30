@@ -8,9 +8,8 @@ import kr.kh.team3final.model.vo.RoomVO;
 
 public interface RoomDAO {
 
-
 	RoomVO selectRoom(int rm_num);
-	
+
 	List<RoomVO> getAvailableRooms(
 			@Param("ld_num") int ld_num,
 			@Param("checkin") String checkin,
