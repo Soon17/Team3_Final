@@ -141,7 +141,14 @@
 		}
 
 		.image-box input[type="file"] {
-			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			cursor: pointer;
+			z-index: 2;
 		}
 
 		.plus-sign {
@@ -173,7 +180,7 @@
 	<div class="main" style="background-color: #fff;">
 		<main layout:fragment="content">
 
-			<form class="main-container" action="/owner/uploadLodgingPost" method="post">
+			<form class="main-container" action="/owner/uploadLodgingPost" method="post" enctype="multipart/form-data">
 				<div class="title">
 					<i class="fas fa-hotel"> 신규 숙소 등록</i>
 				</div>
@@ -186,25 +193,25 @@
 							<!-- 이미지 박스 1번: 메인 (2x2) -->
 							<div class="image-box image-main" data-index="1">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')" name="loadging-thumbnail" required>
 							</div>
 
 							<!-- 2~5번: 서브 이미지 -->
 							<div class="image-box" data-index="2">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')" name="loadging-thumbnail" required>
 							</div>
 							<div class="image-box" data-index="3">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')" name="loadging-thumbnail" required>
 							</div>
 							<div class="image-box" data-index="4">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')" name="loadging-thumbnail" required>
 							</div>
 							<div class="image-box" data-index="5">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')" name="loadging-thumbnail" required>
 							</div>
 						</div>
 					</div>
@@ -234,7 +241,8 @@
 							<label class="form-label" for="ld_rg_num">지역</label>
 							<select class="form-select" id="ld_rg_num" name="ld_rg_num" required>
 								<option value="">-- 선택 --</option>
-								<option th:each="region : ${regions}" th:value="${region.rg_num}" th:text="${region.rg_name}"></option>
+								<option th:each="region : ${regions}" th:value="${region.rg_num}"
+									th:text="${region.rg_name}"></option>
 							</select>
 						</div>
 					</div>
@@ -380,14 +388,20 @@
 
 					const reader = new FileReader();
 					reader.onload = function (e) {
-						let $switchBox;
-						if (type === 'lodging') {
-							$switchBox = $input.closest('.lodging-box');
-						} else if (type === 'room') {
-							$switchBox = $input.closest('.room-box');
-						}
-						const $box = $switchBox.find(`.image-box[data-index='${index}']`);
-						$box.html(`<img src="${e.target.result}" alt="image">`);
+						const $box = $input.closest(`.image-box[data-index='${index}']`);
+
+						// 이미 존재하는 이미지가 있으면 제거
+						$box.find('img').remove();
+
+						// 새 이미지 미리보기 추가 (input은 그대로 둠)
+						const $img = $('<img>', {
+							src: e.target.result,
+							alt: 'image'
+						});
+						$box.append($img);
+
+						// + 아이콘 숨기기
+						$box.find('.plus-sign').hide();
 					};
 					reader.readAsDataURL(file);
 				}
