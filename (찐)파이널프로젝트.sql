@@ -164,7 +164,7 @@ DROP TABLE IF EXISTS `CAR_TYPE`;
 CREATE TABLE `CAR_TYPE` (
    `CT_KEY` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
    `CT_NAME` VARCHAR(20) NOT NULL,
-   `CT_TYPE` ENUM('소형', '세단', 'SUV', '승합')
+   `CT_TYPE` ENUM('소형', '세단', 'SUV', '승합차')
 );
 
 -- Foreign Key Constraints

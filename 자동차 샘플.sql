@@ -24,8 +24,8 @@ INSERT INTO car_type (CT_NAME, CT_TYPE) VALUES
 ('모닝 어반', '소형'),
 ('쏘렌토 MQ4', 'SUV'),
 ('산타페 TM', 'SUV'),
-('카니발 KA4', '승합'),
-('스타리아 라운지', '승합');
+('카니발 KA4', '승합차'),
+('스타리아 라운지', '승합차');
 
 INSERT INTO car (CR_YEAR, CR_FUEL_TYPE, CR_TRANS, CR_PRICE, CR_COUNT, CR_RE_NUM, CR_CT_KEY, CR_THUMBNAIL) VALUES
 -- 스파크 4세대
@@ -71,10 +71,9 @@ INSERT INTO car (CR_YEAR, CR_FUEL_TYPE, CR_TRANS, CR_PRICE, CR_COUNT, CR_RE_NUM,
 -- 스타리아 라운지
 (2023, '경유', '오토', 28000, 3, 1, 6, 'staria.png'),
 (2023, '경유', '오토', 27500, 2, 2, 6, 'staria.png'),
-(2023, '경유', '오토', 28500, 2, 3, 6, 'staria.png'),
-(2024, '전기', '오토', 30000, 2, 1, 6, 'staria.png'),
-(2024, '전기', '오토', 31000, 1, 2, 6, 'staria.png'),
-(2024, '전기', '오토', 29500, 1, 3, 6, 'staria.png');
+(2024, '전기', '오토', 30000, 2, 1, 6, 'staria2.png'),
+(2024, '전기', '오토', 31000, 1, 2, 6, 'staria2.png'),
+(2024, '전기', '오토', 29500, 1, 3, 6, 'staria2.png');
 
 
 INSERT INTO review (RV_RATING, RV_CONTENT, RV_DATE, RV_TABLE_NAME, RV_NUMBER, RV_ME_NUM)
