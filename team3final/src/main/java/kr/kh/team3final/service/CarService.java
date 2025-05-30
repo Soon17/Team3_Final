@@ -35,11 +35,7 @@ public class CarService {
 		return dates[1].trim().replace(".", "-");
 	}
 
-	public Map<String, Object> selectCarInfo(
-			@Param("ct_key") int ct_key,
-			@Param("cr_year") int cr_year,
-			@Param("cr_fuel_type") String cr_fuel_type,
-			@Param("cr_trans") String cr_trans) {
+	public Map<String, Object> selectCarInfo(int ct_key, int cr_year, String cr_fuel_type, String cr_trans) {
 		return carDao.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans);
 	}
 

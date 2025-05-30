@@ -865,6 +865,35 @@
             updateSelection();
          }
 
+         //달력에 날짜 표시
+         function parseDate(dateStr) {
+            if (!dateStr || !dateStr.includes('.')) return null;
+
+            const [ymd] = dateStr.split('(');
+            const [y, m, d] = ymd.split('.').map(Number);
+            return new Date(y, m - 1, d);
+         }
+
+         $(document).ready(function () {
+            renderCalendars();
+
+            // URL 파라미터로부터 초기값 설정
+            const params = new URLSearchParams(window.location.search);
+            const checkTime = params.get("checkTime");
+
+            if (checkTime) {
+               const [startStr, endStr] = checkTime.split("~").map(s => s.trim());
+               $('#start-date').text(startStr);
+               $('#end-date').text(endStr);
+
+               selectedStart = parseDate(startStr);
+               selectedEnd = parseDate(endStr);
+
+               // 달력에 선택 표시
+               updateSelection();
+            }
+         });
+
          function updateSelection() {
             $('.day').removeClass('selected in-range');
 
@@ -934,22 +963,6 @@
             renderCalendars();
          });
 
-      </script>
-      <script>
-         // 모달 내용 로드
-         $("#modal-content").load("/searching/carfind");
-
-         // 모달 열기
-         $("#openModalBtn").on("click", function () {
-            $("#modal").show();
-         });
-
-         // 모달 바깥 클릭 시 닫기
-         $("#modal").on("click", function (e) {
-            if (!$(e.target).closest("#modal-content").length) {
-               $("#modal").hide();
-            }
-         });
       </script>
 
       <!--상단헤더 사라지기-->

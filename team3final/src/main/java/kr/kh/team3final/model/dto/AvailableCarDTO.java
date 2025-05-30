@@ -9,6 +9,7 @@ public class AvailableCarDTO {
   private String rentalName;
   private Double avgRating;
   private int reviewCount;
+  private Integer rg_num;
 
   // 차량 정보
   private int carId;
