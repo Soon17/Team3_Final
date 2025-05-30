@@ -321,6 +321,16 @@
 		#confirm-btn:hover {
 			background-color: #005bb5;
 		}
+
+		@media screen and (max-width: 1080px) {
+
+			.event-next,
+			.lodging-next,
+			.money-next,
+			.booking-next {
+				display: none;
+			}
+		}
 	</style>
 </head>
 
@@ -634,15 +644,15 @@
 			});
 
 			// const swiper = new Swiper(".event-swiper", {
-			// 	loop: true,
-			// 	autoplay: {
-			// 		delay: 5000,
-			// 		disableOnInteraction: false
-			// 	},
-			// 	navigation: {
-			// 		nextEl: ".event-next",
-			// 		prevEl: ".event-prev"
-			// 	}
+			//    loop: true,
+			//    autoplay: {
+			//       delay: 5000,
+			//       disableOnInteraction: false
+			//    },
+			//    navigation: {
+			//       nextEl: ".event-next",
+			//       prevEl: ".event-prev"
+			//    }
 			// });
 			var swiperOption = {
 				loop: true,
@@ -664,6 +674,11 @@
 				navigation: {
 					nextEl: ".lodging-next",
 					prevEl: ".lodging-prev"
+				},
+				breakpoints: {
+					1200: { slidesPerView: 4 },
+					980: { slidesPerView: 3 },
+					480: { slidesPerView: 2 }
 				}
 			};
 			var swiperOption3 = {
@@ -673,6 +688,11 @@
 				navigation: {
 					nextEl: ".money-next",
 					prevEl: ".money-prev"
+				},
+				breakpoints: {
+					1200: { slidesPerView: 4 },
+					980: { slidesPerView: 3 },
+					480: { slidesPerView: 2 }
 				}
 			};
 			var swiperOption4 = {
@@ -682,6 +702,11 @@
 				navigation: {
 					nextEl: ".booking-next",
 					prevEl: ".booking-prev"
+				},
+				breakpoints: {
+					1200: { slidesPerView: 4 },
+					980: { slidesPerView: 3 },
+					480: { slidesPerView: 2 }
 				}
 			};
 			var swiper2, swiper3, swiper4;

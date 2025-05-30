@@ -9,7 +9,7 @@ public class AvailableCarDTO {
   private String rentalName;
   private Double avgRating;
   private int reviewCount;
-  private Integer rg_num;
+  private String rg_name;
 
   // 차량 정보
   private int carId;
@@ -18,6 +18,5 @@ public class AvailableCarDTO {
   private String carTrans;
   private int carPrice;
 
-  // 썸네일 (car_type 기준)
   private String thumbnail;
 }

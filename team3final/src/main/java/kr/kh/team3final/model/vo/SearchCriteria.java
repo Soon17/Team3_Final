@@ -15,7 +15,6 @@ public class SearchCriteria {
 	private int avg;
 	private int price;
 	private String ld_name;
-	private Integer rg_num;
 
 	// 렌트카 전용 필터
 	private String[] ct_type; // 차량 타입

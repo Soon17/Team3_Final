@@ -15,14 +15,14 @@
 			c.CR_TRANS   AS carTrans,
 			c.CR_PRICE   AS carPrice,
 			
-			ct.CT_THUMBNAIL AS thumbnail
+			c.CR_THUMBNAIL AS thumbnail
 
 		FROM RENTAL r
 		JOIN CAR c ON r.RE_NUM = c.CR_RE_NUM
-		JOIN CAR_TYPE ct ON c.CT_KEY = ct.CT_KEY
+		JOIN CAR_TYPE ct ON c.CR_CT_KEY = ct.CT_KEY
 		LEFT JOIN REVIEW rv ON rv.RV_TABLE_NAME = 'rental' AND rv.RV_NUMBER = r.RE_NUM
 
-		WHERE c.CT_KEY = #{ct_key}
+		WHERE c.CR_CT_KEY = #{ct_key}
 			AND c.CR_YEAR = #{cr_year}
 			AND c.CR_FUEL_TYPE = #{cr_fuel_type}
 			AND c.CR_TRANS = #{cr_trans}

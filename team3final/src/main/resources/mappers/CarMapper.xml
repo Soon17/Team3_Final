@@ -2,61 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.CarDAO">
 
-	<select id="selectSearchCarList" resultType="CarVO">
-		SELECT 
-			c.cr_year,
-			c.cr_fuel_type,
-			c.cr_trans,
-			ct.ct_key,
-			ct.ct_name,
-			ct.ct_type,
-			ct.ct_thumbnail,
-			MIN(c.cr_price) AS cr_price
-		FROM car c
-		JOIN car_type ct ON c.ct_key = ct.ct_key
+	<select id="selectSearchCarList" parameterType="map" resultType="CarVO">
+    SELECT
+      c.cr_year,
+      c.cr_fuel_type,
+      c.cr_trans,
+      ct.ct_key,
+      ct.ct_name,
+      ct.ct_type,
+      c.cr_thumbnail,
+      MIN(c.cr_price) AS cr_price
+    FROM car c
+    JOIN rental r ON c.cr_re_num = r.re_num
+    JOIN region reg ON r.re_rg_num = reg.rg_num
+    JOIN car_type ct ON c.cr_ct_key = ct.ct_key
 		<where>
+			<if test="cri.rg_name != null and cri.rg_name != ''">
+        AND reg.rg_name = #{cri.rg_name}
+			</if>
 			<if test="cri.ct_type != null and cri.ct_type.length > 0">
-				AND ct.ct_type IN
+        AND ct.ct_type IN
 				<foreach collection="cri.ct_type" item="type" open="(" separator="," close=")">
-					#{type}
+          #{type}
 				</foreach>
 			</if>
 			<if test="cri.ct_name != null and cri.ct_name != ''">
-				AND ct.ct_name LIKE CONCAT('%', #{cri.ct_name}, '%')
+        AND ct.ct_name LIKE CONCAT('%', #{cri.ct_name}, '%')
 			</if>
 			<if test="cri.cr_fuel_type != null and cri.cr_fuel_type.length > 0">
-				AND c.cr_fuel_type IN
+        AND c.cr_fuel_type IN
 				<foreach collection="cri.cr_fuel_type" item="fuel" open="(" separator="," close=")">
-					#{fuel}
+          #{fuel}
 				</foreach>
 			</if>
 			<if test="cri.cr_trans != null and cri.cr_trans.length > 0">
-				AND c.cr_trans IN
+        AND c.cr_trans IN
 				<foreach collection="cri.cr_trans" item="gear" open="(" separator="," close=")">
-					#{gear}
+          #{gear}
 				</foreach>
 			</if>
 			<if test="cri.price != null and cri.price != ''">
         AND c.cr_price &lt;= #{cri.price}
 			</if>
 		</where>
-		GROUP BY 
-			c.cr_year,
-			c.cr_fuel_type,
-			c.cr_trans,
-			ct.ct_key,
-			ct.ct_name,
-			ct.ct_type,
-			ct.ct_thumbnail
+
+    GROUP BY
+      c.cr_year,
+      c.cr_fuel_type,
+      c.cr_trans,
+      ct.ct_key,
+      ct.ct_name,
+      ct.ct_type,
+      c.cr_thumbnail
+
 		<choose>
 			<when test="cri.sort == '가격순'">
-				ORDER BY cr_price ASC
+        ORDER BY cr_price ASC
 			</when>
 			<when test="cri.sort == '신차순'">
-				ORDER BY c.cr_year DESC
+        ORDER BY c.cr_year DESC
 			</when>
 			<otherwise>
-				ORDER BY ct.ct_key DESC
+        ORDER BY ct.ct_key DESC
 			</otherwise>
 		</choose>
 	</select>
@@ -66,16 +73,23 @@
 			ct.ct_name AS carName,
 			MIN(c.cr_price) AS minPrice,
 			MAX(c.cr_price) AS maxPrice,
-			ct.ct_thumbnail AS thumbnail,
+			c.cr_thumbnail AS thumbnail, 						
 			c.cr_year AS cr_year,
 			c.cr_fuel_type AS cr_fuel_type,
 			c.cr_trans AS cr_trans
 		FROM car c
-		JOIN car_type ct ON c.ct_key = ct.ct_key
-		WHERE c.ct_key = #{ct_key}
+		JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+		WHERE c.cr_ct_key = #{ct_key}
 			AND c.cr_year = #{cr_year}
 			AND c.cr_fuel_type = #{cr_fuel_type}
 			AND c.cr_trans = #{cr_trans}
+		GROUP BY
+			ct.ct_name,
+			c.cr_thumbnail,
+			c.cr_year,
+			c.cr_fuel_type,
+			c.cr_trans
 	</select>
+
 
 </mapper>
