@@ -38,40 +38,40 @@
         GROUP BY rv_rating
     </select>
     <select id="getSelectReviewList" resultType="kr.kh.team3final.model.dto.Lodging_ReviewDTO">
-    SELECT
-        r.rv_num,
-        r.rv_rating,
-        r.rv_date,
-        r.rv_content,
-        l.ld_num,
-        l.ld_name,
-        l.ld_region
-    FROM review r
-    JOIN lodging l ON r.rv_number = l.ld_num
-    WHERE r.rv_table_name = 'room'
-      AND r.rv_me_num = #{meNum}
-    ORDER BY r.rv_num DESC
+        SELECT
+            r.rv_num,
+            r.rv_rating,
+            r.rv_date,
+            r.rv_content,
+            l.ld_num,
+            l.ld_name,
+            l.ld_region
+        FROM review r
+        JOIN lodging l ON r.rv_number = l.ld_num
+        WHERE r.rv_table_name = 'room'
+        AND r.rv_me_num = #{meNum}
+        ORDER BY r.rv_num DESC
     </select>
 
     <insert id="insertReview" parameterType="kr.kh.team3final.model.vo.ReviewVO" useGeneratedKeys="true" keyProperty="rv_num">
-    INSERT INTO review
-    (
-      rv_rating,
-      rv_content,
-      rv_date,
-      rv_table_name,
-      rv_number,
-      rv_me_num
-    )
-    VALUES
-    (
-      #{rv_rating},
-      #{rv_content},
-      NOW(),
-      #{rv_table_name},
-      #{rv_number},
-      #{rv_me_num}
-    )
+        INSERT INTO review
+        (
+        rv_rating,
+        rv_content,
+        rv_date,
+        rv_table_name,
+        rv_number,
+        rv_me_num
+        )
+        VALUES
+        (
+        #{rv_rating},
+        #{rv_content},
+        NOW(),
+        #{rv_table_name},
+        #{rv_number},
+        #{rv_me_num}
+        )
     </insert>
     <select id="detailReview" resultType="ReviewVO">
         SELECT * FROM review 
@@ -80,15 +80,15 @@
         AND rv_table_name = #{tableName}
     </select>
     <update id="updateReview">
-    UPDATE review 
-    SET 
-        rv_rating = #{rv_rating},
-        rv_content = #{rv_content},
-        rv_date = NOW()
-    WHERE 
-        rv_me_num = #{rv_me_num}
-        AND rv_table_name = #{rv_table_name}
-        AND rv_number = #{rv_number}
+        UPDATE review 
+        SET 
+            rv_rating = #{rv_rating},
+            rv_content = #{rv_content},
+            rv_date = NOW()
+        WHERE 
+            rv_me_num = #{rv_me_num}
+            AND rv_table_name = #{rv_table_name}
+            AND rv_number = #{rv_number}
     </update>
     <delete id="deleteReview">
         DELETE FROM review
