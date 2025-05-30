@@ -19,7 +19,7 @@ public class RentCarController {
 	@GetMapping("/detail")
 	public String rentCarDetail() {
 
-		return "/";
+		return "rent/detail";
 	}
 	
 	@GetMapping("/detailSummary")
