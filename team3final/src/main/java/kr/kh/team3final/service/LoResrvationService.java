@@ -15,7 +15,6 @@ public class LoResrvationService {
 
 	public void insertLoReservation(LoResrvationVO lr) {
 		loResrvationDAO.insertLoReservation(lr);
-		System.out.println(lr);
 		if(lr.getChoice_option_nums() != null && lr.getChoice_option_nums().length !=0 ){
 			loResrvationDAO.insertUserOption(lr);
 		}
