@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import kr.kh.team3final.model.dto.LodgingDTO;
+import kr.kh.team3final.model.vo.DefaultOptionVO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.SearchCriteria;
 
@@ -21,5 +23,9 @@ public interface LodgingDAO {
 	LodgingVO selectLodging(int ld_num);
 
 	int getMealPrice(int ldNum);
+
+	boolean insertLodging(LodgingDTO lodgingDTO);
+
+	void insertDefaultOption(DefaultOptionVO dOVO);
 
 }

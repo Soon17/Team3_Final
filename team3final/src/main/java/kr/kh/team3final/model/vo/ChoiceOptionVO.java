@@ -6,7 +6,6 @@ import lombok.Data;
 public class ChoiceOptionVO {
 	int co_num;
 	int co_do_num;
-	String co_table;
-	int co_key;
+	int co_ld_num;
 	String co_do_name;
 }

@@ -10,6 +10,7 @@ public class LodgingDTO {
 	String ld_type;
 	int ld_rating;
 	int ld_rg_num;
+	int ld_me_num;
 	String ld_name;
 
 	int ld_meal_price;

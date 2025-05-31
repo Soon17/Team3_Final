@@ -5,9 +5,8 @@
 		 select* from region; 
 	</select>
 	<select id="allLodgingList" resultType="LodgingVO">
-  SELECT * FROM lodging WHERE ld_num = #{ld_num}
+  		SELECT * FROM lodging WHERE ld_num = #{ld_num}
 	</select>
-
 	<select id="selectRegionSwitchLodgingList" resultType="LodgingVO">
 
 		SELECT lodging.*,
@@ -94,4 +93,12 @@
 	<select id="getMealPrice" resultType="int">
 		select ld_meal_price from lodging where  ld_num = #{ld_num}
 	</select>
+	<insert id="insertLodging" useGeneratedKeys="true" keyProperty="ld_num">
+		insert into lodging(ld_name, ld_region, ld_type, ld_number, ld_rating, ld_infor, ld_meal_price, ld_me_num, ld_rg_num)
+		value(#{ld_name}, #{ld_region}, #{ld_type}, #{ld_number}, #{ld_rating}, #{ld_infor}, #{ld_meal_price}, #{ld_me_num}, #{ld_rg_num})
+	</insert>
+	<insert id="insertDefaultOption" useGeneratedKeys="true" keyProperty="do_num">
+		insert into default_option(do_name)
+		values (#{do_name})
+	</insert>
 </mapper>

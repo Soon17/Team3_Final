@@ -193,25 +193,25 @@
 							<!-- 이미지 박스 1번: 메인 (2x2) -->
 							<div class="image-box image-main" data-index="1">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')" name="loadging-thumbnail" required>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')" name="loadging-thumbnail">
 							</div>
 
 							<!-- 2~5번: 서브 이미지 -->
 							<div class="image-box" data-index="2">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')" name="loadging-thumbnail" required>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')" name="loadging-thumbnail">
 							</div>
 							<div class="image-box" data-index="3">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')" name="loadging-thumbnail" required>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')" name="loadging-thumbnail">
 							</div>
 							<div class="image-box" data-index="4">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')" name="loadging-thumbnail" required>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')" name="loadging-thumbnail">
 							</div>
 							<div class="image-box" data-index="5">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')" name="loadging-thumbnail" required>
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')" name="loadging-thumbnail">
 							</div>
 						</div>
 					</div>
@@ -219,7 +219,7 @@
 					<div class="d-flex">
 						<div class="form-group col">
 							<label class="form-label" for="ld_type">숙소 유형</label>
-							<select class="form-select" id="ld_type" name="ld_type" required>
+							<select class="form-select" id="ld_type" name="ld_type" >
 								<option value="">-- 선택 --</option>
 								<option value="호텔">호텔</option>
 								<option value="모텔">모텔</option>
@@ -239,7 +239,7 @@
 						</div>
 						<div class="form-group col-3">
 							<label class="form-label" for="ld_rg_num">지역</label>
-							<select class="form-select" id="ld_rg_num" name="ld_rg_num" required>
+							<select class="form-select" id="ld_rg_num" name="ld_rg_num" >
 								<option value="">-- 선택 --</option>
 								<option th:each="region : ${regions}" th:value="${region.rg_num}"
 									th:text="${region.rg_name}"></option>
@@ -248,7 +248,7 @@
 					</div>
 					<div class="form-group col-12">
 						<label class="form-label" for="ld_name">숙소 이름</label>
-						<input type="text" class="form-input" id="ld_name" name="ld_name" required>
+						<input type="text" class="form-input" id="ld_name" name="ld_name" >
 					</div>
 
 					<div class="form-group col-12">
@@ -278,7 +278,7 @@
 									style="min-width: 40px;">기타</label>
 								<input type="text" id="etc-input" class="form-control form-control-sm"
 									placeholder="옵션1, 옵션2, ..." disabled oninput="syncEtcToHidden()">
-								<input type="hidden" name="options" id="etc-hidden" />
+								<input type="hidden" name="added-options" id="etc-hidden" />
 							</div>
 						</div>
 					</div>
@@ -286,12 +286,12 @@
 					<div class="d-flex">
 						<div class="form-group col-8">
 							<label class="form-label" for="ld_region">주소</label>
-							<input type="text" class="form-input" id="ld_region" name="ld_region" required>
+							<input type="text" class="form-input" id="ld_region" name="ld_region" >
 						</div>
 
 						<div class="form-group col-4">
 							<label class="form-label" for="ld_number">전화번호</label>
-							<input type="text" class="form-input" id="ld_number" name="ld_number" required>
+							<input type="text" class="form-input" id="ld_number" name="ld_number" >
 						</div>
 					</div>
 
@@ -352,22 +352,22 @@
 							<div class="d-flex">
 								<div class="form-group col-8">
 									<label class="form-label">룸 이름</label>
-									<input type="text" class="form-input" name="rooms[${roomIndex}].rm_name" required>
+									<input type="text" class="form-input" name="rooms[${roomIndex}].rm_name" >
 								</div>
 								<div class="form-group col-4">
 									<label class="form-label">룸 개수</label>
-									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_roomcount" min="1" required>
+									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_roomcount" min="1" >
 								</div>
 							</div>
 							<div class="d-flex">
 								<div class="form-group col-3">
 									<label class="form-label">최대 인원</label>
-									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_person" min="1" required>
+									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_person" min="1" >
 								</div>
 	
 								<div class="form-group col-9">
 									<label class="form-label">가격 (원)</label>
-									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_price" min="0" step="1000" required>
+									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_price" min="0" step="1000" >
 								</div>
 							</div>
 

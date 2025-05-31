@@ -18,4 +18,8 @@
 	<select id="selectRoom" resultType="RoomVO">
 		select* from room where rm_num= #{rm_num}
 	</select>
+	<insert id="insertRoom" useGeneratedKeys="true" keyProperty="rm_num">
+		insert into room(rm_name, rm_roomcount, rm_person, rm_price, rm_infor, rm_ld_num)
+		value(#{rm_name}, #{rm_roomcount}, #{rm_person}, #{rm_price}, #{rm_infor}, #{rm_ld_num});
+	</insert>
 </mapper>

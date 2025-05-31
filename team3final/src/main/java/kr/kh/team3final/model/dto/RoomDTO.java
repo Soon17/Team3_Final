@@ -10,4 +10,5 @@ public class RoomDTO {
 	int rm_person;
 	int rm_price;
 	String rm_infor;
+	int rm_ld_num;
 }
