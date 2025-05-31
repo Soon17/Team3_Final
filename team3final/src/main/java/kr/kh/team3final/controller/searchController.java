@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import kr.kh.team3final.model.vo.RegionVO;
 import kr.kh.team3final.model.vo.RentalVO;
 import kr.kh.team3final.service.RegionService;
