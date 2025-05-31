@@ -21,4 +21,5 @@ public class SearchCriteria {
 	private String ct_name; // 차량명 검색
 	private String[] cr_fuel_type; // 연료
 	private String[] cr_trans; // 변속기
+
 }

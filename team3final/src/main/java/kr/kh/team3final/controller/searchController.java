@@ -64,7 +64,7 @@ public class SearchController {
 		model.addAttribute("rg_name", cri.getRg_name());
 		model.addAttribute("checkTime", cri.getCheckTime());
 		model.addAttribute("cri", cri);
-
+		
 		// 차량 목록 조회
 		List<CarVO> carList = carService.getSearchCarList(cri);
 		model.addAttribute("carList", carList);

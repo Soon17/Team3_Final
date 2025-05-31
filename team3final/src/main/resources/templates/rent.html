@@ -702,9 +702,11 @@
 				const qT = encodeURIComponent(checkTime);
 
 				$('.rent-reserv-link').each(function () {
+					const carName = $(this).parent().find(".car-name").text();
+					const qY = encodeURIComponent(carName);
 					$(this).attr(
 						'href',
-						`/searching/carsearch?rg_name=${qR}&checkTime=${qT}`
+						`/searching/carsearch?rg_name=${qR}&checkTime=${qT}&ct_name=${qY}`
 					);
 				});
 			}
