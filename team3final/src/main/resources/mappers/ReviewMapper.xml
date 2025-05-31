@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.ReviewDAO">
+    <select id="selectReview" resultType="kr.kh.team3final.model.dto.Lodging_ReviewDTO">
+        SELECT
+            r.rv_num,
+            r.rv_rating,
+            r.rv_date,
+            r.rv_content,
+            l.ld_num,
+            l.ld_name,
+            l.ld_region,
+            rm.rm_name,
+            m.me_nick 
+        FROM review r
+        JOIN room rm ON r.rv_number = rm.rm_num
+        JOIN lodging l ON rm.rm_ld_num = l.ld_num
+        JOIN member m ON r.rv_me_num = m.me_num 
+        WHERE r.rv_table_name = #{rv_table_name}
+        AND l.ld_num = #{ld_num}
+        ORDER BY r.rv_num DESC
+    </select>
+    <select id="selectLodgingReviewStats" resultType="kr.kh.team3final.model.vo.LodgingVO">
+        SELECT 
+            ROUND(AVG(rv_rating), 1) AS avg_rating,
+            COUNT(*) AS review_count
+        FROM review
+        JOIN room on rm_num = rv_number
+        WHERE rv_table_name = 'room'
+            AND rm_ld_num = #{ld_num}
+    </select>
+    <select id="selectRatingCounts" resultType="map">
+        SELECT rv_rating, COUNT(*) AS cnt
+        FROM review r
+        JOIN room rm ON r.rv_number = rm.rm_num
+        WHERE r.rv_table_name = 'room'
+            AND rm.rm_ld_num = #{ld_num}
+        GROUP BY rv_rating
+    </select>
+    <select id="getSelectReviewList" resultType="kr.kh.team3final.model.dto.Lodging_ReviewDTO">
+        SELECT
+            r.rv_num,
+            r.rv_rating,
+            r.rv_date,
+            r.rv_content,
+            l.ld_num,
+            l.ld_name,
+            l.ld_region
+        FROM review r
+        JOIN lodging l ON r.rv_number = l.ld_num
+        WHERE r.rv_table_name = 'room'
+        AND r.rv_me_num = #{meNum}
+        ORDER BY r.rv_num DESC
+    </select>
+
+    <insert id="insertReview" parameterType="kr.kh.team3final.model.vo.ReviewVO" useGeneratedKeys="true" keyProperty="rv_num">
+        INSERT INTO review
+        (
+        rv_rating,
+        rv_content,
+        rv_date,
+        rv_table_name,
+        rv_number,
+        rv_me_num
+        )
+        VALUES
+        (
+        #{rv_rating},
+        #{rv_content},
+        NOW(),
+        #{rv_table_name},
+        #{rv_number},
+        #{rv_me_num}
+        )
+    </insert>
+    <select id="detailReview" resultType="ReviewVO">
+        SELECT * FROM review 
+        WHERE rv_me_num = #{me_num} 
+        AND rv_number = #{rv_num}
+        AND rv_table_name = #{tableName}
+    </select>
+    <update id="updateReview">
+        UPDATE review 
+        SET 
+            rv_rating = #{rv_rating},
+            rv_content = #{rv_content},
+            rv_date = NOW()
+        WHERE 
+            rv_me_num = #{rv_me_num}
+            AND rv_table_name = #{rv_table_name}
+            AND rv_number = #{rv_number}
+    </update>
+    <delete id="deleteReview">
+        DELETE FROM review
+        WHERE rv_number = #{rv_num}
+        and rv_me_num = #{me_num} 
+    </delete>
+</mapper>

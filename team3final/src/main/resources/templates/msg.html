@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html
+	lang="en" 
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<script th:inline="javascript">
+		setTimeout(function(){
+			alert([[${msg}]]);
+			location.href = [[${url}]];
+		}, 100)
+	</script>
+</body>
+</html>

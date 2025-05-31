@@ -8,8 +8,13 @@ public class MemberVO {
 	String me_id;
 	String me_pw;
 	String me_name;
+	String me_nick;
 	String me_number;
 	String me_email;
 	String me_authority;
 	String me_birthday;
+	String me_gender;
+	String me_profile;
+	String me_provider;
+	String me_del;
 }

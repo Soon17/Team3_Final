@@ -1,18 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.LodgingDAO">
-	<select id="selectRegionLodgingList" resultType="LodgingVO">
-		select* from region; 
-	</select>
-	<select id="selectSearchLodgingList" resultType="LodgingVO">
-		SELECT lodging.*,
+	<select id="selectReviewLodgingList" resultType="LodgingVO">
+		select lodging.*,
 		(
 			SELECT ROUND(AVG(rv_rating), 1)
 			FROM review
-			WHERE rv_table_name = 'lodging' 
-				AND rv_number = lodging.LD_NUM
+			join room on rm_num = rv_number
+			WHERE rv_table_name = 'room' 
+			AND rm_ld_num = lodging.LD_NUM
 		) AS avg_rating,
-		MIN(t.rm_price) AS min_price 
+		MIN(rm_price) as min_price,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
+		from lodging
+		join room on rm_ld_num = ld_num
+		where LD_RG_NUM = #{rg_num}
+		group by ld_num
+		order by avg_rating desc
+		limit 7; 
+	</select>
+	<select id="selectPriceLodgingList" resultType="LodgingVO">
+		select lodging.*,
+		(
+			SELECT ROUND(AVG(rv_rating), 1)
+			FROM review
+			join room on rm_num = rv_number
+			WHERE rv_table_name = 'room' 
+			AND rm_ld_num = lodging.LD_NUM
+		) AS avg_rating,
+		MIN(rm_price) as min_price,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
+		from lodging
+		join room on rm_ld_num = ld_num
+		where LD_RG_NUM = #{rg_num}
+		group by ld_num
+		order by min_price
+		limit 7;
+	</select>
+	<select id="selectReservationLodgingList"  resultType="LodgingVO">
+		select lodging.*,
+		(
+			select round(avg(rv_rating), 1)
+			from review
+			join room on rm_num = rv_number
+			where rv_table_name = 'room' 
+			and rm_ld_num = lodging.ld_num
+		) as avg_rating,
+		min(rm_price) as min_price,
+		count(lo_reservation.lr_num) as reservation_count,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
+		from lodging 
+		join room on rm_ld_num = ld_num
+		join lo_reservation on rm_num = lr_rm_num
+		where ld_rg_num = #{rg_num}
+		group by lodging.ld_num
+		order by reservation_count desc;
+	</select>
+	<select id="allLodgingList" resultType="LodgingVO">
+ 		 SELECT * FROM lodging WHERE ld_num = #{ld_num}
+	</select>
+
+	<select id="selectRegionSwitchLodgingList" resultType="LodgingVO">
+
+		SELECT lodging.*,
+        (
+            SELECT ROUND(AVG(rv_rating), 1)
+            FROM review
+			join room on rm_num = rv_number
+            WHERE rv_table_name = 'room' 
+              AND rm_ld_num = lodging.LD_NUM
+        ) AS avg_rating,
+        MIN(t.rm_price) AS min_price,
+		(select TH_UPLOAD from thumbnail where TH_TABLE="lodging" and th_key =lodging.ld_num limit 1) as main_thumbnail,
+		(select th_name from thumbnail where TH_TABLE="lodging" and th_key =ld_num limit 1) as th_name
 		FROM lodging
 		JOIN (
 			SELECT *
@@ -22,109 +85,71 @@
 					lr_rm_num, 
 					COUNT(lr_rm_num) AS count
 				FROM lo_reservation
-				WHERE (LR_CHECKOUT BETWEEN DATE_ADD(#{lr_checkin}, INTERVAL 1 DAY) AND #{lr_checkout})
-				OR (LR_CHECKIN BETWEEN #{lr_checkin} AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY))
-					AND LR_STATE = "예약완료"
+				WHERE (
+						LR_CHECKOUT BETWEEN DATE_ADD(#{lr_checkin}, INTERVAL 1 DAY) 
+						AND #{lr_checkout}
+					)
+				OR (
+						LR_CHECKIN BETWEEN #{lr_checkin} 
+						AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY)
+					)
+				OR(
+					LR_CHECKIN &lt;= #{lr_checkin}
+                    and LR_CHECKOUT &gt;= #{lr_checkout}
+                )
+				AND LR_STATE = '예약완료'
 				GROUP BY lr_rm_num
 			) AS tmp_lo_reservation ON lr_rm_num = rm_num
-			WHERE RM_ROOMCOUNT - IFNULL(count, 0) > 0 
-			AND rm_person >= #{rm_person}
+			WHERE RM_ROOMCOUNT - IFNULL(count, 0) &gt; 0 
+			AND rm_person &gt;= #{rm_person}
 		) t ON rm_ld_num = ld_num
 		JOIN region ON rg_num = LD_RG_NUM
-		WHERE rg_name = #{rg_name}
-		GROUP BY lodging.LD_NUM;
-	</select>
-	<select id="selectSearchAVGLodgingList" resultType="LodgingVO">
-		SELECT lodging.*,
-		(
-			SELECT ROUND(AVG(rv_rating), 1)
-			FROM review
-			WHERE rv_table_name = 'lodging' 
-				AND rv_number = lodging.LD_NUM
-		) AS avg_rating,
-		MIN(t.rm_price) AS min_price 
-		FROM lodging
-		JOIN (
-			SELECT *
-			FROM room
-			LEFT JOIN (
-				SELECT 
-					lr_rm_num, 
-					COUNT(lr_rm_num) AS count
-				FROM lo_reservation
-				WHERE (LR_CHECKOUT BETWEEN DATE_ADD(#{lr_checkin}, INTERVAL 1 DAY) AND #{lr_checkout})
-				OR (LR_CHECKIN BETWEEN #{lr_checkin} AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY))
-					AND LR_STATE = "예약완료"
-				GROUP BY lr_rm_num
-			) AS tmp_lo_reservation ON lr_rm_num = rm_num
-			WHERE RM_ROOMCOUNT - IFNULL(count, 0) > 0 
-			AND rm_person >= #{rm_person}
-		) t ON rm_ld_num = ld_num
-		JOIN region ON rg_num = LD_RG_NUM
-		WHERE rg_name = #{rg_name}
+		WHERE rg_name = #{cri.rg_name}
+		<if test="cri.rating != null and cri.rating.length > 0">
+			and ld_rating IN
+			<foreach collection="cri.rating" item="rating" open="(" separator="," close=")">
+				#{rating}
+			</foreach>
+		</if>
+		<if test="cri.type != null and cri.type.length > 0">
+			and ld_type IN
+			<foreach collection="cri.type" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+		<if test="cri.ld_name != null">
+			AND ld_name LIKE CONCAT('%', #{cri.ld_name}, '%')
+		</if>
 		GROUP BY lodging.LD_NUM
-		ORDER BY avg_rating DESC;
+		having 1=1
+		<if test="cri.avg != 0">
+			and avg_rating &gt;= #{cri.avg}
+		</if>
+		<if test="cri.price > 0">
+			and min_price &lt;= #{cri.price} *10000
+		</if>
+		<choose>
+			<when test="cri.sort == '추천순'">
+
+			</when>
+			<when test="cri.sort == '평점순'">
+				ORDER BY avg_rating DESC
+			</when>
+			<when test="cri.sort == '가격순'">
+				ORDER BY min_price ASC
+			</when>
+			<when test="cri.sort == '성급순'">
+				ORDER BY ld_rating DESC
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
 	</select>
-	<select id="selectSearchPriceLodgingList" resultType="LodgingVO">
-		SELECT lodging.*,
-		(
-			SELECT ROUND(AVG(rv_rating), 1)
-			FROM review
-			WHERE rv_table_name = 'lodging' 
-				AND rv_number = lodging.LD_NUM
-		) AS avg_rating,
-		MIN(t.rm_price) AS min_price 
-		FROM lodging
-		JOIN (
-			SELECT *
-			FROM room
-			LEFT JOIN (
-				SELECT 
-					lr_rm_num, 
-					COUNT(lr_rm_num) AS count
-				FROM lo_reservation
-				WHERE (LR_CHECKOUT BETWEEN DATE_ADD(#{lr_checkin}, INTERVAL 1 DAY) AND #{lr_checkout})
-				OR (LR_CHECKIN BETWEEN #{lr_checkin} AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY))
-					AND LR_STATE = "예약완료"
-				GROUP BY lr_rm_num
-			) AS tmp_lo_reservation ON lr_rm_num = rm_num
-			WHERE RM_ROOMCOUNT - IFNULL(count, 0) > 0 
-			AND rm_person >= #{rm_person}
-		) t ON rm_ld_num = ld_num
-		JOIN region ON rg_num = LD_RG_NUM
-		WHERE rg_name = #{rg_name}
-		GROUP BY lodging.LD_NUM
-		ORDER BY min_price ASC;
+	<select id="selectLodging" resultType="LodgingVO">
+		select* from lodging where ld_num = #{ld_num}
 	</select>
-	<select id="selectSearchRatingLodgingList" resultType="LodgingVO">
-		SELECT lodging.*,
-		(
-			SELECT ROUND(AVG(rv_rating), 1)
-			FROM review
-			WHERE rv_table_name = 'lodging' 
-				AND rv_number = lodging.LD_NUM
-		) AS avg_rating,
-		MIN(t.rm_price) AS min_price 
-		FROM lodging
-		JOIN (
-			SELECT *
-			FROM room
-			LEFT JOIN (
-				SELECT 
-					lr_rm_num, 
-					COUNT(lr_rm_num) AS count
-				FROM lo_reservation
-				WHERE (LR_CHECKOUT BETWEEN DATE_ADD(#{lr_checkin}, INTERVAL 1 DAY) AND #{lr_checkout})
-				OR (LR_CHECKIN BETWEEN #{lr_checkin} AND DATE_SUB(#{lr_checkout}, INTERVAL 1 DAY))
-					AND LR_STATE = "예약완료"
-				GROUP BY lr_rm_num
-			) AS tmp_lo_reservation ON lr_rm_num = rm_num
-			WHERE RM_ROOMCOUNT - IFNULL(count, 0) > 0 
-			AND rm_person >= #{rm_person}
-		) t ON rm_ld_num = ld_num
-		JOIN region ON rg_num = LD_RG_NUM
-		WHERE rg_name = #{rg_name}
-		GROUP BY lodging.LD_NUM
-		ORDER BY ld_rating DESC;
+	<select id="getMealPrice" resultType="int">
+		select ld_meal_price from lodging where  ld_num = #{ld_num}
 	</select>
 </mapper>

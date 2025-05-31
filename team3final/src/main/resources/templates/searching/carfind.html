@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .search-box {
+      position: sticky;
+      top: 10px;
+      width: 336px;
+      z-index: 10;
+      overflow-y: auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      padding: 15px;
+      flex-direction: column;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .section {
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      padding-bottom: 8px;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      color: #333;
+    }
+
+    .section:first-of-type .section-title {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .sub-text {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .search-bar button {
+      padding: 8px 12px;
+      background-color: #4564b8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background-color: #4564b8;
+      color: white;
+      border-color: #4564b8;
+    }
+
+    .filter-btn.active {
+      background-color: #4564b8;
+      color: white;
+      border-color: #4564b8;
+    }
+
+    .price-range {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .range-slider {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="search-box">
+    <div class="section">
+      <div class="section-title">결과 내에서 검색</div>
+      <div class="search-bar">
+        <input type="text" class="search-ct-name" placeholder="자동차명으로 검색">
+        <button type="button" class="name-search">검색</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">자동차종류</div>
+      <div class="filter-group">
+        <button class="filter-btn fillter-type" data-type="소형">소형</button>
+        <button class="filter-btn fillter-type" data-type="세단">세단</button>
+        <button class="filter-btn fillter-type" data-type="SUV">SUV</button>
+        <button class="filter-btn fillter-type" data-type="승합차">승합차</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">연료</div>
+      <div class="filter-group">
+        <button class="filter-btn fillter-fuel" data-fuel="휘발유">휘발유</button>
+        <button class="filter-btn fillter-fuel" data-fuel="경유">경유</button>
+        <button class="filter-btn fillter-fuel" data-fuel="하이브리드">하이브리드</button>
+        <button class="filter-btn fillter-fuel" data-fuel="전기">전기</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">변속기</div>
+      <div class="filter-group">
+        <button class="filter-btn fillter-trans" data-trans="오토">오토</button>
+        <button class="filter-btn fillter-trans" data-trans="수동">수동</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">가격</div>
+      <p class="price-range">0원 ~ 50만원</p>
+      <input type="range" min="0" max="500000" value="500000" class="range-slider car-price">
+    </div>
+  </div>
+  <script>
+    $('.range-slider').on('input', function () {
+      const value = $(this).val(); // ex) 9000
+      const priceInManwon = Math.floor(value / 10000); // ex) 0.9 → 0
+      $('.price-range').text(`0원 ~ ${priceInManwon}만원`);
+    });
+
+  </script>
+</body>
+
+</html>

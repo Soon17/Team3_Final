@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.kh.team3final.dao.RentalDAO">
+
+	<select id="selectAvailableCarList" resultType="kr.kh.team3final.model.dto.AvailableCarDTO" parameterType="map">
+		SELECT 
+			r.RE_NUM     AS rentalId,
+			r.RE_NAME    AS rentalName,
+			ROUND(AVG(rv.RV_RATING), 1) AS avgRating,
+			COUNT(rv.RV_NUM) AS reviewCount,
+			
+			c.CR_ID      AS carId,
+			c.CR_YEAR    AS carYear,
+			c.CR_FUEL_TYPE AS carFuel,
+			c.CR_TRANS   AS carTrans,
+			c.CR_PRICE   AS carPrice,
+			
+			c.CR_THUMBNAIL AS thumbnail
+
+		FROM RENTAL r
+		JOIN CAR c ON r.RE_NUM = c.CR_RE_NUM
+		JOIN CAR_TYPE ct ON c.CR_CT_KEY = ct.CT_KEY
+		LEFT JOIN REVIEW rv ON rv.RV_TABLE_NAME = 'rental' AND rv.RV_NUMBER = r.RE_NUM
+
+		WHERE c.CR_CT_KEY = #{ct_key}
+			AND c.CR_YEAR = #{cr_year}
+			AND c.CR_FUEL_TYPE = #{cr_fuel_type}
+			AND c.CR_TRANS = #{cr_trans}
+
+		GROUP BY r.RE_NUM, c.CR_ID 
+		ORDER BY c.CR_PRICE ASC
+	</select>
+
+</mapper>

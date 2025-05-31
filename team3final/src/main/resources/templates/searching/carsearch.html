@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+   <meta charset="UTF-8">
+   <title>검색</title>
+   <style>
+      .calendar-wrapper {
+         background: white;
+         max-width: 700px;
+         margin: auto;
+         padding: 20px;
+         border-radius: 15px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-header {
+         margin-bottom: 20px;
+         font-size: 18px;
+         font-weight: bold;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+      }
+
+      .calendar-grid {
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 30px;
+         max-height: 600px;
+         overflow-y: auto;
+         padding-right: 10px;
+      }
+
+      .month {
+         border: 1px solid #ddd;
+         border-radius: 10px;
+         padding: 10px;
+         background: #fff;
+      }
+
+      .month h3 {
+         text-align: center;
+         margin: 0 0 10px;
+      }
+
+      .days {
+         display: grid;
+         grid-template-columns: repeat(7, 1fr);
+         gap: 5px;
+      }
+
+      .day,
+      .day-name {
+         text-align: center;
+         padding: 8px 0;
+      }
+
+      .day:hover {
+         cursor: pointer;
+      }
+
+      .day-name {
+         font-weight: bold;
+         background-color: #f8f8f8;
+      }
+
+      .day.disabled {
+         color: #ccc;
+         cursor: not-allowed;
+      }
+
+      .day.selected {
+         background-color: #007aff;
+         color: white;
+         border-radius: 10px;
+      }
+
+      .day.in-range {
+         background-color: rgba(0, 122, 255, 0.3);
+         border-radius: 10px;
+      }
+
+      .apply-btn {
+         width: 100%;
+         padding: 15px;
+         background-color: #007aff;
+         color: white;
+         font-size: 16px;
+         border: none;
+         margin-top: 20px;
+         border-radius: 10px;
+         cursor: pointer;
+      }
+
+      .main-container {
+         background-color: #f5f6f7;
+         font-family: 'Noto Sans KR', sans-serif;
+         width: 100%;
+         padding: 0;
+      }
+
+      .row {
+         max-width: 1032px;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: space-between;
+         margin: 0px auto;
+         padding-top: 40px;
+         padding-bottom: 100px;
+      }
+
+      .search-bar-wrap {
+         width: 100%;
+         background-color: #fff;
+         border-bottom: 1px solid #eee;
+         position: sticky;
+         top: 0;
+         z-index: 1000;
+         transition: transform 0.3s ease;
+         overflow: hidden;
+      }
+
+      .search-bar-inner {
+         padding: 10px 0;
+         display: flex;
+         gap: 20px;
+         height: 80px;
+         align-items: center;
+         box-sizing: border-box;
+         cursor: pointer;
+         justify-content: center;
+      }
+
+      .search-input {
+         width: 450px;
+         padding: 12px 16px;
+         background-color: #f8f8f8;
+         border: 1px solid #ddd;
+         border-radius: 5px;
+         font-size: 14px;
+         font-weight: bold;
+      }
+
+      .search-btn {
+         padding: 12px 20px;
+         background-color: #007bff;
+         color: white;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         font-weight: 600;
+      }
+
+      .search-box-area {
+         width: 100%;
+         max-width: 330px;
+         margin-right: 20px;
+         position: fixed;
+         transition: transform 0.3s ease;
+         top: 0;
+      }
+
+      .container-box {
+         background-color: #f5f6f7;
+         border-radius: 10px;
+         width: 100%;
+         max-width: 680px;
+         padding-right: 0;
+      }
+
+      .sort-options {
+         display: flex;
+         gap: 16px;
+         background: white;
+         padding: 5px 15px;
+         border-radius: 30px;
+         justify-content: flex-end;
+      }
+
+      .sort-options label {
+         display: flex;
+         align-items: center;
+         cursor: pointer;
+         font-size: 14px;
+         color: #666;
+         font-weight: 400;
+         font-size: 12px;
+         margin: 0;
+      }
+
+      .sort-options input[type="radio"] {
+         appearance: none;
+         width: 12px;
+         height: 12px;
+         border: 2px solid #ccc;
+         border-radius: 50%;
+         margin-right: 2px;
+         cursor: pointer;
+      }
+
+      .sort-options input[type="radio"]:checked::before {
+         content: '';
+         display: block;
+         width: 100%;
+         height: 100%;
+         background-color: #4564b8;
+         border-radius: 50%;
+      }
+
+      .card-link {
+         display: flex;
+         justify-content: flex-start;
+         align-items: center;
+         background: #fff;
+         border-radius: 12px;
+         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+         padding: 20px 15px;
+         margin-bottom: 24px;
+         gap: 24px;
+         text-decoration: none;
+         color: inherit;
+         width: 100%;
+      }
+
+      .poto {
+         width: 250px;
+         height: 140px;
+         border-radius: 10px;
+         object-fit: cover;
+      }
+
+      .car-info {
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         height: 100%;
+         max-width: 400px;
+         width: 100%;
+      }
+
+      .car-name {
+         font-size: 20px;
+         font-weight: bold;
+         color: #222;
+      }
+
+      .car-info span:nth-child(2) {
+         font-size: 15px;
+         color: #555;
+      }
+
+      .price {
+         color: #d64545;
+         font-size: 18px;
+         font-weight: bold;
+      }
+
+      .car-price {
+         margin-top: auto;
+         font-size: 14px;
+         color: #999;
+         display: flex;
+         justify-content: flex-end;
+         align-items: flex-end;
+      }
+
+      .mobile-header {
+         display: none;
+         padding: 16px;
+         background: #fff;
+         font-size: 14px;
+         border-bottom: 1px solid #eee;
+         flex-direction: column;
+         gap: 4px;
+      }
+
+      .im {
+         display: flex;
+         justify-content: center;
+      }
+
+      .mobile-sort-bar {
+         display: none;
+      }
+
+
+      @media screen and (max-width: 1080px) {
+         header {
+            display: none;
+         }
+
+         .search-bar-wrap {
+            display: none;
+         }
+
+         div.d-flex.justify-content-between.align-items-center.mb-2 {
+            display: none !important;
+         }
+
+         .mobile-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 30px;
+            align-items: center;
+            font-size: 14px;
+         }
+
+         .row {
+            align-content: center;
+            flex-direction: column;
+            padding-top: 10px !important;
+         }
+
+         .container-box {
+            margin-top: 10px;
+            max-width: 970px !important;
+            width: 100% !important;
+         }
+
+         .car-info {
+            max-width: 800px !important;
+            width: 100%;
+            padding: 0px 15px !important;
+         }
+
+         .search-box-area {
+            display: none;
+         }
+
+         .mobile-sort-bar {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 30px;
+            background-color: #fff;
+            font-size: 12px;
+         }
+
+         .mobile-sort-bar button,
+         .mobile-sort-bar select {
+            padding: 6px 10px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+            white-space: nowrap;
+            margin-bottom: 10px;
+         }
+
+         .mobile-sort-bar .toggle-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            margin-left: auto;
+         }
+
+         .mobile-sort-bar .count {
+            font-size: 12px;
+            color: #555;
+         }
+
+         #region {
+            width: 100%;
+            max-width: 340px;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: 500;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 18px;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+         }
+
+         #region:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            outline: none;
+         }
+
+      }
+
+      @media screen and (max-width: 720px) {
+         .card-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+         }
+
+         .poto {
+            width: 100% !important;
+            max-width: 520px !important;
+            height: 200px !important;
+            object-fit: cover !important;
+            display: block !important;
+         }
+
+         .car-info {
+            padding: 10px 0px !important;
+            align-items: center;
+            text-align: center;
+         }
+
+         .car-price {
+            margin-top: 10px;
+         }
+
+         .car-thumbnail {
+            width: 100%;
+            max-width: 520px;
+            height: 200px;
+         }
+      }
+
+
+
+      .counter-header {
+         font-size: 20px;
+         font-weight: bold;
+         margin-bottom: 15px;
+      }
+
+      .counter-row {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 15px 0;
+         border-bottom: 1px solid #eee;
+      }
+
+      .counter-row:last-child {
+         border-bottom: none;
+      }
+
+      .counter-label {
+         font-size: 16px;
+      }
+
+      .counter-subtext {
+         font-size: 12px;
+         color: #666;
+         margin-top: 3px;
+      }
+
+      .counter-controls {
+         display: flex;
+         align-items: center;
+         gap: 10px;
+      }
+
+      .counter-btn {
+         width: 32px;
+         height: 32px;
+         line-height: 32px;
+         text-align: center;
+         background: #eee;
+         border-radius: 50%;
+         font-weight: bold;
+         font-size: 22px;
+         user-select: none;
+         cursor: pointer;
+         transition: background 0.3s;
+      }
+
+      .counter-btn:hover {
+         background: #007aff;
+         color: white;
+      }
+
+      .count-value {
+         min-width: 30px;
+         text-align: center;
+         font-size: 16px;
+         user-select: none;
+      }
+
+      #confirm-btn {
+         width: 100%;
+         padding: 14px;
+         margin-top: 25px;
+         border: none;
+         background-color: #007aff;
+         color: white;
+         font-size: 18px;
+         border-radius: 10px;
+         cursor: pointer;
+         user-select: none;
+         transition: background-color 0.3s;
+      }
+
+      #confirm-btn:hover {
+         background-color: #005bb5;
+      }
+
+      .search-trigger {
+         padding: 4px 10px;
+         background-color: #f1f3f5;
+         color: #333;
+         font-size: 13px;
+         border-radius: 6px;
+         font-weight: 500;
+         border: 1px solid #ccc;
+         margin-left: 6px;
+      }
+
+      .search-trigger:hover {
+         cursor: pointer;
+         background-color: #e9ecef;
+      }
+
+      #mobile-calendar:hover {
+         cursor: pointer;
+      }
+   </style>
+</head>
+
+<body>
+   <main layout:fragment="content" class="main-container"><!--메인-->
+      <div class="search-bar-wrap"><!--헤더 검색창-->
+
+         <div class="search-bar-inner">
+            <select name="rg_name" id="region" class="search-input">
+               <!-- 첫 번째: 서버에서 넘어온 선택 값 -->
+               <option th:if="${rg_name != null}" th:value="${rg_name}" th:text="${rg_name}"></option>
+
+               <!-- 나머지 지역 리스트 -->
+               <option th:each="rg : ${regionList}" th:if="${rg.rg_name != rg_name}" th:value="${rg.rg_name}"
+                  th:text="${rg.rg_name}"></option>
+            </select>
+            <div class="search-input" data-toggle="modal" data-target="#calendarModal">
+               <i class="fas fa-list-alt"></i>
+               <span id="checkTime">[[${checkTime}]]</span>
+            </div>
+            <input type="hidden" name="checkTime" id="hiddenCheckTime" th:value="${checkTime}" />
+            <button type="button" class="search-btn">검색</button>
+         </div>
+
+      </div>
+      <!-- 모바일 전용 헤더 -->
+      <div class="mobile-header">
+         <select name="rg_name" id="region" class="search-input">
+            <option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
+         </select>
+         <div class="mobile-header-bottom">
+            <span id="mobile-calendar" data-toggle="modal" data-target="#calendarModal" th:text="${checkTime}"></span>
+            <span class="search-trigger" id="mobile">
+               <i class="uil uil-search-alt"></i> 검색
+            </span>
+         </div>
+         <div id="modal"
+            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index: 999999999;">
+            <div id="modal-content" style="width:366px; margin:100px auto; background:#fff; padding:20px;">
+
+            </div>
+         </div>
+      </div>
+      <div class="mobile-sort-bar">
+         <div class="sort-top">
+            <div class="left-buttons">
+               <select name="sort">
+                  <option value="추천순">추천순</option>
+                  <option value="신차순">신차순</option>
+                  <option value="가격순">가격순</option>
+               </select>
+               <button id="openModalBtn">🛠 필터</button>
+            </div>
+            <div class="sort-bottom">
+               <span id="mobile-loSize" class="count">차량 [[${carList.size()}]]개</span>
+            </div>
+         </div>
+      </div>
+
+      <div class="row">
+         <div id="carsearch-carfind" class="search-box-area" style="position: relative; overflow: visible;">
+            <!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+         </div>
+         <div class="col-md-10 container-box">
+            <div class="d-flex justify-content-between align-items-center mb-2" style="gap: 100px;">
+               <div>
+                  <h5 class="mb-0">검색결과</h5>
+                  <small class="text-muted" id="lodging-size">차량 [[${carList.size()}]]개</small>
+               </div>
+               <div class="sort-options">
+                  <label><input type="radio" name="sort" value="추천순" checked> <span>추천순</span></label>
+                  <label><input type="radio" name="sort" value="신차순"> <span>신차순</span></label>
+                  <label><input type="radio" name="sort" value="가격순"> <span>가격순</span></label>
+               </div>
+            </div>
+            <div id="car_ajx">
+               <!-- Ajax로 차  처음 검색한 데이터는 있고 다음부터 바뀜-->
+               <div class="im" th:each="cr : ${carList}">
+                  <a href="#" class="card-link" th:data-cr-year="${cr.cr_year}" th:data-cr-fuel="${cr.cr_fuel_type}"
+                     th:data-cr-trans="${cr.cr_trans}" th:data-ct-key="${cr.ct_key}">
+                     <!-- 이미지 왼쪽 -->
+                     <div class="car-thumbnail">
+                        <img class="poto" th:src="@{'/resources/static/imgs/' + ${cr.cr_thumbnail}}" alt="대표 이미지">
+                     </div>
+
+                     <!-- 텍스트 오른쪽 -->
+                     <div class="car-info">
+                        <div class="car-up">
+                           <span class="car-name" th:text="${cr.ct_name}">차종명</span>
+                           <div>
+                              <span th:text="${cr.cr_year + '년식 / ' + cr.cr_fuel_type + ' / ' + cr.cr_trans}">정보</span>
+                           </div>
+                        </div>
+                        <div class="car-price">
+                           <span class="price" th:text="${cr.cr_price + '원'}">0원</span>/1박
+                        </div>
+                     </div>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--날짜모달-->
+      <div class="modal" id="calendarModal">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal 헤더 -->
+               <div class="modal-header">
+                  <div>
+                     <span id="start-date">날짜 선택</span> ~ <span id="end-date"></span>
+                  </div>
+                  <div class="nights" id="nights"></div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <!-- Modal 바디 -->
+               <div class="modal-body">
+                  <div class="calendar-wrapper">
+                     <div id="calendar-grid" class="calendar-grid"></div>
+                  </div>
+               </div>
+               <!-- Modal 푸터 -->
+               <div class="modal-footer justify-content-center">
+                  <button type="button" class="apply-btn" onclick="applySelection()" data-dismiss="modal">적용하기</button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!--url이동-->
+      <script>
+         function updateCardLinks() {
+            const region = $('#region').val();
+            const checkTime = $('#checkTime').text().trim();
+            const qR = encodeURIComponent(region || '');
+            const qT = encodeURIComponent(checkTime || '');
+
+            $('.card-link').each(function () {
+               const ctKey = $(this).data('ct-key');
+               const year = $(this).data('cr-year');
+               const fuel = encodeURIComponent($(this).data('cr-fuel'));
+               const trans = encodeURIComponent($(this).data('cr-trans'));
+
+               $(this).attr('href',
+                  `/searching/rentsearch?rg_name=${qR}` +
+                  `&checkTime=${qT}` +
+                  `&ct_key=${ctKey}` +
+                  `&cr_year=${year}` +
+                  `&cr_fuel_type=${fuel}` +
+                  `&cr_trans=${trans}`
+               );
+            });
+         }
+
+         $(document).ready(updateCardLinks);
+      </script>
+
+      <!--왼쪽 검색-->
+      <script>
+         $(document).on('click', ".filter-btn", function () {
+            const section = $(this).parents('.section').find('.section-title').text().trim();
+
+            if (section === '자동차종류') {
+               let dataType = $(this).data("type");
+               $(`[data-type=${dataType}]`).toggleClass("active");
+            }
+            if (section === '연료') {
+               let dataFuel = $(this).data("fuel");
+               $(`[data-fuel=${dataFuel}]`).toggleClass("active");
+            }
+
+            if (section === '변속기') {
+               let dataTrans = $(this).data("trans");
+               $(`[data-trans=${dataTrans}]`).toggleClass("active");
+            }
+
+            getCarList();
+         });
+
+         $(document).on('click', '.name-search', function () {
+            $(".search-ct-name").val($(this).siblings('.search-ct-name').val());
+            getCarList();
+         });
+
+         $(".search-btn").on('click', function () {
+            getCarList();
+            updateCardLinks();
+         });
+
+         $(document).on('input', '.car-price', function () {
+            $(".car-price").val($(this).val());
+            getCarList();
+         });
+
+         $("[name = sort]").on('change', function () {
+            let obj = { sort: $(this).val() }
+            if ($(this).filter("select").length == 0) {
+               $("select[name=sort]").val(obj.sort)
+            } else {
+               $("input[name=sort]").each(function () {
+                  if ($(this).val() == obj.sort) {
+                     $(this).prop("checked", true)
+                  }
+               });
+            }
+            getCarList(obj);
+         });
+
+         function getCarList(obj) {
+            let ct_name = $(".search-ct-name").val();
+            let types = [];
+            $('.filter-btn.fillter-type.active').each(function () {
+               types.push($(this).data('type'));
+            });
+            let fuels = [];
+            $('.filter-btn.fillter-fuel.active').each(function () {
+               fuels.push($(this).data('fuel'));
+            });
+            let trans = [];
+            $('.filter-btn.fillter-trans.active').each(function () {
+               trans.push($(this).data('trans'));
+            });
+            let price = $(".car-price").val();
+            const sort = obj && obj.sort ? obj.sort : $("[name=sort]:checked").val();
+            const checkTime = $("#checkTime").text();
+            const rg_name = $("#region").val();
+
+            let cri = {
+               rg_name: rg_name,
+               checkTime: checkTime,
+               sort: sort,
+               ct_type: types,
+               cr_fuel_type: fuels,
+               cr_trans: trans,
+               price: price,
+               ct_name: ct_name
+            }
+
+            //조각
+            $.ajax({
+               url: '/searching/car',
+               type: 'GET',
+               data: cri,
+               success: function (data) {
+                  $('#car_ajx').html(data);
+
+                  const carSize = $('#car-size').val();
+                  // PC 헤더
+                  $('#lodging-size').text('차량 ' + carSize + '개');
+                  // 모바일 헤더
+                  $('#mobile-loSize').text('차량 ' + carSize + '개');
+
+                  updateCardLinks();
+               }
+            });
+         }
+         function toggleDetailAll() {
+            $.ajax({
+               url: '/searching/carfind', // 차량 상세 ajax 요청 URL로 수정
+               type: 'GET',
+               success: function (data) {
+                  $('#search-find').html(data); // 결과 영역 id 유지 또는 맞게 수정
+               }
+            });
+         }
+
+         $(document).ready(function () {
+            toggleDetailAll();
+            updateCardLinks(); // 차량 카드 링크 초기화 함수
+
+            let lastScrollTop = 0;
+            const searchBarWrap = document.querySelector('.search-bar-wrap');
+            const mobileSortBar = document.querySelector('.mobile-sort-bar');
+            const searchBoxArea = document.querySelector('.search-box-area');
+
+            if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+
+            window.addEventListener('scroll', function () {
+               const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+               if (currentScroll === 0) {
+                  searchBarWrap.style.transform = 'translateY(0)';
+                  searchBarWrap.style.opacity = '1';
+                  if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
+                  if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0px)';
+               } else if (currentScroll < lastScrollTop) {
+                  searchBarWrap.style.transform = 'translateY(0)';
+                  searchBarWrap.style.opacity = '1';
+                  if (mobileSortBar) mobileSortBar.style.transform = 'translateY(0)';
+                  if (searchBoxArea) searchBoxArea.style.transform = 'translateY(80px)';
+               } else {
+                  searchBarWrap.style.transform = 'translateY(-100%)';
+                  searchBarWrap.style.opacity = '0';
+                  if (mobileSortBar) mobileSortBar.style.transform = 'translateY(-100%)';
+                  if (searchBoxArea) searchBoxArea.style.transform = 'translateY(0)';
+               }
+
+               lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+         });
+
+         const today = new Date();
+         today.setHours(0, 0, 0, 0);
+
+         let selectedStart = null;
+         let selectedEnd = null;
+
+         function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const w = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+            return `${y}.${m}.${d}(${w})`;
+         }
+
+         function createCalendar(year, month) {
+            const $monthContainer = $('<div class="month"></div>');
+            const $monthTitle = $('<h3></h3>').text(`${year}.${month + 1}`);
+            const $daysGrid = $('<div class="days"></div>');
+
+            const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+            $.each(dayNames, (_, day) => {
+               $daysGrid.append($('<div class="day-name"></div>').text(day));
+            });
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+               $daysGrid.append('<div></div>');
+            }
+
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+               const date = new Date(year, month, d);
+               const $dayEl = $('<div class="day"></div>').text(d);
+
+               if (date < today) {
+                  $dayEl.addClass('disabled');
+               } else {
+                  $dayEl.on('click', function () {
+                     selectDate(date);
+                  });
+               }
+
+               $daysGrid.append($dayEl);
+            }
+
+            $monthContainer.append($monthTitle).append($daysGrid);
+            $('#calendar-grid').append($monthContainer);
+         }
+
+         function renderCalendars() {
+            const startYear = today.getFullYear();
+            const startMonth = today.getMonth();
+
+            for (let i = 0; i < 12; i++) {
+               const year = startYear + Math.floor((startMonth + i) / 12);
+               const month = (startMonth + i) % 12;
+               createCalendar(year, month);
+            }
+         }
+
+         function selectDate(date) {
+            if (!selectedStart || (selectedStart && selectedEnd)) {
+               selectedStart = date;
+               selectedEnd = null;
+            } else {
+               if (date < selectedStart) {
+                  selectedStart = date;
+                  selectedEnd = null;
+               } else {
+                  const diff = (date - selectedStart) / (1000 * 60 * 60 * 24);
+                  if (diff > 30) {
+                     alert('최대 30일까지만 선택 가능합니다.');
+                     return;
+                  }
+                  selectedEnd = date;
+               }
+            }
+            updateSelection();
+         }
+
+         //달력에 날짜 표시
+         function parseDate(dateStr) {
+            if (!dateStr || !dateStr.includes('.')) return null;
+
+            const [ymd] = dateStr.split('(');
+            const [y, m, d] = ymd.split('.').map(Number);
+            return new Date(y, m - 1, d);
+         }
+
+         $(document).ready(function () {
+            renderCalendars();
+
+            // URL 파라미터로부터 초기값 설정
+            const params = new URLSearchParams(window.location.search);
+            const checkTime = params.get("checkTime");
+
+            if (checkTime) {
+               const [startStr, endStr] = checkTime.split("~").map(s => s.trim());
+               $('#start-date').text(startStr);
+               $('#end-date').text(endStr);
+
+               selectedStart = parseDate(startStr);
+               selectedEnd = parseDate(endStr);
+
+               // 달력에 선택 표시
+               updateSelection();
+            }
+         });
+
+         function updateSelection() {
+            $('.day').removeClass('selected in-range');
+
+            if (selectedStart) {
+               $('.month').each(function () {
+                  const [year, month] = $(this).find('h3').text().split('.').map(Number);
+                  $(this).find('.day').each(function () {
+                     const dayNum = parseInt($(this).text());
+                     const date = new Date(year, month - 1, dayNum);
+
+                     if (selectedStart && !selectedEnd && date.getTime() === selectedStart.getTime()) {
+                        $(this).addClass('selected');
+                     }
+                     if (selectedStart && selectedEnd) {
+                        if (date.getTime() === selectedStart.getTime() || date.getTime() === selectedEnd.getTime()) {
+                           $(this).addClass('selected');
+                        } else if (date > selectedStart && date < selectedEnd) {
+                           $(this).addClass('in-range');
+                        }
+                     }
+                  });
+               });
+            }
+
+            $('#start-date').text(selectedStart ? formatDate(selectedStart) : '날짜 선택');
+            $('#end-date').text(selectedEnd ? formatDate(selectedEnd) : '');
+            if (selectedStart && selectedEnd) {
+               const nights = (selectedEnd - selectedStart) / (1000 * 60 * 60 * 24);
+               $('#nights').text(`${nights}박`);
+            } else {
+               $('#nights').text('');
+            }
+         }
+
+         function applySelection() {
+            if (selectedStart && selectedEnd) {
+               //아이디를 해당 인풋 아이디로 하시면 도ㅣ요
+               $('#checkTime').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+               $('#mobile-calendar').text(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+               $('#hiddenCheckTime').val(`${formatDate(selectedStart)} ~ ${formatDate(selectedEnd)}`);
+
+            } else {
+               alert('날짜를 선택해주세요.');
+            }
+         }
+
+         $(document).ready(function () {
+            renderCalendars();
+         });
+      </script>
+      <script>
+         // 모달 내용 로드
+         $("#modal-content").load("/searching/carfind");
+
+         // 모달 열기
+         $("#openModalBtn").on("click", function () {
+            $("#modal").show();
+         });
+
+         // 모달 바깥 클릭 시 닫기
+         $("#modal").on("click", function (e) {
+            if (!$(e.target).closest("#modal-content").length) {
+               $("#modal").hide();
+            }
+         });
+      </script>
+
+      <script>
+         function toggleDetailAll() {
+            $.ajax({
+               url: '/searching/carfind',
+               type: 'GET',
+               success: function (data) {
+                  $('#carsearch-carfind').html(data);
+
+                  // 버튼 활성화 토글 (연료, 변속기 등 필터용)
+                  $('.filter-btn').on('click', function () {
+                  });
+               },
+            });
+         }
+
+         $(document).ready(function () {
+            toggleDetailAll();
+
+            let lastScrollTop = 0;
+            const $searchBarWrap = $('.search-bar-wrap');
+            const $mobileSortBar = $('.mobile-sort-bar');
+            const $searchBoxArea = $('.search-box-area');
+
+            // 초기 위치 설정
+            $searchBoxArea.css('transform', 'translateY(0px)');
+
+            $(window).on('scroll', function () {
+               const currentScroll = $(this).scrollTop();
+
+               if (currentScroll === 0) {
+                  // 맨 위
+                  $searchBarWrap.css({ transform: 'translateY(0)', opacity: '1' });
+                  $mobileSortBar.css('transform', 'translateY(0)');
+                  $searchBoxArea.css('transform', 'translateY(0px)');
+               } else if (currentScroll < lastScrollTop) {
+                  // 스크롤 위로
+                  $searchBarWrap.css({ transform: 'translateY(0)', opacity: '1' });
+                  $mobileSortBar.css('transform', 'translateY(0)');
+                  $searchBoxArea.css('transform', 'translateY(80px)');
+               } else {
+                  // 스크롤 아래로
+                  $searchBarWrap.css({ transform: 'translateY(-100%)', opacity: '0' });
+                  $mobileSortBar.css('transform', 'translateY(-100%)');
+                  $searchBoxArea.css('transform', 'translateY(0)');
+               }
+
+               lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+         });
+      </script>
+
+   </main>
+</body>
+
+</html>
