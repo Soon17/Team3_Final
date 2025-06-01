@@ -11,5 +11,8 @@ public interface RentalDAO {
       @Param("ct_key") int ct_key,
       @Param("cr_year") int cr_year,
       @Param("cr_fuel_type") String cr_fuel_type,
-      @Param("cr_trans") String cr_trans);
+      @Param("cr_trans") String cr_trans,
+      @Param("checkin") String checkin,
+      @Param("checkout") String checkout,
+      @Param("rg_name") String rg_name);
 }

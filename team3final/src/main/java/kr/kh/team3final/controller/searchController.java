@@ -117,19 +117,25 @@ public class SearchController {
 			@RequestParam String cr_trans,
 			Model model) {
 
-		model.addAttribute("rg_name", rg_name);
-		model.addAttribute("checkTime", checkTime);
+		String[] times = checkTime.split(" ~ ");
+		String checkin = times[0];
+		String checkout = times[1];
 
 		// 차량 상단 정보 (썸네일, 이름, 가격범위 등)
 		Map<String, Object> carTop = carService.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans);
-		model.addAttribute("carTop", carTop);
 
 		// DTO 기반 렌탈 리스트
-		List<AvailableCarDTO> rentalList = rentalService.getAvailableCarList(ct_key, cr_year, cr_fuel_type, cr_trans);
-		model.addAttribute("rentalList", rentalList);
+		List<AvailableCarDTO> rentalList = rentalService.getAvailableCarList(ct_key, cr_year, cr_fuel_type, cr_trans,
+				checkin, checkout, rg_name);
 
 		List<RegionVO> regionList = regionService.getRegionList(); // 전체 지역 가져오는 메서드
+
+		model.addAttribute("rg_name", rg_name);
+		model.addAttribute("checkTime", checkTime);
+		model.addAttribute("carTop", carTop);
+		model.addAttribute("rentalList", rentalList);
 		model.addAttribute("regionList", regionList);
+
 		return "searching/rentsearch";
 	}
 
