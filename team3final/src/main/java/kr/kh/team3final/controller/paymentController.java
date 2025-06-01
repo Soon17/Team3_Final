@@ -81,7 +81,15 @@ public class PaymentController {
 		model.addAttribute("rm_name", rm_name);
 		return "pay/summary";
 	}
+	@GetMapping("/rent/payment")
+	public String rentPayment() {
+		return "rentPay/payment";
+	}
 
+	@GetMapping("/rent/summary")
+	public String rentPaymentSummary() {
+		return "rentPay/summary";
+	}
 	private static String parseDate(String checkTime) {
 		// 예: "2025.06.02(월)"
 		String datePart = checkTime.substring(5, 10); // "06.02"
