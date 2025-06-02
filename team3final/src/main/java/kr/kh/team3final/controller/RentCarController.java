@@ -26,5 +26,13 @@ public class RentCarController {
 	public String detailSummary(@RequestParam String param) {
 		return new String();
 	}
-	
+	@GetMapping("/payment")
+	public String rentPayment() {
+		return "rentPay/payment";
+	}
+
+	@GetMapping("/summary")
+	public String rentPaymentSummary() {
+		return "rentPay/summary";
+	}
 }

@@ -128,30 +128,26 @@
 							style="font-size: 20px">ct_name</h5>
 						<div class="d-flex justify-content-center align-items-center border-bottom pb-2" style="gap: 32px;">
 							<div class="text-center mx-5">
-								<small class="text-muted">체크인</small>
+								<small class="text-muted">대여일</small>
 								<div style="font-weight: bold;" class="check-in">checkIn</div>
 								<div style="font-size: 0.9rem;">15:00 ~</div>
 							</div>
 							<div class="text-center mx-5">
 								<span class="badge badge-light night">1박</span>
 							</div>
-							<div class="text-center mx-5">
-								<small class="text-muted">체크아웃</small>
+							<div class="text-center mx-5" >
+								<small class="text-muted">반납일</small>
 								<div style="font-weight: bold;"  class="check-out">checkOUt</div>
 								<div style="font-size: 0.9rem;">11:00 까지</div>
 							</div>
 						</div>
-						<div class="d-flex align-items-center border-bottom py-3">
+						<div class="d-flex align-items-center pt-3">
 							<div style="font-weight: bold; margin-right: 100px;">보험정보</div>
 							<div class="rm-name" >보험 이름 가격</div>
 						</div>
-						<div class="d-flex align-items-center pt-3">
-							<div style="font-weight: bold; margin-right: 128px;">인원</div>
-							<div class="lr-rm-person">[[${rm_person}]]명</div>
-						</div>
 					</form>
 					<form id="reservationForm">
-						<h5 class="in">예약자 정보</h5>
+						<h5 class="in">운전자 정보</h5>
 						<div class="form-group">
 							<label>이름</label>
 							<input type="text" name="reserverName" class="form-control" placeholder="성명">
@@ -162,74 +158,25 @@
 							<input type="text" name="reserverPhone" class="form-control" placeholder="예: 010-1234-5678">
 							<div class="invalid-feedback">형식에 맞는 휴대폰 번호를 입력해주세요.</div>
 						</div>
-						<h5 class="in">숙박자 정보</h5>
-						<div class="form-check my-3">
-							<input class="form-check-input" type="checkbox" id="sameInfo" checked>
-							<label class="option-label" for="sameInfo">숙박자와 예약자 정보가 같습니다</label>
-						</div>
 						<div class="form-group">
-							<label>이름</label>
-							<input type="text" name="guestName" class="form-control" placeholder="성명">
-							<div class="invalid-feedback">이름을 정확히 입력해주세요.</div>
+							<label>셍년월일</label>
+							<input type="text" name="reserverPhone" class="form-control" placeholder="예: yyyyMMdd">
+							<div class="invalid-feedback">형식에 맞는 생년월일을 입력해주세요.</div>
 						</div>
-						<div class="form-group">
-							<label>휴대폰 번호</label>
-							<input type="text" name="guestPhone" class="form-control" placeholder="예: 010-1234-5678">
-							<div class="invalid-feedback">형식에 맞는 휴대폰 번호를 입력해주세요.</div>
-						</div>
-					</form>
-					<!-- 호텔 요청사항 쪽-->
-					<form>
-						<h5 class="mt-5 mb-3">호텔 요청사항</h5>
-						<div class="d-flex flex-wrap">
-							<div class="form-check mb-2" style="width: 50%;" th:each="choice : ${choiceOptions}">
-								<input class="form-check-input choice-check" type="checkbox"  th:value="${choice.co_num}" th:data-co-do-name="${choice.co_do_name}">
-								<label class="option-label"  th:text="${choice.co_do_name}"></label>
-							</div>
-							<!-- <div class="form-check mb-2" style="width: 50%;">
-								<input class="form-check-input" type="checkbox" id="opt2">
-								<label class="option-label" for="opt2">옵션 2</label>
-							</div>
-							<div class="form-check mb-2" style="width: 50%;">
-								<input class="form-check-input" type="checkbox" id="opt3">
-								<label class="option-label" for="opt3">옵션 3</label>
-							</div>
-							<div class="form-check mb-2" style="width: 50%;">
-								<input class="form-check-input" type="checkbox" id="opt4">
-								<label class="option-label" for="opt4">옵션 4</label>
-							</div>
-							<div class="form-check mb-2" style="width: 50%;">
-								<input class="form-check-input" type="checkbox" id="opt5">
-								<label class="option-label" for="opt5">옵션 5</label>
-							</div>
-							<div class="form-check mb-2" style="width: 50%;">
-								<input class="form-check-input" type="checkbox" id="opt6">
-								<label class="option-label" for="opt6">옵션 6</label>
-							</div> -->
-						</div>
+						
 					</form>
 					<!-- 호텔 요청사항 쪽 끝-->
 					<form>
 						<div class="mt-5">
-							<h5 class="mb-4">객실 정보 안내</h5>
+							<h5 class="mb-4">렌트 정보 안내</h5>
 							<div class="d-flex border rounded p-3 mb-4" style="background-color: #fafafa;">
 								<div class="w-50 text-center border-right">
-									<div class="text-muted mb-1">체크인</div>
+									<div class="text-muted mb-1">대여일</div>
 									<div style="font-weight: 500; color: #4564b8d2;">15:00 ~ 자정</div>
 								</div>
 								<div class="w-50 text-center">
-									<div class="text-muted mb-1">체크아웃</div>
+									<div class="text-muted mb-1">반납일</div>
 									<div style="font-weight: 500; color: #4564b8d2;">11:00 까지</div>
-								</div>
-							</div>
-							<div class="mb-3">
-								<strong>주요 안내사항</strong>
-								<div class="mt-2 text-muted" style="
-									font-size: 0.95rem;
-									line-height: 1.5;
-									white-space: pre-line;
-									word-break: keep-all;
-								" th:text="${lodging.ld_infor}">
 								</div>
 							</div>
 						</div>
@@ -238,17 +185,17 @@
 						<h5 class="mb-4 mt-5">결제 정보</h5>
 						<!-- 총 상품금액 -->
 						<div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
-							<div class="text-muted">총 상품금액</div>
+							<div class="text-muted">총 대여금액</div>
 							<div class="d-flex align-items-center" style="gap: 4px;">
-								<div style="font-weight: bold;" class="room-total-price" th:text="${room.rm_price}"></div>
+								<div style="font-weight: bold;" class="room-total-price" >ㅎㅎ</div>
 								<img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
 							</div>
 						</div>
 						<!-- 호텔 숙박 요금 -->
 						<div class="priceDetail" style="display: none; font-size: 13px;">
 							<div class="d-flex justify-content-between bg-light p-2 rounded mb-1">
-								<div class="text-muted">1박 숙박 요금</div>
-								<div class="text-muted room-rm-price" th:text="${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"></div>
+								<div class="text-muted">1일 대여 요금</div>
+								<div class="text-muted room-rm-price" >원</div>
 							</div>
 						</div>
 						<hr>
@@ -287,12 +234,13 @@
 		
 		<script>
 			$(document).ready(function () {
+				
 				$(".priceDetail").hide();
 				$(".arrowImg").attr("src", "/resources/static/imgs/small-down.png");
 				let rm_name = $(".rm-name").text();
-				alert(1);
+				
 				$.ajax({
-					url: '/pay/rent/summary',
+					url: '/rent/summary',
 					// data : {rm_name : rm_name},
 					type: 'GET',
 					success: function (data) {
