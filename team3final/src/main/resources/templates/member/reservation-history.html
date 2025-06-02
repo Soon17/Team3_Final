@@ -232,32 +232,56 @@
 				}
 
 				reservations.forEach(res => {
-						const row = `
-								<tr>
-									<td>${res.lr_me_name}</td>
-									<td>${res.lr_state}</td>
-									<td>${res.lr_ld_name}</td>
-									<td>${res.lr_rm_name}</td>
-									<td>${formatDate(res.lr_checkin)} - ${formatDate(res.lr_checkout)}</td>
-									<td>${res.lr_booker_name}(${res.lr_count})</td>
-									<td>${res.lr_guest_name}</td>
-									<td>${res.lr_total_price}</td>
-									<td>${res.lr_total_price}</td>
-									<td>${formatDateTime(res.lr_date)}</td>
-									<td>
-										<button
-											type="button"
-											class="btn btn-outline-success review-btn"
-											data-lr-num="${res.lr_num}"
-											data-lodging-name="${res.lr_ld_name}"
-											data-room-name="${res.lr_rm_name}"
-											onclick="openReviewModal(this)">
-											리뷰 작성
-										</button>
-									</td>
-								</tr>
-							`;
-						$list.append(row);
+					const checkoutDate = new Date(res.lr_checkout);
+					const today = new Date();
+
+					checkoutDate.setHours(0, 0, 0, 0);
+					today.setHours(0, 0, 0, 0);
+
+					let reviewBtnHtml = "";
+
+					if (today > checkoutDate) {
+						// 리뷰 가능
+						reviewBtnHtml = `
+							<button
+								type="button"
+								class="btn btn-outline-success review-btn"
+								data-lr-num="${res.lr_num}"
+								data-lodging-name="${res.lr_ld_name}"
+								data-room-name="${res.lr_rm_name}"
+								onclick="openReviewModal(this)">
+								리뷰 작성
+							</button>
+						`;
+					} else {
+						// 리뷰 불가능 - 클릭하면 경고창
+						reviewBtnHtml = `
+							<button
+								type="button"
+								class="btn btn-secondary"
+								onclick="alert('체크아웃 이후에 리뷰 작성이 가능합니다.')">
+								리뷰 작성 (불가)
+							</button>
+						`;
+					}
+
+					const row = `
+						<tr>
+							<td>${res.lr_me_name}</td>
+							<td>${res.lr_state}</td>
+							<td>${res.lr_ld_name}</td>
+							<td>${res.lr_rm_name}</td>
+							<td>${formatDate(res.lr_checkin)} - ${formatDate(res.lr_checkout)}</td>
+							<td>${res.lr_booker_name}(${res.lr_count})</td>
+							<td>${res.lr_guest_name}</td>
+							<td>${res.lr_total_price}</td>
+							<td>${res.lr_total_price}</td>
+							<td>${formatDateTime(res.lr_date)}</td>
+							<td>${reviewBtnHtml}</td>
+						</tr>
+					`;
+
+					$list.append(row);
 				});
 			}
 

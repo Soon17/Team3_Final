@@ -37,8 +37,8 @@ public class ReviewService {
 		return reviewDAO.insertReview(review);
 	}
 
-	public ReviewVO detailReview(int rvNumber, int me_num) {
-		return reviewDAO.detailReview(rvNumber, me_num);
+	public ReviewVO detailReview(int rvNumber, int me_num, String tableName) {
+		return reviewDAO.detailReview(rvNumber, me_num, tableName);
 	}
 
 	public int updateReview(ReviewVO review) {

@@ -82,25 +82,28 @@ public class MemberController {
 	}
 
 	@GetMapping("/view-review")
-	public String viewReview(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2User) {
+	public String viewReview(Model model, 
+													@AuthenticationPrincipal CustomUser user, 
+													@AuthenticationPrincipal OAuth2User oauth2User) {
 		Integer meNum = null;
+
 		if(user != null) {
 			meNum = user.getUser().getMe_num();
+			model.addAttribute("user", user.getUser());
 		} else if(oauth2User != null) {
-			Object meNumObj = oauth2User.getAttribute("meNum");
-				if(meNumObj instanceof Integer) {
-					meNum = (Integer) meNumObj;
-				} else if(meNumObj instanceof String) {
-					meNum = Integer.valueOf((String) meNumObj);
-				}
+			MemberVO dbUser = memberDAO.selectMember(oauth2User.getName());
+			if (dbUser != null) {
+				meNum = dbUser.getMe_num();
+				model.addAttribute("user", dbUser);
+			}
 		}
 
 		List<Lodging_ReviewDTO> list = new ArrayList<>();
 		if(meNum != null) {
 			list = reviewService.getSelectReviewList(meNum);
 		}
-		
 		model.addAttribute("list", list);
+
 		return "member/view-review";
 	}
 
