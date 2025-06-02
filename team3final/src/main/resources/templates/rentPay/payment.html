@@ -113,6 +113,45 @@
 			}
 
 		}
+  .insurance-box {
+    background-color: #fafafa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .insurance-box.active {
+    background-color: #e3f0ff; /* 활성화 시 배경색 살짝 변화 */
+  }
+  .insurance-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  .insurance-desc {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  .highlight {
+    color: #007bff;
+  }
+  .price-badge {
+    background-color: #dee2e6;
+    color: #555;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .insurance-box.active .price-badge {
+    background-color: #007bff;
+    color: white;
+  }
 	</style>
 </head>
 
@@ -141,10 +180,19 @@
 								<div style="font-size: 0.9rem;">11:00 까지</div>
 							</div>
 						</div>
-						<div class="d-flex align-items-center pt-3">
-							<div style="font-weight: bold; margin-right: 100px;">보험정보</div>
-							<div class="rm-name" >보험 이름 가격</div>
+						<div class="d-flex align-items-start pt-3">
+							<div style="font-weight: bold; margin-right: 1rem; line-height: 1.5;">보험정보</div>
+							<div style="display: flex; flex-direction: column; gap: 1rem;">
+							<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+								<div style="font-size: 14.4px; font-weight: bold;">대인 무료 보험</div>
+								<div style="font-size: 14px;">무제한 보상</div>
+							</div>
+							<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+								<div style="font-size: 14.4px; font-weight: bold;">대물 무료 보험</div>
+								<div style="font-size: 14px;">최대 2,000만원 보상</div>
+							</div>
 						</div>
+				</div>
 					</form>
 					<form id="reservationForm">
 						<h5 class="in">운전자 정보</h5>
@@ -160,10 +208,35 @@
 						</div>
 						<div class="form-group">
 							<label>셍년월일</label>
-							<input type="text" name="reserverPhone" class="form-control" placeholder="예: yyyyMMdd">
+							<input type="text" name="reserverBirth" class="form-control" placeholder="예: yyyyMMdd">
 							<div class="invalid-feedback">형식에 맞는 생년월일을 입력해주세요.</div>
 						</div>
 						
+					</form>
+					<form>
+						<div class="mt-5">
+							<h5 class="mb-4">플러스 보험</h5>
+								<div class="insurance-box" id="insuranceBodily">
+									<div>
+										<div class="insurance-title">일반 자차+</div>
+										<div class="insurance-desc">
+											단독사고·휴차보상료까지 <span class="highlight">최대 50만원</span> 보장
+										</div>
+										<span style="color: #999; font-size: 14px;">눌러서 보험 챙겨가세요!</span>
+									</div>
+									<div class="price-badge">9,900원</div>
+								</div>
+								<div class="insurance-box" id="insuranceProperty">
+									<div>
+										<div class="insurance-title">완전 자차+</div>
+										<div class="insurance-desc">
+											단독사고·휴차보상료까지 <span class="highlight">무제한!</span> 보장
+										</div>
+										<span style="color: #999; font-size: 14px;">눌러서 보험 챙겨가세요!</span>
+									</div>
+									<div class="price-badge">20,000원</div>
+								</div>
+						</div>
 					</form>
 					<!-- 호텔 요청사항 쪽 끝-->
 					<form>
@@ -187,7 +260,7 @@
 						<div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
 							<div class="text-muted">총 대여금액</div>
 							<div class="d-flex align-items-center" style="gap: 4px;">
-								<div style="font-weight: bold;" class="room-total-price" >ㅎㅎ</div>
+								<div style="font-weight: bold;" class="room-total-price" >10000</div>
 								<img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
 							</div>
 						</div>
@@ -195,14 +268,14 @@
 						<div class="priceDetail" style="display: none; font-size: 13px;">
 							<div class="d-flex justify-content-between bg-light p-2 rounded mb-1">
 								<div class="text-muted">1일 대여 요금</div>
-								<div class="text-muted room-rm-price" >원</div>
+								<div class="text-muted room-rm-price" >10000원</div>
 							</div>
 						</div>
 						<hr>
 						<!-- 총 결제금액 -->
 						<div class="d-flex justify-content-between mt-3">
 							<strong >총 결제금액</strong>
-							<strong class="st-total-price">66,000원</strong>
+							<strong class="st-total-price">10000</strong>
 						</div>
 					</form>
 				</div>
@@ -233,8 +306,41 @@
 		</div>
 		
 		<script>
+			const boxes = document.querySelectorAll('.insurance-box');
+
+			boxes.forEach((box) => {
+				box.addEventListener('click', () => {
+					// 이미 활성화되어 있으면 비활성화만 하고 끝냄
+					if (box.classList.contains('active')) {
+						box.classList.remove('active');
+						return;
+					}
+
+					// 나머지는 비활성화
+					boxes.forEach((b) => b.classList.remove('active'));
+
+					// 현재 클릭된 것만 활성화
+					box.classList.add('active');
+				});
+			});
+			let detailVisible = true;
+			let isSyncing = false;
+
+			function toggleDetailAll() {
+				const $details = $(".priceDetail");
+				const $arrows = $(".arrowImg");
+
+				detailVisible = !detailVisible;
+
+				if (detailVisible) {
+					$details.stop(true, true).slideDown(200);
+					$arrows.attr("src", "/resources/static/imgs/small-up.png");
+				} else {
+					$details.stop(true, true).slideUp(200);
+					$arrows.attr("src", "/resources/static/imgs/small-down.png");
+				}
+			};
 			$(document).ready(function () {
-				
 				$(".priceDetail").hide();
 				$(".arrowImg").attr("src", "/resources/static/imgs/small-down.png");
 				let rm_name = $(".rm-name").text();
@@ -253,7 +359,107 @@
 						console.error("요청 실패", xhr);
 					}
 				});
+				$("[name='reserverName']").on("input", function () {
+					const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
+					if (!nameRegex.test($(this).val().trim())) {
+						$(this).addClass("is-invalid");
+					} else {
+						$(this).removeClass("is-invalid");
+					}
+				});
+				$("input[name='reserverPhone']").on("input", function () {
+					const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+					if (!phoneRegex.test($(this).val().trim())) {
+						$(this).addClass("is-invalid");
+					} else {
+						$(this).removeClass("is-invalid");
+					}
+				});		
+				$("input[name='reserverBirth']").on("input", function () {
+					const $input = $(this);
+					const val = $input.val().trim();
+					const $feedback = $input.siblings(".invalid-feedback");
+					const regex = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+
+					if (!regex.test(val)) {
+						$input.addClass("is-invalid");
+						$feedback.text("형식에 맞는 생년월일을 입력해주세요.");
+						return;
+					}
+
+					const y = +val.slice(0, 4), m = +val.slice(4, 6) - 1, d = +val.slice(6, 8);
+					const birth = new Date(y, m, d);
+					const today = new Date();
+					const age = today.getFullYear() - y - (today < new Date(today.getFullYear(), m, d) ? 1 : 0);
+
+					if (age < 20) {
+						$input.addClass("is-invalid");
+						$feedback.text("운전자는 만 20세 이상이여야 합니다.");
+					} else {
+						$input.removeClass("is-invalid");
+					}
+				});	
 			});
+			$(document).on("click", ".btn.btn-primary, .mobile-pay-button", function (e) {
+				let shouldOpenModal = false;
+				
+				const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
+				const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+				const birthRegex = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+
+				const reserverName = $("input[name='reserverName']");
+				const reserverPhone = $("input[name='reserverPhone']");
+				const reserverBirth = $("input[name='reserverBirth']");
+
+				if (!nameRegex.test(reserverName.val().trim())) {
+					alert("[운전자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
+					reserverName.addClass("is-invalid").focus();
+					e.preventDefault();
+					return;
+				} else {
+					reserverName.removeClass("is-invalid");
+				}
+
+				// 예약자 번호
+				if (!phoneRegex.test(reserverPhone.val().trim())) {
+					alert("[운전자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
+					reserverPhone.addClass("is-invalid").focus();
+					e.preventDefault();
+					return;
+				} else {
+					reserverPhone.removeClass("is-invalid");
+				}		
+				if (!birthRegex.test(reserverBirth.val().trim())) {
+					alert("[운전자 정보 > 생년월일] 형식에 맞는 생년월일을 입력해 주세요. (예: 19900101)");
+					reserverBirth.addClass("is-invalid").focus();
+					e.preventDefault();
+					return;
+				}
+				
+				const y = +reserverBirth.val().trim().slice(0, 4), m = +reserverBirth.val().trim().slice(4, 6) - 1, d = +reserverBirth.val().trim().slice(6, 8);
+				const birthDate = new Date(y, m, d);
+				const today = new Date();
+				const age = today.getFullYear() - y - (today < new Date(today.getFullYear(), m, d) ? 1 : 0);
+
+				if (age < 20) {
+					alert("[운전자 정보 > 생년월일] 운전자는 만 20세 이상이여야 합니다.");
+					reserverBirth.addClass("is-invalid").focus();
+					e.preventDefault();
+					return;
+				} else {
+					reserverBirth.removeClass("is-invalid");
+				}
+				//결제 모달 요청
+				shouldOpenModal = true;
+				if (shouldOpenModal) {
+					$('#paymentModal').modal('show');
+				}						
+			})
+			$(document).on("click", ".pay-type", function (e) {
+				let type=$(this).data('type');
+				payments(type);
+			})
+
 		</script>
 	</main>
 </body>

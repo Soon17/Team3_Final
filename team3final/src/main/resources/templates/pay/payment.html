@@ -472,20 +472,7 @@
 					}
 				}
 			});
-			function toggleDetailAll() {
-			const $details = $(".priceDetail");
-			const $arrows = $(".arrowImg");
 
-			detailVisible = !detailVisible;
-
-			if (detailVisible) {
-				$details.slideDown(200);
-				$arrows.attr("src", "/resources/static/imgs/small-up.png");
-			} else {
-				$details.slideUp(200);
-				$arrows.attr("src", "/resources/static/imgs/small-down.png");
-			}
-			}
 
 			$(document).ready(function () {
 			$(".priceDetail").slideDown(0);
