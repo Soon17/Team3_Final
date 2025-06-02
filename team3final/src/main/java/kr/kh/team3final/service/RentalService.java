@@ -14,8 +14,9 @@ public class RentalService {
 	@Autowired
 	RentalDAO rentalDao;
 
-	public List<AvailableCarDTO> getAvailableCarList(int ct_key, int cr_year, String cr_fuel_type, String cr_trans) {
-		return rentalDao.selectAvailableCarList(ct_key, cr_year, cr_fuel_type, cr_trans);
+	public List<AvailableCarDTO> getAvailableCarList(int ct_key, int cr_year, String cr_fuel_type, String cr_trans,
+			String checkin, String checkout, String rg_name) {
+		return rentalDao.selectAvailableCarList(ct_key, cr_year, cr_fuel_type, cr_trans, checkin, checkout, rg_name);
 	}
 
 }

@@ -48,4 +48,10 @@ public class MainController {
 		model.addAttribute("regionList", list);
 		return "rent";
 	}
+
+	@GetMapping("/regionRentCar")
+	public String getRegionCar(Model model, @RequestParam("rg_num") int rg_num, @RequestParam("type") String type) {
+		
+		return "regionCarList";
+	}
 }

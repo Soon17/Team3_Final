@@ -6,6 +6,7 @@
 		SELECT 
 			r.RE_NUM     AS rentalId,
 			r.RE_NAME    AS rentalName,
+			r.RE_REGION  AS rg_name,
 			ROUND(AVG(rv.RV_RATING), 1) AS avgRating,
 			COUNT(rv.RV_NUM) AS reviewCount,
 			
@@ -14,21 +15,31 @@
 			c.CR_FUEL_TYPE AS carFuel,
 			c.CR_TRANS   AS carTrans,
 			c.CR_PRICE   AS carPrice,
-			
-			ct.CT_THUMBNAIL AS thumbnail
+			c.CR_THUMBNAIL AS thumbnail
 
 		FROM RENTAL r
 		JOIN CAR c ON r.RE_NUM = c.CR_RE_NUM
-		JOIN CAR_TYPE ct ON c.CT_KEY = ct.CT_KEY
+		JOIN CAR_TYPE ct ON c.CR_CT_KEY = ct.CT_KEY
 		LEFT JOIN REVIEW rv ON rv.RV_TABLE_NAME = 'rental' AND rv.RV_NUMBER = r.RE_NUM
+		LEFT JOIN (
+			SELECT cp.CP_CR_ID, COUNT(*) AS reserved_count
+			FROM RE_RESERVATION rr
+			JOIN CAR_PACKAGE cp ON rr.RR_CP_NUM = cp.CP_NUM
+			WHERE rr.RR_STATE = '예약완료'
+				AND (rr.RR_CHECKIN &lt; #{checkout} AND rr.RR_CHEKOUT &gt; #{checkin})
+			GROUP BY cp.CP_CR_ID
+		) res ON c.CR_ID = res.CP_CR_ID
 
-		WHERE c.CT_KEY = #{ct_key}
+		WHERE r.RE_REGION LIKE CONCAT('%', #{rg_name}, '%')
+			AND c.CR_CT_KEY = #{ct_key}
 			AND c.CR_YEAR = #{cr_year}
 			AND c.CR_FUEL_TYPE = #{cr_fuel_type}
 			AND c.CR_TRANS = #{cr_trans}
+			AND (c.CR_COUNT - IFNULL(res.reserved_count, 0)) &gt; 0
 
 		GROUP BY r.RE_NUM, c.CR_ID 
 		ORDER BY c.CR_PRICE ASC
 	</select>
+
 
 </mapper>

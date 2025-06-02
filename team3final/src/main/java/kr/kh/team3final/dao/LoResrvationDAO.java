@@ -8,8 +8,4 @@ public interface LoResrvationDAO {
 
 	void insertUserOption(LoResrvationVO lr);
 
-
-
-
-
 }

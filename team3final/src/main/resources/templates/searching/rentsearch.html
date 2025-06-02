@@ -516,6 +516,7 @@
          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
          border: 1px solid #f1f1f1;
          flex-direction: column;
+         color: inherit;
       }
 
       .company-info {
@@ -696,12 +697,12 @@
             <!-- 결과가 없을 때 -->
             <th:block th:if="${#lists.isEmpty(rentalList)}">
                <div class="empty-box" style="text-align: center; padding: 40px 0;">
-                  <p style="font-size: 18px; color: #888;">검색 결과가 없습니다.</p>
+                  <p style="font-size: 18px; color: #888;">선택하신 조건에 맞는 업체가 현재 없습니다.</p>
                </div>
             </th:block>
             <!-- 결과가 있을 때 -->
             <th:block th:each="car : ${rentalList}">
-               <div class="company-box">
+               <a href="#" class="company-box" style="text-decoration: none;">
                   <div class="company-info">
                      <span class="company-name" th:text="${car.rentalName}">업체이름</span>
                      <span class="company-rating">
@@ -718,7 +719,7 @@
                      <span class="price"
                         th:text="${#numbers.formatInteger(car.carPrice, 3, 'COMMA') + '원 / 1박'}">가격</span>
                   </div>
-               </div>
+               </a>
             </th:block>
 
          </div>
@@ -892,6 +893,25 @@
                // 달력에 선택 표시
                updateSelection();
             }
+
+            $(".search-btn, .search-trigger").on('click', function () {
+               const region = $('#region').val();
+               const checkTime = $('#checkTime').text().trim();
+               const urlParams = new URLSearchParams(window.location.search);
+               const ctKey = urlParams.get('ct_key');
+               const year = urlParams.get('cr_year');
+               const fuel = urlParams.get('cr_fuel_type');
+               const trans = urlParams.get('cr_trans');
+
+               const url = `/searching/rentsearch?rg_name=${encodeURIComponent(region)}`
+                  + `&checkTime=${encodeURIComponent(checkTime)}`
+                  + `&ct_key=${ctKey}`
+                  + `&cr_year=${year}`
+                  + `&cr_fuel_type=${encodeURIComponent(fuel)}`
+                  + `&cr_trans=${encodeURIComponent(trans)}`;
+
+               location.href = url;
+            });
          });
 
          function updateSelection() {
@@ -1001,8 +1021,6 @@
                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
             });
          });
-
-
 
       </script>
 
