@@ -91,5 +91,21 @@
 			c.cr_trans
 	</select>
 
+	<select id="selectCarById" parameterType="int" resultType="CarVO">
+		SELECT 
+			c.*,
+			ct.ct_name,
+			ct.ct_type,
+			c.cr_thumbnail,
+			r.re_name,
+			reg.rg_name
+		FROM car c
+		JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+		JOIN rental r ON c.cr_re_num = r.re_num
+		JOIN region reg ON r.re_rg_num = reg.rg_num
+		WHERE c.cr_id = #{cr_id}
+	</select>
+
+
 
 </mapper>

@@ -103,14 +103,15 @@ public class LodgingController {
 
     return "reserv";
   }
+
   @PostMapping("/meal/price")
   @ResponseBody
-  public Map<String, Object> getMealPrice(HttpSession session){
-    int ldNum = (int)session.getAttribute("ld_num");
+  public Map<String, Object> getMealPrice(HttpSession session) {
+    int ldNum = (int) session.getAttribute("ld_num");
     Map<String, Object> map = new HashMap<String, Object>();
     int mealPrice = lodgingService.getMealPrice(ldNum);
     map.put("mealPrice", mealPrice);
     return map;
   }
-  
+
 }

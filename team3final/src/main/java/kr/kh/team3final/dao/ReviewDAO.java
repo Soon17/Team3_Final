@@ -21,10 +21,13 @@ public interface ReviewDAO {
 
 	int insertReview(ReviewVO review);
 
-	ReviewVO detailReview(@Param("rv_num") int rvNumber, @Param("me_num") int me_num, @Param("tableName")String tableName);
+	ReviewVO detailReview(@Param("rv_num") int rvNumber, @Param("me_num") int me_num,
+			@Param("tableName") String tableName);
 
 	int updateReview(ReviewVO review);
 
 	int deleteReview(@Param("rv_num") int rvNumber, @Param("me_num") int me_num);
+
+	List<Map<String, Object>> selectRatingCount(@Param("cr_re_num") int cr_re_num);
 
 }

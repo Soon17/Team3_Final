@@ -716,8 +716,11 @@
                      style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                      <span class="car-details"
                         th:text="${car.carYear + '년식 · ' + car.carFuel + ' · 만 20세 이상'}">차량조건</span>
-                     <span class="price"
-                        th:text="${#numbers.formatInteger(car.carPrice, 3, 'COMMA') + '원 / 1박'}">가격</span>
+                     <div>
+                        <span class="price"
+                           th:text="${#numbers.formatInteger(car.carPrice, 3, 'COMMA') + '원'}">가격</span>
+                        <span style="color: #888; font-size: 13px;"> / 1박</span>
+                     </div>
                   </div>
                </a>
             </th:block>

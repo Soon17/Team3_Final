@@ -95,4 +95,12 @@
         WHERE rv_number = #{rv_num}
         and rv_me_num = #{me_num} 
     </delete>
+    <select id="selectRatingCount" parameterType="int" resultType="map">
+        SELECT rv_rating, COUNT(*) AS cnt
+        FROM review
+        WHERE rv_table_name = 'rental'
+            AND rv_number = #{cr_re_num}
+        GROUP BY rv_rating
+    </select>
+
 </mapper>

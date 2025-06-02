@@ -41,5 +41,14 @@
 		ORDER BY c.CR_PRICE ASC
 	</select>
 
+	<select id="selectRentalInfo" parameterType="int" resultType="RentalVO">
+		SELECT 
+			r.*, 
+			ROUND(AVG(rv.rv_rating), 1) AS avg_rating,
+			COUNT(rv.rv_num) AS review_count
+		FROM rental r
+		LEFT JOIN review rv ON rv.rv_table_name = 'rental' AND rv.rv_number = r.re_num
+		WHERE r.re_num = #{re_num}
+	</select>
 
 </mapper>

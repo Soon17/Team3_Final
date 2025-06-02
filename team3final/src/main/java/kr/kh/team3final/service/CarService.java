@@ -39,4 +39,8 @@ public class CarService {
 		return carDao.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans);
 	}
 
+	public CarVO selectCarById(int cr_Id) {
+		return carDao.selectCarById(cr_Id);
+	}
+
 }

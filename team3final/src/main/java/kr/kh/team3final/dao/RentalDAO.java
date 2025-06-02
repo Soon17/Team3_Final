@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import kr.kh.team3final.model.dto.AvailableCarDTO;
+import kr.kh.team3final.model.vo.RentalVO;
 
 public interface RentalDAO {
   List<AvailableCarDTO> selectAvailableCarList(
@@ -15,4 +16,6 @@ public interface RentalDAO {
       @Param("checkin") String checkin,
       @Param("checkout") String checkout,
       @Param("rg_name") String rg_name);
+
+  RentalVO selectRentalInfo(@Param("re_num") int re_num);
 }
