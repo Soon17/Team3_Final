@@ -152,6 +152,15 @@
     background-color: #007bff;
     color: white;
   }
+  .car-type-badge {
+  display: inline-block;
+  background-color: #f1f5f9; /* 연한 회색 */
+  color: #6c757d; /* muted 텍스트 */
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+}
 	</style>
 </head>
 
@@ -161,14 +170,18 @@
 			<!-- 왼쪽 데이터 시작-->
 			<div class="row">
 				<div class="col-md-7 container-box mr-3">
-					<form>
-						<small class="text-muted">ct_type</small>
-						<h5 class="d-flex justify-content-between align-items-center border-bottom pb-3 mt-1 mb-2"
-							style="font-size: 20px">ct_name</h5>
+					<form>						
+						<small class="text-muted car-type-badge" ><i class="uil uil-car-sideview"></i>[[${car.ct_type}]]</small>
+						<h5 class="border-bottom pb-3 mt-1 mb-2" style="font-size: 20px; line-height: 1.2;">
+							<span class="ct-name" th:text="${car.ct_name}" th:data-cr-id="${car.cr_id}"></span><br>
+							<small class="text-muted" style="font-size: 0.9rem;">
+								<i class="uil uil-home"></i>[[${car.re_name}]]
+							</small>
+						</h5>
 						<div class="d-flex justify-content-center align-items-center border-bottom pb-2" style="gap: 32px;">
 							<div class="text-center mx-5">
 								<small class="text-muted">대여일</small>
-								<div style="font-weight: bold;" class="check-in">checkIn</div>
+								<div style="font-weight: bold;" class="check-in" th:text="${checkIn}"></div>
 								<div style="font-size: 0.9rem;">15:00 ~</div>
 							</div>
 							<div class="text-center mx-5">
@@ -176,7 +189,7 @@
 							</div>
 							<div class="text-center mx-5" >
 								<small class="text-muted">반납일</small>
-								<div style="font-weight: bold;"  class="check-out">checkOUt</div>
+								<div style="font-weight: bold;"  class="check-out" th:text="${checkOut}"></div>
 								<div style="font-size: 0.9rem;">11:00 까지</div>
 							</div>
 						</div>
@@ -216,19 +229,28 @@
 					<form>
 						<div class="mt-5">
 							<h5 class="mb-4">플러스 보험</h5>
-								<div class="insurance-box" id="insuranceBodily">
+								<div class="insurance-box active" id="insuranceNomal" data-ir-num="1" data-ir-price="0">
 									<div>
 										<div class="insurance-title">일반 자차+</div>
 										<div class="insurance-desc">
-											단독사고·휴차보상료까지 <span class="highlight">최대 50만원</span> 보장
+											단독사고·휴차보상료 <span class="highlight">보장 불가</span> 
+										</div>
+									</div>
+									<div class="price-badge">무료</div>
+								</div>
+								<div class="insurance-box" id="insuranceFull" data-ir-num="2" data-ir-price="9900">
+									<div>
+										<div class="insurance-title">완전 자차+</div>
+										<div class="insurance-desc">
+											단독사고·휴차보상료까지 <span class="highlight">최대 50만원!</span> 보장
 										</div>
 										<span style="color: #999; font-size: 14px;">눌러서 보험 챙겨가세요!</span>
 									</div>
 									<div class="price-badge">9,900원</div>
 								</div>
-								<div class="insurance-box" id="insuranceProperty">
+								<div class="insurance-box" id="insuranceSuper" data-ir-num="3" data-ir-price="20000">
 									<div>
-										<div class="insurance-title">완전 자차+</div>
+										<div class="insurance-title">슈퍼 자차+</div>
 										<div class="insurance-desc">
 											단독사고·휴차보상료까지 <span class="highlight">무제한!</span> 보장
 										</div>
@@ -260,7 +282,7 @@
 						<div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
 							<div class="text-muted">총 대여금액</div>
 							<div class="d-flex align-items-center" style="gap: 4px;">
-								<div style="font-weight: bold;" class="room-total-price" >10000</div>
+								<div style="font-weight: bold;" class="cr-total-price" th:text="${car.cr_price}"></div>
 								<img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
 							</div>
 						</div>
@@ -268,7 +290,7 @@
 						<div class="priceDetail" style="display: none; font-size: 13px;">
 							<div class="d-flex justify-content-between bg-light p-2 rounded mb-1">
 								<div class="text-muted">1일 대여 요금</div>
-								<div class="text-muted room-rm-price" >10000원</div>
+								<div class="text-muted car-cr-price" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"></div>
 							</div>
 						</div>
 						<hr>
@@ -306,22 +328,54 @@
 		</div>
 		
 		<script>
-			const boxes = document.querySelectorAll('.insurance-box');
+			let total;
+			let basePrice;
+			let ir_num=1;
+			console.log(ir_num)
+			$(document).ready(function () {
+				// 날짜 텍스트 가져오기
+				const checkInText = $('.check-in').text().trim();   // 예: "5/23/금"
+				const checkOutText = $('.check-out').text().trim(); // 예: "5/24/토"
 
-			boxes.forEach((box) => {
-				box.addEventListener('click', () => {
-					// 이미 활성화되어 있으면 비활성화만 하고 끝냄
-					if (box.classList.contains('active')) {
-						box.classList.remove('active');
-						return;
-					}
+				// 날짜 포맷에서 숫자만 추출
+				const parseDate = (text) => {
+					const parts = text.split('/'); // ["5", "23", "금"]
+					const month = parseInt(parts[0]);
+					const day = parseInt(parts[1]);
+					const year = new Date().getFullYear(); // 연도는 현재 연도로 가정
+					return new Date(year, month - 1, day); // JavaScript는 월이 0부터 시작
+				};
 
-					// 나머지는 비활성화
-					boxes.forEach((b) => b.classList.remove('active'));
+				const checkInDate = parseDate(checkInText);
+				const checkOutDate = parseDate(checkOutText);
 
-					// 현재 클릭된 것만 활성화
-					box.classList.add('active');
-				});
+				// 날짜 차이 계산
+				const diffTime = checkOutDate - checkInDate;
+				const diffDays = diffTime / (1000 * 60 * 60 * 24); // ms → days
+				// .badge 안에 텍스트로 n박 입력
+				$('.night').text(`${diffDays}박`);
+				basePrice = $(".cr-total-price").text()* diffDays;
+				total =basePrice;
+				$(".cr-total-price").text(basePrice.toLocaleString()+"원");
+				$(".st-total-price").text(basePrice.toLocaleString()+"원");
+			});
+			$('.insurance-box').on('click', function () {
+				
+				// 이미 선택된 박스면 무시
+				if ($(this).hasClass('active')) return;
+
+				// 모두 비활성화
+				$('.insurance-box').removeClass('active');
+
+				// 현재 클릭된 것만 활성화
+				$(this).addClass('active');
+				irPice = $(this).data("ir-price");
+				ir_num = $(this).data("ir-num");
+				console.log(ir_num)
+				total = basePrice + irPice;
+				$(".cr-total-price").text(total.toLocaleString()+"원");
+				$(".st-total-price").text(total.toLocaleString()+"원");
+				changeSummaryPrice();
 			});
 			let detailVisible = true;
 			let isSyncing = false;
@@ -343,11 +397,11 @@
 			$(document).ready(function () {
 				$(".priceDetail").hide();
 				$(".arrowImg").attr("src", "/resources/static/imgs/small-down.png");
-				let rm_name = $(".rm-name").text();
-				
+
+			
 				$.ajax({
 					url: '/rent/summary',
-					// data : {rm_name : rm_name},
+	
 					type: 'GET',
 					success: function (data) {
 						
@@ -399,67 +453,122 @@
 						$input.removeClass("is-invalid");
 					}
 				});	
+				$(document).on("click", ".btn.btn-primary, .mobile-pay-button", function (e) {
+					let shouldOpenModal = false;
+					
+					const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
+					const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+					const birthRegex = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
+	
+					const reserverName = $("input[name='reserverName']");
+					const reserverPhone = $("input[name='reserverPhone']");
+					const reserverBirth = $("input[name='reserverBirth']");
+	
+					if (!nameRegex.test(reserverName.val().trim())) {
+						alert("[운전자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
+						reserverName.addClass("is-invalid").focus();
+						e.preventDefault();
+						return;
+					} else {
+						reserverName.removeClass("is-invalid");
+					}
+	
+					// 예약자 번호
+					if (!phoneRegex.test(reserverPhone.val().trim())) {
+						alert("[운전자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
+						reserverPhone.addClass("is-invalid").focus();
+						e.preventDefault();
+						return;
+					} else {
+						reserverPhone.removeClass("is-invalid");
+					}		
+					if (!birthRegex.test(reserverBirth.val().trim())) {
+						alert("[운전자 정보 > 생년월일] 형식에 맞는 생년월일을 입력해 주세요. (예: 19900101)");
+						reserverBirth.addClass("is-invalid").focus();
+						e.preventDefault();
+						return;
+					}
+					
+					const y = +reserverBirth.val().trim().slice(0, 4), m = +reserverBirth.val().trim().slice(4, 6) - 1, d = +reserverBirth.val().trim().slice(6, 8);
+					const birthDate = new Date(y, m, d);
+					const today = new Date();
+					const age = today.getFullYear() - y - (today < new Date(today.getFullYear(), m, d) ? 1 : 0);
+	
+					if (age < 20) {
+						alert("[운전자 정보 > 생년월일] 운전자는 만 20세 이상이여야 합니다.");
+						reserverBirth.addClass("is-invalid").focus();
+						e.preventDefault();
+						return;
+					} else {
+						reserverBirth.removeClass("is-invalid");
+					}
+					//결제 모달 요청
+					shouldOpenModal = true;
+					if (shouldOpenModal) {
+						$('#paymentModal').modal('show');
+					}						
+				})
+				$(document).on("click", ".pay-type", function (e) {
+					let type=$(this).data('type');
+					payments(type);
+				})
+				function payments(type){
+					$.ajax({
+					async : true,
+					url : '/pay/kakao/apiKey', 
+					data : {type : type},
+					type : 'post', 
+					success : function (data){
+						let channelKey = data.channel
+						let storeId= data.store
+						requestPayment(channelKey,storeId)					
+					}
+					});			
+					async function requestPayment(channelKey,storeId) {	
+						const cr_id = 	$(".ct-name").data("cr-id");			
+						const cr_name = $(".ct-name").text();
+						const reserverName = $("[name = 'reserverName']").val();
+						const reserverBirth = $("[name = 'reserverBirth']").val();
+						const reserverPhone = $("[name = 'reserverPhone']").val();
+						const response = await PortOne.requestPayment({
+						// Store ID 설정
+						storeId: storeId,
+						// 채널 키 설정
+						channelKey: channelKey,
+						paymentId: `payment-${crypto.randomUUID()}`,
+						orderName: cr_name,
+						totalAmount: total,
+						currency: "CURRENCY_KRW",
+						payMethod: 'EASY_PAY',
+						});
+						if (response.code !== undefined) {
+						// 오류 발생
+						return alert(response.message);
+						}
+						// /payment/complete 엔드포인트를 구현해야 합니다. 다음 목차에서 설명합니다.
+						const notified = await fetch(`http://localhost:8080/rent/kakao/complete`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						// paymentId와 주문 정보를 서버에 전달합니다
+						body: JSON.stringify({
+							cr_id:cr_id,
+							rr_price:total,
+							rr_name:reserverName,
+							rr_number:reserverPhone,
+							rr_birth:reserverBirth,
+							ir_num : ir_num					
+						}),
+						});
+						if (notified.ok) {
+							// 예: 결제 완료 화면으로 이동
+							alert("결제 성공!");
+							window.location.href = "/member/mypage";
+						} else {
+							alert("결제 처리 실패!");
+						}
+					}   
+				}
 			});
-			$(document).on("click", ".btn.btn-primary, .mobile-pay-button", function (e) {
-				let shouldOpenModal = false;
-				
-				const nameRegex = /^[가-힣a-zA-Z]{2,20}$/;
-				const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
-				const birthRegex = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
-
-				const reserverName = $("input[name='reserverName']");
-				const reserverPhone = $("input[name='reserverPhone']");
-				const reserverBirth = $("input[name='reserverBirth']");
-
-				if (!nameRegex.test(reserverName.val().trim())) {
-					alert("[운전자 정보 > 이름] 이름을 정확하게 입력해 주세요.");
-					reserverName.addClass("is-invalid").focus();
-					e.preventDefault();
-					return;
-				} else {
-					reserverName.removeClass("is-invalid");
-				}
-
-				// 예약자 번호
-				if (!phoneRegex.test(reserverPhone.val().trim())) {
-					alert("[운전자 정보 > 휴대폰 번호] 휴대폰 번호를 입력해 주세요.");
-					reserverPhone.addClass("is-invalid").focus();
-					e.preventDefault();
-					return;
-				} else {
-					reserverPhone.removeClass("is-invalid");
-				}		
-				if (!birthRegex.test(reserverBirth.val().trim())) {
-					alert("[운전자 정보 > 생년월일] 형식에 맞는 생년월일을 입력해 주세요. (예: 19900101)");
-					reserverBirth.addClass("is-invalid").focus();
-					e.preventDefault();
-					return;
-				}
-				
-				const y = +reserverBirth.val().trim().slice(0, 4), m = +reserverBirth.val().trim().slice(4, 6) - 1, d = +reserverBirth.val().trim().slice(6, 8);
-				const birthDate = new Date(y, m, d);
-				const today = new Date();
-				const age = today.getFullYear() - y - (today < new Date(today.getFullYear(), m, d) ? 1 : 0);
-
-				if (age < 20) {
-					alert("[운전자 정보 > 생년월일] 운전자는 만 20세 이상이여야 합니다.");
-					reserverBirth.addClass("is-invalid").focus();
-					e.preventDefault();
-					return;
-				} else {
-					reserverBirth.removeClass("is-invalid");
-				}
-				//결제 모달 요청
-				shouldOpenModal = true;
-				if (shouldOpenModal) {
-					$('#paymentModal').modal('show');
-				}						
-			})
-			$(document).on("click", ".pay-type", function (e) {
-				let type=$(this).data('type');
-				payments(type);
-			})
-
 		</script>
 	</main>
 </body>

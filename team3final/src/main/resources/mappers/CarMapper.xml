@@ -116,4 +116,10 @@
 		order by cr_price
 		limit 7;
 	</select>
+	<select id="selectCar" resultType="CarVO">
+		select car.*,ct_name,ct_type,re_name from car
+		join car_type on ct_key = cr_ct_key
+		join rental on re_num = cr_re_num
+		where cr_id = #{cr_id}
+	</select>
 </mapper>

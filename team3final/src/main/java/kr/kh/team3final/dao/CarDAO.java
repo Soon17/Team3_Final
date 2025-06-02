@@ -24,4 +24,6 @@ public interface CarDAO {
 
 	List<CarVO> selectPriceCarList(int rg_num);
 
+	CarVO selectCar(int cr_id);
+
 }

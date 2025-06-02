@@ -49,4 +49,8 @@ public class CarService {
 		}
 	}
 
+	public CarVO getCar(int cr_id) {
+		return carDao.selectCar(cr_id);
+	}
+
 }
