@@ -29,7 +29,7 @@ INSERT INTO car_type (CT_NAME, CT_TYPE) VALUES
 
 INSERT INTO car (CR_YEAR, CR_FUEL_TYPE, CR_TRANS, CR_PRICE, CR_COUNT, CR_RE_NUM, CR_CT_KEY, CR_THUMBNAIL) VALUES
 -- 스파크 4세대
-(2022, '휘발유', '오토', 100000, 5, 1, 1, 'spark4.png'),
+(2022, '휘발유', '오토', 100000, 3, 1, 1, 'spark4.png'),
 (2022, '휘발유', '오토', 105000, 4, 2, 1, 'spark4.png'),
 (2022, '휘발유', '오토', 98000, 3, 3, 1, 'spark4.png'),
 (2023, '휘발유', '수동', 110000, 3, 1, 1, 'spark4.png'),

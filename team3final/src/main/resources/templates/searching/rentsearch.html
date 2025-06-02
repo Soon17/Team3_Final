@@ -702,7 +702,7 @@
             </th:block>
             <!-- 결과가 있을 때 -->
             <th:block th:each="car : ${rentalList}">
-               <a href="#" class="company-box" style="text-decoration: none;">
+               <a href="#" class="company-box" th:attr="data-cr-id=${car.carId}" style="text-decoration: none;">
                   <div class="company-info">
                      <span class="company-name" th:text="${car.rentalName}">업체이름</span>
                      <span class="company-rating">
@@ -982,7 +982,24 @@
             // 이미 있는 함수들 유지
             renderCalendars();
          });
+      </script>
 
+      <!--url이동-->
+      <script>
+         function updateCardLinks() {
+            const checkTime = $('#checkTime').text().trim();
+            const qT = encodeURIComponent(checkTime || '');
+
+            $('.company-box').each(function () {
+               const crId = $(this).data('cr-id');
+
+               $(this).attr('href',
+                  `/rent/detail?&checkTime=${qT}` + `&cr_id=${crId}`
+               );
+            });
+         }
+
+         $(document).ready(updateCardLinks);
       </script>
 
       <!--상단헤더 사라지기-->
