@@ -134,7 +134,7 @@
                 </tr>
 							</thead>
 							<tbody id="reservation-list">
-								<tr th:each="reservation : ${reservation}">
+								<tr th:each="reservation : ${hotelReservations}">
 									<td th:text="${reservation.lr_me_name}"></td>
 									<td th:text="${reservation.lr_state}"></td>
 									<td th:text="${reservation.lr_ld_name}"></td>
@@ -145,7 +145,6 @@
 									<td th:text="${reservation.lr_total_price}"></td>
 									<td th:text="${reservation.lr_total_price}"></td>
 									<td th:text="${#dates.format(reservation.lr_date, 'yyyy-MM-dd HH:mm')}"></td>
-									
 								</tr>
 							</tbody>
 						</table>
@@ -182,44 +181,86 @@
 							<button type="button" onclick="closeReviewModal()">취소</button>
 						</div>
 					</div>
-					<div id="no-reservation-message" style="display:none; text-align:center; padding:20px; font-weight:bold; color:#777;">
-							렌트카 예약 내역이 없습니다.
+					<!-- 렌트카 예약 테이블 -->
+					<div id="rentcar-reservations" style="display:none;">
+						<table style="width: 100%; border-collapse: collapse; text-align: center;">
+							<thead>
+								<tr style="background-color: #f9f9f9;">
+									<th>예약 ID</th>
+									<th>차량명</th>
+									<th>예약 상태</th>
+									<th>대여 일시</th>
+									<th>반납 일시</th>
+									<th>예약자</th>
+									<th>금액</th>
+									<th>예약 일시(KST)</th>
+									<th>리뷰 작성</th>
+								</tr>
+							</thead>
+							<tbody id="rentcar-reservation-list">
+								<tr th:each="reservation : ${rentcarReservations}">
+									<td th:text="${reservation.rr_num}"></td>
+									<td th:text="${reservation.ct_name}"></td>
+									<td th:text="${reservation.rr_state}"></td>
+									<td th:text="${#dates.format(reservation.rr_checkIn, 'yyyy-MM-dd HH:mm')}"></td>
+									<td th:text="${#dates.format(reservation.rr_chekout, 'yyyy-MM-dd HH:mm')}"></td>
+									<td th:text="${reservation.rr_name}"></td>
+									<td th:text="${reservation.rr_price}"></td>
+									<td th:text="${#dates.format(reservation.rr_date, 'yyyy-MM-dd HH:mm')}"></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
         </div>
     </div>
 	<script>
-		let activeTab = '호텔'; // 기본값을 호텔로 설정
+		let activeTab = '호텔';
+		let allReservations = [];
+		let allRentReservations = [];
 
-		function changeTab(clickedTab) {
+		window.changeTab = function(clickedTab) {
 			const $tabs = $('.tab');
 			$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
 			$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
 
 			activeTab = $(clickedTab).text();
 
-			if (activeTab === '렌트카') {
-				$('#reservation-table').hide(); // 테이블 전체 숨기기 (헤더 포함)
-				$('#reservation-state').hide(); // 필터 숨기기
-				$('#no-reservation-message').show(); // '예약 내역 없음' 메시지 보여주기
-			} else {
-				$('#reservation-table').show(); // 테이블 보이기
-				$('#reservation-state').show(); // 필터 보이기
-				$('#no-reservation-message').hide(); // 메시지 숨기기
-				fetchNewReservations();
-			}
-		}
+			// 필터 초기화
+			$('#reservation-state').val('전체');
 
-		let allReservations = []; // 모든 예약 데이터를 저장할 배열
+			if (activeTab === '렌트카') {
+					$('#reservation-table').hide();
+					$('#rentcar-reservations').show();
+					$('#no-reservation-message').hide();
+					fetchRentcarReservations();
+			} else {
+					$('#rentcar-reservations').hide();
+					$('#reservation-table').show();
+					$('#no-reservation-message').hide();
+					fetchNewReservations();
+			}
+	};
 
 		function fetchNewReservations() {
-			$.ajax({
-				url: '/member/reservation-list-ajax',
-				type: 'GET',
-				success: function(reservations) {
-					allReservations = reservations; // 모든 데이터를 전역 변수에 저장
-					renderReservationList(allReservations); // 초기 목록 렌더링
-				}
-			});
+				$.ajax({
+						url: '/member/reservation-list-ajax',
+						type: 'GET',
+						success: function(reservations) {
+								allReservations = reservations;
+								renderReservationList(allReservations);
+						}
+				});
+		}
+
+		function fetchRentcarReservations() {
+				$.ajax({
+						url: '/member/rent-reservation-list-ajax',
+						type: 'GET',
+						success: function(reservations) {
+								allRentReservations = reservations;
+								renderRentReservationList(allRentReservations);
+						}
+				});
 		}
 
 		function renderReservationList(reservations) {
@@ -227,100 +268,145 @@
 				$list.empty();
 
 				if (reservations.length === 0) {
-						$list.html('<tr><td colspan="10">예약 내역이 없습니다.</td></tr>');
+						$list.html('<tr><td colspan="11">예약 내역이 없습니다.</td></tr>');
 						return;
 				}
 
 				reservations.forEach(res => {
-					const checkoutDate = new Date(res.lr_checkout);
-					const today = new Date();
+						const checkoutDate = new Date(res.lr_checkout);
+						const today = new Date();
 
-					checkoutDate.setHours(0, 0, 0, 0);
-					today.setHours(0, 0, 0, 0);
+						checkoutDate.setHours(0, 0, 0, 0);
+						today.setHours(0, 0, 0, 0);
 
-					let reviewBtnHtml = "";
+						let reviewBtnHtml = "";
 
-					if (today > checkoutDate) {
-						// 리뷰 가능
-						reviewBtnHtml = `
-							<button
-								type="button"
-								class="btn btn-outline-success review-btn"
-								data-lr-num="${res.lr_num}"
-								data-lodging-name="${res.lr_ld_name}"
-								data-room-name="${res.lr_rm_name}"
-								onclick="openReviewModal(this)">
-								리뷰 작성
-							</button>
+						if (today > checkoutDate) {
+								// 리뷰 가능
+								reviewBtnHtml = `
+										<button
+												type="button"
+												class="btn btn-outline-success review-btn"
+												data-lr-num="${res.lr_num}"
+												data-lodging-name="${res.lr_ld_name}"
+												data-room-name="${res.lr_rm_name}"
+												onclick="openReviewModal(this)">
+												리뷰 작성
+										</button>
+								`;
+						} else {
+								// 리뷰 불가능 - 클릭 시 경고
+								reviewBtnHtml = `
+										<button
+												type="button"
+												class="btn btn-secondary"
+												onclick="alert('체크아웃 이후에 리뷰 작성이 가능합니다.')">
+												리뷰 작성 (불가)
+										</button>
+								`;
+						}
+
+						// 금액에 천 단위 콤마 추가 함수
+						function formatPrice(price) {
+								return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+						}
+
+						const row = `
+								<tr>
+										<td>${res.lr_me_name}</td>
+										<td>${res.lr_state}</td>
+										<td>${res.lr_ld_name}</td>
+										<td>${res.lr_rm_name}</td>
+										<td>${formatDate(res.lr_checkin)} - ${formatDate(res.lr_checkout)}</td>
+										<td>${res.lr_booker_name}(${res.lr_count})</td>
+										<td>${res.lr_guest_name}</td>
+										<td>${formatPrice(res.lr_total_price)}</td>
+										<td>${formatPrice(res.lr_total_price)}</td>
+										<td>${formatDateTime(res.lr_date)}</td>
+										<td>${reviewBtnHtml}</td>
+								</tr>
 						`;
-					} else {
-						// 리뷰 불가능 - 클릭하면 경고창
-						reviewBtnHtml = `
-							<button
-								type="button"
-								class="btn btn-secondary"
-								onclick="alert('체크아웃 이후에 리뷰 작성이 가능합니다.')">
-								리뷰 작성 (불가)
-							</button>
-						`;
-					}
 
-					const row = `
-						<tr>
-							<td>${res.lr_me_name}</td>
-							<td>${res.lr_state}</td>
-							<td>${res.lr_ld_name}</td>
-							<td>${res.lr_rm_name}</td>
-							<td>${formatDate(res.lr_checkin)} - ${formatDate(res.lr_checkout)}</td>
-							<td>${res.lr_booker_name}(${res.lr_count})</td>
-							<td>${res.lr_guest_name}</td>
-							<td>${res.lr_total_price}</td>
-							<td>${res.lr_total_price}</td>
-							<td>${formatDateTime(res.lr_date)}</td>
-							<td>${reviewBtnHtml}</td>
-						</tr>
-					`;
-
-					$list.append(row);
+						$list.append(row);
 				});
-			}
+		}
 
-			function filterReservations() {
-				const selectedState = $('#reservation-state').val();
-				let filteredReservations;
+		function renderRentReservationList(reservations) {
+				const $list = $('#rentcar-reservation-list');
+				$list.empty();
 
-				if (activeTab !== '호텔') return;
-
-				if (selectedState === '전체') {
-					filteredReservations = allReservations;
-				} else if (selectedState === '예약완료') {
-					filteredReservations = allReservations.filter(res => res.lr_state === '예약완료');
-				} else if (selectedState === '취소/환불') {
-					filteredReservations = allReservations.filter(res => res.lr_state === '예약취소');
+				if (reservations.length === 0) {
+						$list.html('<tr><td colspan="10">렌트카 예약 내역이 없습니다.</td></tr>');
+						return;
 				}
 
-				renderReservationList(filteredReservations);
-			}
+				reservations.forEach(res => {
+						const row = `
+								<tr>
+										<td>${res.rr_num}</td>
+										<td>${res.rr_name}</td>
+										<td>${res.ct_name}</td>
+										<td>${formatDateTime(res.rr_checkIn)}</td>
+										<td>${formatDateTime(res.rr_chekout)}</td>
+										<td>${formatDateTime(res.rr_date)}</td>
+										<td>${res.rr_price.toLocaleString()}원</td>
+										<td>${res.rr_state}</td>
+								</tr>
+						`;
+						$list.append(row);
+				});
+		}
 
-			function formatDate(dateStr) {
+		function filterReservations() {
+				if (activeTab === '호텔') {
+						const selectedState = $('#reservation-state').val();
+						let filteredReservations;
+
+						if (selectedState === '전체') {
+								filteredReservations = allReservations;
+						} else if (selectedState === '예약완료') {
+								filteredReservations = allReservations.filter(res => res.lr_state === '예약완료');
+						} else if (selectedState === '취소/환불') {
+								filteredReservations = allReservations.filter(res => res.lr_state === '예약취소');
+						}
+						renderReservationList(filteredReservations);
+				} else if (activeTab === '렌트카') {
+						const selectedState = $('#reservation-state').val();
+						let filteredRentReservations;
+
+						if (selectedState === '전체') {
+								filteredRentReservations = allRentReservations;
+						} else if (selectedState === '예약완료') {
+								filteredRentReservations = allRentReservations.filter(res => res.rr_state === '예약완료');
+						} else if (selectedState === '취소/환불') {
+								filteredRentReservations = allRentReservations.filter(res => res.rr_state === '예약취소');
+						}
+						renderRentReservationList(filteredRentReservations);
+				}
+		}
+
+		function formatDate(dateStr) {
 				const date = new Date(dateStr);
 				const year = date.getFullYear();
 				const month = String(date.getMonth() + 1).padStart(2, '0');
 				const day = String(date.getDate()).padStart(2, '0');
 				return `${year}-${month}-${day}`;
-			}
+		}
 
-			function formatDateTime(dateStr) {
-					const date = new Date(dateStr);
-					return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
-							date.getDate().toString().padStart(2, '0') + ' ' +
-							date.getHours().toString().padStart(2, '0') + ':' +
-							date.getMinutes().toString().padStart(2, '0');
-			}
+		function formatDateTime(dateStr) {
+				const date = new Date(dateStr);
+				return (
+						date.getFullYear() + '-' +
+						String(date.getMonth() + 1).padStart(2, '0') + '-' +
+						String(date.getDate()).padStart(2, '0') + ' ' +
+						String(date.getHours()).padStart(2, '0') + ':' +
+						String(date.getMinutes()).padStart(2, '0')
+				);
+		}
 
-			$(document).ready(function() {
-					fetchNewReservations();
-			});
+		$(document).ready(function() {
+				fetchNewReservations();
+		});
 		</script>
 		<script>
 			function openReviewModal(btn) {
