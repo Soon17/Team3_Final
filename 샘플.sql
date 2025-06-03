@@ -22,7 +22,7 @@ INSERT INTO region(RG_NAME) VALUES
 ("서울"),("경기"),("부산"),("제주");
 
 INSERT INTO default_option(DO_NAME) VALUES
-("금연 호텔"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰"),("취사 가능"),("조식");
+("조식"),("금연 호텔"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰"),("취사 가능");
 
 INSERT INTO lodging(LD_NAME,LD_REGION,LD_TYPE,LD_NUMBER,LD_RATING,LD_INFOR,LD_MEAL_PRICE,LD_ME_NUM,LD_RG_NUM) VALUES
 ("안좋아영","서울특별시 강남구 테헤란로 130","모텔","010-0000-0000",1,
@@ -573,9 +573,3 @@ VALUES
 (58, 4, '직원 응대가 친절했어요.', '2025-04-19 00:00:00', 'room', 29, 3),
 (59, 4, '방이 깨끗하고 좋았어요.', '2025-04-13 00:00:00', 'room', 30, 4),
 (60, 1, '시설이 좀 오래됐지만 나쁘지 않았음.', '2025-02-07 00:00:00', 'room', 30, 6);
-
-insert into default_option values (1,"조식"),(2,"흡연"),(3,"금연"),(4,"수영장"),(5,"바베큐"),
-(6,"합석"),(7,"노래방"),(8,"당구장"),(9,"레전드"),(10,"어쩌구"),(11,"저쩌구");
-
-insert into choice_option values (1,1,"lodging",1),(2,2,"lodging",1),
-(3,3,"lodging",1),(4,4,"lodging",1),(5,2,"lodging",2),(6,1,"lodging",2),(7,10,"lodging",2);
