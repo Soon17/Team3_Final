@@ -68,4 +68,8 @@ public class LodgingService {
 	public void uploadDefaultOption(DefaultOptionVO defaultOption) {
 		lodgingDao.insertDefaultOption(defaultOption);
 	}
+
+	public int getDo_num(String choiceOption) {
+		return lodgingDao.selectDo_num(choiceOption);
+	}
 }

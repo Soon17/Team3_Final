@@ -10,7 +10,7 @@ import kr.kh.team3final.model.vo.ChoiceOptionVO;
 
 
 @Service
-public class ChoiceOptionService {
+public class OptionService {
 
 	@Autowired
 	ChoiceOptionDAO choiceOptionDAO;

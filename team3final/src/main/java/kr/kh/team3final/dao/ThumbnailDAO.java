@@ -8,4 +8,8 @@ import kr.kh.team3final.model.vo.ThumbnailVO;
 
 public interface ThumbnailDAO {
   List<ThumbnailVO> selectThumbnail(@Param("th_table") String th_table, @Param("th_key") int th_key);
+
+  boolean insertLDTH(int ld_num, String uniqueName);
+
+  boolean insertRMTH(int rm_num, String uniqueName);
 }

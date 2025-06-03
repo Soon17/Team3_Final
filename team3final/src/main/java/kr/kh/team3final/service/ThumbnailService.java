@@ -17,4 +17,12 @@ public class ThumbnailService {
     public List<ThumbnailVO> selectThumbnail(String th_table, int th_key) {
         return thumbnailDAO.selectThumbnail(th_table, th_key);
     }
+
+	public boolean uploadLDTH(int ld_num, String uniqueName) {
+		return thumbnailDAO.insertLDTH(ld_num, uniqueName);
+	}
+
+    public boolean uploadRMTH(int rm_num, String uniqueName) {
+        return thumbnailDAO.insertRMTH(rm_num, uniqueName);
+    }
 }

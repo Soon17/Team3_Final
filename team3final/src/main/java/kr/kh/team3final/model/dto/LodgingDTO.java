@@ -2,6 +2,8 @@ package kr.kh.team3final.model.dto;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -20,4 +22,5 @@ public class LodgingDTO {
 	String ld_infor;
 
 	List<RoomDTO> rooms;
+	List<MultipartFile> lodgingThumbnailList;
 }

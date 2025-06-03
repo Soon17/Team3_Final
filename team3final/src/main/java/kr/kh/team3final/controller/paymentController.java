@@ -22,7 +22,7 @@ import kr.kh.team3final.model.vo.ChoiceOptionVO;
 import kr.kh.team3final.model.vo.LoResrvationVO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.RoomVO;
-import kr.kh.team3final.service.ChoiceOptionService;
+import kr.kh.team3final.service.OptionService;
 import kr.kh.team3final.service.LoResrvationService;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RoomService;
@@ -45,7 +45,7 @@ public class PaymentController {
 	LodgingService lodgingService;
 
 	@Autowired
-	ChoiceOptionService choiceOptionService;
+	OptionService optionService;
 
 	@Autowired
 	RoomService roomService;
@@ -58,7 +58,7 @@ public class PaymentController {
 		Model model,@RequestParam int ld_num,@RequestParam String checkTime,@RequestParam String rm_person,@RequestParam int rm_num) {
 		LodgingVO lodging=  lodgingService.getLodging(ld_num);
 		RoomVO room = roomService.getRoom(rm_num);
-		List<ChoiceOptionVO> choiceOptions = choiceOptionService.getChoiceOpotionList(ld_num);
+		List<ChoiceOptionVO> choiceOptions = optionService.getChoiceOpotionList(ld_num);
 		String[] parts = checkTime.split(" ~ ");
 		String checkIn = parseDate(parts[0]);
 		String checkOut = parseDate(parts[1]);

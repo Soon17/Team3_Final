@@ -28,4 +28,6 @@ public interface LodgingDAO {
 
 	void insertDefaultOption(DefaultOptionVO defaultOption);
 
+	int selectDo_num(String do_name);
+
 }

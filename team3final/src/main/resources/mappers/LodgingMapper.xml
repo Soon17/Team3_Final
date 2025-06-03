@@ -101,4 +101,9 @@
 		insert into default_option(do_name)
 		values (#{do_name})
 	</insert>
+	<select id="selectDo_num" resultType="int">
+		select do_num
+		from default_option
+		where do_name = #{do_name}
+	</select>
 </mapper>
