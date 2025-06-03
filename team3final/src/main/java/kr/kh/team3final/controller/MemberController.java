@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.kh.team3final.dao.MemberDAO;
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
+import kr.kh.team3final.model.dto.Rent_ReviewDTO;
 import kr.kh.team3final.model.dto.UpdateUserDTO;
 import kr.kh.team3final.model.vo.MemberVO;
+import kr.kh.team3final.model.vo.RentReservationVO;
 import kr.kh.team3final.model.vo.ReservationVO;
 import kr.kh.team3final.service.MemberService;
+import kr.kh.team3final.service.RentReservationService;
 import kr.kh.team3final.service.ReservationService;
 import kr.kh.team3final.service.ReviewService;
 import kr.kh.team3final.utils.CustomUser;
@@ -43,6 +46,9 @@ public class MemberController {
 	@Autowired
 	ReviewService reviewService;
 
+	@Autowired
+	RentReservationService rentReservationService;
+
 	@GetMapping("/mypage") // 마이 페이지
 	public String mypage(Model model, @AuthenticationPrincipal CustomUser user,
 			@AuthenticationPrincipal OAuth2User oauth2user) {
@@ -59,30 +65,32 @@ public class MemberController {
 		return "member/mypage";
 	}
 
-	@GetMapping("/reservation-history") // 마이 페이지 -> 예약내역 -> 호텔 탭
-	public String reservation(Model model, @AuthenticationPrincipal CustomUser user,
-			@AuthenticationPrincipal OAuth2User oauth2user) {
-		if (user != null) {
-			int meNum = user.getUser().getMe_num();
-			model.addAttribute("user", user.getUser());
-			List<ReservationVO> list = reservationService.selectList(meNum);
-			model.addAttribute("reservation", list);
+	@GetMapping("/reservation-history") // 마이 페이지 -> 예약 내역 (호텔 + 렌트카)
+	public String reservation(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+			MemberVO loginUser = null;
+
+			if (user != null) {
+					loginUser = user.getUser();
+			} else if (oauth2user != null) {
+					loginUser = memberDAO.selectMember(oauth2user.getName());
+			} else {
+					return "redirect:/member/signIn";
+			}
+
+			int meNum = loginUser.getMe_num();
+			model.addAttribute("user", loginUser);
+
+			List<ReservationVO> hotelReservations = reservationService.selectList(meNum);
+			model.addAttribute("hotelReservations", hotelReservations);
+
+			List<RentReservationVO> rentcarReservations = rentReservationService.selectRentList(meNum);
+			model.addAttribute("rentcarReservations", rentcarReservations);
+
 			return "member/reservation-history";
-		} else if (oauth2user != null) {
-			MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
-			int meNum = dbuser.getMe_num();
-			model.addAttribute("user", dbuser);
-			List<ReservationVO> list = reservationService.selectList(meNum);
-			model.addAttribute("reservation", list);
-			return "member/reservation-history";
-		}
-		return "redirect:/member/signIn";
 	}
 
 	@GetMapping("/view-review")
-	public String viewReview(Model model,
-			@AuthenticationPrincipal CustomUser user,
-			@AuthenticationPrincipal OAuth2User oauth2User) {
+	public String viewReview(Model model, @AuthenticationPrincipal CustomUser user,	@AuthenticationPrincipal OAuth2User oauth2User) {
 		Integer meNum = null;
 
 		if (user != null) {
@@ -100,8 +108,12 @@ public class MemberController {
 		if (meNum != null) {
 			list = reviewService.getSelectReviewList(meNum);
 		}
+		List<Rent_ReviewDTO> rentList = new ArrayList<>();
+		if(meNum != null){
+			rentList = reviewService.getSelectRentReviewList(meNum);
+		}
 		model.addAttribute("list", list);
-
+		model.addAttribute("rentList", rentList);
 		return "member/view-review";
 	}
 
@@ -131,8 +143,26 @@ public class MemberController {
 	}
 
 	@GetMapping("/reservation-rent")
-	public String myRent() {
-		return "member/reservation-rent";
+	public String myRent(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+			int meNum = -1;
+
+			if (user != null) {
+					meNum = user.getUser().getMe_num();
+					model.addAttribute("user", user.getUser());
+			} else if (oauth2user != null) {
+					MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
+					meNum = dbuser.getMe_num();
+					model.addAttribute("user", dbuser);
+			}
+			if (meNum != -1) {
+					List<RentReservationVO> latestRent = rentReservationService.getLatestRentReservation(meNum); // 최신 예약 1건
+					model.addAttribute("latestRent", latestRent);
+					model.addAttribute("logIn", true);
+			} else {
+					model.addAttribute("logIn", false);
+			}
+
+			return "member/reservation-rent";
 	}
 
 	@GetMapping("/modify")
@@ -266,4 +296,31 @@ public class MemberController {
 		return "redirect:/member/signIn";
 	}
 
+	@GetMapping("/rent-reservation-history-ajax") // 렌트 예약 '제일 최신 일자' '예약완료' 내역 1개
+	@ResponseBody
+	public List<RentReservationVO> getRentReservationHistory(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+		if(user != null){
+			int meNum = user.getUser().getMe_num();
+			return rentReservationService.getLatestRentReservation(meNum);
+		}
+		else if(oauth2user != null){
+			int meNum = (memberDAO.selectMember(oauth2user.getName())).getMe_num();
+			return rentReservationService.getLatestRentReservation(meNum);
+		}
+		return new ArrayList<>();
+	}
+
+	@GetMapping("/rent-reservation-list-ajax") // 렌트 예약 내역 전체 리스트
+	@ResponseBody
+	public List<RentReservationVO> getRentReservationHistoryAjax(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+		if(user != null){
+			int meNum = user.getUser().getMe_num();
+			return rentReservationService.selectRentList(meNum); // 전체 리스트 반환
+		}
+		else if(oauth2user != null){
+			int meNum = (memberDAO.selectMember(oauth2user.getName())).getMe_num();
+			return rentReservationService.selectRentList(meNum); // 전체 리스트 반환
+		}
+		return new ArrayList<>();
+	}
 }
