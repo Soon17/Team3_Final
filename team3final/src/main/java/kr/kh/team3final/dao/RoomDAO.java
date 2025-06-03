@@ -8,6 +8,7 @@ import kr.kh.team3final.model.dto.RoomDTO;
 import kr.kh.team3final.model.vo.RoomVO;
 
 public interface RoomDAO {
+
 	RoomVO selectRoom(int rm_num);
 
 	List<RoomVO> getAvailableRooms(

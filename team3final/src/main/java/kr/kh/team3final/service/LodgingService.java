@@ -16,8 +16,16 @@ public class LodgingService {
 	@Autowired
 	LodgingDAO lodgingDao;
 
-	public List<LodgingVO> getRegionLodgingList(int rg_num) {
-		return lodgingDao.selectRegionLodgingList(rg_num);
+	public List<LodgingVO> getRegionLodgingList(int rg_num, String type) {
+		switch (type) {
+			case "review":
+				return lodgingDao.selectReviewLodgingList(rg_num);
+		
+			case "price":
+				return lodgingDao.selectPriceLodgingList(rg_num);
+		}
+		//resrvation
+		return lodgingDao.selectReservationLodgingList(rg_num);
 	}
 
 	public LodgingVO allLodgingList(int ld_num) {

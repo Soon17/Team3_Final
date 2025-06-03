@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.ReservationDAO">
     <!-- 전체 숙소 예약 내역 -->
-	<select id="selectList" resultType="ReservationVO"> 
+    <select id="selectList" resultType="ReservationVO"> 
         SELECT 
             r.LR_NUM,
             r.LR_CHECKIN,
@@ -14,7 +14,6 @@
             r.LR_BOOKER_NAME,
             r.LR_GUEST_NAME,
             r.LR_GUEST_NUMBER,
-            r.LR_CONTENT,
             r.LR_MEAL_STATE,
             r.LR_ME_NUM,
             r.LR_RM_NUM,
@@ -34,7 +33,7 @@
     </select>
 
     <!-- 최신 예약완료 내역 1개 -->
-	<select id="selectLatestReservation" resultType="ReservationVO">
+    <select id="selectLatestReservation" resultType="ReservationVO">
         SELECT 
             r.LR_NUM,
             r.LR_CHECKIN,
@@ -46,7 +45,6 @@
             r.LR_BOOKER_NAME,
             r.LR_GUEST_NAME,
             r.LR_GUEST_NUMBER,
-            r.LR_CONTENT,
             r.LR_MEAL_STATE,
             r.LR_ME_NUM,
             r.LR_RM_NUM,

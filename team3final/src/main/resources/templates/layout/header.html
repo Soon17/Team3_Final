@@ -70,9 +70,17 @@
 
                 let section = "hotel-link"; // 기본값
 
-                if (path === "/" || path.startsWith("/hotel") || path.startsWith("/reserv")) {
+                if (
+                    path === "/" ||
+                    path.startsWith("/hotel") ||
+                    path.startsWith("/reserv")
+                ) {
                     section = "hotel-link";
-                } else if (path.startsWith("/rent")) {
+                } else if (
+                    path.startsWith("/rent") ||
+                    path.includes("/searching/rent") ||
+                    path.includes("/searching/car")
+                ) {
                     section = "rent-link";
                 } else if (path.startsWith("/member")) {
                     const saved = localStorage.getItem("selectedSection");

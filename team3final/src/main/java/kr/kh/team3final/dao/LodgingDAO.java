@@ -11,8 +11,12 @@ import kr.kh.team3final.model.vo.SearchCriteria;
 
 public interface LodgingDAO {
 
-	List<LodgingVO> selectRegionLodgingList(int rg_num);
+	List<LodgingVO> selectReviewLodgingList(int rg_num);
 
+	List<LodgingVO> selectPriceLodgingList(int rg_num);
+
+	List<LodgingVO> selectReservationLodgingList(int rg_num);
+	
 	LodgingVO allLodgingList(@Param("ld_num") int ld_num);
 
 	List<LodgingVO> selectRegionSwitchLodgingList(

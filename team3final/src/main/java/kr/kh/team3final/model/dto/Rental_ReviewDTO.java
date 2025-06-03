@@ -9,15 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Lodging_ReviewDTO {
+public class Rental_ReviewDTO {
 	int rv_num;
 	int rv_rating;
 	Date rv_date;
 	String rv_content;
-	int ld_num;
-	String ld_name;
-	String ld_region;
+	Date rvDate;
+
+	int re_num;
+	String re_name;
+	String re_region;
 	String me_nick;
-	String rm_name;
-	int lr_num;
+	String ct_name;
+	int rr_num;
 }

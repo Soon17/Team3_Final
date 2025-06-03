@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
   <!-- <script src="https://cdn.iamport.kr/v1/iamport.js"></script> -->
+
   <style>
     .pay-summary-box {
       position: fixed;
@@ -97,8 +98,9 @@
         <!-- 상세 요금 -->
         <div class="priceDetail" style="display: none; font-size: 13px;">
           <div class="d-flex justify-content-between bg-light p-2 rounded mb-2">
-            <div class="text-muted">1박 숙박 요금</div>
-            <div class="text-muted summary-room-price"></div>
+            <div class="text-muted">1박 렌트 요금</div>
+            <span class="car-price-text" th:if="${car != null}"
+              th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"></span>
           </div>
         </div>
         <hr>
@@ -110,22 +112,23 @@
       </div>
     </div>
   </main>
-
   <!-- 하단 고정 모바일 결제 박스 -->
   <div class="mobile-pay-footer">
     <div class="mobile-pay-button">
-      <strong class="mobile-room-price"></strong>
+      <strong class="mobile-rent-price"></strong>
     </div>
   </div>
   <script>
-    $(document).ready(function () {
-      let t = $(".room-total-price").text();
-      $(".summary-total-price").text(t);
-      $(".mobile-room-price").text(t);
-      $(".summary-st-price").text(t);
-      $(".summary-room-price").text($(".room-rm-price").text());
-    })
+    function initDetailSummary() {
+      const carPrice = $(".car-price-text").text().trim();
+
+      $(".car-total-price").text(carPrice);
+      $(".summary-st-price").text(carPrice);
+      $(".mobile-rent-price").text(carPrice);
+      $(".car-rent-price").text(carPrice);
+    }
   </script>
+
 </body>
 
 </html>

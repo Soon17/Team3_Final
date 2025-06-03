@@ -18,4 +18,7 @@ public class LodgingVO {
 	Double avg_rating;
 	int min_price;
 	int review_count;
+	int reservation_count;
+	String main_thumbnail;
+	String th_name;
 }

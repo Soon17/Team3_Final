@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<title>렌트카 상세</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<!-- Kakao Maps API -->
+	<!-- <script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
+
+	<style>
+		.row {
+			max-width: 1032px;
+			display: flex;
+			justify-content: center;
+			flex-wrap: nowrap;
+			margin-top: 30px;
+			margin-bottom: 150px;
+		}
+
+		.main-container {
+			background-color: #f5f6f7;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.container-box {
+			background-color: #fff;
+			padding: 25px 30px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.menu-button {
+			background-color: #fff;
+			display: flex;
+			align-items: center;
+			position: sticky;
+			top: 0;
+			margin-left: 1px;
+			z-index: 1000;
+			gap: 10px;
+		}
+
+		.button-menu {
+			border: 0;
+			border-bottom: 2px solid rgba(0, 0, 0, 0);
+			padding: 1rem 0 calc(1rem - 2px);
+			flex: 1 1;
+			background: rgba(0, 0, 0, 0);
+			cursor: pointer;
+			transition: all .3s ease;
+		}
+
+		.button-menu.active {
+			border-bottom-color: #0d6ffc;
+		}
+
+		.button-name {
+			position: relative;
+			font-size: .875rem;
+			font-weight: 600;
+			color: #494949;
+		}
+
+		#review-more-btn {
+			cursor: pointer;
+			font-size: 1rem;
+			border-radius: .5rem;
+			color: #7b8bab;
+			border: 1px solid #7b8bab;
+			background: transparent;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			margin: 1rem 0;
+			padding: 7px 0;
+		}
+
+		@media screen and (max-width:990px) {
+			footer {
+				display: none;
+			}
+
+			.row {
+				flex-direction: column;
+				align-items: center;
+				padding: 0;
+				margin: 0 auto;
+			}
+
+			.container-box {
+				padding: 20px;
+				margin-right: 0 !important;
+				margin-bottom: 70px;
+				margin-top: 10px;
+				width: 100%;
+				max-width: 640px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<main layout:fragment="content" class="main-container">
+		<div class="container mb-5">
+			<!-- 왼쪽 데이터 시작-->
+			<div class="row">
+				<div class="col-md-7 container-box mr-3">
+					<th:block th:if="${car != null}">
+						<div class="car-top-info">
+							<div class="inner-wrapper">
+								<div class="car-image" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+									<img th:src="@{'/resources/static/imgs/' + ${car.cr_thumbnail}}" alt="차량 이미지"
+										style="max-width: 480px; max-height: 250px; width: 100%; height: 100%; border-radius: 10px;">
+									<div style="color: #999; font-size: .84rem; margin-bottom: 15px;">
+										차량 이미지는 이해를 돕기 위한 예시로, 배차 차량과 다를 수 있습니다.
+									</div>
+								</div>
+
+								<div class="car-spec border-bottom pb-3">
+									<div class="d-flex align-items-center" style="gap: 6px; margin-top: 8px;">
+										<span class="badge bg-light text-dark px-2 py-1" style="font-size: 12px; border-radius: 12px;">
+											<i class="fas fa-car-side" style="margin-right: 4px;"></i>
+											<span th:text="${car.ct_type}">차종</span>
+										</span>
+										<span class="badge bg-warning text-white px-2 py-1" style="font-size: 12px; border-radius: 12px;">
+											최저가 보장
+										</span>
+									</div>
+									<div class="car-name" style="font-size: 20px; font-weight: bold;"
+										th:text="${car.ct_name} + ' ' + ${car.cr_year} + '년식'">
+										차이름 + 년식
+									</div>
+								</div>
+							</div>
+						</div>
+					</th:block>
+
+					<div class="d-flex justify-content-center align-items-center border-bottom py-2" style="gap: 32px;">
+						<div class="text-center mx-5">
+							<small class="text-muted">대여일</small>
+							<div style="font-weight: bold;" class="check-in" th:text="${checkin}">대여일</div>
+						</div>
+						<div class="text-center mx-5">
+							<span class="badge badge-light night" th:text="${rentalDays + '박'}">박</span>
+						</div>
+						<div class="text-center mx-5">
+							<small class="text-muted">반납일</small>
+							<div style="font-weight: bold;" class="check-out" th:text="${checkout}">반납일</div>
+						</div>
+					</div>
+
+					<div class="text-center mx-5">
+						<div class="car-price-range" style="margin-top: 25px; margin-bottom: 25px; font-size: 18px;">
+							<div class="start-price"
+								style="display: flex; justify-content: flex-end; align-items: baseline; gap: 6px;">
+								<span th:if="${car != null}" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"
+									style="color: #d64545; font-weight: bold;">가격</span>
+								<span class="text-muted" style="font-size: 0.9rem; color: #666; font-weight: bold;">/1박</span>
+							</div>
+						</div>
+					</div>
+					<div class="d-flex justify-content-between align-items-center my-3"
+						style="padding: 10px; margin-right: 20px;">
+						<!-- 업체명 -->
+						<span th:text="${rental.re_name}" style="font-weight: bold;">업체명</span>
+						<!-- 별점 -->
+						<div>
+							<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
+							<span th:text="${rental.avg_rating}" style="font-weight: bold;">평점</span>
+						</div>
+					</div>
+					<!-- 렌트 상세 정보-->
+					<div class="menu-button">
+						<button class="button-menu" data-target=".car-detail-box">
+							<span class="button-name">예약정보</span>
+						</button>
+						<button class="button-menu" data-target=".rent-mustread">
+							<span class="button-name">필독사항</span>
+						</button>
+						<button class="button-menu" data-target=".rent-rivew">
+							<span class="button-name">리뷰</span>
+						</button>
+					</div>
+
+					<!--예약정보-->
+					<div class="car-detail-box" style="font-size: 15px; line-height: 1.8;">
+						<th:block th:if="${car != null}">
+							<div>
+								<strong style="display: block; font-size: 16px; margin-bottom: 8px; margin-top: 10px;">차량정보</strong>
+
+								<span style="margin-right: 16px;">
+									<i class="fas fa-calendar-alt" style="color: #999;"></i>
+									<span th:text="${car.cr_year}">2년식</span>
+								</span>
+
+								<span style="margin-right: 16px;">
+									<i class="fas fa-tint" style="color: #999;"></i>
+									<span th:text="${car.cr_fuel_type}">유류종류</span>
+								</span>
+
+								<span>
+									<i class="fas fa-cogs" style="color: #999;"></i>
+									<span th:text="${car.cr_trans}">기어 종류</span>
+								</span>
+							</div>
+						</th:block>
+
+
+						<!-- 부가서비스 -->
+						<div style="margin-top: 20px;">
+							<strong style="display: block; font-size: 16px; margin-bottom: 8px;">부가 서비스</strong>
+							<div>유모차/카시트 대여</div>
+						</div>
+
+						<!-- 대여조건 -->
+						<div style="margin-top: 20px;">
+							<strong style="display: block; font-size: 16px; margin-bottom: 8px;">대여조건</strong>
+							<div>
+								차량 대여 시 실물면허증 소지 (<span style="color: #007bff; font-weight: bold;">2종 보통</span> 면허 이상 필요)
+							</div>
+						</div>
+						<div style="display: flex; justify-content: space-around; background: #f8f8f8; padding: 10px 0; 
+							border-radius: 12px; max-width: 600px; margin-top: 10px; margin-bottom: 30px; cursor: pointer;">
+							<div style="text-align: center; position: relative; width: 80px;">
+								<i class="fas fa-paw" style="font-size: 24px; color: #aaa;"></i>
+								<i class="fas fa-ban"
+									style="color: #ccc; font-size: 28px; position: absolute; top: -2px; left: 50%; transform: translateX(-50%); opacity: 0.7;"></i>
+								<div style="margin-top: 6px; color: #888; font-size: 13px;">반려동물</div>
+							</div>
+							<div style="text-align: center; position: relative; width: 80px;">
+								<i class="fas fa-fish" style="font-size: 24px; color: #aaa;"></i>
+								<i class="fas fa-ban"
+									style="color: #ccc; font-size: 28px; position: absolute; top: -2px; left: 50%; transform: translateX(-50%); opacity: 0.7;"></i>
+								<div style="margin-top: 6px; color: #888; font-size: 13px;">낚시용품</div>
+							</div>
+						</div>
+						<div>
+							<strong style="display: block; font-size: 20px; margin-bottom: 10px;">부가 서비스</strong>
+							<div style="margin-bottom: 8px;">
+								<span style="font-weight: 500;">유모차 / 카시트</span>
+							</div>
+							<div style="color: #555;">
+								예약 완료 후 상세 화면에서 유모차 및 카시트를 제휴 업체를 통해 신청할 수 있습니다.<br>
+								이용 가능 여부는 업체 사정에 따라 달라질 수 있습니다.
+							</div>
+							<div style="color: #999; font-size: 13px; margin-top: 10px; margin-bottom: 30px;">
+								* 고객님의 편의를 위해 신뢰할 수 있는 업체와 연결해 드립니다.
+							</div>
+						</div>
+					</div>
+					<!--필독사항-->
+					<div class="rent-mustread">
+						<strong style="font-size: 20px; margin-bottom: 15px;">본사 대여규정</strong>
+						<div style="font-family: 'Noto Sans KR', sans-serif; letter-spacing: -0.05em; color: #666;">
+							<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+								<div
+									style="background: #f1f1f1; border-radius: 20px; padding: 6px 14px; font-size: 14px; margin-top: 10px;">
+									반려동물/낚시용품</div>
+							</div>
+							<div style="margin-bottom: 20px;">
+								<div style="margin-bottom: 10px;">
+									<strong>반려동물 동반 시 대여 불가</strong><br>
+								</div>
+								<div style="margin-bottom: 10px;">
+									<strong>낚시용품 지참 시 대여 불가</strong>
+								</div>
+								<div style="margin-bottom: 10px;">
+									<strong>실내클리닝 비용 청구</strong>
+									<div style="font-size: 14px;">
+										- 악취/오염 발생 시 정도에 따라 실내 클리닝 비용 청구
+									</div>
+								</div>
+							</div>
+							<div style="margin-bottom: 25px; font-size: 14px; letter-spacing: -0.03em; line-height: 1.5;">
+								<h5 style="font-size: 15px; font-weight: bold; margin-bottom: 12px;">자차보험</h5>
+								<div style="margin-bottom: 10px;">
+									&lt;일반자차&gt;<br>
+									- 보상한도 내에서 면책금과 휴차보상료 (1일 대여요금의 50%)는 임차인 부담<br>
+									- 단독사고인 경우 보험처리 가능<br>
+									- 휠/타이어 보험처리 불가
+								</div>
+								<div style="margin-bottom: 10px;">
+									&lt;완전자차&gt;<br>
+									- 보상한도 내에서 면책금과 휴차보상료 없음<br>
+									- 단독사고인 경우 보험처리 가능<br>
+									- 휠/타이어 보험처리 불가
+								</div>
+								<div>
+									&lt;슈퍼자차&gt;<br>
+									- 보상한도 내에서 면책금과 휴차보상료 없음<br>
+									- 단독사고인 경우 보험처리 가능<br>
+									- 휠/타이어 보험처리 불가
+								</div>
+							</div>
+							<div
+								style="font-size: 14px; letter-spacing: -0.03em; line-height: 1.5; word-break: keep-all; margin-bottom: 25px;">
+								<h5 style="font-size: 15px; font-weight: bold; margin-bottom: 12px;">기타 특이사항</h5>
+								<p style="margin: 0;">- 차량 반납 시, 차량 내 문제 확인되면 실내 클리닝 비용 25만원 청구</p>
+							</div>
+							<div
+								style="font-size: 14px; letter-spacing: -0.03em; line-height: 1.5; word-break: keep-all; margin-bottom: 25px;">
+								<h5 style="font-size: 15px; font-weight: bold; margin-bottom: 12px;">연료 규정</h5>
+								<p style="margin: 0;">
+									- 차량 반납 시, 대여 시의 연료량과 동일하도록 주유하여 반납해야 합니다.(차량 대여 직후 계기판 사진 촬영 권장)<br>
+									- 연료량이 모자를 경우, 추가 비용이 발생할 수 있으며 기존 연료량보다 많을 경우, 환불이 불가능합니다.<br>
+									- 반납 시 주유 불충분에 대해서는 주유소의 가격과 상이할 수 있으며, 주유서비스 비용이 함께 청구될 수 있습니다.</p>
+							</div>
+							<div
+								style="font-size: 14px; letter-spacing: -0.03em; line-height: 1.5; word-break: keep-all; margin-bottom: 25px;">
+								<h5 style="font-size: 15px; font-weight: bold; margin-bottom: 12px;">약정 주행거리</h5>
+								<p style="margin: 0;">
+									- 약정 주행거리는 렌트카 업체의 대여 규정을 확인해 주세요
+									- 주행거리 초과 시, km당 추가 요금이 발생하거나 이후 이용이 어려울 수 있습니다.</p>
+							</div>
+						</div>
+					</div>
+					<div class="rent-rivew">
+						<h5 style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">업체정보</h5>
+						<div>
+							<!-- 업체명 -->
+							<span th:text="${rental.re_name}">업체명</span>
+							<!-- 별점 + 예약수 -->
+							<div>
+								<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
+								<span th:text="${rental.avg_rating}">평점</span>
+								<span style="font-size: 12px; color: #666;" th:text="|리뷰수 (${rental.review_count})|">(0 리뷰수)</span>
+							</div>
+						</div>
+						<div style=" position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
+							<!-- 지도 호출 부분 -->
+							<div onclick="openMapModal()" class="rent-map-datail" id="map1"></div>
+						</div>
+						<div style="font-size: 14px; color: #444; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif;">
+							<div style="margin-bottom: 16px;">
+								<div style="font-weight: bold;">주소</div>
+								<div>제주특별자치도 제주시 연미길 35</div>
+							</div>
+							<div style="margin-bottom: 16px;">
+								<div style="font-weight: bold;">전화</div>
+								<div>064-743-8285</div>
+							</div>
+							<div style="margin-bottom: 16px;">
+								<div style="font-weight: bold;">
+									영업시간
+								</div>
+								<div>08:00~20:00</div>
+							</div>
+						</div>
+						<!-- 리뷰 리스트 -->
+						<div style="display: flex; flex-direction: column; gap: 1rem;">
+							<div style="display: flex; justify-content: space-between;align-items: center;">
+								<div style="font-size: 20px; font-weight: bold; color: #494949;">리뷰</div>
+							</div>
+							<!-- 전체 컨테이너 -->
+							<div class="rating-stats"
+								style="flex:1 1 50%; width:50%; padding-right:1rem; display:flex; flex-direction:column;gap:1.5rem;">
+
+								<!-- 평균 점수 -->
+								<div style="display:flex;justify-content:space-between;align-items:center;">
+									<div style="font-size:1rem;font-weight:bold;color:#494949;">평점</div>
+									<div style="display:flex;align-items:baseline;gap:.25rem;">
+										<div style="font-size:2rem;font-weight:bold;color:#0d6ffc;" th:text="${avg_rating}">0.0
+										</div>
+										<div style="font-size:1rem;color:#d4d4d4;">/ 5.0</div>
+									</div>
+								</div>
+
+								<!-- 점수 분포 -->
+								<div th:with="total=${review_count}"
+									style="display:flex;flex-direction:column;gap:.5rem;line-height:1.5; margin-bottom: 16px;">
+
+									<th:block th:each="i : ${#numbers.sequence(5,1,-1)}" th:with="
+										key=${i.intValue()},
+										strKey=${key + ''},
+										count=${ratingCounts.get(strKey)},
+										percent=${count != null ? (count * 100.0 / total) : 0}">
+
+										<div style="display:flex;align-items:center;gap:.75rem;">
+											<!-- 점수 라벨 -->
+											<div style="font-size:.9rem;font-weight:bold;color:#494949;" th:text="|${key}점|">점수</div>
+
+											<!-- 바 배경 -->
+											<div style="flex:1; height:.5rem; background:#e5e7eb; border-radius:999px; overflow:hidden;">
+												<div th:style="|width:${percent}%; height:100%; background:#0d6ffc;|"></div>
+											</div>
+
+											<!-- 인원 수 -->
+											<div style="width:2rem;text-align:right;font-size:.9rem;color:#333;"
+												th:text="${count != null ? count : 0} + '명'">몇명</div>
+										</div>
+								</div>
+							</div>
+							<!-- 리뷰 리스트 목록 -->
+							<div>
+								<div class="review-item"
+									style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
+									onclick="handleReviewClick(this)">
+									<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+										<div style="display: flex; align-items: end; gap: .125rem;">
+											<div style="font-size: 1.5rem; font-weight: bold; color: #333;">별점
+											</div>
+											<div
+												style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5; margin-bottom: 4px;">
+												/ 5.0
+											</div>
+										</div>
+										<div>
+											<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">차 이름</span>
+										</div>
+									</div>
+									<div>
+										<div style="width: 100%; display: flex; align-items: center;">
+											<i class="fas fa-user"></i>
+											<p
+												style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+												닉네임</p>
+										</div>
+										<p class="rev" style="margin: 0; width: 40%; font-size: .875rem; line-height: 1.5; color: #666;">
+											<span>리뷰</span>
+										</p>
+										<div style="width: 100%; display: flex; align-items: center;">
+											<span style="font-size: .75rem; line-height: 1.5; color: #999;">날짜</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<button id="review-more-btn">더보기</button>
+						</div>
+					</div>
+
+					<!-- 총 상품금액 -->
+					<h5 class="mb-4 mt-5">결제 정보</h5>
+					<div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
+						<div class="text-muted" style="font-size: 14px;">요금 포함 사항</div>
+						<div class="d-flex align-items-center" style="gap: 4px;">
+							<div style="font-weight: bold;" class="car-total-price" text="car.cr_price"></div>
+							<img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
+						</div>
+					</div>
+					<!-- 렌트 요금 -->
+					<div class="priceDetail" style="display: none; font-size: 13px;">
+						<div class="d-flex justify-content-between bg-light p-2 rounded mb-1">
+							<div class="text-muted">1박 렌트 요금</div>
+							<div class="text-muted" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"></div>
+						</div>
+					</div>
+					<hr>
+					<!-- 총 결제금액 -->
+					<div class="d-flex justify-content-between mt-3">
+						<strong>예상 결제금액</strong>
+						<strong class="st-total-price"
+							th:text="${#numbers.formatInteger(car.cr_price * rentalDays, 3, 'COMMA')} + '원'">
+						</strong>
+					</div>
+				</div>
+
+				<!-- 왼쪽 데이터 끝-->
+				<div class="col-md-5" id="payment-summary-container" style="position: relative; overflow: visible;">
+					<!-- Ajax로 불러온 내용이 여기에 들어옴 -->
+				</div>
+			</div>
+		</div>
+		<!--모달-->
+		<div class="modal" id="paymentModal">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<!-- Modal 헤더 -->
+					<div class="modal-header">
+						<span>결제하기</span>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 리뷰 모달 -->
+		<div class="modal fade" id="reviewModal" role="dialog">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content p-4">
+					<div class="modal-header">
+						<h5 class="modal-title"><span id="modal-nickname">닉네임</span>님의 리뷰</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p id="modal-content">내용</p>
+						<p id="modal-date" class="text-muted">날짜</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="mapModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 750px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">호텔 지도 보기</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body p-0">
+						<div style="height: 70vh; max-height: 800px;">
+							<div id="modal-map" style="width: 100%; height: 100%;"></div>
+						</div>
+						<div class="p-3" style="font-size: 0.9rem; color: #666; display: flex; justify-content: center;"
+							id="map-address"></div>
+					</div>
+					<div class="modal-footer p-0">
+						<div class="d-flex w-100">
+							<button type="button" id="route-btn" class="flex-fill btn btn-light rounded-0">
+								길찾기
+							</button>
+							<button type="button" id="copy-addr-btn" class="flex-fill btn btn-light rounded-0 border-left">
+								주소 복사
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--드롭다운-->
+		<script>
+			let detailVisible = false;
+
+			function toggleDetailAll() {
+				const $details = $(".priceDetail");
+				const $arrows = $(".arrowImg");
+
+				detailVisible = !detailVisible;
+
+				if (detailVisible) {
+					$details.stop(true, true).slideDown(200);
+					$arrows.attr("src", "/resources/static/imgs/small-up.png");
+				} else {
+					$details.stop(true, true).slideUp(200);
+					$arrows.attr("src", "/resources/static/imgs/small-down.png");
+				}
+			}
+		</script>
+		<!--에이젝스-->
+		<script>
+			$(function () {
+				const checkTime = '2025.06.03 ~ 2025.06.04'; // 임시
+				const crId = 1; // 임시 ID
+				$.ajax({
+					url: '/rent/detailSummary',
+					type: 'GET',
+					data: {
+						cr_id: crId,
+						checkTime: checkTime
+					},
+					success: function (html) {
+						$('#payment-summary-container').html(html);
+						initDetailSummary(); // ← 이걸 호출해야 함
+					},
+					error: function () {
+						console.error('불러오기 실패');
+					}
+				});
+			});
+		</script>
+		<!-- 자동 탭 추적 기능 -->
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				// 상단 탭 버튼 (.button-menu)
+				const tabButtons = document.querySelectorAll('.button-menu');
+
+				tabButtons.forEach(btn => {
+					btn.addEventListener('click', function (e) {
+						e.preventDefault();
+
+						// 기존 active 제거하고 현재 버튼에만 active 추가
+						tabButtons.forEach(b => b.classList.remove('active'));
+						this.classList.add('active');
+
+						// 대상 위치로 스크롤
+						const targetSelector = this.dataset.target;
+						const target = document.querySelector(targetSelector);
+						if (!target) return;
+
+						const headerOffset = 80;
+						const y = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+						window.scrollTo({ top: y, behavior: 'smooth' });
+					});
+				});
+
+				const goToReview = document.querySelector('.go-to-review');
+				if (goToReview) {
+					goToReview.addEventListener('click', function () {
+						const targetSelector = this.dataset.target;
+						const target = document.querySelector(targetSelector);
+						if (!target) return;
+
+						const headerOffset = 80;
+						const y = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+						window.scrollTo({ top: y, behavior: 'smooth' });
+					});
+				}
+
+				//내부 정보 탭 전환 
+				const infoTabs = document.querySelectorAll('.sub-infor');
+				const tabContents = document.querySelectorAll('.tab-content');
+
+				infoTabs.forEach((btn, idx) => {
+					btn.addEventListener('click', function () {
+						infoTabs.forEach(b => b.classList.remove('active'));
+						this.classList.add('active');
+
+						tabContents.forEach((content, i) => {
+							content.style.display = (i === idx) ? 'block' : 'none';
+						});
+					});
+				});
+			});
+		</script>
+		<!--스크롤시 색변경-->
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const tabButtons = document.querySelectorAll('.button-menu');
+				const sectionMap = {};
+				let isClickScrolling = false;
+
+				// 버튼과 섹션 매핑
+				tabButtons.forEach(btn => {
+					const selector = btn.dataset.target;
+					const section = document.querySelector(selector);
+					if (section) {
+						sectionMap[selector] = { btn, section };
+
+						// 버튼 클릭 시
+						btn.addEventListener('click', function (e) {
+							e.preventDefault();
+							isClickScrolling = true; // 클릭 스크롤 중 플래그 켜기
+
+							tabButtons.forEach(b => b.classList.remove('active'));
+							this.classList.add('active');
+
+							const targetOffset = section.getBoundingClientRect().top + window.scrollY - 80;
+							window.scrollTo({ top: targetOffset, behavior: 'smooth' });
+
+							// 1초 후 플래그 해제 (스크롤 끝났다고 판단)
+							setTimeout(() => {
+								isClickScrolling = false;
+							}, 1000);
+						});
+					}
+				});
+
+				// 자동 감지 탭 변경
+				const observer = new IntersectionObserver(entries => {
+					if (isClickScrolling) return; // 클릭 스크롤 중이면 무시
+
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							const matched = Object.values(sectionMap).find(obj => obj.section === entry.target);
+							if (matched) {
+								tabButtons.forEach(btn => btn.classList.remove('active'));
+								matched.btn.classList.add('active');
+							}
+						}
+					});
+				}, {
+					root: null,
+					rootMargin: '0px',
+					threshold: 0.6
+				});
+
+				Object.values(sectionMap).forEach(obj => {
+					observer.observe(obj.section);
+				});
+			});
+		</script>
+
+		<!--드롭다운 실행-->
+		<script>
+			$(document).on("click", ".arrowImg", function () {
+				toggleDetailAll();
+			});
+		</script>
+		<!-- 리뷰 목록 -->
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				// 리뷰 항목
+				const reviews = document.querySelectorAll('.review-item');
+
+				// 더보기 버튼
+				const moreBtn = document.getElementById('review-more-btn');
+
+				const showCount = 3;
+
+				// 리뷰가 3개 이하면 버튼 숨김
+				if (reviews.length <= showCount) {
+					moreBtn.style.display = 'none';
+					return;
+				}
+
+				// 처음엔 4번째 이후 리뷰들 숨기기
+				reviews.forEach((el, idx) => {
+					if (idx >= showCount) el.style.display = 'none';
+				});
+
+				// 클릭 시 나머지 리뷰 모두 보여주고 버튼 숨기기
+				moreBtn.addEventListener('click', function () {
+					reviews.forEach(el => el.style.display = 'block');
+					moreBtn.style.display = 'none';
+				});
+			});
+		</script>
+
+	</main>
+</body>
+
+</html>

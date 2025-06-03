@@ -11,8 +11,8 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 	<!-- Kakao Maps API -->
-	<script
-		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
+	<!-- <script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
 
 	<style>
 		.container {
@@ -844,7 +844,8 @@
 			</div>
 			<div class="infor-container container">
 				<div class="infor-item">
-					<span class="infor-star" th:text="${lodging.ld_rating + '성급'}"></span>
+					<span class="infor-star" th:text="${lodging.ld_type == '호텔' ? lodging.ld_rating + '성급' : lodging.ld_type}">
+					</span>
 					<p class="infor-name" th:text="${lodging.ld_name}"></p>
 					<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 5px;">
 						<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
@@ -1026,8 +1027,10 @@
 																<!--총 금액  -->
 															</div>
 															<div style="text-align: right; font-size: 0.8rem; color: #666; margin-top: 4px;">
-																<small th:text="'총' + ${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"
-																	style="font-size: 13px;"></small>
+																<small
+																	th:text="'총 ' + ${#numbers.formatInteger(room.rm_price * nights, 3, 'COMMA')} + '원 (' + ${nights} + '박)'"
+																	style="font-size: 13px;">
+																</small>
 															</div>
 														</div>
 													</div>
@@ -1086,8 +1089,10 @@
 
 														<!-- 총 금액 한 줄 아래로 -->
 														<div style="text-align: right; font-size: 0.8rem; color: #666; margin-top: 4px;">
-															<small th:text="'총' + ${#numbers.formatInteger(room.rm_price, 3, 'COMMA')} + '원'"
-																style="font-size: 13px;"></small>
+															<small
+																th:text="'총 ' + ${#numbers.formatInteger(room.rm_price * nights, 3, 'COMMA')} + '원 (' + ${nights} + '박)'"
+																style="font-size: 13px;">
+															</small>
 														</div>
 													</div>
 													<div class="hotel-service p-2">
@@ -1703,8 +1708,11 @@
 														onclick="handleReviewClick(this)">
 														<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
 															<div style="display: flex; align-items: end; gap: .125rem;">
-																<div style="font-size: 1.5rem; font-weight: bold; color: #333;">5.0</div>
-																<div style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5;">/ 5.0
+																<div style="font-size: 1.5rem; font-weight: bold; color: #333;"
+																	th:text="${rev.rv_rating} + .0">별점</div>
+																<div
+																	style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5; margin-bottom: 4px;">
+																	/ 5.0
 																</div>
 															</div>
 															<div>

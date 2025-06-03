@@ -226,7 +226,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             "gender", dbUser.getMe_gender(),
             "phoneNumber", dbUser.getMe_number(),
             "profileImage", dbUser.getMe_profile(),
-            "provider", dbUser.getMe_provider()
+            "provider", dbUser.getMe_provider(),
+            "num", dbUser.getMe_num()
         );
 
         return new DefaultOAuth2User(

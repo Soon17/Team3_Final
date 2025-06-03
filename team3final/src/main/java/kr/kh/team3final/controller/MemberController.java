@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +26,6 @@ import kr.kh.team3final.utils.CustomUser;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 
 @Controller
 @RequestMapping("/member")
@@ -46,32 +44,31 @@ public class MemberController {
 	ReviewService reviewService;
 
 	@GetMapping("/mypage") // 마이 페이지
-	public String mypage(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-		if(user != null){
+	public String mypage(Model model, @AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user) {
+		if (user != null) {
 			model.addAttribute("user", user.getUser());
 			model.addAttribute("logIn", true);
-		}
-		else if(oauth2user != null){
+		} else if (oauth2user != null) {
 			MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
 			model.addAttribute("user", dbuser);
 			model.addAttribute("logIn", true);
-		}
-		else {
+		} else {
 			model.addAttribute("logIn", false);
 		}
 		return "member/mypage";
 	}
 
 	@GetMapping("/reservation-history") // 마이 페이지 -> 예약내역 -> 호텔 탭
-	public String reservation(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-		if(user != null){
+	public String reservation(Model model, @AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user) {
+		if (user != null) {
 			int meNum = user.getUser().getMe_num();
 			model.addAttribute("user", user.getUser());
 			List<ReservationVO> list = reservationService.selectList(meNum);
 			model.addAttribute("reservation", list);
 			return "member/reservation-history";
-		}
-		else if(oauth2user != null){
+		} else if (oauth2user != null) {
 			MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
 			int meNum = dbuser.getMe_num();
 			model.addAttribute("user", dbuser);
@@ -83,44 +80,47 @@ public class MemberController {
 	}
 
 	@GetMapping("/view-review")
-	public String viewReview(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2User) {
+	public String viewReview(Model model,
+			@AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2User) {
 		Integer meNum = null;
-		if(user != null) {
+
+		if (user != null) {
 			meNum = user.getUser().getMe_num();
-		} else if(oauth2User != null) {
-			Object meNumObj = oauth2User.getAttribute("meNum");
-				if(meNumObj instanceof Integer) {
-					meNum = (Integer) meNumObj;
-				} else if(meNumObj instanceof String) {
-					meNum = Integer.valueOf((String) meNumObj);
-				}
+			model.addAttribute("user", user.getUser());
+		} else if (oauth2User != null) {
+			MemberVO dbUser = memberDAO.selectMember(oauth2User.getName());
+			if (dbUser != null) {
+				meNum = dbUser.getMe_num();
+				model.addAttribute("user", dbUser);
+			}
 		}
 
 		List<Lodging_ReviewDTO> list = new ArrayList<>();
-		if(meNum != null) {
+		if (meNum != null) {
 			list = reviewService.getSelectReviewList(meNum);
 		}
-		
 		model.addAttribute("list", list);
+
 		return "member/view-review";
 	}
 
 	@GetMapping("/reservation-hotel")
-	public String myHotel(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+	public String myHotel(Model model, @AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user) {
 		if (user != null) {
 			int meNum = user.getUser().getMe_num();
 			model.addAttribute("user", user.getUser());
-	
+
 			List<ReservationVO> latestReservation = reservationService.getLatestReservation(meNum);
 			model.addAttribute("reservations", latestReservation);
 			model.addAttribute("logIn", false);
-		}
-		else if(oauth2user != null){
+		} else if (oauth2user != null) {
 			MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
 
 			int meNum = dbuser.getMe_num();
 			model.addAttribute("user", dbuser);
-	
+
 			List<ReservationVO> latestReservation = reservationService.getLatestReservation(meNum);
 			model.addAttribute("reservations", latestReservation);
 			model.addAttribute("logIn", false);
@@ -136,19 +136,18 @@ public class MemberController {
 	}
 
 	@GetMapping("/modify")
-	public String modify(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-			
+	public String modify(Model model, @AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user) {
+
 		MemberVO member = null;
 
 		if (user != null) {
 			member = user.getUser();
-		}
-		else if (oauth2user != null) {
+		} else if (oauth2user != null) {
 			String email = (String) oauth2user.getAttributes().get("email");
 			String provider = ((String) oauth2user.getAttributes().getOrDefault("provider", "NORMAL")).toUpperCase();
 			member = memberService.getMemberByEmailAndProvider(email, provider);
-		}
-		else {
+		} else {
 			return "redirect:/member/signIn";
 		}
 
@@ -172,33 +171,33 @@ public class MemberController {
 	public String getMethodName() {
 		return "member/signIn";
 	}
+
 	@GetMapping("/check/id")
 	@ResponseBody
 	public boolean checkId(@RequestParam String id) {
 		return memberService.checkId(id);
 	}
-	
+
 	@PostMapping("/signInPost")
 	public String signIn(Model model, MemberVO member) {
-		if(memberService.signIn(member)){
+		if (memberService.signIn(member)) {
 			model.addAttribute("msg", "회원가입이 완료되었습니다!");
-		}
-		else {
+		} else {
 			model.addAttribute("msg", "회원가입에 실패하였습니다!");
 		}
 		model.addAttribute("url", "/member/signIn");
-		
+
 		return "msg";
 	}
 
 	@GetMapping("/reservation-history-ajax") // 숙소 예약 '제일 최신 일자' '예약완료' 내역 1개
 	@ResponseBody
-	public List<ReservationVO> getReservationHistory(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-		if(user != null){
+	public List<ReservationVO> getReservationHistory(@AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user) {
+		if (user != null) {
 			int meNum = user.getUser().getMe_num();
 			return reservationService.getLatestReservation(meNum);
-		}
-		else if(oauth2user != null){
+		} else if (oauth2user != null) {
 			int meNum = (memberDAO.selectMember(oauth2user.getName())).getMe_num();
 			return reservationService.getLatestReservation(meNum);
 		}
@@ -207,12 +206,12 @@ public class MemberController {
 
 	@GetMapping("/reservation-list-ajax") // 숙소 예약 내역 전체 리스트
 	@ResponseBody
-	public List<ReservationVO> getReservationHistoryAjax(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
-		if(user != null){
+	public List<ReservationVO> getReservationHistoryAjax(@AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user) {
+		if (user != null) {
 			int meNum = user.getUser().getMe_num();
 			return reservationService.selectList(meNum); // 전체 리스트 반환
-		}
-		else if(oauth2user != null){
+		} else if (oauth2user != null) {
 			int meNum = (memberDAO.selectMember(oauth2user.getName())).getMe_num();
 			return reservationService.selectList(meNum); // 전체 리스트 반환
 		}
@@ -221,51 +220,50 @@ public class MemberController {
 
 	@PostMapping("/modify")
 	@ResponseBody
-	public String updateUser(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user, @RequestBody UpdateUserDTO dto) {
+	public String updateUser(Model model, @AuthenticationPrincipal CustomUser user,
+			@AuthenticationPrincipal OAuth2User oauth2user, @RequestBody UpdateUserDTO dto) {
 		MemberVO member = null;
 
-		if(user != null){
+		if (user != null) {
 			member = user.getUser();
-		}
-		else if(oauth2user != null){
+		} else if (oauth2user != null) {
 			member = memberDAO.selectMember(oauth2user.getName());
-		}
-		else{
+		} else {
 			return "redirect:/member/signIn";
 		}
 
 		member.setMe_number(dto.getMe_number());
-    member.setMe_nick(dto.getMe_nick());
-    member.setMe_birthday(dto.getMe_birthday());
-    member.setMe_gender(dto.getMe_gender());
+		member.setMe_nick(dto.getMe_nick());
+		member.setMe_birthday(dto.getMe_birthday());
+		member.setMe_gender(dto.getMe_gender());
 
 		boolean updateUser = memberService.updateUser(member);
 
 		model.addAttribute("msg", updateUser ? "회원 정보가 성공적으로 수정되었습니다." : "회원 정보 수정에 실패했습니다.");
-    model.addAttribute("url", "/member/mypage");
-		
+		model.addAttribute("url", "/member/mypage");
+
 		return "msg";
 	}
-	
+
 	@PostMapping("/delete")
 	public String deleteMember(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
 		MemberVO member = null;
 
 		if (user != null) {
-				member = user.getUser();
+			member = user.getUser();
 		} else if (oauth2user != null) {
-				String email = (String) oauth2user.getAttributes().get("email");
-				String provider = (String) oauth2user.getAttributes().getOrDefault("provider", "NORMAL");
-				member = memberService.getMemberByEmailAndProvider(email, provider);
+			String email = (String) oauth2user.getAttributes().get("email");
+			String provider = (String) oauth2user.getAttributes().getOrDefault("provider", "NORMAL");
+			member = memberService.getMemberByEmailAndProvider(email, provider);
 		}
 
 		if (member != null) {
-				member.setMe_del("Y");
-				memberService.updateMemberDel(member.getMe_num());
-				SecurityContextHolder.clearContext(); // 로그아웃
+			member.setMe_del("Y");
+			memberService.updateMemberDel(member.getMe_num());
+			SecurityContextHolder.clearContext(); // 로그아웃
 		}
 
 		return "redirect:/member/signIn";
 	}
-	
+
 }
