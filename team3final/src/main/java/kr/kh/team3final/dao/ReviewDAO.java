@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 import kr.kh.team3final.model.dto.Rent_ReviewDTO;
+import kr.kh.team3final.model.dto.Rental_ReviewDTO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.ReviewVO;
 

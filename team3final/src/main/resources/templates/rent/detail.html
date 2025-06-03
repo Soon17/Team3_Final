@@ -6,9 +6,14 @@
 	<meta charset="UTF-8">
 	<title>렌트카 상세</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+	<!-- 1) jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- 2) Bootstrap JS (Popper 포함) -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Kakao Maps API -->
-	<!-- <script
-		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
+	<script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
 
 	<style>
 		.row {
@@ -327,7 +332,7 @@
 						<h5 style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">업체정보</h5>
 						<div>
 							<!-- 업체명 -->
-							<span th:text="${rental.re_name}">업체명</span>
+							<span th:text="${rental.re_name}" style="font-weight: bold;">업체명</span>
 							<!-- 별점 + 예약수 -->
 							<div>
 								<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
@@ -335,9 +340,10 @@
 								<span style="font-size: 12px; color: #666;" th:text="|리뷰수 (${rental.review_count})|">(0 리뷰수)</span>
 							</div>
 						</div>
-						<div style=" position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
-							<!-- 지도 호출 부분 -->
-							<div onclick="openMapModal()" class="rent-map-datail" id="map1"></div>
+						<!-- 지도 호출 부분 -->
+						<div class="homap"
+							style="position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
+							<div id="map1" onclick="openMapModal()" style="width: 100%; height: 100%;"></div>
 						</div>
 						<div style="font-size: 14px; color: #444; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif;">
 							<div style="margin-bottom: 16px;">
@@ -501,11 +507,12 @@
 				</div>
 			</div>
 		</div>
+		<!--지도모달-->
 		<div class="modal fade" id="mapModal" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 750px;">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">호텔 지도 보기</h5>
+						<h5 class="modal-title">업체 위치 보기</h5>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 					<div class="modal-body p-0">
@@ -528,6 +535,103 @@
 				</div>
 			</div>
 		</div>
+
+		<!--지도 스크립트-->
+		<script th:inline="javascript">
+			//전역 변수 선언
+			let pageMap = null;
+			let modalMap = null;
+			const coordsCache = {};
+
+			const address = /*[[${rental.re_region}]]*/ "";
+
+			//한 번 구한 좌표는 재사용
+			function getCachedCoords(addr, callback) {
+				if (coordsCache[addr]) {
+					return callback(coordsCache[addr]);
+				}
+				const geocoder = new kakao.maps.services.Geocoder();
+				geocoder.addressSearch(addr, (result, status) => {
+					if (status === kakao.maps.services.Status.OK) {
+						const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						coordsCache[addr] = coords;
+						callback(coords);
+					} else {
+						console.error("주소 검색 실패:", status);
+					}
+				});
+			}
+
+			document.addEventListener("DOMContentLoaded", function () {
+				// 약간의 딜레이를 두어 요소가 렌더링된 후 실행
+				setTimeout(() => {
+					const container = document.getElementById('map1');
+					if (!container || !address) return;
+
+					getCachedCoords(address, (coords) => {
+						// 이미 생성된 지도가 있으면 보여주고, 없으면 새로 생성
+						if (!pageMap) {
+							pageMap = new kakao.maps.Map(container, {
+								center: coords,
+								level: 3
+							});
+							// 마커 이미지
+							const markerImage = new kakao.maps.MarkerImage(
+								"/resources/static/imgs/mak.svg",
+								new kakao.maps.Size(45, 45)
+							);
+							new kakao.maps.Marker({ position: coords, map: pageMap, image: markerImage });
+						} else {
+							pageMap.setCenter(coords);
+							setTimeout(() => pageMap.relayout(), 100);
+						}
+					});
+				}, 300);
+
+				// 모달 내부 버튼 이벤트 설정
+				document.getElementById('route-btn').onclick = function () {
+					const addr = document.getElementById('map-address').textContent.trim();
+					const url = "https://map.kakao.com/link/search/" + encodeURIComponent(addr);
+					window.open(url, "_blank");
+				};
+				document.getElementById('copy-addr-btn').onclick = function () {
+					const addr = document.getElementById('map-address').textContent.trim();
+					navigator.clipboard.writeText(addr).then(() => alert("주소가 복사되었습니다."));
+				};
+			});
+
+			//모달 열릴 때 한 번만 지도 생성 
+			function openMapModal() {
+				$('#mapModal').modal('show');
+				$('#map-address').text(address);
+
+				$('#mapModal').on('shown.bs.modal', function () {
+					const modalContainer = document.getElementById('modal-map');
+					if (!modalContainer || !address) return;
+
+					getCachedCoords(address, (coords) => {
+						if (!modalMap) {
+							modalMap = new kakao.maps.Map(modalContainer, {
+								center: coords,
+								level: 3
+							});
+							const markerImage = new kakao.maps.MarkerImage(
+								"/resources/static/imgs/mak.svg",
+								new kakao.maps.Size(45, 45)
+							);
+							new kakao.maps.Marker({ position: coords, map: modalMap, image: markerImage });
+						} else {
+							modalMap.setCenter(coords);
+							setTimeout(() => modalMap.relayout(), 100);
+						}
+					});
+
+					// 한 번만 실행하도록 이벤트 제거
+					$(this).off('shown.bs.modal');
+				});
+			}
+		</script>
+
 		<!--드롭다운-->
 		<script>
 			let detailVisible = false;
@@ -643,6 +747,7 @@
 				});
 			});
 		</script>
+
 		<!--스크롤시 색변경-->
 		<script>
 			document.addEventListener('DOMContentLoaded', function () {
@@ -750,6 +855,22 @@
 				$('#reviewModal').modal('show');
 			}
 		</script>
+		<!--결제이동-->
+		<script>
+			function goToPayment() {
+				const urlParams = new URLSearchParams(window.location.search);
+				const checkTime = urlParams.get("checkTime");
+				const crId = urlParams.get("cr_id");
+
+				if (!checkTime || !crId) {
+					alert("필수 정보가 없습니다.");
+					return;
+				}
+
+				location.href = `/rent/payment?checkTime=${encodeURIComponent(checkTime)}&cr_id=${crId}`;
+			}
+		</script>
+
 	</main>
 </body>
 
