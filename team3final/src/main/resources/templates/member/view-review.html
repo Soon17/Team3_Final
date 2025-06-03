@@ -35,6 +35,77 @@
 			border-bottom: 1px solid #eee;
 			padding: 20px 0;
 		}
+		.review-summary {
+			max-width: 768px;
+			margin: 0 auto 30px auto;
+			background-color: #fff;
+			padding: 25px 40px;
+			border-radius: 12px;
+			display: flex;
+			justify-content: space-around;
+			box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+	.review-summary__item {
+			text-align: center;
+			/* min-width: 100px; 삭제 */
+			flex: 1;  /* 균등 너비 분할 */
+			position: relative;
+			/* padding-right: 30px; 구분선과 글자 간 간격 증가 */
+	}
+
+	.review-summary__item:not(:last-child)::after {
+			content: "";
+			position: absolute;
+			top: 20%;
+			right: -5px;   /* 더 오른쪽으로 밀기 (음수 값 증가) */
+			height: 60%;
+			border-right: 1px solid #ddd;
+	}
+
+	.review-summary__label {
+			margin: 0 0 8px 0;
+			font-weight: 600;
+			font-size: 14px;
+			color: #666;
+			letter-spacing: 0.03em;
+	}
+
+	.review-summary__count {
+			margin: 0;
+			font-weight: 700;
+			font-size: 28px;
+			color: #333;
+	}
+
+	/* 색상 포인트 */
+	.review-summary__count.hotel {
+			color: #007bff; /* 파란색 */
+	}
+
+	.review-summary__count.rental {
+			color: #28a745; /* 초록색 */
+	}
+
+	/* 모바일 대응 */
+	@media (max-width: 480px) {
+			.review-summary {
+					flex-direction: column;
+					padding: 20px 15px;
+					gap: 15px;
+			}
+			.review-summary__item {
+					flex: none;
+					padding-right: 0; /* 모바일에선 패딩 없앰 */
+			}
+			.review-summary__count {
+					font-size: 24px;
+			}
+			.review-summary__item:not(:last-child)::after {
+					display: none; /* 모바일에선 구분선 숨김 */
+			}
+	}
 	</style>
 </head>
 <body>
@@ -45,54 +116,74 @@
 		</div>
 
 		<!-- 유저 정보 -->
-		<div style="width: 70%; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 8px; width: 768px;">
-			<p><strong>사용자</strong></p>
-			<p style="color: #999;">작성한 리뷰 <span th:text="${#lists.size(list)}">0</span></p>
+		<div class="review-summary">
+		<div class="review-summary__item">
+			<p class="review-summary__label">작성한 리뷰</p>
+			<p class="review-summary__count" th:text="${(list != null ? #lists.size(list) : 0) + (rentList != null ? #lists.size(rentList) : 0)}">0</p>
 		</div>
+		<div class="review-summary__item">
+			<p class="review-summary__label">호텔</p>
+			<p class="review-summary__count hotel" th:text="${#lists.size(list)}">0</p>
+		</div>
+		<div class="review-summary__item">
+			<p class="review-summary__label">렌트카</p>
+			<p class="review-summary__count rental" th:text="${#lists.size(rentList)}">0</p>
+		</div>
+	</div>
 
 		<!-- 리뷰 목록 -->
 		<div style="width: 70%; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; width: 768px;">
 			<p><strong>사용자 리뷰</strong></p>
 
-			<!-- 탭 -->
+			<!-- 탭 영역 -->
 			<div id="tab-menu" style="display: flex; justify-content: center; margin-top: 20px; border-bottom: 2px solid #ddd;">
-				<div class="tab" onclick="changeTab(this)">렌트카</div>
-				<div class="tab active" onclick="changeTab(this)">호텔</div>
+				<div class="tab active" onclick="changeTab(this, 'hotel')">호텔</div>
+				<div class="tab" onclick="changeTab(this, 'rental')">렌트카</div>
 			</div>
 
-			<!-- 호텔 리뷰 -->
-			<div id="tab-content" style="margin-top: 30px;">
-				<!-- null 또는 비었을 때 메시지 -->
-				<div th:if="${list == null or #lists.isEmpty(list)}" style="text-align: center; color: #aaa;">
-					작성된 리뷰가 없습니다.
+			<!-- 리뷰 컨텐츠 영역 -->
+			<div style="margin-top: 30px;">
+				<!-- 호텔 리뷰 리스트 -->
+				<div id="hotel-review-list" class="review-list">
+					<div th:if="${list == null or #lists.isEmpty(list)}" style="text-align: center; color: #aaa;">
+						호텔 리뷰가 없습니다.
+					</div>
+					<div th:each="review : ${list}" class="review-box" th:unless="${list == null or #lists.isEmpty(list)}">
+						<p><strong th:text="${review.ld_name}">숙소명</strong> | <span th:text="${review.ld_region}">지역</span></p>
+						<p th:text="${review.rv_content}">리뷰 내용</p>
+						<p>⭐ <span th:text="${review.rv_rating}">5</span>점 |
+							작성일: <span th:text="${#dates.format(review.rv_date, 'yyyy-MM-dd')}">2025-05-20</span></p>
+					</div>
 				</div>
 
-				<!-- 리뷰 리스트 -->
-				<div th:each="review : ${list}" class="review-box" th:unless="${list == null or #lists.isEmpty(list)}">
-					<p><strong th:text="${review.ld_name}">숙소명</strong> | <span th:text="${review.ld_region}">지역</span></p>
-					<p th:text="${review.rv_content}">리뷰 내용</p>
-					<p>⭐ <span th:text="${review.rv_rating}">5</span>점 |
-					   작성일: <span th:text="${#dates.format(review.rv_date, 'yyyy-MM-dd')}">2025-05-20</span></p>
+				<!-- 렌트카 리뷰 리스트 -->
+				<div id="rental-review-list" class="review-list" style="display: none;">
+					<div th:if="${rentList == null or #lists.isEmpty(rentList)}" style="text-align: center; color: #aaa;">
+						렌트카 리뷰가 없습니다.
+					</div>
+					<div th:each="review : ${rentList}" class="review-box" th:unless="${rentList == null or #lists.isEmpty(rentList)}">
+						<p><strong th:text="${review.ct_name}">차량명</strong> | <span th:text="${review.re_name}">업체명</span></p>
+						<p th:text="${review.rv_content}">리뷰 내용</p>
+						<p>⭐ <span th:text="${review.rv_rating}">5</span>점 |
+							작성일: <span th:text="${#dates.format(review.rv_date, 'yyyy-MM-dd')}">2025-05-20</span></p>
+					</div>
 				</div>
 			</div>
-		</div>	  
-
 		<script>
-			function changeTab(clickedTab) {
-				const $tabs = $('.tab');
-				$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
-				$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
+		function changeTab(clickedTab, tabType) {
+			const $tabs = $('.tab');
+			$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
+			$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
 
-				const selectedText = $(clickedTab).text();
-				const contentDiv = $('#tab-content');
-
-				if (selectedText === '렌트카') {
-					contentDiv.html('<div style="text-align: center; color: #aaa;">렌트카 리뷰가 없습니다.</div>');
-				} else {
-					location.reload(); // 호텔 탭 클릭 시 현재 페이지 새로고침해서 호텔 리뷰 다시 출력
-				}
+			if (tabType === 'hotel') {
+				$('#hotel-review-list').show();
+				$('#rental-review-list').hide();
+			} else {
+				$('#hotel-review-list').hide();
+				$('#rental-review-list').show();
 			}
-		</script>
+		}
+	</script>
 	</main>
 </body>
 </html>

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
+import kr.kh.team3final.model.dto.Rent_ReviewDTO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.ReviewVO;
 
@@ -26,5 +27,7 @@ public interface ReviewDAO {
 	int updateReview(ReviewVO review);
 
 	int deleteReview(@Param("rv_num") int rvNumber, @Param("me_num") int me_num);
+
+	List<Rent_ReviewDTO> getSelectRentReviewList(int meNum);
 
 }

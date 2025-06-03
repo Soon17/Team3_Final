@@ -37,6 +37,16 @@
             AND rm.rm_ld_num = #{ld_num}
         GROUP BY rv_rating
     </select>
+    <resultMap id="rentReviewMap" type="kr.kh.team3final.model.dto.Rent_ReviewDTO">
+        <result property="rr_num" column="rr_num"/>
+        <result property="rr_date" column="rr_date"/>
+        <result property="ct_name" column="ct_name"/>
+        <result property="re_name" column="re_name"/>
+        <result property="rv_num" column="rv_num"/>
+        <result property="rv_rating" column="rv_rating"/>
+        <result property="rv_date" column="rv_date"/>
+        <result property="rv_content" column="rv_content"/>
+    </resultMap>
     <select id="getSelectReviewList" resultType="kr.kh.team3final.model.dto.Lodging_ReviewDTO">
         SELECT
             r.rv_num,
@@ -52,7 +62,34 @@
         AND r.rv_me_num = #{meNum}
         ORDER BY r.rv_num DESC
     </select>
-
+    <select id="getSelectRentReviewList" parameterType="int" resultType="kr.kh.team3final.model.dto.Rent_ReviewDTO">
+        SELECT
+            rr.rr_num,
+            rr.rr_date,
+            ct.ct_name,
+            rental.re_name,
+            r.rv_num,
+            r.rv_rating,
+            r.rv_date,
+            r.rv_content
+        FROM
+            re_reservation rr
+        JOIN
+            car_package p ON rr.rr_cp_num = p.cp_num
+        JOIN
+            car c ON p.cp_cr_id = c.cr_id
+        JOIN
+            car_type ct ON c.cr_ct_key = ct.ct_key
+        JOIN
+            rental ON c.cr_re_num = rental.re_num
+        JOIN
+            review r ON r.rv_number = rr.rr_num
+        WHERE
+            r.rv_table_name = 'rental'
+            AND r.rv_me_num = #{meNum}
+        ORDER BY
+            r.rv_num DESC
+    </select>
     <insert id="insertReview" parameterType="kr.kh.team3final.model.vo.ReviewVO" useGeneratedKeys="true" keyProperty="rv_num">
         INSERT INTO review
         (

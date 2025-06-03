@@ -2,13 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.RentReservationDAO">
     <select id="selectRentList" parameterType="int" resultType="kr.kh.team3final.model.vo.RentReservationVO">
-        SELECT r.*, ct.CT_NAME
-        FROM re_reservation r
-        JOIN car_package p ON r.rr_cp_num = p.CP_NUM
-        JOIN car c ON p.CP_CR_ID = c.CR_ID
-        JOIN car_type ct ON c.CR_CT_KEY = ct.CT_KEY
-        WHERE r.rr_me_num = #{meNum}
-        ORDER BY r.rr_date DESC
+        SELECT 
+            r.*, 
+            ct.CT_NAME, 
+            rental.RE_NAME AS re_name
+        FROM 
+            re_reservation r
+        JOIN 
+            car_package p ON r.rr_cp_num = p.CP_NUM
+        JOIN 
+            car c ON p.CP_CR_ID = c.CR_ID
+        JOIN 
+            car_type ct ON c.CR_CT_KEY = ct.CT_KEY
+        JOIN 
+            rental ON c.CR_RE_NUM = rental.RE_NUM
+        WHERE 
+            r.rr_me_num = #{meNum}
+        ORDER BY 
+            r.rr_date DESC
     </select>
     <resultMap id="RentReservationResultMap" type="kr.kh.team3final.model.vo.RentReservationVO">
         <id property="rr_num" column="rr_num"/>
@@ -23,6 +34,7 @@
         <result property="rr_cp_num" column="rr_cp_num"/>
         <result property="rr_me_num" column="rr_me_num"/>
         <result property="ct_name" column="ct_name"/>
+        <result property="re_name" column="re_name"/>
     </resultMap>
 
     <select id="getLatestRentReservation" parameterType="int" resultType="kr.kh.team3final.model.vo.RentReservationVO">
@@ -32,7 +44,7 @@
         JOIN car cr ON p.cp_cr_id = cr.cr_id
         JOIN car_type c ON cr.cr_ct_key = c.ct_key
         WHERE r.rr_me_num = #{meNum}
-          and  r.RR_STATE = '예약완료'
+          
         ORDER BY r.rr_checkIn DESC
         LIMIT 1
     </select>

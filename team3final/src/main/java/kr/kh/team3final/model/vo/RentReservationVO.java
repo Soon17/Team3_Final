@@ -19,4 +19,6 @@ private int rr_birth; //예약자 생년월일
 private int rr_cp_num; //예약 차량 패키지 번호
 private int rr_me_num; //예약자 유저넘버
 private String ct_name; //차량 이름
+private String re_name;   // 업체명
+
 }

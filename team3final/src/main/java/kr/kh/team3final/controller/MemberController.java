@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.kh.team3final.dao.MemberDAO;
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
+import kr.kh.team3final.model.dto.Rent_ReviewDTO;
 import kr.kh.team3final.model.dto.UpdateUserDTO;
 import kr.kh.team3final.model.vo.MemberVO;
 import kr.kh.team3final.model.vo.RentReservationVO;
@@ -91,7 +92,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/view-review")
-	public String viewReview(Model model,	@AuthenticationPrincipal CustomUser user,	@AuthenticationPrincipal OAuth2User oauth2User) {
+	public String viewReview(Model model, @AuthenticationPrincipal CustomUser user,	@AuthenticationPrincipal OAuth2User oauth2User) {
 		Integer meNum = null;
 
 		if(user != null) {
@@ -109,8 +110,12 @@ public class MemberController {
 		if(meNum != null) {
 			list = reviewService.getSelectReviewList(meNum);
 		}
+		List<Rent_ReviewDTO> rentList = new ArrayList<>();
+		if(meNum != null){
+			rentList = reviewService.getSelectRentReviewList(meNum);
+		}
 		model.addAttribute("list", list);
-
+		model.addAttribute("rentList", rentList);
 		return "member/view-review";
 	}
 
