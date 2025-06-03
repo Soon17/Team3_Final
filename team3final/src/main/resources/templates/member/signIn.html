@@ -46,8 +46,10 @@
 											<div th:if="${param.error}" class="alert alert-danger">
 												아이디 또는 비밀번호가 잘못되었습니다.
 											</div>
-											<p class="mb-0 mt-4 text-center"><a href="#0" class="link mr-3 signIn-i">아이디
-													찾기</a><a href="#0" class="link signIn-p">비밀번호 찾기</a></p>
+											<p class="mb-0 mt-4 text-center">
+												<span class="link mr-3 signIn-i" data-toggle="modal" data-target="#idFindModal">아이디찾기</span>
+												<span class="link signIn-p">비밀번호 찾기</span>
+											</p>
 											
 											<a href="/oauth2/authorization/kakao" class="api-login">
 												<div class="kakao-login" style="background: #fccb00;">
@@ -169,6 +171,21 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal" id="idFindModal">
+			<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content id-find" style="color: #c4c3ca; font-weight: 500;">
+				<!-- Modal 헤더 -->
+				<div class="modal-header">
+					<span>아이디 찾기</span>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal 바디 -->
+				<div class="modal-body" id="map1">
+					하하하하
+				</div>
+			</div>
+			</div>
+		</div> 		
 		<script>
 			// 회원가입 유효성 검사
 			$(".singUp-from").validate({
