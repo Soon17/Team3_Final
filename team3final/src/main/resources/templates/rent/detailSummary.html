@@ -57,7 +57,7 @@
 
       .mobile-pay-button strong {
         font-weight: bold;
-        font-size: 17px;
+        font-size: 15px;
         color: #fff;
         display: block;
       }
@@ -90,7 +90,7 @@
         <div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
           <div class="text-muted">총 상품금액</div>
           <div class="d-flex align-items-center" style="gap: 4px;">
-            <div class="font-weight-bold summary-total-price"></div>
+            <div class="font-weight-bold summary-total-price">0원</div>
             <img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
           </div>
         </div>
@@ -99,36 +99,24 @@
         <div class="priceDetail" style="display: none; font-size: 13px;">
           <div class="d-flex justify-content-between bg-light p-2 rounded mb-2">
             <div class="text-muted">1박 렌트 요금</div>
-            <span class="car-price-text" th:if="${car != null}"
-              th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"></span>
+            <span class="car-price-text">0원</span>
           </div>
         </div>
         <hr>
         <div class="d-flex justify-content-between mt-3 mb-3">
           <strong>총 결제금액</strong>
-          <strong class="summary-st-price"></strong>
+          <strong class="summary-st-price">0원</strong>
         </div>
         <button class="btn btn-primary btn-block">결제하기</button>
       </div>
-    </div>
-  </main>
-  <!-- 하단 고정 모바일 결제 박스 -->
-  <div class="mobile-pay-footer">
-    <div class="mobile-pay-button">
-      <strong class="mobile-rent-price"></strong>
-    </div>
-  </div>
-  <script>
-    function initDetailSummary() {
-      const carPrice = $(".car-price-text").text().trim();
 
-      $(".car-total-price").text(carPrice);
-      $(".summary-st-price").text(carPrice);
-      $(".mobile-rent-price").text(carPrice);
-      $(".car-rent-price").text(carPrice);
-    }
-  </script>
-
+      <!-- 모바일 고정 결제박스 -->
+      <div class="mobile-pay-footer">
+        <div class="mobile-pay-button">
+          <strong class="mobile-rent-price">0원</strong>
+        </div>
+      </div>
+    </div>
 </body>
 
 </html>

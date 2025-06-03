@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.kh.team3final.dao.ReviewDAO;
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
+import kr.kh.team3final.model.dto.Rental_ReviewDTO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.ReviewVO;
 
@@ -53,7 +54,7 @@ public class ReviewService {
 		return reviewDao.selectRatingCount(cr_re_num);
 	}
 
-	public List<ReviewVO> rentalReviews(int re_num) {
+	public List<Rental_ReviewDTO> rentalReviews(int re_num) {
 		return reviewDao.rentalReviews(re_num);
 	}
 

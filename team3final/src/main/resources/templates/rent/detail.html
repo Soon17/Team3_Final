@@ -159,6 +159,9 @@
 						<div class="car-price-range" style="margin-top: 25px; margin-bottom: 25px; font-size: 18px;">
 							<div class="start-price"
 								style="display: flex; justify-content: flex-end; align-items: baseline; gap: 6px;">
+								<span style="font-size: 14px; margin-right: 5px;">
+									<strong style="font-weight: 600;">일반자차</strong> 포함가
+								</span>
 								<span th:if="${car != null}" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"
 									style="color: #d64545; font-weight: bold;">가격</span>
 								<span class="text-muted" style="font-size: 0.9rem; color: #666; font-weight: bold;">/1박</span>
@@ -398,37 +401,42 @@
 							</div>
 							<!-- 리뷰 리스트 목록 -->
 							<div>
-								<div class="review-item"
+
+								<div th:each="review : ${reviewList}" class="review-item"
 									style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
 									onclick="handleReviewClick(this)">
+
+									<!-- 평점 + 차이름 -->
 									<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
 										<div style="display: flex; align-items: end; gap: .125rem;">
-											<div style="font-size: 1.5rem; font-weight: bold; color: #333;">별점
+											<div style="font-size: 1.5rem; font-weight: bold; color: #333;" th:text="${review.rv_rating}">별점
 											</div>
 											<div
 												style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5; margin-bottom: 4px;">
-												/ 5.0
-											</div>
+												/ 5.0</div>
 										</div>
 										<div>
-											<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">차 이름</span>
+											<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;"
+												th:text="${review.ct_name}">차 이름</span>
 										</div>
 									</div>
+
+									<!-- 닉네임 + 내용 + 날짜 -->
 									<div>
 										<div style="width: 100%; display: flex; align-items: center;">
 											<i class="fas fa-user"></i>
-											<p
-												style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-												닉네임</p>
+											<p style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;"
+												th:text="${review.me_nick}">닉네임</p>
 										</div>
 										<p class="rev" style="margin: 0; width: 40%; font-size: .875rem; line-height: 1.5; color: #666;">
-											<span>리뷰</span>
+											<span th:text="${review.rv_content}">리뷰</span>
 										</p>
 										<div style="width: 100%; display: flex; align-items: center;">
-											<span style="font-size: .75rem; line-height: 1.5; color: #999;">날짜</span>
+											<span class="review-date" th:text="${#dates.format(review.rv_date, 'yyyy.MM.dd')}">날짜</span>
 										</div>
 									</div>
 								</div>
+
 							</div>
 							<button id="review-more-btn">더보기</button>
 						</div>
@@ -539,11 +547,14 @@
 				}
 			}
 		</script>
+
 		<!--에이젝스-->
 		<script>
 			$(function () {
-				const checkTime = '2025.06.03 ~ 2025.06.04'; // 임시
-				const crId = 1; // 임시 ID
+				const checkTime = document.querySelector('.check-in')?.textContent + ' ~ ' + document.querySelector('.check-out')?.textContent;
+				const crId = document.querySelector('.car-top-info [th\\:src]')?.getAttribute('th:src')?.match(/\/(\d+)\./)?.[1] || 1;
+				const totalPrice = document.querySelector('.st-total-price')?.textContent;
+
 				$.ajax({
 					url: '/rent/detailSummary',
 					type: 'GET',
@@ -552,15 +563,30 @@
 						checkTime: checkTime
 					},
 					success: function (html) {
-						$('#payment-summary-container').html(html);
-						initDetailSummary(); // ← 이걸 호출해야 함
+						$('#payment-summary-container').html(html); // 조각 삽입 끝
+
+						// 삽입 후 DOM에서 다시 값 뽑기
+						const totalPriceText = document.querySelector('.st-total-price')?.textContent || '0원';
+						const oneNightText = document.querySelector('.priceDetail .text-muted:last-child')?.textContent || '0원';
+
+						const totalPrice = parseInt(totalPriceText.replace(/[^0-9]/g, '')) || 0;
+						const oneNightPrice = parseInt(oneNightText.replace(/[^0-9]/g, '')) || 0;
+
+						// 덮어쓰기
+						document.querySelector('.summary-st-price').textContent = totalPrice.toLocaleString() + '원';
+						document.querySelector('.summary-total-price').textContent = totalPrice.toLocaleString() + '원';
+						const el = document.querySelector('.mobile-rent-price');
+						el.innerHTML = totalPrice.toLocaleString() + '원<br>바로 결제하기';
+						document.querySelector('.car-price-text').textContent = oneNightPrice.toLocaleString() + '원';
 					},
+
 					error: function () {
 						console.error('불러오기 실패');
 					}
 				});
 			});
 		</script>
+
 		<!-- 자동 탭 추적 기능 -->
 		<script>
 			document.addEventListener('DOMContentLoaded', function () {
@@ -710,7 +736,20 @@
 				});
 			});
 		</script>
+		<!--리뷰 모달-->
+		<script>
+			function handleReviewClick(el) {
+				const nickname = el.querySelector("p").innerText;
+				const content = el.querySelector(".rev span").innerText;
+				const date = el.querySelector(".review-date")?.innerText || '';
 
+				document.getElementById("modal-nickname").innerText = nickname;
+				document.getElementById("modal-content").innerText = content;
+				document.getElementById('modal-date').textContent = date;
+
+				$('#reviewModal').modal('show');
+			}
+		</script>
 	</main>
 </body>
 
