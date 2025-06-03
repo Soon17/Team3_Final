@@ -141,36 +141,40 @@
 						</div>
 					</th:block>
 
-
 					<div class="d-flex justify-content-center align-items-center border-bottom py-2" style="gap: 32px;">
 						<div class="text-center mx-5">
 							<small class="text-muted">대여일</small>
-							<div style="font-weight: bold;" text="checkIn" class="check-in"></div>
-							<div style="font-size: 15px; font-weight: bold;">06.02(월)</div>
+							<div style="font-weight: bold;" class="check-in" th:text="${checkin}">대여일</div>
 						</div>
 						<div class="text-center mx-5">
-							<span class="badge badge-light night">1박</span>
+							<span class="badge badge-light night" th:text="${rentalDays + '박'}">박</span>
 						</div>
 						<div class="text-center mx-5">
 							<small class="text-muted">반납일</small>
-							<div style="font-weight: bold;" text="checkOut" class="check-out"></div>
-							<div style="font-size: 15px; font-weight: bold;">06.03(화)</div>
+							<div style="font-weight: bold;" class="check-out" th:text="${checkout}">반납일</div>
 						</div>
 					</div>
+
 					<div class="text-center mx-5">
 						<div class="car-price-range" style="margin-top: 25px; margin-bottom: 25px; font-size: 18px;">
 							<div class="start-price"
 								style="display: flex; justify-content: flex-end; align-items: baseline; gap: 6px;">
-								<span style="color: #d64545; font-weight: bold;">32,892원</span>
+								<span th:if="${car != null}" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"
+									style="color: #d64545; font-weight: bold;">가격</span>
 								<span class="text-muted" style="font-size: 0.9rem; color: #666; font-weight: bold;">/1박</span>
 							</div>
 						</div>
 					</div>
-					<div class="d-flex justify-content-between align-items-center my-3" style="padding: 10px;">
-						<span style="font-size: 20px">업체명</span>
-						<span style="font-size: small;">별점</span>
+					<div class="d-flex justify-content-between align-items-center my-3"
+						style="padding: 10px; margin-right: 20px;">
+						<!-- 업체명 -->
+						<span th:text="${rental.re_name}" style="font-weight: bold;">업체명</span>
+						<!-- 별점 -->
+						<div>
+							<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
+							<span th:text="${rental.avg_rating}" style="font-weight: bold;">평점</span>
+						</div>
 					</div>
-
 					<!-- 렌트 상세 정보-->
 					<div class="menu-button">
 						<button class="button-menu" data-target=".car-detail-box">
@@ -186,21 +190,27 @@
 
 					<!--예약정보-->
 					<div class="car-detail-box" style="font-size: 15px; line-height: 1.8;">
-						<div>
-							<strong style="display: block; font-size: 16px; margin-bottom: 8px; margin-top: 10px;">차량정보</strong>
-							<span style="margin-right: 16px;">
-								<i class="fas fa-calendar-alt" style="color: #999;"></i>
-								20~21년식
-							</span>
-							<span style="margin-right: 16px;">
-								<i class="fas fa-tint" style="color: #999;"></i>
-								휘발유
-							</span>
-							<span>
-								<i class="fas fa-cogs" style="color: #999;"></i>
-								오토
-							</span>
-						</div>
+						<th:block th:if="${car != null}">
+							<div>
+								<strong style="display: block; font-size: 16px; margin-bottom: 8px; margin-top: 10px;">차량정보</strong>
+
+								<span style="margin-right: 16px;">
+									<i class="fas fa-calendar-alt" style="color: #999;"></i>
+									<span th:text="${car.cr_year}">2년식</span>
+								</span>
+
+								<span style="margin-right: 16px;">
+									<i class="fas fa-tint" style="color: #999;"></i>
+									<span th:text="${car.cr_fuel_type}">유류종류</span>
+								</span>
+
+								<span>
+									<i class="fas fa-cogs" style="color: #999;"></i>
+									<span th:text="${car.cr_trans}">기어 종류</span>
+								</span>
+							</div>
+						</th:block>
+
 
 						<!-- 부가서비스 -->
 						<div style="margin-top: 20px;">
@@ -313,11 +323,13 @@
 					<div class="rent-rivew">
 						<h5 style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">업체정보</h5>
 						<div>
-							<span>업체명</span>
+							<!-- 업체명 -->
+							<span th:text="${rental.re_name}">업체명</span>
+							<!-- 별점 + 예약수 -->
 							<div>
 								<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
-								<span>4.0</span>
-								<span style="font-size: 12px; color: #666;">예약수</span>
+								<span th:text="${rental.avg_rating}">평점</span>
+								<span style="font-size: 12px; color: #666;" th:text="|리뷰수 (${rental.review_count})|">(0 리뷰수)</span>
 							</div>
 						</div>
 						<div style=" position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
@@ -425,9 +437,9 @@
 					<!-- 총 상품금액 -->
 					<h5 class="mb-4 mt-5">결제 정보</h5>
 					<div class="d-flex justify-content-between mb-2" style="cursor: pointer;" onclick="toggleDetailAll()">
-						<div class="text-muted">총 상품금액</div>
+						<div class="text-muted" style="font-size: 14px;">요금 포함 사항</div>
 						<div class="d-flex align-items-center" style="gap: 4px;">
-							<div style="font-weight: bold;" class="room-total-price" text="room.rm_price"></div>
+							<div style="font-weight: bold;" class="car-total-price" text="car.cr_price"></div>
 							<img class="arrowImg" src="/resources/static/imgs/small-up.png" width="16" height="16" />
 						</div>
 					</div>
@@ -435,14 +447,16 @@
 					<div class="priceDetail" style="display: none; font-size: 13px;">
 						<div class="d-flex justify-content-between bg-light p-2 rounded mb-1">
 							<div class="text-muted">1박 렌트 요금</div>
-							<div class="text-muted room-rm-price"></div>
+							<div class="text-muted" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"></div>
 						</div>
 					</div>
 					<hr>
 					<!-- 총 결제금액 -->
 					<div class="d-flex justify-content-between mt-3">
-						<strong>총 결제금액</strong>
-						<strong class="st-total-price">66,000원</strong>
+						<strong>예상 결제금액</strong>
+						<strong class="st-total-price"
+							th:text="${#numbers.formatInteger(car.cr_price * rentalDays, 3, 'COMMA')} + '원'">
+						</strong>
 					</div>
 				</div>
 
@@ -530,7 +544,6 @@
 			$(function () {
 				const checkTime = '2025.06.03 ~ 2025.06.04'; // 임시
 				const crId = 1; // 임시 ID
-
 				$.ajax({
 					url: '/rent/detailSummary',
 					type: 'GET',
@@ -540,6 +553,7 @@
 					},
 					success: function (html) {
 						$('#payment-summary-container').html(html);
+						initDetailSummary(); // ← 이걸 호출해야 함
 					},
 					error: function () {
 						console.error('불러오기 실패');

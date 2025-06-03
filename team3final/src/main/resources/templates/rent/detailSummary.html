@@ -99,7 +99,8 @@
         <div class="priceDetail" style="display: none; font-size: 13px;">
           <div class="d-flex justify-content-between bg-light p-2 rounded mb-2">
             <div class="text-muted">1박 렌트 요금</div>
-            <div class="text-muted summary-room-price"></div>
+            <span class="car-price-text" th:if="${car != null}"
+              th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"></span>
           </div>
         </div>
         <hr>
@@ -117,6 +118,16 @@
       <strong class="mobile-rent-price"></strong>
     </div>
   </div>
+  <script>
+    function initDetailSummary() {
+      const carPrice = $(".car-price-text").text().trim();
+
+      $(".car-total-price").text(carPrice);
+      $(".summary-st-price").text(carPrice);
+      $(".mobile-rent-price").text(carPrice);
+      $(".car-rent-price").text(carPrice);
+    }
+  </script>
 
 </body>
 

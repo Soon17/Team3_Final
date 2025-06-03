@@ -102,5 +102,17 @@
             AND rv_number = #{cr_re_num}
         GROUP BY rv_rating
     </select>
+    <select id="rentalReviews" parameterType="int" resultType="kr.kh.team3final.model.vo.ReviewVO">
+        SELECT
+            rv_num, rv_rating, rv_content, rv_date,
+            rv_table_name, rv_number, rv_me_num
+        FROM review
+        WHERE rv_table_name = 'rental'
+        AND rv_number = #{re_num}
+        ORDER BY rv_date DESC
+    </select>
+
+
+
 
 </mapper>

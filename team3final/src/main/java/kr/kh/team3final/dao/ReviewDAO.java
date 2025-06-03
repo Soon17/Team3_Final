@@ -30,4 +30,6 @@ public interface ReviewDAO {
 
 	List<Map<String, Object>> selectRatingCount(@Param("cr_re_num") int cr_re_num);
 
+	List<ReviewVO> rentalReviews(@Param("re_num") int re_num);
+
 }

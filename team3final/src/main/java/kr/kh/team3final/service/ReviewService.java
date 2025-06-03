@@ -53,4 +53,8 @@ public class ReviewService {
 		return reviewDao.selectRatingCount(cr_re_num);
 	}
 
+	public List<ReviewVO> rentalReviews(int re_num) {
+		return reviewDao.rentalReviews(re_num);
+	}
+
 }

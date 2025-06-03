@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 
 import kr.kh.team3final.model.vo.CarVO;
 import kr.kh.team3final.model.vo.RentalVO;
+import kr.kh.team3final.model.vo.ReviewVO;
 import kr.kh.team3final.service.CarService;
 import kr.kh.team3final.service.RentalService;
 import kr.kh.team3final.service.ReviewService;
@@ -66,6 +67,8 @@ public class RentCarController {
 				ratingCounts.put(rating, count);
 			}
 		}
+		// 리뷰
+		List<ReviewVO> reviewList = reviewService.rentalReviews(car.getCr_re_num());
 
 		model.addAttribute("car", car);
 		model.addAttribute("rental", rental);
@@ -74,9 +77,9 @@ public class RentCarController {
 		model.addAttribute("rentalDays", rentalDays);
 		model.addAttribute("checkTime", checkTime);
 		model.addAttribute("ratingCounts", ratingCounts);
-
 		model.addAttribute("avg_rating", rental.getAvg_rating());
 		model.addAttribute("review_count", rental.getReview_count());
+		model.addAttribute("reviewList", reviewList);
 
 		return "rent/detail";
 	}
