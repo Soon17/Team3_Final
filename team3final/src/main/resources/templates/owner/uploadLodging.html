@@ -300,7 +300,67 @@
 						<textarea class="form-input" name="ld_infor" id="ld_infor" style="height: 300px;"></textarea>
 					</div>
 
-					<div id="roomsContainer"></div>
+					<div id="roomsContainer">
+						<div class="room-box position-relative">
+							<!-- ❌ 닫기 버튼 -->
+							<button type="button" class="close-room-btn" title="삭제">×</button>
+
+							<div class="room-title">
+								<i class="fas fa-home"></i> 룸 1
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">사진 (3장)</label>
+								<div class="image-grid room-grid">
+									<!-- index 1: 가로 2칸 이미지 -->
+									<div class="image-box image-main" data-index="1">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'room')" name="rooms[0].roomThumbnailList" required>
+									</div>
+
+									<!-- index 2 -->
+									<div class="image-box" data-index="2">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'room')" name="rooms[0].roomThumbnailList" required>
+									</div>
+
+									<!-- index 3 -->
+									<div class="image-box" data-index="3">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'room')" name="rooms[0].roomThumbnailList" required>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="d-flex">
+								<div class="form-group col-8">
+									<label class="form-label">룸 이름</label>
+									<input type="text" class="form-input" name="rooms[0].rm_name" required>
+								</div>
+								<div class="form-group col-4">
+									<label class="form-label">룸 개수</label>
+									<input type="number" class="form-input" name="rooms[0].rm_roomcount" min="1" required>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div class="form-group col-3">
+									<label class="form-label">최대 인원</label>
+									<input type="number" class="form-input" name="rooms[0].rm_person" min="1" required>
+								</div>
+	
+								<div class="form-group col-9">
+									<label class="form-label">가격 (원)</label>
+									<input type="number" class="form-input" name="rooms[0].rm_price" min="0" step="1000" required>
+								</div>
+							</div>
+
+							<div class="form-group col-12">
+								<label class="form-label">룸 정보</label>
+								<textarea class="form-input" name="rooms[0].rm_infor" style="height: 100px;"></textarea>
+							</div>
+						</div>
+					</div>
 
 					<div class="d-flex justify-content-between">
 						<button type="button" class="button" onclick="addRoomBox()">+ 룸 추가하기</button>
@@ -311,7 +371,7 @@
 			</form>
 
 			<script>
-				let roomCount = 0;
+				let roomCount = 1;
 
 				// 룸 추가 박스 열기
 				function addRoomBox() {

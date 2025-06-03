@@ -47,11 +47,6 @@ public class LodgingService {
 		String EndTime = dates[1].trim().replace(".", "-");
 		return EndTime;
 	}
-
-	public List<String> getDefaultOptions() {
-		List<String> defaultOptions = lodgingDao.selectDefaultOptions();
-		return defaultOptions;
-	}
 	
 	public LodgingVO getLodging(int ld_num) {
 		return lodgingDao.selectLodging(ld_num);
@@ -63,10 +58,6 @@ public class LodgingService {
 
 	public boolean uploadLodging(LodgingDTO lodgingDTO) {
 		return lodgingDao.insertLodging(lodgingDTO);
-	}
-
-	public void uploadDefaultOption(DefaultOptionVO defaultOption) {
-		lodgingDao.insertDefaultOption(defaultOption);
 	}
 
 	public int getDo_num(String choiceOption) {

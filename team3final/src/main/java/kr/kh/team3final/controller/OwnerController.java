@@ -50,7 +50,7 @@ public class OwnerController {
 
 	@GetMapping("/uploadLodging")
 	public String uploadLodging(Model model) {
-		List<String> defaultOptions = lodgingService.getDefaultOptions();
+		List<String> defaultOptions = optionService.getDefaultOptions();
 		List<RegionVO> regions = regionService.getRegionList();
 		model.addAttribute("defaultOptions", defaultOptions);
 		model.addAttribute("regions", regions);
@@ -125,7 +125,7 @@ public class OwnerController {
 				DefaultOptionVO defaultOptionVO = new DefaultOptionVO();
 				defaultOptionVO.setDo_name(addedOption);
 				// 추가 옵션 -> 기본 옵션 업로드
-				lodgingService.uploadDefaultOption(defaultOptionVO);
+				optionService.uploadDefaultOption(defaultOptionVO);
 				// 추가 옵션 -> 선택 옵션 업로드
 				optionService.uploadChoiceOption(defaultOptionVO.getDo_num(), lodgingDTO.getLd_num());
 			}

@@ -18,15 +18,12 @@ public interface LodgingDAO {
 	List<LodgingVO> selectRegionSwitchLodgingList(
 			String lr_checkin, String lr_checkout, int rm_person, SearchCriteria cri);
 
-	List<String> selectDefaultOptions();
 	
 	LodgingVO selectLodging(int ld_num);
 
 	int getMealPrice(int ldNum);
 
 	boolean insertLodging(LodgingDTO lodgingDTO);
-
-	void insertDefaultOption(DefaultOptionVO defaultOption);
 
 	int selectDo_num(String do_name);
 

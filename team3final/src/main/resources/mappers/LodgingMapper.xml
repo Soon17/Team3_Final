@@ -84,9 +84,6 @@
 			</otherwise>
 		</choose>
 	</select>
-	<select id="selectDefaultOptions" resultType="String">
-		select do_name from default_option
-	</select>
 	<select id="selectLodging" resultType="LodgingVO">
 		select* from lodging where ld_num = #{ld_num}
 	</select>
@@ -96,10 +93,6 @@
 	<insert id="insertLodging" useGeneratedKeys="true" keyProperty="ld_num">
 		insert into lodging(ld_name, ld_region, ld_type, ld_number, ld_rating, ld_infor, ld_meal_price, ld_me_num, ld_rg_num)
 		value(#{ld_name}, #{ld_region}, #{ld_type}, #{ld_number}, #{ld_rating}, #{ld_infor}, #{ld_meal_price}, #{ld_me_num}, #{ld_rg_num})
-	</insert>
-	<insert id="insertDefaultOption" useGeneratedKeys="true" keyProperty="do_num">
-		insert into default_option(do_name)
-		values (#{do_name})
 	</insert>
 	<select id="selectDo_num" resultType="int">
 		select do_num

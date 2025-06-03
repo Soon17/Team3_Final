@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.kh.team3final.dao.ChoiceOptionDAO">
+<mapper namespace="kr.kh.team3final.dao.OptionDAO">
 	<select id="selectChoiceOpotionList" resultType="ChoiceOptionVO">
 		select choice_option.*, do_name as co_do_name from choice_option 
 		join default_option on do_num = co_do_num
@@ -9,5 +9,12 @@
 	<insert id="insertChoiceOption">
 		insert into choice_option(co_do_num, co_ld_num)
 		value(#{do_num}, #{ld_num})
+	</insert>
+	<select id="selectDefaultOptions" resultType="String">
+		select do_name from default_option
+	</select>
+	<insert id="insertDefaultOption" useGeneratedKeys="true" keyProperty="do_num">
+		insert into default_option(do_name)
+		values (#{do_name})
 	</insert>
 </mapper>
