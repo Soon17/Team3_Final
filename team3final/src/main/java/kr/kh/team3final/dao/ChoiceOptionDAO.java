@@ -8,5 +8,7 @@ public interface ChoiceOptionDAO {
 
 	List<ChoiceOptionVO> selectChoiceOpotionList(int ld_num);
 
+	void insertChoiceOption(int do_num, int ld_num);
+
 
 }

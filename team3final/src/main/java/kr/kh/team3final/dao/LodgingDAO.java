@@ -26,6 +26,6 @@ public interface LodgingDAO {
 
 	boolean insertLodging(LodgingDTO lodgingDTO);
 
-	void insertDefaultOption(DefaultOptionVO dOVO);
+	void insertDefaultOption(DefaultOptionVO defaultOption);
 
 }

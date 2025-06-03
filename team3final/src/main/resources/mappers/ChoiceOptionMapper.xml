@@ -6,4 +6,8 @@
 		join default_option on do_num = co_do_num
 		where co_ld_num = #{ld_num};
 	</select>
+	<insert id="insertChoiceOption">
+		insert into choice_option(co_do_num, co_ld_num)
+		value(#{do_num}, #{ld_num})
+	</insert>
 </mapper>

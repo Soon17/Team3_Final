@@ -65,7 +65,7 @@ public class LodgingService {
 		return lodgingDao.insertLodging(lodgingDTO);
 	}
 
-	public void uploadDefaultOption(DefaultOptionVO dOVO) {
-		lodgingDao.insertDefaultOption(dOVO);
+	public void uploadDefaultOption(DefaultOptionVO defaultOption) {
+		lodgingDao.insertDefaultOption(defaultOption);
 	}
 }

@@ -18,5 +18,9 @@ public class ChoiceOptionService {
 	public List<ChoiceOptionVO> getChoiceOpotionList(int ld_num) {
 		return choiceOptionDAO.selectChoiceOpotionList(ld_num);
 	}
+
+	public void uploadChoiceOption(int do_num, int ld_num) {
+		choiceOptionDAO.insertChoiceOption(do_num, ld_num);
+	}
 	
 }
