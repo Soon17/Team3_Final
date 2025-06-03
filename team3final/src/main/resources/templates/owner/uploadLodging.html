@@ -68,8 +68,16 @@
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 		}
 
+		.btn-submit {
+			background-color: #03b80c;
+		}
+
 		.button:hover {
 			background-color: #3498db;
+		}
+
+		.btn-submit:hover {
+			background-color: #037c09;
 		}
 
 		.room-box {
@@ -133,7 +141,14 @@
 		}
 
 		.image-box input[type="file"] {
-			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			cursor: pointer;
+			z-index: 2;
 		}
 
 		.plus-sign {
@@ -165,8 +180,10 @@
 	<div class="main" style="background-color: #fff;">
 		<main layout:fragment="content">
 
-			<div class="main-container">
-				<div class="title">🏨 숙소 등록</div>
+			<form class="main-container" action="/owner/uploadLodgingPost" method="post" enctype="multipart/form-data">
+				<div class="title">
+					<i class="fas fa-hotel"> 신규 숙소 등록</i>
+				</div>
 
 				<div class="form-section" id="hotelForm">
 
@@ -176,33 +193,43 @@
 							<!-- 이미지 박스 1번: 메인 (2x2) -->
 							<div class="image-box image-main" data-index="1">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'lodging')" name="lodgingThumbnailList" required>
 							</div>
 
 							<!-- 2~5번: 서브 이미지 -->
 							<div class="image-box" data-index="2">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'lodging')" name="lodgingThumbnailList" required>
 							</div>
 							<div class="image-box" data-index="3">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'lodging')" name="lodgingThumbnailList" required>
 							</div>
 							<div class="image-box" data-index="4">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 4, 'lodging')" name="lodgingThumbnailList" required>
 							</div>
 							<div class="image-box" data-index="5">
 								<span class="plus-sign">+</span>
-								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')">
+								<input type="file" accept="image/*" onchange="handleSingleImage($(this), 5, 'lodging')" name="lodgingThumbnailList" required>
 							</div>
 						</div>
 					</div>
 
 					<div class="d-flex">
+						<div class="form-group col">
+							<label class="form-label" for="ld_type">숙소 유형</label>
+							<select class="form-select" id="ld_type" name="ld_type" required>
+								<option value="">-- 선택 --</option>
+								<option value="호텔">호텔</option>
+								<option value="모텔">모텔</option>
+								<option value="펜션">펜션</option>
+							</select>
+						</div>
 						<div class="form-group col-3">
-							<label class="form-label" for="rating">성급 (1~5)</label>
-							<select class="form-select" id="rating" name="rating">
+							<label class="form-label" for="ld_rating">성급 (1~5)</label>
+							<select class="form-select" id="ld_rating" name="ld_rating" disabled>
+								<option value="">-- 선택 --</option>
 								<option value="1">1성</option>
 								<option value="2">2성</option>
 								<option value="3">3성</option>
@@ -210,41 +237,77 @@
 								<option value="5">5성</option>
 							</select>
 						</div>
+						<div class="form-group col-3">
+							<label class="form-label" for="ld_rg_num">지역</label>
+							<select class="form-select" id="ld_rg_num" name="ld_rg_num" required>
+								<option value="">-- 선택 --</option>
+								<option th:each="region : ${regions}" th:value="${region.rg_num}"
+									th:text="${region.rg_name}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group col-12">
+						<label class="form-label" for="ld_name">숙소 이름</label>
+						<input type="text" class="form-input" id="ld_name" name="ld_name" required>
+					</div>
 
-						<div class="form-group col-9">
-							<label class="form-label" for="name">숙소 이름</label>
-							<input type="text" class="form-input" id="name" name="name">
+					<div class="form-group col-12">
+						<label class="form-label mb-2">제공 옵션</label>
+
+						<!-- 체크박스 컨테이너 -->
+						<div class="d-flex flex-wrap gap-3">
+							<!-- 기본 옵션들 -->
+							<div th:each="opt : ${defaultOptions}" class="form-check d-flex align-items-center"
+								style="width: 48%;">
+								<input class="form-check-input me-2" type="checkbox" th:id="'option-' + ${opt}"
+									th:name="options" th:value="${opt}" />
+								<label class="form-check-label me-2" th:for="'option-' + ${opt}"
+									th:text="${opt}"></label>
+
+								<!-- "조식"일 때만 가격 입력 필드 출력 -->
+								<input type="number" class="form-control form-control-sm ml-2 col-8"
+									th:if="${opt == '조식'}" id="ld_meal_price" name="ld_meal_price"
+									placeholder="조식 가격 (원)" disabled min="0" step="1000">
+							</div>
+
+							<!-- 기타 입력 항목 -->
+							<div class="form-check d-flex align-items-center" style="width: 48%;">
+								<input type="checkbox" class="form-check-input me-2" id="option-etc"
+									onchange="toggleEtcInput(this)">
+								<label class="form-check-label me-2" for="option-etc"
+									style="min-width: 40px;">기타</label>
+								<input type="text" id="etc-input" class="form-control form-control-sm"
+									placeholder="옵션1, 옵션2, ..." disabled oninput="syncEtcToHidden()">
+								<input type="hidden" name="added-options" id="etc-hidden" />
+							</div>
+						</div>
+					</div>
+
+					<div class="d-flex">
+						<div class="form-group col-8">
+							<label class="form-label" for="ld_region">주소</label>
+							<input type="text" class="form-input" id="ld_region" name="ld_region" required>
+						</div>
+
+						<div class="form-group col-4">
+							<label class="form-label" for="ld_number">전화번호</label>
+							<input type="text" class="form-input" id="ld_number" name="ld_number" required>
 						</div>
 					</div>
 
 					<div class="form-group col-12">
-						<label class="form-label" for="address">주소</label>
-						<input type="text" class="form-input" id="address" name="address">
+						<label class="form-label" for="ld_infor">상세 정보</label>
+						<textarea class="form-input" name="ld_infor" id="ld_infor" style="height: 300px;"></textarea>
 					</div>
 
-					<div class="form-group col-12">
-						<label class="form-label" for="phone">전화번호</label>
-						<input type="text" class="form-input" id="phone" name="phone">
-					</div>
-
-					<div id="roomsContainer"></div>
-
-					<button class="button" onclick="addRoomBox()">+ 방 등록하기</button>
-				</div>
-
-			</div>
-
-			<script>
-				let roomCount = 0;
-
-				function addRoomBox() {
-					roomCount++;
-					const roomBox = $(`
+					<div id="roomsContainer">
 						<div class="room-box position-relative">
 							<!-- ❌ 닫기 버튼 -->
 							<button type="button" class="close-room-btn" title="삭제">×</button>
 
-							<div class="room-title">🛏️ 방 ${roomCount}</div>
+							<div class="room-title">
+								<i class="fas fa-home"></i> 룸 1
+							</div>
 
 							<div class="form-group">
 								<label class="form-label">사진 (3장)</label>
@@ -252,44 +315,138 @@
 									<!-- index 1: 가로 2칸 이미지 -->
 									<div class="image-box image-main" data-index="1">
 										<span class="plus-sign">+</span>
-										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'room')">
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'room')" name="rooms[0].roomThumbnailList" required>
 									</div>
 
 									<!-- index 2 -->
 									<div class="image-box" data-index="2">
 										<span class="plus-sign">+</span>
-										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'room')">
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'room')" name="rooms[0].roomThumbnailList" required>
 									</div>
 
 									<!-- index 3 -->
 									<div class="image-box" data-index="3">
 										<span class="plus-sign">+</span>
-										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'room')">
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'room')" name="rooms[0].roomThumbnailList" required>
 									</div>
 								</div>
 
 							</div>
 
-							<div class="form-group col-12">
-								<label class="form-label">룸 유형</label>
-								<input type="text" class="form-input" name="room_type_${roomCount}">
+							<div class="d-flex">
+								<div class="form-group col-8">
+									<label class="form-label">룸 이름</label>
+									<input type="text" class="form-input" name="rooms[0].rm_name" required>
+								</div>
+								<div class="form-group col-4">
+									<label class="form-label">룸 개수</label>
+									<input type="number" class="form-input" name="rooms[0].rm_roomcount" min="1" required>
+								</div>
 							</div>
 							<div class="d-flex">
 								<div class="form-group col-3">
 									<label class="form-label">최대 인원</label>
-									<input type="number" class="form-input" name="max_people_${roomCount}" min="1">
+									<input type="number" class="form-input" name="rooms[0].rm_person" min="2" required>
 								</div>
 	
 								<div class="form-group col-9">
 									<label class="form-label">가격 (원)</label>
-									<input type="number" class="form-input" name="price_${roomCount}" min="0">
+									<input type="number" class="form-input" name="rooms[0].rm_price" min="0" step="1000" required>
 								</div>
+							</div>
+
+							<div class="form-group col-12">
+								<label class="form-label">룸 정보</label>
+								<textarea class="form-input" name="rooms[0].rm_infor" style="height: 100px;"></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="d-flex justify-content-between">
+						<button type="button" class="button" onclick="addRoomBox()">+ 룸 추가하기</button>
+						<button type="submit" class="button btn-submit">호텔 등록</button>
+					</div>
+				</div>
+
+			</form>
+
+			<script>
+				let roomCount = 1;
+
+				// 룸 추가 박스 열기
+				function addRoomBox() {
+					let roomIndex = roomCount;
+					roomCount++;
+					const roomBox = $(`
+						<div class="room-box position-relative">
+							<!-- ❌ 닫기 버튼 -->
+							<button type="button" class="close-room-btn" title="삭제">×</button>
+
+							<div class="room-title">
+								<i class="fas fa-home"></i> 룸 ${roomCount}
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">사진 (3장)</label>
+								<div class="image-grid room-grid">
+									<!-- index 1: 가로 2칸 이미지 -->
+									<div class="image-box image-main" data-index="1">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 1, 'room')" name="rooms[${roomIndex}].roomThumbnailList" required>
+									</div>
+
+									<!-- index 2 -->
+									<div class="image-box" data-index="2">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 2, 'room')" name="rooms[${roomIndex}].roomThumbnailList" required>
+									</div>
+
+									<!-- index 3 -->
+									<div class="image-box" data-index="3">
+										<span class="plus-sign">+</span>
+										<input type="file" accept="image/*" onchange="handleSingleImage($(this), 3, 'room')" name="rooms[${roomIndex}].roomThumbnailList" required>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="d-flex">
+								<div class="form-group col-8">
+									<label class="form-label">룸 이름</label>
+									<input type="text" class="form-input" name="rooms[${roomIndex}].rm_name" required>
+								</div>
+								<div class="form-group col-4">
+									<label class="form-label">룸 개수</label>
+									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_roomcount" min="1" required>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div class="form-group col-3">
+									<label class="form-label">최대 인원</label>
+									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_person" min="2" required>
+								</div>
+	
+								<div class="form-group col-9">
+									<label class="form-label">가격 (원)</label>
+									<input type="number" class="form-input" name="rooms[${roomIndex}].rm_price" min="0" step="1000" required>
+								</div>
+							</div>
+
+							<div class="form-group col-12">
+								<label class="form-label">룸 정보</label>
+								<textarea class="form-input" name="rooms[${roomIndex}].rm_infor" style="height: 100px;"></textarea>
 							</div>
 						</div>
 					`);
 
 					$('#roomsContainer').append(roomBox);
 				}
+
+				// 룸 추가 박스 닫기
+				$(document).on('click', '.close-room-btn', function () {
+					$(this).closest('.room-box').remove();
+					roomCount--;
+				});
 
 				// 단일 이미지 업로드 및 미리보기 처리
 				function handleSingleImage($input, index, type) {
@@ -298,14 +455,20 @@
 
 					const reader = new FileReader();
 					reader.onload = function (e) {
-						let $switchBox;
-						if (type === 'lodging') {
-							$switchBox = $input.closest('.lodging-box');
-						} else if (type === 'room') {
-							$switchBox = $input.closest('.room-box');
-						}
-						const $box = $switchBox.find(`.image-box[data-index='${index}']`);
-						$box.html(`<img src="${e.target.result}" alt="image">`);
+						const $box = $input.closest(`.image-box[data-index='${index}']`);
+
+						// 이미 존재하는 이미지가 있으면 제거
+						$box.find('img').remove();
+
+						// 새 이미지 미리보기 추가 (input은 그대로 둠)
+						const $img = $('<img>', {
+							src: e.target.result,
+							alt: 'image'
+						});
+						$box.append($img);
+
+						// + 아이콘 숨기기
+						$box.find('.plus-sign').hide();
 					};
 					reader.readAsDataURL(file);
 				}
@@ -317,11 +480,46 @@
 					$input.trigger('click');
 				});
 
-				$(document).on('click', '.close-room-btn', function () {
-					$(this).closest('.room-box').remove();
-					roomCount--;
-				});
+				$(document).ready(function () {
+					// 1. 숙소 유형 변경 시 성급 select 활성화/비활성화
+					$('#ld_type').on('change', function () {
+						const selected = $(this).val();
+						if (selected === '호텔') {
+							$('#ld_rating').prop('disabled', false).prop('required', true);
+						} else {
+							$('#ld_rating').prop('disabled', true).val('');
+						}
+					});
 
+					$('#ld_type').trigger('change'); // 폼 로드시 초기 상태 반영
+
+					// 2. 기타 옵션 체크 시 입력 필드 활성화/비활성화
+					$('#option-etc').on('change', function () {
+						if ($(this).is(':checked')) {
+							$('#etc-input').prop('disabled', false).prop('required', true);
+						} else {
+							$('#etc-input').val('').prop('disabled', true);
+							$('#etc-hidden').val('');
+						}
+					});
+
+					// 기타 옵션 입력값을 hidden 필드에 반영
+					$('#etc-input').on('input', function () {
+						$('#etc-hidden').val($(this).val());
+					});
+
+					// 1. 조식 체크박스 찾기 (value가 '조식'인 input)
+					const $breakfastCheckbox = $("input[type='checkbox'][name='options'][value='조식']");
+
+					// 2. 조식 체크 상태 변화 시 가격 입력 필드 토글
+					$breakfastCheckbox.on('change', function () {
+						if ($(this).is(':checked')) {
+							$('#ld_meal_price').prop('disabled', false).prop('required', true);
+						} else {
+							$('#ld_meal_price').prop('disabled', true).val('');
+						}
+					});
+				});
 			</script>
 		</main>
 	</div>

@@ -3,7 +3,6 @@ package kr.kh.team3final.service;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +40,19 @@ public class CarService {
 
 	public CarVO selectCarById(int cr_Id) {
 		return carDao.selectCarById(cr_Id);
+	}
+
+	public List<CarVO> getRegionCarList(int rg_num, String type) {
+		if(type.equals("rent-trend")){
+			return carDao.selectTrendCarList(rg_num);
+			
+		}else{
+			return carDao.selectPriceCarList(rg_num);
+		}
+	}
+
+	public CarVO getCar(int cr_id) {
+		return carDao.selectCar(cr_id);
 	}
 
 }

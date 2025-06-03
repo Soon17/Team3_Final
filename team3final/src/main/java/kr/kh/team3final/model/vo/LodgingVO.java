@@ -8,8 +8,6 @@ public class LodgingVO {
 	String ld_name;
 	String ld_region;
 	String ld_type;
-	Double ld_latitude;
-	Double ld_longitude;
 	String ld_number;
 	int ld_rating;
 	String ld_infor;

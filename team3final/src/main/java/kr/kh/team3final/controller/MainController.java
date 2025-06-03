@@ -6,16 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.servlet.http.HttpSession;
+import kr.kh.team3final.model.vo.CarVO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.RegionVO;
-import kr.kh.team3final.model.vo.RoomVO;
+import kr.kh.team3final.service.CarService;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RegionService;
-import kr.kh.team3final.service.RoomService;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MainController {
@@ -24,6 +26,9 @@ public class MainController {
 
 	@Autowired
 	LodgingService lodgingService;
+
+	@Autowired
+	CarService carService;
 
 	@GetMapping("/")
 	public String main(Model model) {
@@ -51,7 +56,8 @@ public class MainController {
 
 	@GetMapping("/regionRentCar")
 	public String getRegionCar(Model model, @RequestParam("rg_num") int rg_num, @RequestParam("type") String type) {
-		
+		List<CarVO> carList = carService.getRegionCarList(rg_num, type);
+		model.addAttribute("carList", carList);
 		return "regionCarList";
 	}
 }

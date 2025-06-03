@@ -21,5 +21,11 @@ public interface CarDAO {
             @Param("cr_trans") String cr_trans);
 
     CarVO selectCarById(@Param("cr_id") int cr_id);
+    
+	List<CarVO> selectTrendCarList(int rg_num);
+
+	List<CarVO> selectPriceCarList(int rg_num);
+
+	CarVO selectCar(int cr_id);
 
 }

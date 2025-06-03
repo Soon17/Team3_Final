@@ -3,19 +3,19 @@
 <mapper namespace="kr.kh.team3final.dao.CarDAO">
 
 	<select id="selectSearchCarList" parameterType="map" resultType="CarVO">
-    SELECT
-      c.cr_year,
-      c.cr_fuel_type,
-      c.cr_trans,
-      ct.ct_key,
-      ct.ct_name,
-      ct.ct_type,
-      c.cr_thumbnail,
-      MIN(c.cr_price) AS cr_price
-    FROM car c
-    JOIN rental r ON c.cr_re_num = r.re_num
-    JOIN region reg ON r.re_rg_num = reg.rg_num
-    JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+		SELECT
+		c.cr_year,
+		c.cr_fuel_type,
+		c.cr_trans,
+		ct.ct_key,
+		ct.ct_name,
+		ct.ct_type,
+		c.cr_thumbnail,
+		MIN(c.cr_price) AS cr_price
+		FROM car c
+		JOIN rental r ON c.cr_re_num = r.re_num
+		JOIN region reg ON r.re_rg_num = reg.rg_num
+		JOIN car_type ct ON c.cr_ct_key = ct.ct_key
 		<where>
 			<if test="cri.rg_name != null and cri.rg_name != ''">
         AND reg.rg_name = #{cri.rg_name}
@@ -46,14 +46,14 @@
 			</if>
 		</where>
 
-    GROUP BY
-      c.cr_year,
-      c.cr_fuel_type,
-      c.cr_trans,
-      ct.ct_key,
-      ct.ct_name,
-      ct.ct_type,
-      c.cr_thumbnail
+		GROUP BY
+		c.cr_year,
+		c.cr_fuel_type,
+		c.cr_trans,
+		ct.ct_key,
+		ct.ct_name,
+		ct.ct_type,
+		c.cr_thumbnail
 
 		<choose>
 			<when test="cri.sort == '가격순'">
@@ -90,6 +90,22 @@
 			c.cr_fuel_type,
 			c.cr_trans
 	</select>
+	<select id="selectTrendCarList" resultType="CarVO">
+		select 
+			car.*,
+			ct_name,
+			count(rr_num) as reservation_count
+		from car
+		join car_type on ct_key = cr_ct_key
+		join rental on re_num = cr_re_num
+		join region on rg_num =  re_rg_num
+		join car_package on cp_cr_id = cr_id
+		join re_reservation on rr_cp_num = cp_num
+		where rg_num = #{rg_num}
+		group by cr_id
+		order by reservation_count desc
+		limit 7;
+	</select>
 
 	<select id="selectCarById" parameterType="int" resultType="CarVO">
 		SELECT 
@@ -108,4 +124,19 @@
 
 
 
+	<select id="selectPriceCarList" resultType="CarVO">
+		select  car.*,ct_name from car
+		join car_type on ct_key = cr_ct_key
+		join rental on re_num = cr_re_num
+		join region on rg_num =  re_rg_num
+		where rg_num = #{rg_num}
+		order by cr_price
+		limit 7;
+	</select>
+	<select id="selectCar" resultType="CarVO">
+		select car.*,ct_name,ct_type,re_name from car
+		join car_type on ct_key = cr_ct_key
+		join rental on re_num = cr_re_num
+		where cr_id = #{cr_id}
+	</select>
 </mapper>

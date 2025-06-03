@@ -7,4 +7,14 @@
   WHERE th_table = #{th_table}
     AND th_key = #{th_key}
 	</select>
+
+  <insert id="insertLDTH">
+    insert into thumbnail(th_table, th_key, th_upload, th_name)
+    value("lodging",#{ld_num},"/resources/static/img/",#{uniqueName})
+  </insert>
+
+  <insert id="insertRMTH">
+    insert into thumbnail(th_table, th_key, th_upload, th_name)
+    value("room",#{rm_num},"/resources/static/img/",#{uniqueName})
+  </insert>
 </mapper>

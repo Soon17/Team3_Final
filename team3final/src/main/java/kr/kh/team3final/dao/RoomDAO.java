@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import kr.kh.team3final.model.dto.RoomDTO;
 import kr.kh.team3final.model.vo.RoomVO;
 
 public interface RoomDAO {
@@ -15,4 +16,6 @@ public interface RoomDAO {
 			@Param("checkin") String checkin,
 			@Param("checkout") String checkout,
 			@Param("person") int person);
+
+	boolean insertRoom(RoomDTO room);
 }

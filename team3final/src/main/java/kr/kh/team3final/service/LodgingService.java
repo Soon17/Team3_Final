@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.kh.team3final.dao.LodgingDAO;
+import kr.kh.team3final.model.dto.LodgingDTO;
+import kr.kh.team3final.model.vo.DefaultOptionVO;
 import kr.kh.team3final.model.vo.LodgingVO;
 import kr.kh.team3final.model.vo.SearchCriteria;
 
@@ -53,12 +55,20 @@ public class LodgingService {
 		String EndTime = dates[1].trim().replace(".", "-");
 		return EndTime;
 	}
-
+	
 	public LodgingVO getLodging(int ld_num) {
 		return lodgingDao.selectLodging(ld_num);
 	}
 
 	public int getMealPrice(int ldNum) {
 		return lodgingDao.getMealPrice(ldNum);
+	}
+
+	public boolean uploadLodging(LodgingDTO lodgingDTO) {
+		return lodgingDao.insertLodging(lodgingDTO);
+	}
+
+	public int getDo_num(String choiceOption) {
+		return lodgingDao.selectDo_num(choiceOption);
 	}
 }
