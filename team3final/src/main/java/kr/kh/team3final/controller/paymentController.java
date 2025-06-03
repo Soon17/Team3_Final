@@ -27,6 +27,7 @@ import kr.kh.team3final.service.LoResrvationService;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RoomService;
 import kr.kh.team3final.utils.CustomUser;
+import kr.kh.team3final.utils.Util;
 
 @Controller
 @RequestMapping("/pay")
@@ -61,8 +62,8 @@ public class PaymentController {
 		RoomVO room = roomService.getRoom(rm_num);
 		List<ChoiceOptionVO> choiceOptions = optionService.getChoiceOpotionList(ld_num);
 		String[] parts = checkTime.split(" ~ ");
-		String checkIn = parseDate(parts[0]);
-		String checkOut = parseDate(parts[1]);
+		String checkIn = Util.parseDate(parts[0]);
+		String checkOut = Util.parseDate(parts[1]);
 		sesssion.setAttribute("ld_num", ld_num);
 		sesssion.setAttribute("parts", parts);
 		sesssion.setAttribute("rm_num", rm_num);
@@ -80,17 +81,6 @@ public class PaymentController {
 	public String paymentSummary(Model model, @RequestParam String rm_name) {
 		model.addAttribute("rm_name", rm_name);
 		return "pay/summary";
-	}
-
-	private static String parseDate(String checkTime) {
-		// 예: "2025.06.02(월)"
-		String datePart = checkTime.substring(5, 10); // "06.02"
-		String[] dateSplit = datePart.split("\\.");
-		String month = String.valueOf(Integer.parseInt(dateSplit[0])); // 앞자리 0 제거
-		String day = dateSplit[1];
-		String dayOfWeek = checkTime.substring(checkTime.indexOf('(') + 1, checkTime.indexOf(')'));
-
-		return month + "/" + day + "/" + dayOfWeek;
 	}
 
 	@PostMapping("/kakao/apiKey")
@@ -122,8 +112,8 @@ public class PaymentController {
 		}
 		String[] par = (String[]) session.getAttribute("parts");
 		int rm_num = (int) session.getAttribute("rm_num");
-		String lr_checkIn = formatDate(par[0]);
-		String lr_checkOut = formatDate(par[1]);
+		String lr_checkIn = Util.formatDate(par[0]);
+		String lr_checkOut = Util.formatDate(par[1]);
 		lr.setLr_checkIn(lr_checkIn);
 		lr.setLr_checkOut(lr_checkOut);
 		lr.setLr_rm_num(rm_num);
@@ -131,11 +121,5 @@ public class PaymentController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("ok", true);
 		return map;
-	}
-
-	public static String formatDate(String dateStr) {
-		// 괄호 앞까지 자르고 점(.)을 하이픈(-)으로 교체
-		String dateOnly = dateStr.split("\\(")[0];
-		return dateOnly.replace(".", "-");
 	}
 }

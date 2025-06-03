@@ -532,7 +532,7 @@
 <body>
    <main layout:fragment="content" class="main-container"><!--메인-->
       <div class="search-bar-wrap"><!--헤더 검색창-->
-
+         <input type="hidden" class="carName" th:value="${cri.ct_name}">
          <div class="search-bar-inner">
             <select name="rg_name" id="region" class="search-input">
                <!-- 첫 번째: 서버에서 넘어온 선택 값 -->

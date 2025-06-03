@@ -12,9 +12,11 @@ public class CarVO {
 	int cr_count;
 	int cr_re_num;
 	String cr_thumbnail;
-
+	
+	String re_name;
 	int min_price;
 	int ct_key;
 	String ct_name;
 	String ct_type;
+	int reservation_count;
 }

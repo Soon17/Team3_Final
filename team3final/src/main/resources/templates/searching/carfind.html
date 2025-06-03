@@ -149,12 +149,16 @@
     </div>
   </div>
   <script>
+
     $('.range-slider').on('input', function () {
       const value = $(this).val(); // ex) 9000
       const priceInManwon = Math.floor(value / 10000); // ex) 0.9 → 0
       $('.price-range').text(`0원 ~ ${priceInManwon}만원`);
     });
-
+         $(document).ready(function () {
+            let carName = $(".carName").val();
+            $('.search-ct-name').val(carName);           
+         });
   </script>
 </body>
 

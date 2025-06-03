@@ -697,18 +697,16 @@
 			}
 			function updateRentLinks() {	// 렌트 스와이퍼 링크 달아주기
 				// url 바꿔야 함 마지막에		
-				const checkTime = $('#check-time').val()
-				const people = "성인2"
+				const checkTime = $('#check-time').val();
 				const qR = encodeURIComponent(regionName);
 				const qT = encodeURIComponent(checkTime);
-				const qP = encodeURIComponent(people);
 
-				$('.reserv-link').each(function () {
-					const ld_num = $(this).data('ld-num');
-					const ld_region = encodeURIComponent($(this).data('ld-region'));
+				$('.rent-reserv-link').each(function () {
+					const carName = $(this).parent().find(".car-name").text();
+					const qY = encodeURIComponent(carName);
 					$(this).attr(
 						'href',
-						`/reserv?rg_name=${qR}&checkTime=${qT}&rm_person=${qP}&ld_num=${ld_num}&ld_region=${ld_region}`
+						`/searching/carsearch?rg_name=${qR}&checkTime=${qT}&ct_name=${qY}`
 					);
 				});
 			}
