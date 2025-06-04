@@ -3,51 +3,22 @@ SELECT * FROM travel.lodging;
 SELECT * FROM travel.room;
 SELECT * FROM travel.thumbnail;
 SELECT * FROM travel.review;
-SELECT * FROM travel.re_reservation;
 
 DELETE FROM region;
 DELETE FROM lodging;
 DELETE FROM room;
 DELETE FROM thumbnail;
 DELETE FROM review;
-DELETE FROM default_option;
 
 ALTER TABLE region AUTO_INCREMENT = 1;
 ALTER TABLE lodging AUTO_INCREMENT = 1;
 ALTER TABLE room AUTO_INCREMENT = 1;
 ALTER TABLE thumbnail AUTO_INCREMENT = 1;
 ALTER TABLE review AUTO_INCREMENT = 1;
-ALTER TABLE default_option AUTO_INCREMENT = 1;
 
-INSERT INTO member (ME_ID, ME_PW, ME_NAME, ME_NICK, ME_NUMBER, ME_EMAIL, ME_AUTHORITY, ME_BIRTHDAY, ME_GENDER, ME_PROFILE, ME_PROVIDER, ME_DEL) VALUES
-('user01', '$2b$12$cE3qQ0dBV6GQx/g6UKRfLupzBEzU1BSZg9JtpNzGLoMyodM3LjMoa', '홍길동', '길동이', '01012345678', 'user01@example.com', 'USER', '19900101', '남자', 'default1.jpg', 'NORMAL', 'N'),
-('user02', '$2b$12$cWxlnpiXk37R98U6NZ7zzONKKxqvRLpSkfNHcahJJySXjZrz4/Ch6', '김철수', '철수짱', '01023456789', 'user02@example.com', 'USER', '19910202', '남자', 'default2.jpg', 'NORMAL', 'N'),
-('user03', '$2b$12$/7JW.XpEhb6aQFXqI1aR8.dSQrn63W6o3JIdetGItRc3dqnm.MzTq', '이민호', '민호맨', '01034567890', 'user03@example.com', 'USER', '19920303', '남자', 'default3.jpg', 'NORMAL', 'N'),
-('user04', '$2b$12$2Viu.RNk48oEnEIio9VGze.3z6kmpx5EX2VM3SeKe1pgXxhe4GglC', '박지훈', '지훈킹', '01045678901', 'user04@example.com', 'USER', '19930404', '남자', 'default4.jpg', 'NORMAL', 'N'),
-('user05', '$2b$12$CKcYUPaoaTNCr3dWma9B..AVYx4rGmgqRen9ifepzkboQuJCx03aa', '최우진', '우진이', '01056789012', 'user05@example.com', 'USER', '19940505', '남자', 'default5.jpg', 'NORMAL', 'N'),
-('user06', '$2b$12$N05/DC0IcdXuXi2LgGbdB.kHsshLExM4OweZLfTTLpzYfTNaxE4j2', '정태호', '태호짱', '01067890123', 'user06@example.com', 'USER', '19950606', '남자', 'default6.jpg', 'NORMAL', 'N');
-
-INSERT INTO re_reservation (
-    RR_CHECKIN, RR_CHEKOUT, RR_PRICE, RR_DATE, RR_STATE,
-    RR_NAME, RR_NUMBER, RR_BIRTH, RR_CP_NUM, RR_ME_NUM
-) VALUES
-('2025-06-10 00:00:00', '2025-06-12 00:00:00', 55000, NOW(), '예약완료',
- '홍길동', 900101, 19900101, 1, 1),
-
-('2025-06-10 00:00:00', '2025-06-12 00:00:00', 55000, NOW(), '예약완료',
- '김철수', 910202, 19910202, 1, 2),
-
-('2025-06-10 00:00:00', '2025-06-12 00:00:00', 55000, NOW(), '예약완료',
- '이민호', 920303, 19920303, 1, 3),
- 
- ('2025-06-12 00:00:00', '2025-06-14 00:00:00', 55000, NOW(), '예약완료',
- '정태호', 930404, 19930404, 1, 4);
 
 INSERT INTO region(RG_NAME) VALUES
-("서울"),("경기"),("부산"),("제주");
-
-INSERT INTO default_option(DO_NAME) VALUES
-("조식"),("금연 호텔"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰"),("취사 가능");
+("서울"),("경기"),("부산");
 
 INSERT INTO lodging(LD_NAME,LD_REGION,LD_TYPE,LD_NUMBER,LD_RATING,LD_INFOR,LD_MEAL_PRICE,LD_ME_NUM,LD_RG_NUM) VALUES
 ("안좋아영","서울특별시 강남구 테헤란로 130","모텔","010-0000-0000",1,
