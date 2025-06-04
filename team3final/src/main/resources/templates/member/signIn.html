@@ -173,20 +173,56 @@
 		</div>
 		<div class="modal" id="idFindModal">
 			<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content id-find" style="color: #c4c3ca; font-weight: 500;">
-				<!-- Modal 헤더 -->
-				<div class="modal-header">
-					<span>아이디 찾기</span>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="modal-content id-find" style="color: #c4c3ca; font-weight: 500; height: auto;">
+					<!-- Modal 헤더 -->
+					<div class="modal-header id-find-header">
+						<span>아이디 찾기</span>
+						<button type="button" class="close id-find-close" data-dismiss="modal">&times;</button>
+					</div>
+					<!-- Modal 바디 --> 
+					<div class="modal-body" id="map1">
+						<div class="form-group mt-2">
+							<form class="id-find-form">
+								<div class="mb-4">
+									<p>이름</p>
+									<input type="text" name="id-find-name" class="form-style" autocomplete="off">
+									<i class="find-icon uil uil-user"></i>
+								</div>
+								<div class="mb-4">
+									<p>전화번호</p>	
+									<i class="find-icon  uil-phone"></i>							
+									<input type="text" name="id-find-menumber" class="form-style" autocomplete="off">
+									
+									<button class="sms-find-btn d-block mx-auto" type="button" id="sms-find-btn" disabled>인증번호 받기</button>								
+								</div>
+								<div>
+									<p>인증번호</p>
+									<i class="find-icon uil-comment-alt-dots"></i>
+									<input type="text" name="id-find-checknumber" class="form-style" autocomplete="off">								
+									<button class="sms-find-btn d-block mx-auto" id="checkSms-find" type="button" disabled>인증번호 확인</button>
+								</div>
+								<button id="id-find-btn" class="btn mt-4 d-block mx-auto signIn-a" type="submit"  disabled>아이디 찾기</button>
+							</form>
+						</div>
+					</div>
 				</div>
-				<!-- Modal 바디 -->
-				<div class="modal-body" id="map1">
-					하하하하
-				</div>
-			</div>
 			</div>
 		</div> 		
 		<script>
+			//아이디 찾기 유효성 검사
+			$(".id-find-form").validate({
+				rules: {
+					'id-find-name': { required: true },
+					"id-find-menumber": { required: true, phone: true },
+				},
+				messages: {
+					'id-find-name': { required: "이름을 적어 주세요" },
+					"id-find-menumber": { required: "전화번호를 적어 주세요", phone: "형식에 맞게 적어 주세요(010-0000-0000)" },
+				},
+				submitHandler: function () {
+					return false;
+				},
+			});			
 			// 회원가입 유효성 검사
 			$(".singUp-from").validate({
 				rules: {
