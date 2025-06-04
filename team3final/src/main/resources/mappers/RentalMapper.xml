@@ -51,4 +51,13 @@
 		WHERE r.re_num = #{re_num}
 	</select>
 
+	<select id="selectCarTypes" resultType="CarTypeVO">
+		select *
+		from car_type
+	</select>
+
+	<insert id="insertRental" useGeneratedKeys="true" keyProperty="re_num">
+		insert into rental(re_name, re_number, re_region, re_me_num, re_rg_num)
+		value(#{re_name},#{re_number},#{re_region},#{re_me_num},#{re_rg_num})
+	</insert>
 </mapper>

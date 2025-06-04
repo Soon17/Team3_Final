@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import kr.kh.team3final.dao.RentalDAO;
 import kr.kh.team3final.model.dto.AvailableCarDTO;
+import kr.kh.team3final.model.dto.RentalDTO;
+import kr.kh.team3final.model.vo.CarTypeVO;
 import kr.kh.team3final.model.vo.RentalVO;
 
 @Service
@@ -22,6 +24,15 @@ public class RentalService {
 
 	public RentalVO getRentalInfo(int re_num) {
 		return rentalDao.selectRentalInfo(re_num);
+	}
+
+	public List<CarTypeVO> getCarTypes() {
+		return rentalDao.selectCarTypes();
+	}
+
+	public boolean uploadRental(RentalDTO rentalDTO) {
+		if(rentalDTO == null) return false;
+		return rentalDao.insertRental(rentalDTO);
 	}
 
 }

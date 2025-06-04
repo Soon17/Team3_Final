@@ -17,19 +17,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.team3final.dao.MemberDAO;
+import kr.kh.team3final.model.dto.CarDTO;
 import kr.kh.team3final.model.dto.LodgingDTO;
+import kr.kh.team3final.model.dto.RentalDTO;
+import kr.kh.team3final.model.vo.CarTypeVO;
 import kr.kh.team3final.model.vo.DefaultOptionVO;
 import kr.kh.team3final.model.vo.MemberVO;
 import kr.kh.team3final.model.vo.RegionVO;
 import kr.kh.team3final.service.OptionService;
+import kr.kh.team3final.service.CarService;
 import kr.kh.team3final.service.LodgingService;
 import kr.kh.team3final.service.RegionService;
+import kr.kh.team3final.service.RentalService;
 import kr.kh.team3final.service.RoomService;
 import kr.kh.team3final.service.ThumbnailService;
 import kr.kh.team3final.utils.CustomUser;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/owner")
@@ -48,6 +54,11 @@ public class OwnerController {
 	@Autowired
 	OptionService optionService;
 
+	@Autowired
+	RentalService rentalService;
+	@Autowired
+	CarService carService;
+
 	@GetMapping("/uploadLodging")
 	public String uploadLodging(Model model) {
 		List<String> defaultOptions = optionService.getDefaultOptions();
@@ -63,10 +74,9 @@ public class OwnerController {
 			LodgingDTO lodgingDTO,
 			@AuthenticationPrincipal CustomUser customUser, @AuthenticationPrincipal OAuth2User oauth2User,
 			@RequestParam(value = "options", required = false) List<String> selectedOptions,
-			@RequestParam(value = "added-options", required = false) String addedOptions
-			) throws IOException {
+			@RequestParam(value = "added-options", required = false) String addedOptions) throws IOException {
 
-		MemberVO user = null;
+		MemberVO user;
 		if (customUser != null) {
 			user = customUser.getUser();
 		} else if (oauth2User != null) {
@@ -76,8 +86,9 @@ public class OwnerController {
 			model.addAttribute("url", "/member/signIn");
 			return "msg";
 		}
-		
-		lodgingDTO.setLd_me_num(user.getMe_num());
+		if(user != null){
+			lodgingDTO.setLd_me_num(user.getMe_num());
+		}
 
 		// 숙소 정보 업로드
 		boolean uploadLD = lodgingService.uploadLodging(lodgingDTO);
@@ -85,14 +96,14 @@ public class OwnerController {
 
 		// 숙소 썸네일 업로드
 		String uploadDir = new File("").getAbsolutePath() +
-		"/team3final/src/main/resources/static/img";
+				"/team3final/src/main/resources/static/img";
 		boolean uploadLDTH = false;
 		for (MultipartFile file : lodgingDTO.getLodgingThumbnailList()) {
 			if (!file.isEmpty()) {
 				String originalName = file.getOriginalFilename();
 				String uuid = UUID.randomUUID().toString();
 				String uniqueName = uuid + "_" + originalName;
-				
+
 				File destination = new File(uploadDir, uniqueName);
 				file.transferTo(destination);
 				System.out.println("숙소 썸네일 파일: " + uniqueName);
@@ -106,8 +117,8 @@ public class OwnerController {
 		System.out.println("룸 업로드 성공");
 
 		// 선택 옵션 업로드
-		if(selectedOptions != null && !selectedOptions.isEmpty()){
-			for(String choiceOption : selectedOptions){
+		if (selectedOptions != null && !selectedOptions.isEmpty()) {
+			for (String choiceOption : selectedOptions) {
 				int do_num = lodgingService.getDo_num(choiceOption);
 				optionService.uploadChoiceOption(do_num, lodgingDTO.getLd_num());
 			}
@@ -116,12 +127,12 @@ public class OwnerController {
 
 		// 추가 옵션 문자열 리스트화
 		List<String> result = Arrays.stream(addedOptions.split(","))
-                            .map(String::trim)
-                            .filter(s -> !s.isEmpty())  // 빈 값 제거
-                            .collect(Collectors.toList());
+				.map(String::trim)
+				.filter(s -> !s.isEmpty()) // 빈 값 제거
+				.collect(Collectors.toList());
 		// 추가 옵션 리스트 객체화
-		if(result != null && !result.isEmpty()){
-			for(String addedOption : result){
+		if (result != null && !result.isEmpty()) {
+			for (String addedOption : result) {
 				DefaultOptionVO defaultOptionVO = new DefaultOptionVO();
 				defaultOptionVO.setDo_name(addedOption);
 				// 추가 옵션 -> 기본 옵션 업로드
@@ -135,6 +146,49 @@ public class OwnerController {
 		model.addAttribute("msg", "등록되었습니다.");
 		model.addAttribute("url", "/");
 		return "msg";
+	}
+
+	@GetMapping("/uploadRental")
+	public String uploadRental(Model model) {
+		List<CarTypeVO> carTypes = rentalService.getCarTypes();
+		List<RegionVO> regions = regionService.getRegionList();
+		model.addAttribute("carTypes", carTypes);
+		model.addAttribute("regions", regions);
+		return "owner/uploadRental";
+	}
+
+	@PostMapping("/uploadRentalPost")
+	public String postMethodName(
+			Model model, RentalDTO rentalDTO,
+			@AuthenticationPrincipal CustomUser customUser, @AuthenticationPrincipal OAuth2User oauth2User) {
+
+		MemberVO user;
+		if (customUser != null) {
+			user = customUser.getUser();
+		} else if (oauth2User != null) {
+			user = memberDAO.selectMember(oauth2User.getName());
+		} else {
+			model.addAttribute("msg", "로그인 후 이용하세요.");
+			model.addAttribute("url", "/member/signIn");
+			return "msg";
+		}
+		if(user != null){
+			rentalDTO.setRe_me_num(user.getMe_num());
+		}
+		// 렌탈 업로드
+		boolean uploadRental = rentalService.uploadRental(rentalDTO);
+		
+		// 자동차 업로드
+		boolean uploadCars = carService.uploadCars(rentalDTO.getCars(), rentalDTO.getRe_num());
+		if (uploadRental) {
+			model.addAttribute("msg", "등록되었습니다.");
+			model.addAttribute("url", "/");
+			return "msg";
+		} else {
+			model.addAttribute("msg", "등록에 실패하였습니다.");
+			model.addAttribute("url", "owner/uploadRental");
+			return "msg";
+		}
 	}
 
 }

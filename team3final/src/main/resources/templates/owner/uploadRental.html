@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout.html}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>렌트 등록</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<style>
+		.main-container {
+			max-width: 800px;
+			margin: 40px auto;
+			padding: 30px;
+			background-color: #fdfdfd;
+			border-radius: 16px;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			font-family: 'Segoe UI', sans-serif;
+		}
+
+		.title {
+			font-size: 28px;
+			font-weight: bold;
+			color: #2c3e50;
+			margin-bottom: 30px;
+			text-align: center;
+		}
+
+		.form-section {
+			margin-bottom: 30px;
+		}
+
+		.form-group {
+			margin-bottom: 18px;
+		}
+
+		.form-label {
+			display: block;
+			font-weight: 600;
+			color: #34495e;
+			margin-bottom: 6px;
+		}
+
+		.form-input,
+		.form-select {
+			width: 100%;
+			padding: 10px 12px;
+			font-size: 15px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			box-sizing: border-box;
+		}
+
+		.form-file {
+			margin-top: 8px;
+		}
+
+		.button {
+			display: inline-block;
+			background-color: #5dade2;
+			color: white;
+			padding: 10px 18px;
+			font-size: 15px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.btn-submit {
+			background-color: #03b80c;
+		}
+
+		.button:hover {
+			background-color: #3498db;
+		}
+
+		.btn-submit:hover {
+			background-color: #037c09;
+		}
+
+		.car-box {
+			margin-bottom: 30px;
+			padding: 20px;
+			background-color: #f4f6f7;
+			border: 1px dashed #bbb;
+			border-radius: 12px;
+		}
+
+		.car-title {
+			font-size: 18px;
+			font-weight: bold;
+			margin-bottom: 15px;
+			color: #2e4053;
+		}
+
+		.image-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-rows: repeat(2, 150px);
+			gap: 10px;
+			max-width: 800px;
+			margin: auto;
+			padding: 20px;
+		}
+
+		.image-grid.car-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(2, 150px);
+			gap: 10px;
+		}
+
+		.image-grid.car-grid .image-main {
+			grid-column: 1 / span 2;
+			grid-row: 1;
+			/* 1행만 차지 */
+		}
+
+		.image-box {
+			position: relative;
+			background-color: #e0e0e0;
+			border-radius: 8px;
+			overflow: hidden;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.image-box img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			/* ✅ 이미지 전체를 박스에 맞춤 */
+			object-position: center;
+			/* ✅ 중앙 정렬 */
+			background-color: #f0f0f0;
+			/* ✅ 비어 있는 영역 배경색 (선택) */
+		}
+
+		.image-box input[type="file"] {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			cursor: pointer;
+			z-index: 2;
+		}
+
+		.plus-sign {
+			font-size: 40px;
+			color: #aaa;
+			z-index: 1;
+		}
+
+		/* 메인 이미지 (2x2 병합) */
+		.image-main {
+			grid-column: 1 / span 2;
+			grid-row: 1 / span 2;
+		}
+
+		.close-car-btn {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			background: transparent;
+			border: none;
+			font-size: 20px;
+			cursor: pointer;
+			color: #888;
+		}
+	</style>
+</head>
+
+<body style="background-color: #f5f6f7;">
+	<div class="main" style="background-color: #fff;">
+		<main layout:fragment="content">
+
+			<form class="main-container" action="/owner/uploadRentalPost" method="post" enctype="multipart/form-data">
+				<div class="title">
+					<i class="fas fa-car"> 신규 렌트 등록</i>
+				</div>
+
+				<div class="form-section" id="rentalForm">
+					<div class="d-flex">
+						<div class="form-group col">
+							<label class="form-label" for="re_name">회사 이름</label>
+							<input type="text" class="form-input" id="re_name" name="re_name" required>
+						</div>
+						<div class="form-group col-4">
+							<label class="form-label" for="re_rg_num">지역</label>
+							<select class="form-select" id="re_rg_num" name="re_rg_num" required>
+								<option value="">-- 선택 --</option>
+								<option th:each="region : ${regions}" th:value="${region.rg_num}"
+									th:text="${region.rg_name}"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="d-flex">
+						<div class="form-group col">
+							<label class="form-label" for="re_region">주소</label>
+							<input type="text" class="form-input" id="re_region" name="re_region" required>
+						</div>
+
+						<div class="form-group col-4">
+							<label class="form-label" for="re_number">전화번호</label>
+							<input type="text" class="form-input" id="re_number" name="re_number" required>
+						</div>
+					</div>
+
+					<div id="carsContainer">
+						<div class="car-box position-relative">
+							
+							<div class="car-title">
+								<i class="fas fa-car"></i> 제공 차종 <span class="car-numbering">1</span>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">사진</label>
+								<div class="image-box" style="height: 200px;" data-index="1">
+									<span class="plus-sign">+</span>
+									<input type="file" accept="image/*" class="car-thumb" onchange="handleSingleImage($(this), 1)" name="cars[0].cr_thumbnail" required>
+								</div>
+							</div>
+
+							<div class="d-flex">
+								<div class="form-group col-8">
+									<label class="form-label mb-2">차량 타입</label>
+									<select class="form-select car-type" name="cars[0].cr_ct_key" required>
+										<option value="">-- 선택 --</option>
+										<option th:each="type : ${carTypes}" th:value="${type.ct_key}"
+											th:text="${type.ct_name}"></option>
+									</select>
+								</div>
+								<div class="form-group col-4">
+									<label class="form-label">차량 대수</label>
+									<input type="number" class="form-input car-count" name="cars[0].cr_count" min="1" required>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div class="form-group col-4">
+									<label class="form-label">차량 연식</label>
+									<input type="number" class="form-input car-year" name="cars[0].cr_year" min="1900" required>
+								</div>
+	
+								<div class="form-group col-8">
+									<label class="form-label">기본 요금(단위: 원)</label>
+									<input type="number" class="form-input car-price" name="cars[0].cr_price" min="0" step="1000" required>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div class="form-group col">
+									<label class="form-label mb-2">연료 형태</label>
+									<select class="form-select car-fuel" name="cars[0].cr_fuel_type" required>
+										<option value="">-- 선택 --</option>
+										<option value="휘발유">휘발유</option>
+										<option value="경유">경유</option>
+										<option value="하이브리드">하이브리드</option>
+										<option value="전기">전기</option>
+									</select>
+								</div>
+								<div class="form-group col">
+									<label class="form-label car-trans">주행 형태</label>
+									<select class="form-select" name="cars[0].cr_trans" required>
+										<option value="">-- 선택 --</option>
+										<option value="오토">오토</option>
+										<option value="수동">수동</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="d-flex justify-content-between">
+						<button type="button" class="button" onclick="addCarBox()">+ 차량 추가하기</button>
+						<button type="submit" class="button btn-submit">렌트 등록</button>
+					</div>
+				</div>
+
+			</form>
+
+			<script th:inlie="javascript">
+				// 차량 추가 박스 열기
+				function addCarBox() {
+					var carTypes = JSON.parse('[[${carTypes}]]'.replaceAll('&quot;', '"'));
+					var options = '';
+					carTypes.forEach(element => {
+						options += `
+							<option value="${element.ct_key}">${element.ct_type}</option>
+						`
+					});
+					
+					
+					const carBox = $(`
+						<div class="car-box position-relative">
+							<!-- ❌ 닫기 버튼 -->
+							<button type="button" class="close-car-btn" title="삭제">×</button>
+
+							<div class="car-title">
+								<i class="fas fa-car"></i> 제공 차종 <span class="car-numbering"></span>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">사진</label>
+								<div class="image-box" style="height: 200px;" data-index="1">
+									<span class="plus-sign">+</span>
+									<input type="file" accept="image/*" class="car-thumb" onchange="handleSingleImage($(this), 1)" required>
+								</div>
+							</div>
+
+							<div class="d-flex">
+								<div class="form-group col-8">
+									<label class="form-label mb-2">차량 타입</label>
+									<select class="form-select car-type" name="cars[0].cr_ct_key" required>
+										<option value="">-- 선택 --</option>
+										${options}
+									</select>
+								</div>
+								<div class="form-group col-4">
+									<label class="form-label">차량 대수</label>
+									<input type="number" class="form-input car-count" min="1" required>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div class="form-group col-4">
+									<label class="form-label">차량 연식</label>
+									<input type="number" class="form-input car-year" min="1900" required>
+								</div>
+	
+								<div class="form-group col-8">
+									<label class="form-label">기본 요금(단위: 원)</label>
+									<input type="number" class="form-input car-price" min="0" step="1000" required>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div class="form-group col">
+									<label class="form-label mb-2">연료 형태</label>
+									<select class="form-select car-fuel" required>
+										<option value="">-- 선택 --</option>
+										<option value="휘발유">휘발유</option>
+										<option value="경유">경유</option>
+										<option value="하이브리드">하이브리드</option>
+										<option value="전기">전기</option>
+									</select>
+								</div>
+								<div class="form-group col">
+									<label class="form-label">주행 형태</label>
+									<select class="form-select car-trans" required>
+										<option value="">-- 선택 --</option>
+										<option value="오토">오토</option>
+										<option value="수동">수동</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					`);
+
+					$('#carsContainer').append(carBox);
+					resetNumber();
+				}
+
+				// 차량 추가 박스 닫기
+				$(document).on('click', '.close-car-btn', function () {
+					$(this).closest('.car-box').remove();
+					resetNumber();
+				});
+				
+				// 추가/삭제 시 넘버링
+				function resetNumber(){
+					$(".car-box").each(function(index){
+						$(this).find(".car-numbering").text(index+1);
+						$(this).find(".car-thumb").attr("name", `cars[${index}].cr_thumbnail`);
+						$(this).find(".car-type").attr("name", `cars[${index}].cr_ct_key`);
+						$(this).find(".car-count").attr("name", `cars[${index}].cr_count`);
+						$(this).find(".car-year").attr("name", `cars[${index}].cr_year`);
+						$(this).find(".car-price").attr("name", `cars[${index}].cr_price`);
+						$(this).find(".car-fuel").attr("name", `cars[${index}].cr_fuel_type`);
+						$(this).find(".car-trans").attr("name", `cars[${index}].cr_trans`);
+					})
+				}
+
+				// 단일 이미지 업로드 및 미리보기 처리
+				function handleSingleImage($input, index) {
+					const file = $input[0].files[0];
+					if (!file) return;
+
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						const $box = $input.closest(`.image-box[data-index='${index}']`);
+
+						// 이미 존재하는 이미지가 있으면 제거
+						$box.find('img').remove();
+
+						// 새 이미지 미리보기 추가 (input은 그대로 둠)
+						const $img = $('<img>', {
+							src: e.target.result,
+							alt: 'image'
+						});
+						$box.append($img);
+
+						// + 아이콘 숨기기
+						$box.find('.plus-sign').hide();
+					};
+					reader.readAsDataURL(file);
+				}
+
+				// 이미지 박스를 클릭하면 파일 입력창 열기
+				$(document).on('click', '.image-box', function (e) {
+					const $input = $(this).find('input[type="file"]');
+					if (e.target === $input[0]) return;
+					$input.trigger('click');
+				});
+			</script>
+		</main>
+	</div>
+</body>
+
+</html>

@@ -207,6 +207,20 @@
 					<a class="primary-btn" href="/">호텔 보러가기</a>
 				</div>
 			</div>
+
+			<div sec:authorize="hasRole('OWNER')">
+				<!-- 요약 영역 -->
+				<div class="summary">
+					<a class="summary-item" href="/owner/uploadLodging">
+						<i class="fa fa-hotel"></i>
+						<p>숙소 등록</p>
+					</a>
+					<a class="summary-item" href="/owner/uploadRental">
+						<i class="fa fa-car"></i>
+						<p>렌트 등록</p>
+					</a>
+				</div>
+			</div>
 		</div>
 		<script>
 			// 페이지 로드 시 호텔 예약 내역 자동 로드

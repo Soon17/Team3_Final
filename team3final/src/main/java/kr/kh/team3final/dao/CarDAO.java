@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import kr.kh.team3final.model.dto.CarDTO;
 import kr.kh.team3final.model.vo.CarVO;
 import kr.kh.team3final.model.vo.SearchCriteria;
 
@@ -27,5 +28,7 @@ public interface CarDAO {
 	List<CarVO> selectPriceCarList(int rg_num);
 
 	CarVO selectCar(int cr_id);
+
+	boolean insertCar(CarDTO car);
 
 }

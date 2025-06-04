@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import kr.kh.team3final.model.dto.AvailableCarDTO;
+import kr.kh.team3final.model.dto.RentalDTO;
+import kr.kh.team3final.model.vo.CarTypeVO;
 import kr.kh.team3final.model.vo.RentalVO;
 
 public interface RentalDAO {
@@ -18,4 +20,8 @@ public interface RentalDAO {
       @Param("rg_name") String rg_name);
 
   RentalVO selectRentalInfo(@Param("re_num") int re_num);
+
+  List<CarTypeVO> selectCarTypes();
+
+  boolean insertRental(RentalDTO rentalDTO);
 }
