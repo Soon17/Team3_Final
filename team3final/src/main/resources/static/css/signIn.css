@@ -375,3 +375,17 @@ label.regex-error,#checkId,#smsSend,#sms-msg {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.found-id-box {
+    display: none;
+    margin-top: 15px;
+    background-color: #fff4d6;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+
+.found-id {
+    color: #ff9900;
+}

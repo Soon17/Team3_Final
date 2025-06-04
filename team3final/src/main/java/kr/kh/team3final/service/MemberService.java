@@ -84,5 +84,9 @@ public class MemberService {
 		return memberDAO.deleteUser(member);
 	}
 
+    public String getId(MemberVO member) {
+        return memberDAO.selectId(member);
+    }
+
 	
 }

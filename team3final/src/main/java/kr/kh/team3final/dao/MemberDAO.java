@@ -18,4 +18,6 @@ public interface MemberDAO {
 
 	int deleteUser(@Param("me_num")int me_num);
 
+    String selectId(MemberVO member);
+
 }

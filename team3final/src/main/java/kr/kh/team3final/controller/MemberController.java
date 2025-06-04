@@ -1,7 +1,9 @@
 package kr.kh.team3final.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -322,5 +324,19 @@ public class MemberController {
 			return rentReservationService.selectRentList(meNum); // 전체 리스트 반환
 		}
 		return new ArrayList<>();
+	}
+	@PostMapping("/find")
+	@ResponseBody
+	public Map<String, Object> findUser(MemberVO member) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(member.getMe_id() == null){
+			String  me_id = memberService.getId(member);
+			map.put("me_id", me_id);
+			return map;
+		}
+		System.out.println("비번찾기");
+		System.out.println(member);
+		return map;
+		
 	}
 }

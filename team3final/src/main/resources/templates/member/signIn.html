@@ -182,11 +182,11 @@
 					<!-- Modal 바디 --> 
 					<div class="modal-body" id="map1">
 						<div class="form-group mt-2">
-							<form class="id-find-form">
+							<form class="id-find-form" method="post">
 								<div class="mb-4">
 									<p>이름</p>
 									<i class="find-icon uil uil-user"></i>
-									<input type="text" name="id-find-name" class="form-style" autocomplete="off">
+									<input type="text" name="id-find-name" id="id-find-name" class="form-style" autocomplete="off">
 									
 								</div>
 								<div class="mb-4">
@@ -204,6 +204,12 @@
 									<button class="sms-find-btn d-block mx-auto" id="checkSms-find" type="button" disabled>인증번호 확인</button>
 								</div>
 								<button id="id-find-btn" class="btn mt-4 d-block mx-auto signIn-a" type="submit"  disabled>아이디 찾기</button>
+								<div id="foundIdBox" class="found-id-box">
+									찾으시는 아이디는 <span id="foundId" class="found-id"></span> 입니다.
+								</div>
+								<div id="notFoundoundIdBox" class="found-id-box">
+									찾으시는 아이디는 존재하지 않습니다.
+								</div>
 							</form>
 						</div>
 					</div>
@@ -222,16 +228,25 @@
 					"id-find-menumber": { required: "전화번호를 적어 주세요", phone2: "형식에 맞게 적어 주세요(010-0000-0000)" },
 				},
 				submitHandler: function () {
+					const me_name = $("#id-find-name").val();
+					const me_number = $("#id-find-number").val();
 					$.ajax({
 						async: false,
-						url: '/findUser',
+						url: '/member/find',
 						type: 'post',
 						data: { 
-							me_number: me_number,
+							me_name : me_name,
+							me_number: me_number
 						},
 						success: function (data) {
-						if (data) res = true;
-						else res= false;
+						if (data.me_id != null) {
+							$('#notFoundoundIdBox').hide();
+							$('#foundId').text(data.me_id);
+							$('#foundIdBox').slideDown();  // 부드럽게 표시
+						} else {
+							$("#notFoundoundIdBox").slideDown();
+							$('#foundIdBox').hide();
+						}
 						}
 					});
 					return false;
@@ -309,6 +324,26 @@
 				}
 				return res;
 			}	
+			$('#idFindModal').on('show.bs.modal', function () {
+				// 입력창 초기화
+				$('#id-find-name').val('');
+				$('#id-find-number').val('');
+				$('#id-find-checknumber').val('');
+
+				// 인증 버튼 초기 상태
+				$('#sms-find-btn').prop('disabled', true);
+				$('#checkSms-find').prop('disabled', true);
+				$('#id-find-btn').prop('disabled', true);
+
+				// 메시지 초기화
+				$('#smsidSend').text('');
+				$('#sms-id-msg').text('');
+				$('#foundId').text('');
+				$('#foundIdBox').hide();
+				$('#notFoundoundIdBox').hide();
+				$('#smsidSend, #sms-id-msg').text('');
+				$('#sms-find-btn, #checkSms-find, #id-find-btn').prop('disabled', true);
+			});
 			// 회원가입 유효성 검사
 			$(".singUp-from").validate({
 				rules: {

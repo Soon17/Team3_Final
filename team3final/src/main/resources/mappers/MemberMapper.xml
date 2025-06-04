@@ -43,4 +43,7 @@
 		SET ME_DEL = 'Y'
 		WHERE ME_NUM = #{me_num}
 	</update>
+	<select id="selectId" resultType="String">
+		select me_id from member where me_name = #{me_name} and me_number = #{me_number};
+	</select>
 </mapper>
