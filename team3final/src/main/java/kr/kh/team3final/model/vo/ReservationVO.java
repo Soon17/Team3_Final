@@ -25,4 +25,5 @@ public class ReservationVO {
 	String lr_me_name; //회원 이름
 	String lr_rm_name; //객실 이름
 	String lr_ld_name; //숙소 이름
+	int lr_ld_num;
 }

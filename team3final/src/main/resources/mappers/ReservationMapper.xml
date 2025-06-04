@@ -19,6 +19,7 @@
             r.LR_RM_NUM,
             m.ME_NAME AS LR_ME_NAME,
             rm.RM_NAME AS LR_RM_NAME,
+            ld.LD_NUM AS LR_LD_NUM,
             ld.LD_NAME AS LR_LD_NAME
         FROM 
             lo_reservation r
@@ -60,8 +61,6 @@
         JOIN 
             lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
         WHERE
-            
-        
             r.lr_me_num = #{meNum}
         ORDER BY
             r.LR_DATE DESC

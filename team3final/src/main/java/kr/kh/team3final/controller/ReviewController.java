@@ -29,29 +29,37 @@ public class ReviewController {
 	@PostMapping("/insert")
 	@ResponseBody
 	public String insertReview(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user, @RequestParam("rv_rating") int rating,
-			@RequestParam("rv_content") String content, @RequestParam("rv_number") int rvNumber, @RequestParam("rv_table_name") String tableName) {
+														@RequestParam("rv_content") String content, @RequestParam("rv_number") int rvNumber, @RequestParam("rv_table_name") String tableName) {
 
-		MemberVO member = null;
+			MemberVO member = null;
 
-		if(user != null){
-			member = user.getUser();
-		}
-		else if(oauth2user != null){
-			member = memberDAO.selectMember(oauth2user.getName());
-		} else {
-			return "fail";
-		}
+			if (user != null) {
+					member = user.getUser();
+			} else if (oauth2user != null) {
+					member = memberDAO.selectMember(oauth2user.getName());
+			} else {
+					return "fail";
+			}
 
-		ReviewVO review = new ReviewVO();
-		review.setRv_rating(rating);
-		review.setRv_content(content);
-		review.setRv_number(rvNumber);
-		review.setRv_table_name(tableName);
-		review.setRv_me_num(member.getMe_num());
+			// 유효성 검사 추가
+			if (rating < 1 || rating > 5) {
+					return "invalid_rating";
+			}
 
-		int result = reviewService.insertReview(review);
+			if (content == null || content.trim().isEmpty()) {
+					return "invalid_content";
+			}
 
-		return result > 0 ? "success" : "fail";
+			ReviewVO review = new ReviewVO();
+			review.setRv_rating(rating);
+			review.setRv_content(content);
+			review.setRv_number(rvNumber);
+			review.setRv_table_name(tableName);
+			review.setRv_me_num(member.getMe_num());
+
+			int result = reviewService.insertReview(review);
+
+			return result > 0 ? "success" : "fail";
 	}
 
 	@GetMapping("/check")
@@ -85,50 +93,58 @@ public class ReviewController {
 	@PostMapping("/update")
 	@ResponseBody
 	public String updateReview(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user, @RequestParam("rv_rating") int rating,
-							   @RequestParam("rv_content") String content, @RequestParam("rv_number") int rvNumber) {
-		MemberVO member = null;
-		if(user != null){
-			member = user.getUser();
-		} else if(oauth2user != null){
-			member = memberDAO.selectMember(oauth2user.getName());
-		} else {
-			return "fail";
-		}
+														@RequestParam("rv_content") String content, @RequestParam("rv_number") int rvNumber, @RequestParam("rv_table_name") String tableName) {
 
-		ReviewVO review = new ReviewVO();
-		review.setRv_rating(rating);
-		review.setRv_content(content);
-		review.setRv_number(rvNumber);
-		review.setRv_me_num(member.getMe_num());
-		review.setRv_table_name("room");
+			MemberVO member = null;
+			if (user != null) {
+					member = user.getUser();
+			} else if (oauth2user != null) {
+					member = memberDAO.selectMember(oauth2user.getName());
+			} else {
+					return "fail";
+			}
 
-		int result = reviewService.updateReview(review);
+			// 유효성 검사
+			if (rating < 1 || rating > 5) {
+					return "invalid_rating";
+			}
+			if (content == null || content.trim().isEmpty()) {
+					return "invalid_content";
+			}
 
-		return result > 0 ? "success" : "fail";
+			ReviewVO review = new ReviewVO();
+			review.setRv_rating(rating);
+			review.setRv_content(content);
+			review.setRv_number(rvNumber);
+			review.setRv_me_num(member.getMe_num());
+			review.setRv_table_name(tableName);  
+
+			int result = reviewService.updateReview(review);
+			return result > 0 ? "success" : "fail";
 	}
 
 	@PostMapping("/delete")
-@ResponseBody
-public String deleteReview(@RequestParam("rv_number") int rvNumber, 
-                           @AuthenticationPrincipal CustomUser user, 
-                           @AuthenticationPrincipal OAuth2User oauth2user) {
-    System.out.println("deleteReview 호출됨, rvNumber = " + rvNumber);
-    MemberVO member = null;
-    if(user != null){
-        member = user.getUser();
-        System.out.println("CustomUser 인증됨, member me_num = " + member.getMe_num());
-    } else if(oauth2user != null){
-        member = memberDAO.selectMember(oauth2user.getName());
-        System.out.println("OAuth2User 인증됨, member me_num = " + member.getMe_num());
-    } else {
-        System.out.println("인증 실패: user, oauth2user 둘 다 null");
-        return "fail";
-    }
+	@ResponseBody
+	public String deleteReview(@RequestParam("rv_number") int rvNumber, 
+														@AuthenticationPrincipal CustomUser user, 
+														@AuthenticationPrincipal OAuth2User oauth2user) {
+			System.out.println("deleteReview 호출됨, rvNumber = " + rvNumber);
+			MemberVO member = null;
+			if(user != null){
+					member = user.getUser();
+					System.out.println("CustomUser 인증됨, member me_num = " + member.getMe_num());
+			} else if(oauth2user != null){
+					member = memberDAO.selectMember(oauth2user.getName());
+					System.out.println("OAuth2User 인증됨, member me_num = " + member.getMe_num());
+			} else {
+					System.out.println("인증 실패: user, oauth2user 둘 다 null");
+					return "fail";
+			}
 
-    int result = reviewService.deleteReview(rvNumber, member.getMe_num());
-    System.out.println("삭제 처리 결과 result = " + result);
+			int result = reviewService.deleteReview(rvNumber, member.getMe_num());
+			System.out.println("삭제 처리 결과 result = " + result);
 
-    return result > 0 ? "success" : "fail";
-}
+			return result > 0 ? "success" : "fail";
+	}
 
 }

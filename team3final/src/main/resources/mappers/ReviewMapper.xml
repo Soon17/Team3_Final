@@ -124,7 +124,6 @@
             rv_date = NOW()
         WHERE 
             rv_me_num = #{rv_me_num}
-            AND rv_table_name = #{rv_table_name}
             AND rv_number = #{rv_number}
     </update>
     <delete id="deleteReview">
