@@ -185,20 +185,22 @@
 							<form class="id-find-form">
 								<div class="mb-4">
 									<p>이름</p>
-									<input type="text" name="id-find-name" class="form-style" autocomplete="off">
 									<i class="find-icon uil uil-user"></i>
+									<input type="text" name="id-find-name" class="form-style" autocomplete="off">
+									
 								</div>
 								<div class="mb-4">
 									<p>전화번호</p>	
 									<i class="find-icon  uil-phone"></i>							
-									<input type="text" name="id-find-menumber" class="form-style" autocomplete="off">
-									
+									<input type="text" name="id-find-menumber" id="id-find-number" class="form-style" autocomplete="off">
+									<label id="smsidSend" class=""></label>
 									<button class="sms-find-btn d-block mx-auto" type="button" id="sms-find-btn" disabled>인증번호 받기</button>								
 								</div>
 								<div>
 									<p>인증번호</p>
 									<i class="find-icon uil-comment-alt-dots"></i>
-									<input type="text" name="id-find-checknumber" class="form-style" autocomplete="off">								
+									<input type="text" name="id-find-checknumber" class="form-style"id="id-find-checknumber" autocomplete="off" disabled>	
+									<label id="sms-id-msg" class=""></label>							
 									<button class="sms-find-btn d-block mx-auto" id="checkSms-find" type="button" disabled>인증번호 확인</button>
 								</div>
 								<button id="id-find-btn" class="btn mt-4 d-block mx-auto signIn-a" type="submit"  disabled>아이디 찾기</button>
@@ -213,16 +215,100 @@
 			$(".id-find-form").validate({
 				rules: {
 					'id-find-name': { required: true },
-					"id-find-menumber": { required: true, phone: true },
+					"id-find-menumber": { required: true, phone2: true },
 				},
 				messages: {
 					'id-find-name': { required: "이름을 적어 주세요" },
-					"id-find-menumber": { required: "전화번호를 적어 주세요", phone: "형식에 맞게 적어 주세요(010-0000-0000)" },
+					"id-find-menumber": { required: "전화번호를 적어 주세요", phone2: "형식에 맞게 적어 주세요(010-0000-0000)" },
 				},
 				submitHandler: function () {
+					$.ajax({
+						async: false,
+						url: '/findUser',
+						type: 'post',
+						data: { 
+							me_number: me_number,
+						},
+						success: function (data) {
+						if (data) res = true;
+						else res= false;
+						}
+					});
 					return false;
 				},
-			});			
+			});
+			$.validator.addMethod("phone2", function (value, element) {
+				$("#sms-find-btn").prop("disabled", true);
+				$("#smsidSend").text("");
+				let res = this.optional(element) || /^01[016789]-\d{3,4}-\d{4}$/.test(value);
+				if (res) {
+					$("#sms-find-btn").prop("disabled", false);
+				}
+				return res;
+			}, "정규표현식을 확인하세요.");		
+			//인증번호 받기 버튼 클릭
+			$('#sms-find-btn').on('click', function () {
+				smsIdSend();
+			});
+			function smsIdSend() {
+				const me_number = $('#id-find-number').val();
+				const type="id";
+				$.ajax({
+					async: false,
+					url: '/sms/send',
+					type: 'post',
+					data: { 
+						me_number: me_number,
+						type:type
+					 },
+					success: function (data) {
+					if (data) res = true;
+					else res= false;
+					}
+				});
+				let str = res ? "전송 성공!." : "전송 실패ㅠ";
+				$("#smsidSend")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res);
+				if (1==1) {
+					$("#checkSms-find, #id-find-checknumber").prop("disabled", false);
+				}
+				return res;
+			}
+			//인증번호 확인 버튼 클릭
+			$('#checkSms-find').on('click', function () {
+				checkIdSMS();
+			});
+			function checkIdSMS() {
+				$("#sms-id-msg").text("");
+				let userCode = $("#id-find-checknumber").val();
+				let res = false;
+				const type ="id";
+				// $.ajax({
+				// 	async: false,
+				// 	url: '/sms/check',
+				// 	type: 'post',
+				// 	data: { 
+				// userCode: userCode,
+				// type : type
+				//  },
+				// 	success: function (data) {
+				// 		if (data) res = true;
+				// 	},
+				// });
+				res = true; //임의 값 = 무조건 참
+
+				let str = res ? "인증 성공!" : "인증번호가 다릅니다.";
+				$("#sms-id-msg")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res)
+				if (res) {
+					$("#id-find-btn").prop("disabled", false);
+				}
+				return res;
+			}	
 			// 회원가입 유효성 검사
 			$(".singUp-from").validate({
 				rules: {
@@ -324,12 +410,15 @@
 				$("#sms-msg").text("");
 				let userCode = $("#checknumber").val();
 				let res = false;
-
+				const type ="signup";
 				// $.ajax({
 				// 	async: false,
 				// 	url: '/sms/check',
 				// 	type: 'post',
-				// 	data: { userCode: userCode },
+				// 	data: { 
+				// userCode: userCode,
+				// type : type
+				//  },
 				// 	success: function (data) {
 				// 		if (data) res = true;
 				// 	},
@@ -353,11 +442,15 @@
 			});
 			function smsSend() {
 				const me_number = $('#me_number').val();
+				const type="signup";
 				$.ajax({
 					async: false,
 					url: '/sms/send',
 					type: 'post',
-					data: { me_number: me_number },
+					data: { 
+						me_number: me_number,
+						type:type
+					 },
 					success: function (data) {
 					if (data) res = true;
 					else res= false;
