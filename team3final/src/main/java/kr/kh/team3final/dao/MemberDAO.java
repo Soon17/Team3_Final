@@ -20,4 +20,8 @@ public interface MemberDAO {
 
     String selectId(MemberVO member);
 
+	MemberVO selectPw(MemberVO member);
+
+	void updatePw(MemberVO member);
+
 }

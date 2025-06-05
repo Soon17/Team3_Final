@@ -44,6 +44,12 @@
 		WHERE ME_NUM = #{me_num}
 	</update>
 	<select id="selectId" resultType="String">
-		select me_id from member where me_name = #{me_name} and me_number = #{me_number};
+		select me_id from member where me_name = #{me_name} and me_number = #{me_number} and me_del = "N";
 	</select>
+	<select id="selectPw" resultType="MemberVO">
+		select *from member where me_name = #{me_name} and me_id = #{me_id} and me_number = #{me_number} and me_del = "N";
+	</select>
+	<update id="updatePw">
+		update member set me_pw = #{me_pw} where me_num = #{me_num} and me_del ="N"
+	</update>
 </mapper>
