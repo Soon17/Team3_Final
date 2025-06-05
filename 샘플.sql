@@ -3,22 +3,35 @@ SELECT * FROM travel.lodging;
 SELECT * FROM travel.room;
 SELECT * FROM travel.thumbnail;
 SELECT * FROM travel.review;
+SELECT * FROM travel.re_reservation;
 
 DELETE FROM region;
 DELETE FROM lodging;
 DELETE FROM room;
 DELETE FROM thumbnail;
 DELETE FROM review;
+DELETE FROM default_option;
 
 ALTER TABLE region AUTO_INCREMENT = 1;
 ALTER TABLE lodging AUTO_INCREMENT = 1;
 ALTER TABLE room AUTO_INCREMENT = 1;
 ALTER TABLE thumbnail AUTO_INCREMENT = 1;
 ALTER TABLE review AUTO_INCREMENT = 1;
+ALTER TABLE default_option AUTO_INCREMENT = 1;
 
+INSERT INTO member (ME_ID, ME_PW, ME_NAME, ME_NICK, ME_NUMBER, ME_EMAIL, ME_AUTHORITY, ME_BIRTHDAY, ME_GENDER, ME_PROFILE, ME_PROVIDER, ME_DEL) VALUES
+('user01', '$2b$12$cE3qQ0dBV6GQx/g6UKRfLupzBEzU1BSZg9JtpNzGLoMyodM3LjMoa', '홍길동', '길동이', '01012345678', 'user01@example.com', 'USER', '19900101', '남자', 'default1.jpg', 'NORMAL', 'N'),
+('user02', '$2b$12$cWxlnpiXk37R98U6NZ7zzONKKxqvRLpSkfNHcahJJySXjZrz4/Ch6', '김철수', '철수짱', '01023456789', 'user02@example.com', 'USER', '19910202', '남자', 'default2.jpg', 'NORMAL', 'N'),
+('user03', '$2b$12$/7JW.XpEhb6aQFXqI1aR8.dSQrn63W6o3JIdetGItRc3dqnm.MzTq', '이민호', '민호맨', '01034567890', 'user03@example.com', 'USER', '19920303', '남자', 'default3.jpg', 'NORMAL', 'N'),
+('user04', '$2b$12$2Viu.RNk48oEnEIio9VGze.3z6kmpx5EX2VM3SeKe1pgXxhe4GglC', '박지훈', '지훈킹', '01045678901', 'user04@example.com', 'USER', '19930404', '남자', 'default4.jpg', 'NORMAL', 'N'),
+('user05', '$2b$12$CKcYUPaoaTNCr3dWma9B..AVYx4rGmgqRen9ifepzkboQuJCx03aa', '최우진', '우진이', '01056789012', 'user05@example.com', 'USER', '19940505', '남자', 'default5.jpg', 'NORMAL', 'N'),
+('user06', '$2b$12$N05/DC0IcdXuXi2LgGbdB.kHsshLExM4OweZLfTTLpzYfTNaxE4j2', '정태호', '태호짱', '01067890123', 'user06@example.com', 'USER', '19950606', '남자', 'default6.jpg', 'NORMAL', 'N');
 
 INSERT INTO region(RG_NAME) VALUES
-("서울"),("경기"),("부산");
+("서울"),("경기"),("부산"),("제주");
+
+INSERT INTO default_option(DO_NAME) VALUES
+("조식"),("금연 호텔"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰"),("취사 가능");
 
 INSERT INTO lodging(LD_NAME,LD_REGION,LD_TYPE,LD_NUMBER,LD_RATING,LD_INFOR,LD_MEAL_PRICE,LD_ME_NUM,LD_RG_NUM) VALUES
 ("안좋아영","서울특별시 강남구 테헤란로 130","모텔","010-0000-0000",1,
@@ -569,3 +582,27 @@ VALUES
 (58, 4, '직원 응대가 친절했어요.', '2025-04-19 00:00:00', 'room', 29, 3),
 (59, 4, '방이 깨끗하고 좋았어요.', '2025-04-13 00:00:00', 'room', 30, 4),
 (60, 1, '시설이 좀 오래됐지만 나쁘지 않았음.', '2025-02-07 00:00:00', 'room', 30, 6);
+
+DELETE FROM lo_reservation;
+ALTER TABLE lo_reservation AUTO_INCREMENT = 1;
+
+-- 샘플 INSERT
+INSERT INTO lo_reservation (
+  LR_CHECKIN, LR_CHECKOUT, LR_COUNT, LR_TOTAL_PRICE, LR_STATE,
+  LR_DATE, LR_BOOKER_NAME, LR_GUEST_NAME, LR_GUEST_NUMBER,
+  LR_MEAL_STATE, LR_ME_NUM, LR_RM_NUM
+) VALUES
+('2025-06-01 00:00:00', '2025-06-02 00:00:00', 2, 220000, '예약완료',
+ NOW(), '홍길동', '홍길동', '010-1111-1111', 'Y', 1, 1),
+
+('2025-06-14 00:00:00', '2025-06-16 00:00:00', 3, 330000, '예약완료',
+ NOW(), '김철수', '김철수', '010-2222-2222', 'N', 2, 2),
+
+('2025-06-18 00:00:00', '2025-06-20 00:00:00', 2, 200000, '환불완료',
+ NOW(), '이영희', '이영희', '010-3333-3333', 'Y', 3, 3),
+
+('2025-06-21 00:00:00', '2025-06-22 00:00:00', 1, 120000, '예약취소',
+ NOW(), '박민수', '박민수', '010-4444-4444', 'N', 4, 4),
+
+('2025-06-25 00:00:00', '2025-06-27 00:00:00', 2, 250000, '예약완료',
+ NOW(), '최예린', '최예린', '010-5555-5555', 'Y', 5, 5);
