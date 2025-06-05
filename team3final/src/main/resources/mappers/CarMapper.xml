@@ -141,6 +141,6 @@
 	</select>
 	<insert id="insertCar" useGeneratedKeys="true" keyProperty="cr_id">
 		insert into car(cr_year, cr_fuel_type, cr_trans, cr_price, cr_count, cr_re_num, cr_ct_key, cr_thumbnail)
-		value(#{cr_year}, #{cr_fuel_type}, #{cr_trans}, #{cr_price}, #{cr_count}, #{cr_re_num}, #{cr_ct_key}, #{cr_thumbnail})
+		value(#{cr_year}, #{cr_fuel_type}, #{cr_trans}, #{cr_price}, #{cr_count}, #{cr_re_num}, #{cr_ct_key}, #{thumbString})
 	</insert>
 </mapper>

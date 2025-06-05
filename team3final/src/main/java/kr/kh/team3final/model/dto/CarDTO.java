@@ -15,4 +15,5 @@ public class CarDTO {
 	int cr_re_num;				// 렌트업체 번호//
 	int cr_ct_key;				// 차량 타입//
 	MultipartFile cr_thumbnail;	// 차량 사진//
+	String thumbString;			// 사진 파일명
 }

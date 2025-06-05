@@ -117,7 +117,6 @@ public class SearchController {
 			@RequestParam String cr_fuel_type,
 			@RequestParam String cr_trans,
 			Model model) {
-
 		String[] times = checkTime.split(" ~ ");
 		String checkin = times[0];
 		String checkout = times[1];
@@ -130,7 +129,7 @@ public class SearchController {
 				checkin, checkout, rg_name);
 
 		List<RegionVO> regionList = regionService.getRegionList(); // 전체 지역 가져오는 메서드
-
+		System.out.println(rentalList);
 		model.addAttribute("rg_name", rg_name);
 		model.addAttribute("checkTime", checkTime);
 		model.addAttribute("carTop", carTop);

@@ -210,12 +210,13 @@
 						<div class="form-group col-4">
 							<label class="form-label" for="re_number">전화번호</label>
 							<input type="text" class="form-input" id="re_number" name="re_number" required>
+							<small id="phone-error" class="error" style="display:none;">전화번호 형식이 올바르지 않습니다.</small>
 						</div>
 					</div>
 
 					<div id="carsContainer">
 						<div class="car-box position-relative">
-							
+
 							<div class="car-title">
 								<i class="fas fa-car"></i> 제공 차종 <span class="car-numbering">1</span>
 							</div>
@@ -224,7 +225,8 @@
 								<label class="form-label">사진</label>
 								<div class="image-box" style="height: 200px;" data-index="1">
 									<span class="plus-sign">+</span>
-									<input type="file" accept="image/*" class="car-thumb" onchange="handleSingleImage($(this), 1)" name="cars[0].cr_thumbnail" required>
+									<input type="file" accept="image/*" class="car-thumb"
+										onchange="handleSingleImage($(this), 1)" name="cars[0].cr_thumbnail" required>
 								</div>
 							</div>
 
@@ -239,18 +241,21 @@
 								</div>
 								<div class="form-group col-4">
 									<label class="form-label">차량 대수</label>
-									<input type="number" class="form-input car-count" name="cars[0].cr_count" min="1" required>
+									<input type="number" class="form-input car-count" name="cars[0].cr_count" min="1"
+										required>
 								</div>
 							</div>
 							<div class="d-flex">
 								<div class="form-group col-4">
 									<label class="form-label">차량 연식</label>
-									<input type="number" class="form-input car-year" name="cars[0].cr_year" min="1900" required>
+									<input type="number" class="form-input car-year" name="cars[0].cr_year" min="1900"
+										required>
 								</div>
-	
+
 								<div class="form-group col-8">
 									<label class="form-label">기본 요금(단위: 원)</label>
-									<input type="number" class="form-input car-price" name="cars[0].cr_price" min="0" step="1000" required>
+									<input type="number" class="form-input car-price" name="cars[0].cr_price" min="0"
+										step="1000" required>
 								</div>
 							</div>
 							<div class="d-flex">
@@ -285,6 +290,22 @@
 			</form>
 
 			<script th:inlie="javascript">
+
+				$('#re_number').on('input', function () {
+					const phone = $(this).val().trim();
+
+					// 정규표현식: 010-1234-5678 또는 01012345678 등
+					const regex = /^01[0|1|6|7|8|9]-?\d{3,4}-?\d{4}$/;
+
+					if (regex.test(phone)) {
+						$('#phone-error').hide();
+						$(this).removeClass('red-border');
+					} else {
+						$('#phone-error').show();
+						$(this).addClass('red-border');
+					}
+				});
+				
 				// 차량 추가 박스 열기
 				function addCarBox() {
 					var carTypes = JSON.parse('[[${carTypes}]]'.replaceAll('&quot;', '"'));
@@ -294,8 +315,8 @@
 							<option value="${element.ct_key}">${element.ct_type}</option>
 						`
 					});
-					
-					
+
+
 					const carBox = $(`
 						<div class="car-box position-relative">
 							<!-- ❌ 닫기 버튼 -->
@@ -369,11 +390,11 @@
 					$(this).closest('.car-box').remove();
 					resetNumber();
 				});
-				
+
 				// 추가/삭제 시 넘버링
-				function resetNumber(){
-					$(".car-box").each(function(index){
-						$(this).find(".car-numbering").text(index+1);
+				function resetNumber() {
+					$(".car-box").each(function (index) {
+						$(this).find(".car-numbering").text(index + 1);
 						$(this).find(".car-thumb").attr("name", `cars[${index}].cr_thumbnail`);
 						$(this).find(".car-type").attr("name", `cars[${index}].cr_ct_key`);
 						$(this).find(".car-count").attr("name", `cars[${index}].cr_count`);

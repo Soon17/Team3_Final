@@ -153,7 +153,7 @@ input:-webkit-autofill {
 .form-style {
 	padding: 13px 20px;
 	padding-left: 55px;
-	padding-right: 200px;
+	padding-right: 50%;
 	height: 48px;
 	width: 100%;
 	font-weight: 500;
@@ -302,7 +302,7 @@ input:-webkit-autofill {
 label.regex-error,#checkId,#smsSend,#sms-msg {
 	position: absolute;
 	top: 50%;
-	left: 62%;
+	left: 50%;
 	transform: translateY(-50%);
 	padding: 0 4px;
 	z-index: 1;
@@ -318,7 +318,7 @@ label.regex-error,#checkId,#smsSend,#sms-msg {
 .sms-btn{
 	position: absolute;
 	top: 50%;
-	left: 470px;
+	right: 0px;
 	transform: translateY(-50%);
 	padding: 0 4px;
 }
