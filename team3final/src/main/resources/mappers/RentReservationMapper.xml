@@ -36,16 +36,28 @@
         <result property="ct_name" column="ct_name"/>
         <result property="re_name" column="re_name"/>
     </resultMap>
-
     <select id="getLatestRentReservation" parameterType="int" resultType="kr.kh.team3final.model.vo.RentReservationVO">
-        SELECT r.*, c.ct_name
-        FROM re_reservation r
-        JOIN car_package p ON r.rr_cp_num = p.cp_num
-        JOIN car cr ON p.cp_cr_id = cr.cr_id
-        JOIN car_type c ON cr.cr_ct_key = c.ct_key
-        WHERE r.rr_me_num = #{meNum}
-          
-        ORDER BY r.rr_checkIn DESC
-        LIMIT 1
+        SELECT 
+            r.*, 
+            c.ct_name
+        FROM 
+            re_reservation r
+        JOIN 
+            car_package p ON r.rr_cp_num = p.cp_num
+        JOIN 
+            car cr ON p.cp_cr_id = cr.cr_id
+        JOIN 
+            car_type c ON cr.cr_ct_key = c.ct_key
+        WHERE 
+            r.rr_me_num = #{meNum}
+            AND r.rr_state = '예약완료'
+            AND r.rr_checkIn >= CURRENT_DATE
+        ORDER BY 
+            r.rr_checkIn ASC
     </select>
+    <update id="cancelRent">
+        UPDATE re_reservation
+        SET RR_STATE = #{state}
+        WHERE RR_NUM = #{rr_num}
+    </update>
 </mapper>

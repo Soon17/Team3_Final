@@ -217,6 +217,7 @@
 								$(this).addClass('active');
 								$('#reservation-hotel').removeClass('active');
 								$.ajax({
+										async : false,
 										url: '/member/reservation-rent',
 										method: 'GET',
 										success: function (data) {
@@ -244,6 +245,37 @@
 						}
 				});
 			</script>
+			<script>
+
+
+            
+            $(document).on("click", ".cancel-btn", function(e){
+
+            
+                console.log("버튼 눌림 확인 ");
+                if (!confirm("정말 해당 렌트 예약을 취소하시겠습니까?")) return;
+
+                const rrNum = $(this).data("rr_num");
+
+                $.ajax({
+                    url: "/member/reservation-rent/cancel",
+                    method: "POST",
+                    data: { rr_num: rrNum },
+                    success: function (response) {
+                        if (response === "success") {
+                            alert("예약이 성공적으로 취소되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("예약 취소에 실패했습니다.");
+                        }
+                    },
+                    error: function () {
+                        alert("서버와의 통신에 실패했습니다.");
+                    }
+                });
+            })
+	    </script>
+			
 	</main>
 </body>
 

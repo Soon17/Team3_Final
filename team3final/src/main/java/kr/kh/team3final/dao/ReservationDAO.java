@@ -2,6 +2,8 @@ package kr.kh.team3final.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import kr.kh.team3final.model.vo.ReservationVO;
 
 public interface ReservationDAO {
@@ -9,5 +11,7 @@ public interface ReservationDAO {
 	List<ReservationVO> selectList(int meNum);
 
 	List<ReservationVO> selectLatestReservation(int meNum);
+
+	int cancelHotel(@Param("lr_num")int lr_num, @Param("state")String string);
 	
 }
