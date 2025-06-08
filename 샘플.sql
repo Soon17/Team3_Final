@@ -27,22 +27,6 @@ INSERT INTO member (ME_ID, ME_PW, ME_NAME, ME_NICK, ME_NUMBER, ME_EMAIL, ME_AUTH
 ('user05', '$2b$12$CKcYUPaoaTNCr3dWma9B..AVYx4rGmgqRen9ifepzkboQuJCx03aa', '최우진', '우진이', '01056789012', 'user05@example.com', 'USER', '19940505', '남자', 'default5.jpg', 'NORMAL', 'N'),
 ('user06', '$2b$12$N05/DC0IcdXuXi2LgGbdB.kHsshLExM4OweZLfTTLpzYfTNaxE4j2', '정태호', '태호짱', '01067890123', 'user06@example.com', 'USER', '19950606', '남자', 'default6.jpg', 'NORMAL', 'N');
 
-INSERT INTO re_reservation (
-    RR_CHECKIN, RR_CHEKOUT, RR_PRICE, RR_DATE, RR_STATE,
-    RR_NAME, RR_NUMBER, RR_BIRTH, RR_CP_NUM, RR_ME_NUM
-) VALUES
-('2025-06-10 00:00:00', '2025-06-12 00:00:00', 55000, NOW(), '예약완료',
- '홍길동', 900101, 19900101, 1, 1),
-
-('2025-06-10 00:00:00', '2025-06-12 00:00:00', 55000, NOW(), '예약완료',
- '김철수', 910202, 19910202, 1, 2),
-
-('2025-06-10 00:00:00', '2025-06-12 00:00:00', 55000, NOW(), '예약완료',
- '이민호', 920303, 19920303, 1, 3),
- 
- ('2025-06-12 00:00:00', '2025-06-14 00:00:00', 55000, NOW(), '예약완료',
- '정태호', 930404, 19930404, 1, 4);
-
 INSERT INTO region(RG_NAME) VALUES
 ("서울"),("경기"),("부산"),("제주");
 

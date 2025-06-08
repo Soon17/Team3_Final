@@ -27,13 +27,13 @@ public class CarService {
 	}
 
 	private String getStartTime(String str) {
-		str = str.replaceAll("\(.*?\)", "").trim();
+		str = str.replaceAll("\\(.*?\\)", "").trim();
 		String[] dates = str.split("~");
 		return dates[0].trim().replace(".", "-");
 	}
 
 	private String getEndTime(String str) {
-		str = str.replaceAll("\(.*?\)", "").trim();
+		str = str.replaceAll("\\(.*?\\)", "").trim();
 		String[] dates = str.split("~");
 		return dates[1].trim().replace(".", "-");
 	}
