@@ -66,7 +66,7 @@
 </head>
 
 <body>
-  <main layout:fragment="content">
+  <<<<<<< HEAD <main layout:fragment="content">
     <!-- 예약 내역이 있을 경우 -->
     <div class="container" th:if="${!#lists.isEmpty(latestRent)}">
       <h3 class="text-center">최근 렌트카 예약 내역</h3>
@@ -106,41 +106,119 @@
           </tr>
         </tbody>
       </table>
+      =======
+      <main layout:fragment="content">
+        <!-- 예약 내역이 있을 경우 -->
+        <div class="container" th:if="${!#lists.isEmpty(latestRent)}">
+          <h3 class="text-center">최근 렌트카 예약 내역</h3>
+          <table class="table table-striped text-center reservation-table">
+            <thead>
+              <tr>
+                <th>예약번호</th>
+                <th>예약자</th>
+                <th>차량이름</th>
+                <th>대여일</th>
+                <th>반납일</th>
+                <th>예약일시</th>
+                <th>가격</th>
+                <th>상태</th>
+                <th>예약취소</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="rent : ${latestRent}">
+                <td th:text="${rent.rr_num}"></td>
+                <td th:text="${rent.rr_name}"></td>
+                <td th:text="${rent.ct_name}"></td>
+                <td th:text="${#dates.format(rent.rr_checkIn,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#dates.format(rent.rr_chekout,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#dates.format(rent.rr_date,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#numbers.formatInteger(rent.rr_price,3,'COMMA')} + '원'"></td>
+                <td th:text="${rent.rr_state}"></td>
+                <td>
+                  <button th:if="${rent.cancelable}" th:attr="data-rr_num=${rent.rr_num}"
+                    class="btn btn-danger rent-cancel-btn">
+                    예약 취소
+                  </button>
+                  <span th:unless="${rent.cancelable}" style="color: gray;">
+                    취소 불가
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-      <!--  카드 뷰 -->
-      <div class="reservation-cards">
-        <div th:each="rent : ${latestRent}" class="reservation-card">
-          <div><strong>예약번호:</strong> <span th:text="${rent.rr_num}" /></div>
-          <div><strong>예약자:</strong> <span th:text="${rent.rr_name}" /></div>
-          <div><strong>차량이름:</strong> <span th:text="${rent.ct_name}" /></div>
-          <div><strong>대여일시:</strong> <span th:text="${#dates.format(rent.rr_checkIn,'yyyy-MM-dd')}" />
+          <!--  카드 뷰 -->
+          <div class="reservation-cards">
+            <div th:each="rent : ${latestRent}" class="reservation-card">
+              <div><strong>예약번호:</strong> <span th:text="${rent.rr_num}" /></div>
+              <div><strong>예약자:</strong> <span th:text="${rent.rr_name}" /></div>
+              <div><strong>차량이름:</strong> <span th:text="${rent.ct_name}" /></div>
+              <div><strong>대여일시:</strong> <span th:text="${#dates.format(rent.rr_checkIn,'yyyy-MM-dd HH:mm')}" />
+              </div>
+              <div><strong>반납일시:</strong> <span th:text="${#dates.format(rent.rr_chekout,'yyyy-MM-dd HH:mm')}" />
+              </div>
+              <div><strong>예약일시:</strong> <span th:text="${#dates.format(rent.rr_date,'yyyy-MM-dd HH:mm')}" />
+              </div>
+              <div><strong>금액:</strong> <span th:text="${#numbers.formatInteger(rent.rr_price,3,'COMMA')} + '원'" />
+              </div>
+              <div><strong>상태:</strong> <span th:text="${rent.rr_state}" /></div>
+              <!-- 카드 뷰 안에도 추가 -->
+              <div th:if="${rent.cancelable}">
+                <button th:data-rr_num="${rent.rr_num}" class="btn btn-danger rent-cancel-btn">예약 취소</button>
+              </div>
+              <div th:unless="${rent.cancelable}" style="color: gray;">
+                취소 불가
+              </div>
+            </div>
           </div>
-          <div><strong>반납일시:</strong> <span th:text="${#dates.format(rent.rr_chekout,'yyyy-MM-dd')}" />
+          >>>>>>> origin/hdj
+
+          <!--  카드 뷰 -->
+          <div class="reservation-cards">
+            <div th:each="rent : ${latestRent}" class="reservation-card">
+              <div><strong>예약번호:</strong> <span th:text="${rent.rr_num}" /></div>
+              <div><strong>예약자:</strong> <span th:text="${rent.rr_name}" /></div>
+              <div><strong>차량이름:</strong> <span th:text="${rent.ct_name}" /></div>
+              <div><strong>대여일시:</strong> <span th:text="${#dates.format(rent.rr_checkIn,'yyyy-MM-dd')}" />
+              </div>
+              <div><strong>반납일시:</strong> <span th:text="${#dates.format(rent.rr_chekout,'yyyy-MM-dd')}" />
+              </div>
+              <div><strong>예약일시:</strong> <span th:text="${#dates.format(rent.rr_date,'yyyy-MM-dd HH:mm')}" />
+              </div>
+              <div><strong>금액:</strong> <span th:text="${#numbers.formatInteger(rent.rr_price,3,'COMMA')} + '원'" />
+              </div>
+              <div><strong>상태:</strong> <span th:text="${rent.rr_state}" /></div>
+              <!-- 카드 뷰 안에도 추가 -->
+              <div th:if="${rent.cancelable}">
+                <button th:data-rr_num="${rent.rr_num}" class="btn btn-danger rent-cancel-btn">예약 취소</button>
+              </div>
+              <div th:unless="${rent.cancelable}" style="color: gray;">
+                취소 불가
+              </div>
+            </div>
           </div>
-          <div><strong>예약일시:</strong> <span th:text="${#dates.format(rent.rr_date,'yyyy-MM-dd HH:mm')}" />
-          </div>
-          <div><strong>금액:</strong> <span th:text="${#numbers.formatInteger(rent.rr_price,3,'COMMA')} + '원'" /></div>
-          <div><strong>상태:</strong> <span th:text="${rent.rr_state}" /></div>
-          <!-- 카드 뷰 안에도 추가 -->
-          <div th:if="${rent.cancelable}">
-            <button th:data-rr_num="${rent.rr_num}" class="btn btn-danger rent-cancel-btn">예약 취소</button>
-          </div>
-          <div th:unless="${rent.cancelable}" style="color: gray;">
-            취소 불가
-          </div>
-        </div>
+
+          <<<<<<< HEAD </div>
+
+            <!-- 예약 내역 없을 경우 -->
+            <div th:if="${#lists.isEmpty(latestRent)}" class="empty-box">
+              <p class="main-text">예약하신 렌트카 내역이 없습니다 :)</p>
+              <p class="sub-text">지금 원하는 렌트카 예약하고<br>여행을 떠나보세요!</p>
+              <a class="primary-btn" href="/rent">렌트하러 가기</a>
+            </div>
+      </main>
+
+      =======
+      <!-- 예약 내역 없을 경우 -->
+      <div th:if="${#lists.isEmpty(latestRent)}" class="empty-box">
+        <p class="main-text">예약하신 렌트카 내역이 없습니다 :)</p>
+        <p class="sub-text">지금 원하는 렌트카 예약하고<br>여행을 떠나보세요!</p>
+        <a class="primary-btn" href="/rent">렌트하러 가기</a>
       </div>
+      </main>
 
-    </div>
-
-    <!-- 예약 내역 없을 경우 -->
-    <div th:if="${#lists.isEmpty(latestRent)}" class="empty-box">
-      <p class="main-text">예약하신 렌트카 내역이 없습니다 :)</p>
-      <p class="sub-text">지금 원하는 렌트카 예약하고<br>여행을 떠나보세요!</p>
-      <a class="primary-btn" href="/rent">렌트하러 가기</a>
-    </div>
-  </main>
-
+      >>>>>>> origin/hdj
 </body>
 
 </html>
