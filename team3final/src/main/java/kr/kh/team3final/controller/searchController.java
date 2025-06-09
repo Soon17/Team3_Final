@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpSession;
+
 import kr.kh.team3final.model.vo.RegionVO;
-import kr.kh.team3final.model.vo.RentalVO;
 import kr.kh.team3final.service.RegionService;
 import kr.kh.team3final.service.RentalService;
 import kr.kh.team3final.model.dto.AvailableCarDTO;
@@ -64,7 +63,7 @@ public class SearchController {
 		model.addAttribute("rg_name", cri.getRg_name());
 		model.addAttribute("checkTime", cri.getCheckTime());
 		model.addAttribute("cri", cri);
-		
+
 		// 차량 목록 조회
 		List<CarVO> carList = carService.getSearchCarList(cri);
 		model.addAttribute("carList", carList);

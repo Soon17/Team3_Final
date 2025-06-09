@@ -138,16 +138,27 @@
             AND rv_number = #{cr_re_num}
         GROUP BY rv_rating
     </select>
-    <select id="rentalReviews" parameterType="int" resultType="kr.kh.team3final.model.vo.ReviewVO">
+    <select id="rentalReviews" parameterType="int" resultType="kr.kh.team3final.model.dto.Rental_ReviewDTO">
         SELECT
-            rv_num, rv_rating, rv_content, rv_date,
-            rv_table_name, rv_number, rv_me_num
-        FROM review
-        WHERE rv_table_name = 'rental'
-        AND rv_number = #{re_num}
-        ORDER BY rv_date DESC
+            r.rv_num,
+            r.rv_rating,
+            r.rv_date,
+            r.rv_content,
+            m.me_nick,
+            (
+                SELECT ct.ct_name
+                FROM car c
+                JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+                WHERE c.cr_re_num = re.re_num
+                LIMIT 1
+            ) AS ct_name
+        FROM review r
+        JOIN member m ON r.rv_me_num = m.me_num
+        JOIN rental re ON r.rv_number = re.re_num
+        WHERE r.rv_table_name = 'rental'
+        AND r.rv_number = #{re_num}
+        ORDER BY r.rv_date DESC
     </select>
-
 
 
 

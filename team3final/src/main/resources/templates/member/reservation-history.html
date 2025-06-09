@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html
-	lang="en" 
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout.html}">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +14,13 @@
 			color: #888;
 			cursor: pointer;
 		}
+
 		.tab.active {
 			color: #007bff;
 			border-bottom: 2px solid #007bff;
 		}
-		.state-select{
+
+		.state-select {
 			border: 1px solid #ced4da;
 			border-radius: .5rem;
 			padding: .5rem 1.5rem .5rem .75rem;
@@ -28,19 +28,23 @@
 			-webkit-appearance: none;
 			background: #fff url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMyAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Im05LjUgNC0zIDMtMy0zIiBzdHJva2U9IiM5OTkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K) no-repeat center right .5rem;
 		}
+
 		#modalOverlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 9999;
 		}
 
 		#reviewModal {
 			display: none;
 			background: #fff;
-			width: 600px;
+			max-width: 600px;
+			width: 100%;
 			margin: 100px auto;
 			padding: 30px;
 			border-radius: 12px;
@@ -76,6 +80,7 @@
 			background-color: #ccc;
 			color: black;
 		}
+
 		.star-rating {
 			font-size: 2rem;
 			direction: ltr;
@@ -94,13 +99,16 @@
 		.star-rating .star.selected {
 			color: gold;
 		}
+
 		#modalOverlayRental {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 9999;
 		}
 
 		#reviewModalRental {
@@ -142,431 +150,575 @@
 			background-color: #ccc;
 			color: black;
 		}
-		#reservation-table tr{
-			line-height: 40px;
+
+		.tx {
+			font-size: 15px;
+			word-break: keep-all;
+			vertical-align: middle;
+			line-height: 1.3;
 		}
-		#reservation-table tr td:last-child *{
+
+		#reservation-list {
+			font-size: 15px;
+			word-break: keep-all;
+			vertical-align: middle;
+			line-height: 1.3;
+
+		}
+
+		#rentcar-reservation-list {
+			font-size: 15px;
+			word-break: keep-all;
+			vertical-align: middle;
+			line-height: 1.3;
+		}
+
+		.table th,
+		.table td {
+			white-space: nowrap;
+			text-align: center;
+			line-height: 1.3;
+			vertical-align: middle !important;
+		}
+
+		.reservation-table th,
+		.reservation-table td {
+			display: table-cell;
+		}
+
+		.btn-secondary,
+		.btn-outline-success {
+			max-width: 130px;
 			width: 100%;
 		}
-		#rentcar-reservations tr{
-			line-height: 40px;
+
+		@media (max-width: 1400px) {
+
+			.reservation-table th.col-secondary,
+			.reservation-table td.col-secondary {
+				display: none;
+			}
+
+			.table th,
+			.table td {
+				white-space: normal !important;
+			}
+
+			.btn-secondary,
+			.btn-outline-success {
+				max-height: 45px;
+				height: 100px;
+				font-size: 12px;
+			}
+
 		}
-		#rentcar-reservations tr td:last-child *{
-			width: 100%;
+
+		@media (max-width: 765px) {
+			table.table {
+				display: none;
+			}
+
+			.reservation-card {
+				border: 1px solid #ddd;
+				border-radius: 8px;
+				padding: 16px;
+				margin-bottom: 16px;
+				background-color: #fff;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+				font-size: 14px;
+			}
+
+			.reservation-card div {
+				margin-bottom: 6px;
+			}
+
+			.reservation-card .status {
+				font-weight: bold;
+				color: green;
+			}
+
+			.reservation-card .review-btn {
+				padding: 6px 12px;
+				border: 1px solid #4CAF50;
+				background: #fff;
+				color: #4CAF50;
+				border-radius: 4px;
+				cursor: pointer;
+			}
 		}
 	</style>
 </head>
+
 <body>
 	<main layout:fragment="content">
 		<div style="width: 100%; border-top: 1px solid #eeeeee;"></div>
 		<div class="main-text" style="text-align: center; padding: 2rem 0;">
 			<h1 class="js-hero-pc-title" style="font-size: 24px; color: #333;">예약내역</h1>
 		</div>
-		<div style="width: 70%; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; width: 768px;">
-			<div id="tab-menu" style="display: flex; justify-content: center; margin-top: 20px; border-bottom: 2px solid #ddd;">
+		<div
+			style="width: 70%; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; max-width: 768px; width: 100%;">
+			<div id="tab-menu"
+				style="display: flex; justify-content: center; margin-top: 20px; border-bottom: 2px solid #ddd;">
 				<div class="tab" onclick="changeTab(this)">렌트카</div>
 				<div class="tab active" onclick="changeTab(this)">호텔</div>
 			</div>
-			<select id="reservation-state" class="state-select" style="margin-top: 1rem; width: 100%; padding: .75rem; color: #494949; font-size: .875rem;" onchange="filterReservations()">
+			<select id="reservation-state" class="state-select"
+				style="margin-top: 1rem; width: 100%; padding: .75rem; color: #494949; font-size: .875rem;"
+				onchange="filterReservations()">
 				<option value="전체">전체</option>
 				<option value="예약완료">예약완료</option>
 				<option value="취소/환불">취소/환불</option>
 			</select>
 		</div>
-		<div>
-			<div style="margin: .25rem 0 1rem; background-color: #f3f3f3; width: 100%; height: 1px;"></div>
-        <div style="margin: 20px auto; width: 80%;">
-					<div id="reservation-table">
-            <table style="width: 100%; border-collapse: collapse; text-align: center;">
-							<thead>
-                <tr style="background-color: #f9f9f9;">
-									<th>예약 ID</th>
-									<th>예약 상태</th>
-									<th>예약 숙소</th>
-									<th>대표 예약 옵션</th>
-									<th>체크인 - 체크아웃</th>
-									<th>예약자(인원)</th>
-									<th>대표 투숙자</th>
-									<th>판매 금액</th>
-									<th>입금 금액</th>
-									<th>예약 일시(KST)</th>
-									<th>이용 여부</th>
-									<th>리뷰 작성</th>
-								</tr>
-							</thead>
-							<tbody id="reservation-list">
-								<tr th:each="reservation : ${hotelReservations}"
-										th:attr="data-checkout=${#dates.format(reservation.lr_checkout, 'yyyy-MM-dd')},
-														data-state=${reservation.lr_state},
-														data-lr-num=${reservation.lr_num},
-														data-ld-name=${reservation.lr_ld_name},
-														data-rm-name=${reservation.lr_rm_name}">
-									<td th:text="${reservation.lr_me_name}"></td>
-									<td th:text="${reservation.lr_state}"></td>
-									<td th:text="${reservation.lr_ld_name}"></td>
-									<td th:text="${reservation.lr_rm_name}"></td>
-									<td th:text="${#dates.format(reservation.lr_checkin, 'yyyy-MM-dd') + ' - ' + #dates.format(reservation.lr_checkout, 'yyyy-MM-dd')}"></td>
-									<td th:text="${reservation.lr_booker_name + '(' + reservation.lr_count + ')'}"></td>
-									<td th:text="${reservation.lr_guest_name}"></td>
-									<td th:text="${reservation.lr_total_price}"></td>
-									<td th:text="${reservation.lr_total_price}"></td>
-									<td th:text="${#dates.format(reservation.lr_date, 'yyyy-MM-dd HH:mm')}"></td>
-									<td class="use-status-cell"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<!-- 모달 -->
-					<div id="modalOverlay">
-						<div id="reviewModal">
-							<input type="hidden" id="hiddenLrNumInput">
+		<div style="padding-bottom: 50px;">
+			<div style="margin: .25rem 0 1rem; width: 100%; height: 1px;"></div>
+			<div style="margin: 20px auto; width: 80%;">
+				<div id="reservation-table">
+					<table class="table text-center reservation-table"
+						style="width: 100%; border-collapse: collapse; text-align: center;">
+						<thead>
+							<tr class="tx" style="background-color: #f9f9f9;">
+								<th>예약 ID</th>
+								<th>숙소 이름</th>
+								<th>예약 객실</th>
+								<th class="col-secondary">예약자<br>(인원)</th>
+								<th class="col-secondary">대표<br>투숙자</th>
+								<th class="col-secondary">예약 일시<br>(KST)</th>
+								<th>체크인 - 체크아웃</th>
+								<th class="col-secondary">입금 금액</th>
+								<th>판매 금액</th>
+								<th class="col-secondary">예약 상태</th>
+								<th>이용 여부</th>
+								<th>리뷰 작성</th>
+							</tr>
+						</thead>
+						<tbody id="reservation-list">
+							<tr th:each="reservation : ${hotelReservations}">
+								<td th:text="${reservation.lr_me_name}">홍길동</td>
+								<td th:text="${reservation.lr_ld_name}">안좋아영</td>
+								<td th:text="${reservation.lr_rm_name}">1호실</td>
+								<td class="col-secondary" th:text="${reservation.lr_booker_name + '(' + reservation.lr_count + ')'}">
+									홍길동(2)</td>
+								<td class="col-secondary" th:text="${reservation.lr_guest_name}">홍길동</td>
+								<td class="col-secondary" th:text="${#dates.format(reservation.lr_date, 'yyyy-MM-dd HH:mm')}">2025-06-04
+									15:10</td>
+								<td
+									th:text="${#dates.format(reservation.lr_checkin, 'yyyy-MM-dd') + ' - ' + #dates.format(reservation.lr_checkout, 'yyyy-MM-dd')}">
+									2025-06-10 - 2025-06-12
+								</td>
+								<td class="col-secondary"
+									th:text="${#numbers.formatInteger(reservation.lr_total_price, 3, 'COMMA')} + '원'">220,000원</td>
 
-							<div>
-								<strong>숙소 이름:</strong> <span id="lodgingName"></span><br>
-								<strong>객실명:</strong> <span id="roomName"></span>
-							</div>
+								<td th:text="${#numbers.formatInteger(reservation.lr_total_price, 3, 'COMMA')} + '원'">220,000원</td>
 
-							<div class="star-rating" onmouseleave="resetStars()">
-								<span class="star" data-value="1" onmouseover="highlightStars(1)" onclick="selectRating(1)">★</span>
-								<span class="star" data-value="2" onmouseover="highlightStars(2)" onclick="selectRating(2)">★</span>
-								<span class="star" data-value="3" onmouseover="highlightStars(3)" onclick="selectRating(3)">★</span>
-								<span class="star" data-value="4" onmouseover="highlightStars(4)" onclick="selectRating(4)">★</span>
-								<span class="star" data-value="5" onmouseover="highlightStars(5)" onclick="selectRating(5)">★</span>
-								<input type="hidden" id="ratingValue" name="rating" value="0">
-							</div>
+								<td class="col-secondary" th:text="${reservation.lr_state}">예약완료</td>
+								<td class="use-status-cell">이용 전</td>
+								<td>
+									<button type="button" class="btn btn-outline-success review-btn" data-lr-num="${reservation.lr_num}"
+										data-lodging-name="${reservation.lr_ld_name}" data-room-name="${reservation.lr_rm_name}"
+										onclick="openReviewModal(this)">
+										리뷰 작성
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 
-							<div>
-								<label>리뷰 내용:</label><br>
-								<textarea id="reviewContent" rows="5" cols="30"></textarea>
-							</div>
+				<!-- 모달 -->
+				<div id="modalOverlay">
+					<div id="reviewModal">
+						<input type="hidden" id="hiddenLrNumInput">
 
-							<button id="submitBtn" type="button" onclick="submitReview()">등록</button>
-
-							<button id="updateBtn" type="button" style="display:none;" onclick="updateReview()">수정</button>
-							<button id="deleteBtn" type="button" style="display:none;" onclick="deleteReview()">삭제</button>
-
-							<button type="button" onclick="closeReviewModal()">취소</button>
+						<div>
+							<strong>숙소 이름:</strong> <span id="lodgingName"></span><br>
+							<strong>객실명:</strong> <span id="roomName"></span>
 						</div>
-					</div>
-					<!-- 렌트카 예약 테이블 -->
-					<div id="rentcar-reservations" style="display:none;">
-						<table style="width: 100%; border-collapse: collapse; text-align: center;">
-							<thead>
-								<tr style="background-color: #f9f9f9;">
-									<th>예약 ID</th>
-									<th>업체명</th>
-									<th>차량명</th>
-									<th>예약 상태</th>
-									<th>대여 일시</th>
-									<th>반납 일시</th>
-									<th>예약자</th>
-									<th>금액</th>
-									<th>예약 일시(KST)</th>
-									<th>이용 여부</th>
-									<th>리뷰 작성</th>
-								</tr>
-							</thead>
-							<tbody id="rentcar-reservation-list">
-								<tr th:each="reservation : ${rentcarReservations}"
-										th:attr="data-checkout=${#dates.format(reservation.rr_chekout, 'yyyy-MM-dd HH:mm')},
-														data-state=${reservation.rr_state},
-														data-rr-num=${reservation.rr_num},
-														data-ct-name=${reservation.ct_name}">
-									<td th:text="${reservation.rr_num}"></td>
-									<td th:text="${reservation.re_name}"></td>
-									<td th:text="${reservation.ct_name}"></td>
-									<td th:text="${reservation.rr_state}"></td>
-									<td th:text="${#dates.format(reservation.rr_checkIn, 'yyyy-MM-dd HH:mm')}"></td>
-									<td th:text="${#dates.format(reservation.rr_chekout, 'yyyy-MM-dd HH:mm')}"></td>
-									<td th:text="${reservation.rr_name}"></td>
-									<td th:text="${reservation.rr_price}"></td>
-									<td th:text="${#dates.format(reservation.rr_date, 'yyyy-MM-dd HH:mm')}"></td>
-									<td class="use-status-cell"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<!-- 렌트카 리뷰 모달 -->
-					<div id="modalOverlayRental">
-						<div id="reviewModalRental">
-							<input type="hidden" id="hiddenRentalNumInput">
 
-							<div>
-								<strong>업체명:</strong> <span id="rental-name"></span><br>
-								<strong>차량명:</strong> <span id="ctName"></span>
-							</div>
-
-							<div class="star-rating">
-								<span class="star" data-value="1" onmouseover="highlightStarsRental(1)" onclick="selectRatingRental(1)">★</span>
-								<span class="star" data-value="2" onmouseover="highlightStarsRental(2)" onclick="selectRatingRental(2)">★</span>
-								<span class="star" data-value="3" onmouseover="highlightStarsRental(3)" onclick="selectRatingRental(3)">★</span>
-								<span class="star" data-value="4" onmouseover="highlightStarsRental(4)" onclick="selectRatingRental(4)">★</span>
-								<span class="star" data-value="5" onmouseover="highlightStarsRental(5)" onclick="selectRatingRental(5)">★</span>
-							</div>
-
-							<input type="hidden" id="ratingValueRental" value="0">
-
-							<textarea id="reviewContentRental" placeholder="리뷰 내용을 입력하세요"></textarea>
-
-							<button id="submitBtnRental" onclick="submitReviewRental()">등록</button>
-							<button id="updateBtnRental" style="display:none;" onclick="updateReviewRental()">수정</button>
-							<button id="deleteBtnRental" style="display:none;" onclick="deleteReviewRental()">삭제</button>
+						<div class="star-rating" onmouseleave="resetStars()">
+							<span class="star" data-value="1" onmouseover="highlightStars(1)" onclick="selectRating(1)">★</span>
+							<span class="star" data-value="2" onmouseover="highlightStars(2)" onclick="selectRating(2)">★</span>
+							<span class="star" data-value="3" onmouseover="highlightStars(3)" onclick="selectRating(3)">★</span>
+							<span class="star" data-value="4" onmouseover="highlightStars(4)" onclick="selectRating(4)">★</span>
+							<span class="star" data-value="5" onmouseover="highlightStars(5)" onclick="selectRating(5)">★</span>
+							<input type="hidden" id="ratingValue" name="rating" value="0">
 						</div>
+
+						<div>
+							<label>리뷰 내용:</label><br>
+							<textarea id="reviewContent" rows="5" cols="30"></textarea>
+						</div>
+
+						<button id="submitBtn" type="button" onclick="submitReview()">등록</button>
+
+						<button id="updateBtn" type="button" style="display:none;" onclick="updateReview()">수정</button>
+						<button id="deleteBtn" type="button" style="display:none;" onclick="deleteReview()">삭제</button>
+
+						<button type="button" onclick="closeReviewModal()">취소</button>
 					</div>
-        </div>
-    </div>
-	<script>
-		let activeTab = '호텔';
-		let allReservations = [];
-		let allRentReservations = [];
+				</div>
+				<!-- 렌트카 예약 테이블 -->
+				<div id="rentcar-reservations" style="display:none;">
+					<table class="table text-center reservation-table"
+						style="width: 100%; border-collapse: collapse; text-align: center;">
+						<thead>
+							<tr class="tx" style="background-color: #f9f9f9;">
+								<th class="col-secondary">예약 ID</th>
+								<th class="col-secondary">업체명</th>
+								<th class="col-secondary">차량명</th>
+								<th>예약자</th>
+								<th class="col-secondary">예약 일시 (KST)</th>
+								<th>대여 일시</th>
+								<th>반납 일시</th>
+								<th>금액</th>
+								<th class="col-secondary">예약 상태</th>
+								<th>이용 여부</th>
+								<th>리뷰 작성</th>
+							</tr>
+						</thead>
+						<tbody id="rentcar-reservation-list">
+							<tr th:each="reservation : ${rentcarReservations}" th:attr="
+								data-checkout=${#dates.format(reservation.rr_chekout, 'yyyy-MM-dd')},
+								data-state=${reservation.rr_state},
+								data-rr-num=${reservation.rr_num},
+								data-ct-name=${reservation.ct_name}">
+								<td class="col-secondary" th:text="${reservation.rr_num}">1</td>
+								<td class="col-secondary" th:text="${reservation.re_name}">발리렌트카</td>
+								<td class="col-secondary" th:text="${reservation.ct_name}">스파크 4세대</td>
+								<td th:text="${reservation.rr_name}">홍길동</td>
+								<td class="col-secondary" th:text="${#dates.format(reservation.rr_date, 'yyyy-MM-dd')}">2025-06-05</td>
+								<td th:text="${#dates.format(reservation.rr_checkIn, 'yyyy-MM-dd')}">2025-06-10</td>
+								<td th:text="${#dates.format(reservation.rr_chekout, 'yyyy-MM-dd')}">2025-06-12</td>
+								<td th:text="${#numbers.formatInteger(reservation.rr_price, 3, 'COMMA')} + '원'">120,000원</td>
+								<td class="col-secondary" th:text="${reservation.rr_state}">예약완료</td>
+								<td class="use-status-cell">이용 전</td>
+								<td>
+									<button type="button" class="btn btn-outline-success review-btn"
+										th:attr="data-rr-num=${reservation.rr_num}, data-ct-name=${reservation.ct_name}"
+										onclick="openReviewModal(this)">리뷰 작성</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 
-		window.changeTab = function(clickedTab) {
-			const $tabs = $('.tab');
-			$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
-			$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
 
-			activeTab = $(clickedTab).text();
+				<!-- 호텔 카드 전용 -->
+				<div id="reservation-cards" class="d-md-none"></div>
+				<!-- 렌트카 카드 전용 -->
+				<div id="rentcar-cards" class="d-md-none" style="display:none;"></div>
 
-			// 필터 초기화
-			$('#reservation-state').val('전체');
+				<!-- 렌트카 리뷰 모달 -->
+				<div id="modalOverlayRental">
+					<div id="reviewModalRental">
+						<input type="hidden" id="hiddenRentalNumInput">
 
-			if (activeTab === '렌트카') {
+						<div>
+							<strong>업체명:</strong> <span id="rental-name"></span><br>
+							<strong>차량명:</strong> <span id="ctName"></span>
+						</div>
+
+						<div class="star-rating">
+							<span class="star" data-value="1" onmouseover="highlightStarsRental(1)"
+								onclick="selectRatingRental(1)">★</span>
+							<span class="star" data-value="2" onmouseover="highlightStarsRental(2)"
+								onclick="selectRatingRental(2)">★</span>
+							<span class="star" data-value="3" onmouseover="highlightStarsRental(3)"
+								onclick="selectRatingRental(3)">★</span>
+							<span class="star" data-value="4" onmouseover="highlightStarsRental(4)"
+								onclick="selectRatingRental(4)">★</span>
+							<span class="star" data-value="5" onmouseover="highlightStarsRental(5)"
+								onclick="selectRatingRental(5)">★</span>
+						</div>
+
+						<input type="hidden" id="ratingValueRental" value="0">
+
+						<textarea id="reviewContentRental" placeholder="리뷰 내용을 입력하세요"></textarea>
+
+						<button id="submitBtnRental" onclick="submitReviewRental()">등록</button>
+						<button id="updateBtnRental" style="display:none;" onclick="updateReviewRental()">수정</button>
+						<button id="deleteBtnRental" style="display:none;" onclick="deleteReviewRental()">삭제</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			let activeTab = '호텔';
+			let allReservations = [];
+			let allRentReservations = [];
+
+			window.changeTab = function (clickedTab) {
+				const $tabs = $('.tab');
+				$tabs.removeClass('active').css({ color: '#888', borderBottom: 'none' });
+				$(clickedTab).addClass('active').css({ color: '#007bff', borderBottom: '2px solid #007bff' });
+
+				activeTab = $(clickedTab).text();
+				$('#reservation-state').val('전체');
+
+				if (activeTab === '렌트카') {
 					$('#reservation-table').hide();
 					$('#rentcar-reservations').show();
-					$('#no-reservation-message').hide();
+					$('#reservation-cards').hide(); // 호텔 카드 숨김
+					$('#rentcar-cards').show();     // 렌트카 카드 보이기
 					fetchRentcarReservations();
-			} else {
+				} else {
 					$('#rentcar-reservations').hide();
 					$('#reservation-table').show();
-					$('#no-reservation-message').hide();
+					$('#reservation-cards').show(); // 호텔 카드 보이기
+					$('#rentcar-cards').hide();     // 렌트카 카드 숨김
 					fetchNewReservations();
-			}
-	};
+				}
+			};
 
-		function fetchNewReservations() {
+			function fetchNewReservations() {
 				$.ajax({
-						url: '/member/reservation-list-ajax',
-						type: 'GET',
-						success: function(reservations) {
-								allReservations = reservations;
-								renderReservationList(allReservations);
-						}
-				});
-		}
-
-		function fetchRentcarReservations() {
-				$.ajax({
-						url: '/member/rent-reservation-list-ajax',
-						type: 'GET',
-						success: function(reservations) {
-								allRentReservations = reservations;
-								renderRentReservationList(allRentReservations);
-						}
-				});
-		}
-
-		function renderReservationList(reservations) {
-			const $list = $('#reservation-list');
-			$list.empty();
-
-			if (reservations.length === 0) {
-				$list.html('<tr><td colspan="12">예약 내역이 없습니다.</td></tr>'); // colspan 변경
-				return;
-			}
-
-			reservations.forEach(res => {
-				const checkoutDate = new Date(res.lr_checkout);
-				const today = new Date();
-
-				checkoutDate.setHours(0, 0, 0, 0);
-				today.setHours(0, 0, 0, 0);
-
-				let reviewBtnHtml = "";
-				let usageStatus = "";
-
-				if (res.lr_state === "예약완료") {
-					if (today > checkoutDate) {
-						// 이용 완료
-						usageStatus = `<span style="color: green; font-weight: bold;">이용 완료</span>`;
-						reviewBtnHtml = `
-							<button
-								type="button"
-								class="btn btn-outline-success review-btn"
-								data-lr-num="${res.lr_ld_num}"
-								data-lodging-name="${res.lr_ld_name}"
-								data-room-name="${res.lr_rm_name}"
-								onclick="openReviewModal(this)">
-								리뷰 작성
-							</button>
-						`;
-					} else {
-						// 이용 전
-						usageStatus = `<span style="color: #888;">이용 전</span>`;
-						reviewBtnHtml = `
-							<button
-								type="button"
-								class="btn btn-secondary"
-								onclick="alert('체크아웃 이후에 리뷰 작성이 가능합니다.')">
-								리뷰 작성 (불가)
-							</button>
-						`;
+					url: '/member/reservation-list-ajax',
+					type: 'GET',
+					success: function (reservations) {
+						allReservations = reservations;
+						renderReservationList(allReservations);
 					}
-				} else {
-					// 예약취소 등
-					usageStatus = `<span style="color: red;">예약 취소</span>`;
-					reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
+				});
+			}
+
+			function fetchRentcarReservations() {
+				$.ajax({
+					url: '/member/rent-reservation-list-ajax',
+					type: 'GET',
+					success: function (reservations) {
+						allRentReservations = reservations;
+						renderRentReservationList(allRentReservations);
+					}
+				});
+			}
+
+			function renderReservationList(reservations) {
+				const $list = $('#reservation-list');
+				const $cardList = $('#reservation-cards');
+				$list.empty();
+				$cardList.empty();
+
+				if (reservations.length === 0) {
+					$list.html('<tr><td colspan="12">예약 내역이 없습니다.</td></tr>'); // colspan 변경
+					return;
 				}
 
-				// 금액에 천 단위 콤마 추가 함수
+				reservations.forEach(res => {
+					const checkoutDate = new Date(res.lr_checkout);
+					const today = new Date();
+
+					checkoutDate.setHours(0, 0, 0, 0);
+					today.setHours(0, 0, 0, 0);
+
+					let reviewBtnHtml = "";
+					let usageStatus = "";
+
+					if (res.lr_state === "예약완료") {
+						if (today > checkoutDate) {
+							// 이용 완료
+							usageStatus = `<span style="color: green; font-weight: bold;">이용 완료</span>`;
+							reviewBtnHtml = `
+								<button
+									type="button"
+									class="btn btn-outline-success review-btn"
+									data-lr-num="${res.lr_num}"
+									data-lodging-name="${res.lr_ld_name}"
+									data-room-name="${res.lr_rm_name}"
+									onclick="openReviewModal(this)">
+									리뷰 작성
+								</button>
+							`;
+						} else {
+							// 이용 전
+							usageStatus = `<span style="color: #888;">이용 전</span>`;
+							reviewBtnHtml = `
+								<button
+									type="button"
+									class="btn btn-secondary"
+									onclick="alert('체크아웃 이후에 리뷰 작성이 가능합니다.')">
+									리뷰 작성 (불가)
+								</button>
+							`;
+						}
+					} else {
+						// 예약취소 등
+						usageStatus = `<span style="color: red;">이용 불가</span>`;
+						reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
+					}
+
+					// 금액에 천 단위 콤마 추가 함수
+					function formatPrice(price) {
+						return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					}
+					const row = `
+							<tr>
+								<td>${res.lr_me_name}</td>
+								<td>${res.lr_ld_name}</td>
+								<td>${res.lr_rm_name}</td>
+								<td class="col-secondary">${res.lr_booker_name}(${res.lr_count})</td>
+								<td class="col-secondary">${res.lr_guest_name}</td>
+								<td class="col-secondary">${formatDateTime(res.lr_date)}</td>
+								<td>${formatDate(res.lr_checkin)} - ${formatDate(res.lr_checkout)}</td>
+								<td class="col-secondary">${formatPrice(res.lr_total_price)}</td>
+								<td>${formatPrice(res.lr_total_price)}</td>
+								<td class="col-secondary">${res.lr_state}</td>
+								<td>${usageStatus}</td>
+								<td>${reviewBtnHtml}</td>
+							</tr>
+						`;
+
+					$list.append(row);
+
+					const card = `
+						<div class="reservation-card">
+							<div><strong>예약 ID:</strong> ${res.lr_me_name}</div>
+							<div><strong>예약 상태:</strong> ${res.lr_state}</div>
+							<div><strong>숙소:</strong> ${res.lr_ld_name}</div>
+							<div><strong>객실:</strong> ${res.lr_rm_name}</div>
+							<div><strong>기간:</strong> ${formatDate(res.lr_checkin)} ~ ${formatDate(res.lr_checkout)}</div>
+							<div><strong>예약자:</strong> ${res.lr_booker_name} (${res.lr_count}명)</div>
+							<div><strong>투숙자:</strong> ${res.lr_guest_name}</div>
+							<div><strong>금액:</strong> ${formatPrice(res.lr_total_price)}원</div>
+							<div><strong>예약일:</strong> ${formatDateTime(res.lr_date)}</div>
+							<div><strong>이용 여부:</strong> ${usageStatus}</div>
+							<div>${reviewBtnHtml}</div>
+						</div>
+					`;
+					$cardList.append(card);
+				});
+			}
+
+			function renderRentReservationList(reservations) {
+				const $list = $('#rentcar-reservation-list');
+				const $cardList = $('#rentcar-cards');
+				$list.empty();
+				$cardList.empty();
+
+				if (reservations.length === 0) {
+					$list.html('<tr><td colspan="11">렌트카 예약 내역이 없습니다.</td></tr>');
+					$cardList.html('<div class="reservation-card">렌트카 예약 내역이 없습니다.</div>');
+					return;
+				}
+
 				function formatPrice(price) {
 					return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 				}
 
-				const row = `
-					<tr>
-						<td>${res.lr_me_name}</td>
-						<td>${res.lr_state}</td>
-						<td>${res.lr_ld_name}</td>
-						<td>${res.lr_rm_name}</td>
-						<td>${formatDate(res.lr_checkin)} - ${formatDate(res.lr_checkout)}</td>
-						<td>${res.lr_booker_name}(${res.lr_count})</td>
-						<td>${res.lr_guest_name}</td>
-						<td>${formatPrice(res.lr_total_price)}</td>
-						<td>${formatPrice(res.lr_total_price)}</td>
-						<td>${formatDateTime(res.lr_date)}</td>
-						<td>${usageStatus}</td>
-						<td>${reviewBtnHtml}</td>
-					</tr>
-				`;
+				reservations.forEach(res => {
+					const checkoutDate = new Date(res.rr_chekout);
+					const today = new Date();
+					checkoutDate.setHours(0, 0, 0, 0);
+					today.setHours(0, 0, 0, 0);
 
-				$list.append(row);
-			});
-		}
+					let usageStatus = "";
+					let reviewBtnHtml = "";
 
-		function renderRentReservationList(reservations) {
-			const $list = $('#rentcar-reservation-list');
-			$list.empty();
-
-			if (reservations.length === 0) {
-				$list.html('<tr><td colspan="12">렌트카 예약 내역이 없습니다.</td></tr>'); // colspan 12로 맞춤
-				return;
-			}
-
-			// 천 단위 콤마 함수
-			function formatPrice(price) {
-				return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			}
-
-			reservations.forEach(res => {
-				const checkoutDate = new Date(res.rr_chekout);
-				const today = new Date();
-
-				checkoutDate.setHours(0, 0, 0, 0);
-				today.setHours(0, 0, 0, 0);
-
-				let usageStatus = "";
-				let reviewBtnHtml = "";
-
-				if (res.rr_state === "예약완료") {
-					if (today > checkoutDate) {
-						usageStatus = `<span style="color: green; font-weight: bold;">이용 완료</span>`;
-						reviewBtnHtml = `
-							<button
-								type="button"
-								class="btn btn-outline-success review-btn"
-								data-rental-num="${res.rr_num}"
-								data-rental-name="${res.re_name}"
-								data-ct-name="${res.ct_name}"
-								onclick="openReviewModalRental(this)">
-								리뷰 작성
-							</button>
-						`;
+					if (res.rr_state === "예약완료") {
+						if (today > checkoutDate) {
+							usageStatus = `<span style="color: green; font-weight: bold;">이용 완료</span>`;
+							reviewBtnHtml = `
+								<button type="button" class="btn btn-outline-success review-btn"
+									data-rental-num="${res.rr_num}"
+									data-rental-name="${res.re_name}"
+									data-ct-name="${res.ct_name}"
+									onclick="openReviewModalRental(this)">리뷰 작성</button>`;
+						} else {
+							usageStatus = `<span style="color: #888;">이용 전</span>`;
+							reviewBtnHtml = `<button type="button" class="btn btn-secondary"
+								onclick="alert('차량 반납 이후에 리뷰 작성이 가능합니다.')">리뷰 작성 (불가)</button>`;
+						}
 					} else {
-						usageStatus = `<span style="color: #888;">이용 전</span>`;
-						reviewBtnHtml = `
-							<button
-								type="button"
-								class="btn btn-secondary"
-								onclick="alert('차량 반납 이후에 리뷰 작성이 가능합니다.')">
-								리뷰 작성 (불가)
-							</button>
-						`;
+						usageStatus = `<span style="color: red;">이용 불가</span>`;
+						reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
 					}
-				} else {
-					usageStatus = `<span style="color: red;">예약 취소</span>`;
-					reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
-				}
 
-				const row = `
-					<tr>
-						<td>${res.rr_num}</td>
-						<td>${res.re_name}</td>
-						<td>${res.ct_name}</td>
-						<td>${res.rr_state}</td>
-						<td>${formatDateTime(res.rr_checkIn)}</td>
-						<td>${formatDateTime(res.rr_chekout)}</td>
-						<td>${res.rr_name}</td>
-						<td>${formatPrice(res.rr_price)}원</td>
-						<td>${formatDateTime(res.rr_date)}</td>
-						<td>${usageStatus}</td>
-						<td>${reviewBtnHtml}</td>
-					</tr>
-				`;
+					const row = `
+						<tr data-checkout="${res.rr_chekout}" data-state="${res.rr_state}" data-rr-num="${res.rr_num}" data-ct-name="${res.ct_name}">
+							<td class="col-secondary">${res.rr_num}</td>
+							<td class="col-secondary">${res.re_name}</td>
+							<td class="col-secondary">${res.ct_name}</td>
+							<td>${res.rr_name}</td>
+							<td class="col-secondary">${formatDateTime(res.rr_date)}</td>
+							<td>${formatDateTime(res.rr_checkIn)}</td>
+							<td>${formatDateTime(res.rr_chekout)}</td>
+							<td>${formatPrice(res.rr_price)}원</td>
+							<td class="col-secondary">${res.rr_state}</td>
+							<td>${usageStatus}</td>
+							<td>${reviewBtnHtml}</td>
+						</tr>
+					`;
+					$list.append(row);
 
-				$list.append(row);
-			});
-		}
+					const card = `
+						<div class="reservation-card">
+							<div><strong>예약 ID:</strong> ${res.rr_num}</div>
+							<div><strong>업체명:</strong> ${res.re_name}</div>
+							<div><strong>차량명:</strong> ${res.ct_name}</div>
+							<div><strong>상태:</strong> ${res.rr_state}</div>
+							<div><strong>대여:</strong> ${formatDateTime(res.rr_checkIn)}</div>
+							<div><strong>반납:</strong> ${formatDateTime(res.rr_chekout)}</div>
+							<div><strong>예약자:</strong> ${res.rr_name}</div>
+							<div><strong>금액:</strong> ${formatPrice(res.rr_price)}원</div>
+							<div><strong>예약일:</strong> ${formatDateTime(res.rr_date)}</div>
+							<div><strong>이용 여부:</strong> ${usageStatus}</div>
+							<div>${reviewBtnHtml}</div>
+						</div>
+					`;
+					$cardList.append(card);
+				});
+			}
 
-		function filterReservations() {
+
+			function filterReservations() {
 				if (activeTab === '호텔') {
-						const selectedState = $('#reservation-state').val();
-						let filteredReservations;
+					const selectedState = $('#reservation-state').val();
+					let filteredReservations;
 
-						if (selectedState === '전체') {
-								filteredReservations = allReservations;
-						} else if (selectedState === '예약완료') {
-								filteredReservations = allReservations.filter(res => res.lr_state === '예약완료');
-						} else if (selectedState === '취소/환불') {
-								filteredReservations = allReservations.filter(res => res.lr_state === '예약취소');
-						}
-						renderReservationList(filteredReservations);
+					if (selectedState === '전체') {
+						filteredReservations = allReservations;
+					} else if (selectedState === '예약완료') {
+						filteredReservations = allReservations.filter(res => res.lr_state === '예약완료');
+					} else if (selectedState === '취소/환불') {
+						filteredReservations = allReservations.filter(res => res.lr_state === '예약취소');
+					}
+					renderReservationList(filteredReservations);
 				} else if (activeTab === '렌트카') {
-						const selectedState = $('#reservation-state').val();
-						let filteredRentReservations;
+					const selectedState = $('#reservation-state').val();
+					let filteredRentReservations;
 
-						if (selectedState === '전체') {
-								filteredRentReservations = allRentReservations;
-						} else if (selectedState === '예약완료') {
-								filteredRentReservations = allRentReservations.filter(res => res.rr_state === '예약완료');
-						} else if (selectedState === '취소/환불') {
-								filteredRentReservations = allRentReservations.filter(res => res.rr_state === '예약취소');
-						}
-						renderRentReservationList(filteredRentReservations);
+					if (selectedState === '전체') {
+						filteredRentReservations = allRentReservations;
+					} else if (selectedState === '예약완료') {
+						filteredRentReservations = allRentReservations.filter(res => res.rr_state === '예약완료');
+					} else if (selectedState === '취소/환불') {
+						filteredRentReservations = allRentReservations.filter(res => res.rr_state === '예약취소');
+					}
+					renderRentReservationList(filteredRentReservations);
 				}
-		}
+			}
 
-		function formatDate(dateStr) {
+			function formatDate(dateStr) {
 				const date = new Date(dateStr);
 				const year = date.getFullYear();
 				const month = String(date.getMonth() + 1).padStart(2, '0');
 				const day = String(date.getDate()).padStart(2, '0');
 				return `${year}-${month}-${day}`;
-		}
+			}
 
-		function formatDateTime(dateStr) {
+			function formatDateTime(dateStr) {
 				const date = new Date(dateStr);
 				return (
-						date.getFullYear() + '-' +
-						String(date.getMonth() + 1).padStart(2, '0') + '-' +
-						String(date.getDate()).padStart(2, '0') + ' ' +
-						String(date.getHours()).padStart(2, '0') + ':' +
-						String(date.getMinutes()).padStart(2, '0')
+					date.getFullYear() + '-' +
+					String(date.getMonth() + 1).padStart(2, '0') + '-' +
+					String(date.getDate()).padStart(2, '0') + ' ' +
+					String(date.getHours()).padStart(2, '0') + ':' +
+					String(date.getMinutes()).padStart(2, '0')
 				);
-		}
+			}
 
-		$(document).ready(function() {
+			$(document).ready(function () {
 				fetchNewReservations();
-		});
+			});
 		</script>
 		<script>
 			function openReviewModal(btn) {
@@ -591,7 +743,7 @@
 					url: "/review/detail",
 					type: "GET",
 					data: { rv_number: lrNum, rv_table_name: 'room' },
-					success: function(review) {
+					success: function (review) {
 						if (review && review.rv_number) { // 존재 여부를 정확히 체크
 							$("#reviewContent").val(review.rv_content);
 							$("#ratingValue").val(review.rv_rating);
@@ -619,7 +771,7 @@
 				$('input[name="rating"]').prop('checked', false);
 				$('#lodgingName').text('');
 				$('#roomName').text('');
-				
+
 				currentRating = 0;
 				resetStars();
 			}
@@ -671,23 +823,23 @@
 				const rv_table_name = "room"; // 혹은 동적으로 설정되게
 
 				$.ajax({
-						url: "/review/update",
-						type: "POST",
-						data: {
-								rv_rating: rating,
-								rv_content: content,
-								rv_number: rv_number,
-								rv_me_num: rv_me_num,
-								rv_table_name: rv_table_name
-						},
-						success: function(res) {
-								if (res === "success") {
-										alert("리뷰가 수정되었습니다!");
-										closeReviewModal();
-								} else {
-										alert("리뷰 수정 실패");
-								}
+					url: "/review/update",
+					type: "POST",
+					data: {
+						rv_rating: rating,
+						rv_content: content,
+						rv_number: rv_number,
+						rv_me_num: rv_me_num,
+						rv_table_name: rv_table_name
+					},
+					success: function (res) {
+						if (res === "success") {
+							alert("리뷰가 수정되었습니다!");
+							closeReviewModal();
+						} else {
+							alert("리뷰 수정 실패");
 						}
+					}
 				});
 			}
 
@@ -702,8 +854,8 @@
 					data: {
 						rv_number: rv_number
 					},
-					success: function(res) {
-						if(res === "success") {
+					success: function (res) {
+						if (res === "success") {
 							alert("리뷰가 삭제되었습니다.");
 							closeReviewModal();
 						} else {
@@ -761,8 +913,8 @@
 				const rentalName = $(btn).data("rental-name");
 				const carTypeName = $(btn).data("ctName");
 				if (isNaN(rentalNum)) {
-						alert("예약 번호가 유효하지 않습니다.");
-						return;
+					alert("예약 번호가 유효하지 않습니다.");
+					return;
 				}
 
 				$("#rental-name").text(rentalName);
@@ -777,29 +929,29 @@
 				$("#updateBtnRental, #deleteBtnRental").hide();
 
 				$.ajax({
-						url: "/review/detail",
-						type: "GET",
-						data: { rv_number: rentalNum, rv_table_name: 'rental' },
-						success: function(review) {
-								if (review && review.rv_number) {
-										$("#reviewContentRental").val(review.rv_content);
-										$("#ratingValueRental").val(review.rv_rating);
-										currentRatingRental = review.rv_rating;
-										resetStarsRental();
+					url: "/review/detail",
+					type: "GET",
+					data: { rv_number: rentalNum, rv_table_name: 'rental' },
+					success: function (review) {
+						if (review && review.rv_number) {
+							$("#reviewContentRental").val(review.rv_content);
+							$("#ratingValueRental").val(review.rv_rating);
+							currentRatingRental = review.rv_rating;
+							resetStarsRental();
 
-										$("#submitBtnRental").hide();
-										$("#updateBtnRental, #deleteBtnRental").show();
-								}
-								$("#modalOverlayRental").show();
-								$("#reviewModalRental").show();
-						},
-						error: function () {
-								alert("리뷰 정보 불러오기 실패");
-								$("#modalOverlayRental").show();
-								$("#reviewModalRental").show();
+							$("#submitBtnRental").hide();
+							$("#updateBtnRental, #deleteBtnRental").show();
 						}
+						$("#modalOverlayRental").show();
+						$("#reviewModalRental").show();
+					},
+					error: function () {
+						alert("리뷰 정보 불러오기 실패");
+						$("#modalOverlayRental").show();
+						$("#reviewModalRental").show();
+					}
 				});
-		}
+			}
 
 			// 닫기 함수
 			function closeReviewModalRental() {
@@ -809,7 +961,7 @@
 				$("#reviewContentRental").val("");
 				$("#ratingValueRental").val(0);
 				$("#reviewModalRental .star").removeClass("selected hover");
-				
+
 				currentRatingRental = 0;
 				resetStarsRental();
 			}
@@ -963,4 +1115,5 @@
 		</script>
 	</main>
 </body>
+
 </html>

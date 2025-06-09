@@ -6,9 +6,14 @@
 	<meta charset="UTF-8">
 	<title>렌트카 상세</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+	<!-- 1) jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- 2) Bootstrap JS (Popper 포함) -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Kakao Maps API -->
-	<!-- <script
-		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script> -->
+	<script
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fce1f8292f377b6b54069cd934db5676&libraries=services,clusterer,drawing"></script>
 
 	<style>
 		.row {
@@ -159,6 +164,9 @@
 						<div class="car-price-range" style="margin-top: 25px; margin-bottom: 25px; font-size: 18px;">
 							<div class="start-price"
 								style="display: flex; justify-content: flex-end; align-items: baseline; gap: 6px;">
+								<span style="font-size: 14px; margin-right: 5px;">
+									<strong style="font-weight: 600;">일반자차</strong> 포함가
+								</span>
 								<span th:if="${car != null}" th:text="${#numbers.formatInteger(car.cr_price, 3, 'COMMA')} + '원'"
 									style="color: #d64545; font-weight: bold;">가격</span>
 								<span class="text-muted" style="font-size: 0.9rem; color: #666; font-weight: bold;">/1박</span>
@@ -324,7 +332,7 @@
 						<h5 style="font-size: 20px; font-weight: bold; margin-bottom: 12px;">업체정보</h5>
 						<div>
 							<!-- 업체명 -->
-							<span th:text="${rental.re_name}">업체명</span>
+							<span th:text="${rental.re_name}" style="font-weight: bold;">업체명</span>
 							<!-- 별점 + 예약수 -->
 							<div>
 								<img src="/resources/static/imgs/star.svg" alt="별" style="width: 14px; height: 14px;">
@@ -332,26 +340,31 @@
 								<span style="font-size: 12px; color: #666;" th:text="|리뷰수 (${rental.review_count})|">(0 리뷰수)</span>
 							</div>
 						</div>
-						<div style=" position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
-							<!-- 지도 호출 부분 -->
-							<div onclick="openMapModal()" class="rent-map-datail" id="map1"></div>
+						<!-- 지도 호출 부분 -->
+						<div class="homap"
+							style="position: relative; height: 150px; width: 100%; border-radius: 6px; margin-bottom: 1rem;">
+							<div id="map1" onclick="openMapModal()" style="width: 100%; height: 100%;"></div>
 						</div>
 						<div style="font-size: 14px; color: #444; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif;">
-							<div style="margin-bottom: 16px;">
+							<!-- 주소 -->
+							<div style="margin-bottom: 16px;" th:if="${rental != null}">
 								<div style="font-weight: bold;">주소</div>
-								<div>제주특별자치도 제주시 연미길 35</div>
+								<div th:text="${rental.re_region}">제주특별자치도 제주시 연미길 35</div>
 							</div>
-							<div style="margin-bottom: 16px;">
+
+							<!-- 전화 -->
+							<div style="margin-bottom: 16px;" th:if="${rental != null}">
 								<div style="font-weight: bold;">전화</div>
-								<div>064-743-8285</div>
+								<div th:text="${rental.re_number}">064-743-8285</div>
 							</div>
-							<div style="margin-bottom: 16px;">
-								<div style="font-weight: bold;">
-									영업시간
-								</div>
+
+							<!-- 영업시간 -->
+							<div style="margin-bottom: 16px;" th:if="${rental != null}">
+								<div style="font-weight: bold;">영업시간</div>
 								<div>08:00~20:00</div>
 							</div>
 						</div>
+
 						<!-- 리뷰 리스트 -->
 						<div style="display: flex; flex-direction: column; gap: 1rem;">
 							<div style="display: flex; justify-content: space-between;align-items: center;">
@@ -398,37 +411,42 @@
 							</div>
 							<!-- 리뷰 리스트 목록 -->
 							<div>
-								<div class="review-item"
+
+								<div th:each="review : ${reviewList}" class="review-item"
 									style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
 									onclick="handleReviewClick(this)">
+
+									<!-- 평점 + 차이름 -->
 									<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
 										<div style="display: flex; align-items: end; gap: .125rem;">
-											<div style="font-size: 1.5rem; font-weight: bold; color: #333;">별점
+											<div style="font-size: 1.5rem; font-weight: bold; color: #333;" th:text="${review.rv_rating}">별점
 											</div>
 											<div
 												style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5; margin-bottom: 4px;">
-												/ 5.0
-											</div>
+												/ 5.0</div>
 										</div>
 										<div>
-											<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">차 이름</span>
+											<span style="display: block; font-size: .75rem; line-height: 1.5; color: #999;"
+												th:text="${review.ct_name}">차 이름</span>
 										</div>
 									</div>
+
+									<!-- 닉네임 + 내용 + 날짜 -->
 									<div>
 										<div style="width: 100%; display: flex; align-items: center;">
 											<i class="fas fa-user"></i>
-											<p
-												style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-												닉네임</p>
+											<p style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;"
+												th:text="${review.me_nick}">닉네임</p>
 										</div>
 										<p class="rev" style="margin: 0; width: 40%; font-size: .875rem; line-height: 1.5; color: #666;">
-											<span>리뷰</span>
+											<span th:text="${review.rv_content}">리뷰</span>
 										</p>
 										<div style="width: 100%; display: flex; align-items: center;">
-											<span style="font-size: .75rem; line-height: 1.5; color: #999;">날짜</span>
+											<span class="review-date" th:text="${#dates.format(review.rv_date, 'yyyy.MM.dd')}">날짜</span>
 										</div>
 									</div>
 								</div>
+
 							</div>
 							<button id="review-more-btn">더보기</button>
 						</div>
@@ -493,11 +511,12 @@
 				</div>
 			</div>
 		</div>
+		<!--지도모달-->
 		<div class="modal fade" id="mapModal" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 750px;">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">호텔 지도 보기</h5>
+						<h5 class="modal-title">업체 위치 보기</h5>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 					<div class="modal-body p-0">
@@ -520,6 +539,103 @@
 				</div>
 			</div>
 		</div>
+
+		<!--지도 스크립트-->
+		<script th:inline="javascript">
+			//전역 변수 선언
+			let pageMap = null;
+			let modalMap = null;
+			const coordsCache = {};
+
+			const address = /*[[${rental.re_region}]]*/ "";
+
+			//한 번 구한 좌표는 재사용
+			function getCachedCoords(addr, callback) {
+				if (coordsCache[addr]) {
+					return callback(coordsCache[addr]);
+				}
+				const geocoder = new kakao.maps.services.Geocoder();
+				geocoder.addressSearch(addr, (result, status) => {
+					if (status === kakao.maps.services.Status.OK) {
+						const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+						coordsCache[addr] = coords;
+						callback(coords);
+					} else {
+						console.error("주소 검색 실패:", status);
+					}
+				});
+			}
+
+			document.addEventListener("DOMContentLoaded", function () {
+				// 약간의 딜레이를 두어 요소가 렌더링된 후 실행
+				setTimeout(() => {
+					const container = document.getElementById('map1');
+					if (!container || !address) return;
+
+					getCachedCoords(address, (coords) => {
+						// 이미 생성된 지도가 있으면 보여주고, 없으면 새로 생성
+						if (!pageMap) {
+							pageMap = new kakao.maps.Map(container, {
+								center: coords,
+								level: 3
+							});
+							// 마커 이미지
+							const markerImage = new kakao.maps.MarkerImage(
+								"/resources/static/imgs/mak.svg",
+								new kakao.maps.Size(45, 45)
+							);
+							new kakao.maps.Marker({ position: coords, map: pageMap, image: markerImage });
+						} else {
+							pageMap.setCenter(coords);
+							setTimeout(() => pageMap.relayout(), 100);
+						}
+					});
+				}, 300);
+
+				// 모달 내부 버튼 이벤트 설정
+				document.getElementById('route-btn').onclick = function () {
+					const addr = document.getElementById('map-address').textContent.trim();
+					const url = "https://map.kakao.com/link/search/" + encodeURIComponent(addr);
+					window.open(url, "_blank");
+				};
+				document.getElementById('copy-addr-btn').onclick = function () {
+					const addr = document.getElementById('map-address').textContent.trim();
+					navigator.clipboard.writeText(addr).then(() => alert("주소가 복사되었습니다."));
+				};
+			});
+
+			//모달 열릴 때 한 번만 지도 생성 
+			function openMapModal() {
+				$('#mapModal').modal('show');
+				$('#map-address').text(address);
+
+				$('#mapModal').on('shown.bs.modal', function () {
+					const modalContainer = document.getElementById('modal-map');
+					if (!modalContainer || !address) return;
+
+					getCachedCoords(address, (coords) => {
+						if (!modalMap) {
+							modalMap = new kakao.maps.Map(modalContainer, {
+								center: coords,
+								level: 3
+							});
+							const markerImage = new kakao.maps.MarkerImage(
+								"/resources/static/imgs/mak.svg",
+								new kakao.maps.Size(45, 45)
+							);
+							new kakao.maps.Marker({ position: coords, map: modalMap, image: markerImage });
+						} else {
+							modalMap.setCenter(coords);
+							setTimeout(() => modalMap.relayout(), 100);
+						}
+					});
+
+					// 한 번만 실행하도록 이벤트 제거
+					$(this).off('shown.bs.modal');
+				});
+			}
+		</script>
+
 		<!--드롭다운-->
 		<script>
 			let detailVisible = false;
@@ -539,11 +655,14 @@
 				}
 			}
 		</script>
+
 		<!--에이젝스-->
 		<script>
 			$(function () {
-				const checkTime = '2025.06.03 ~ 2025.06.04'; // 임시
-				const crId = 1; // 임시 ID
+				const checkTime = document.querySelector('.check-in')?.textContent + ' ~ ' + document.querySelector('.check-out')?.textContent;
+				const crId = document.querySelector('.car-top-info [th\\:src]')?.getAttribute('th:src')?.match(/\/(\d+)\./)?.[1] || 1;
+				const totalPrice = document.querySelector('.st-total-price')?.textContent;
+
 				$.ajax({
 					url: '/rent/detailSummary',
 					type: 'GET',
@@ -552,15 +671,30 @@
 						checkTime: checkTime
 					},
 					success: function (html) {
-						$('#payment-summary-container').html(html);
-						initDetailSummary(); // ← 이걸 호출해야 함
+						$('#payment-summary-container').html(html); // 조각 삽입 끝
+
+						// 삽입 후 DOM에서 다시 값 뽑기
+						const totalPriceText = document.querySelector('.st-total-price')?.textContent || '0원';
+						const oneNightText = document.querySelector('.priceDetail .text-muted:last-child')?.textContent || '0원';
+
+						const totalPrice = parseInt(totalPriceText.replace(/[^0-9]/g, '')) || 0;
+						const oneNightPrice = parseInt(oneNightText.replace(/[^0-9]/g, '')) || 0;
+
+						// 덮어쓰기
+						document.querySelector('.summary-st-price').textContent = totalPrice.toLocaleString() + '원';
+						document.querySelector('.summary-total-price').textContent = totalPrice.toLocaleString() + '원';
+						const el = document.querySelector('.mobile-rent-price');
+						el.innerHTML = totalPrice.toLocaleString() + '원<br>바로 결제하기';
+						document.querySelector('.car-price-text').textContent = oneNightPrice.toLocaleString() + '원';
 					},
+
 					error: function () {
 						console.error('불러오기 실패');
 					}
 				});
 			});
 		</script>
+
 		<!-- 자동 탭 추적 기능 -->
 		<script>
 			document.addEventListener('DOMContentLoaded', function () {
@@ -617,6 +751,7 @@
 				});
 			});
 		</script>
+
 		<!--스크롤시 색변경-->
 		<script>
 			document.addEventListener('DOMContentLoaded', function () {
@@ -709,6 +844,35 @@
 					moreBtn.style.display = 'none';
 				});
 			});
+		</script>
+		<!--리뷰 모달-->
+		<script>
+			function handleReviewClick(el) {
+				const nickname = el.querySelector("p").innerText;
+				const content = el.querySelector(".rev span").innerText;
+				const date = el.querySelector(".review-date")?.innerText || '';
+
+				document.getElementById("modal-nickname").innerText = nickname;
+				document.getElementById("modal-content").innerText = content;
+				document.getElementById('modal-date').textContent = date;
+
+				$('#reviewModal').modal('show');
+			}
+		</script>
+		<!--결제이동-->
+		<script>
+			function goToPayment() {
+				const urlParams = new URLSearchParams(window.location.search);
+				const checkTime = urlParams.get("checkTime");
+				const crId = urlParams.get("cr_id");
+
+				if (!checkTime || !crId) {
+					alert("필수 정보가 없습니다.");
+					return;
+				}
+
+				location.href = `/rent/payment?checkTime=${encodeURIComponent(checkTime)}&cr_id=${crId}`;
+			}
 		</script>
 
 	</main>
