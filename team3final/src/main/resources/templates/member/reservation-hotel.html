@@ -24,6 +24,11 @@
 			display: none;
 		}
 
+		.table td,
+		.table th {
+			vertical-align: middle !important;
+		}
+
 		/* 965px 이하일 때 테이블 숨기고 카드 보이기 */
 		@media (max-width: 965px) {
 			.reservation-table {
@@ -66,7 +71,7 @@
 			<h3 class="text-center">최근 호텔 예약 내역</h3>
 			<table class="table table-striped text-center reservation-table">
 				<thead>
-					<tr>
+					<tr class="tx">
 						<th>예약번호</th>
 						<th>예약자</th>
 						<th>숙소이름</th>
@@ -89,10 +94,7 @@
 						<td th:text="${#dates.format(res.lr_date,'yyyy-MM-dd HH:mm')}"></td>
 						<td th:text="${res.lr_state}"></td>
 						<td>
-							<button
-								th:if="${res.cancelable}"
-								th:attr="data-lr_num=${res.lr_num}"
-								class="btn btn-danger cancel-btn">
+							<button th:if="${res.cancelable}" th:attr="data-lr_num=${res.lr_num}" class="btn btn-danger cancel-btn">
 								예약 취소
 							</button>
 							<span th:unless="${res.cancelable}" style="color: gray;">
@@ -114,8 +116,18 @@
 					<div><strong>체크아웃:</strong> <span th:text="${#dates.format(res.lr_checkout,'yyyy-MM-dd')}" /></div>
 					<div><strong>예약일시:</strong> <span th:text="${#dates.format(res.lr_date,'yyyy-MM-dd HH:mm')}" /></div>
 					<div><strong>상태:</strong> <span th:text="${res.lr_state}" /></div>
+					<div>
+						<button th:if="${res.cancelable}" th:attr="data-lr_num=${res.lr_num}" class="btn btn-danger cancel-btn">
+							예약 취소
+						</button>
+						<span th:unless="${res.cancelable}" style="color: gray;">
+							취소 불가
+						</span>
+					</div>
 				</div>
 			</div>
+		</div>
+		</div>
 		</div>
 
 		<div th:if="${#lists.isEmpty(reservations)}" class="empty-box">
@@ -124,31 +136,31 @@
 			<a class="primary-btn" href="/">호텔 보러가기</a>
 		</div>
 		<script>
-		$(document).ready(function() {
-			$(".cancel-btn").click(function() {
-				if (!confirm("정말 이 호텔 예약을 취소하시겠습니까?")) return;
+			$(document).ready(function () {
+				$(".cancel-btn").click(function () {
+					if (!confirm("정말 이 호텔 예약을 취소하시겠습니까?")) return;
 
-				const lrNum = $(this).data("lr_num");
+					const lrNum = $(this).data("lr_num");
 
-				$.ajax({
-					url: "/member/reservation-hotel/cancel",
-					method: "POST",
-					data: { lr_num: lrNum },
-					success: function(response) {
-						if (response === "success") {
-							alert("예약이 성공적으로 취소되었습니다.");
-							location.reload();
-						} else {
-							alert("예약 취소에 실패했습니다.");
+					$.ajax({
+						url: "/member/reservation-hotel/cancel",
+						method: "POST",
+						data: { lr_num: lrNum },
+						success: function (response) {
+							if (response === "success") {
+								alert("예약이 성공적으로 취소되었습니다.");
+								location.reload();
+							} else {
+								alert("예약 취소에 실패했습니다.");
+							}
+						},
+						error: function () {
+							alert("서버와의 통신에 실패했습니다.");
 						}
-					},
-					error: function() {
-						alert("서버와의 통신에 실패했습니다.");
-					}
+					});
 				});
 			});
-		});
-	</script>
+		</script>
 	</main>
 </body>
 
