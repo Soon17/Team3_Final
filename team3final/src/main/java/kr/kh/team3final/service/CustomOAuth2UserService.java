@@ -162,11 +162,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     public String convertPhoneNumber(String phone) {
+        if(phone == null){
+            return "";
+        }
         return phone.replace("+82", "0")
                 .replaceAll(" ", "");
     }
 
     public String convertGender(String gender) {
+        if(gender == null){
+            return "";
+        }
         if (gender.equals("M") || gender.equals("male"))
             return "남자";
         if (gender.equals("W") || gender.equals("female"))
@@ -176,6 +182,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     public String convertBirthday(String birthday) {
+        if(birthday == null){
+            return "";
+        }
         return birthday.replaceAll("-", "");
     }
 
