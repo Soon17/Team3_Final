@@ -142,6 +142,18 @@
 			background-color: #ccc;
 			color: black;
 		}
+		#reservation-table tr{
+			line-height: 40px;
+		}
+		#reservation-table tr td:last-child *{
+			width: 100%;
+		}
+		#rentcar-reservations tr{
+			line-height: 40px;
+		}
+		#rentcar-reservations tr td:last-child *{
+			width: 100%;
+		}
 	</style>
 </head>
 <body>
@@ -404,7 +416,6 @@
 					usageStatus = `<span style="color: red;">예약 취소</span>`;
 					reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
 				}
-				console.log("버튼에 지정된 숙소 ID:", res.lr_num);
 
 				// 금액에 천 단위 콤마 추가 함수
 				function formatPrice(price) {
@@ -563,7 +574,6 @@
 				const lodgingName = $(btn).data("lodging-name");
 				const roomName = $(btn).data("room-name");
 
-				console.log("리뷰 대상 숙소 ID:", lrNum);
 				$("#hiddenLrNumInput").val(lrNum);
 				$("#lodgingName").text(lodgingName);
 				$("#roomName").text(roomName);
@@ -742,14 +752,6 @@
 					error: function () {
 						alert('서버 오류. 잠시 후 다시 시도해주세요.');
 					}
-				});
-				console.log("리뷰 대상 숙소 번호:", lrNum);
-				
-				console.log("submitReview 전송값:", {
-					rv_rating: rating,
-					rv_content: content,
-					rv_table_name: 'room',
-					rv_number: lrNum
 				});
 			}
 		</script>

@@ -62,8 +62,6 @@
         <script>
             $(document).on("click", ".cancel-btn", function(e){
 
-            
-                console.log("버튼 눌림 확인 ");
                 if (!confirm("정말 해당 렌트 예약을 취소하시겠습니까?")) return;
 
                 const rrNum = $(this).data("rr_num");
