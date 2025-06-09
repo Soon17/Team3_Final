@@ -20,10 +20,9 @@ public class SmsController {
 
     @PostMapping("/send")
     @ResponseBody
-    public boolean sendSms(@RequestParam String me_number, HttpSession session, Model model) {
+    public boolean sendSms(@RequestParam String me_number,@RequestParam String type, HttpSession session, Model model) {
         String code = String.valueOf((int)(Math.random() * 900000) + 100000); // 6자리 랜덤 숫자
-        session.setAttribute("smsCode", code);
-        session.setMaxInactiveInterval(300); // 5분 유효
+
         // try {
         //     if(smsService.sendSms(me_number, code)){
         //         return true;
@@ -32,12 +31,41 @@ public class SmsController {
         // } catch (Exception e) {
 		// 	return false;
         // }
+        System.out.println(type);
+        switch (type) {
+            case "id":
+                session.setAttribute("smsIdCode", code);
+                session.setMaxInactiveInterval(300); // 5분 유효
+                return true;
+        
+            case "signup":
+                session.setAttribute("smsCode", code);
+                session.setMaxInactiveInterval(300); // 5분 유효
+                return true;
+            case "pw":
+                session.setAttribute("smsPwCode", code);
+                session.setMaxInactiveInterval(300); // 5분 유효
+                return true;
+        }
+        
         return true;
     }
     @PostMapping("/check")
     @ResponseBody
-    public Boolean checkSMS(@RequestParam String userCode, HttpSession session) {
-        String code = (String) session.getAttribute("smsCode");
+    public Boolean checkSMS(@RequestParam String userCode,@RequestParam String type, HttpSession session) {
+        String code = ""; 
+        switch (type) {
+            case "id":
+                code = (String) session.getAttribute("smsIdCode");
+                break;
+        
+            case "signup":
+                code = (String) session.getAttribute("smsCode");
+                break;
+            case "pw":
+                code = (String) session.getAttribute("smsPwCode");
+                break;
+        }
         if(code == null || !code.equals(userCode)){
             return false;
         }

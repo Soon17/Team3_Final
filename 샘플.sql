@@ -20,12 +20,12 @@ ALTER TABLE review AUTO_INCREMENT = 1;
 ALTER TABLE default_option AUTO_INCREMENT = 1;
 
 INSERT INTO member (ME_ID, ME_PW, ME_NAME, ME_NICK, ME_NUMBER, ME_EMAIL, ME_AUTHORITY, ME_BIRTHDAY, ME_GENDER, ME_PROFILE, ME_PROVIDER, ME_DEL) VALUES
-('user01', '$2b$12$cE3qQ0dBV6GQx/g6UKRfLupzBEzU1BSZg9JtpNzGLoMyodM3LjMoa', '홍길동', '길동이', '01012345678', 'user01@example.com', 'USER', '19900101', '남자', 'default1.jpg', 'NORMAL', 'N'),
-('user02', '$2b$12$cWxlnpiXk37R98U6NZ7zzONKKxqvRLpSkfNHcahJJySXjZrz4/Ch6', '김철수', '철수짱', '01023456789', 'user02@example.com', 'USER', '19910202', '남자', 'default2.jpg', 'NORMAL', 'N'),
-('user03', '$2b$12$/7JW.XpEhb6aQFXqI1aR8.dSQrn63W6o3JIdetGItRc3dqnm.MzTq', '이민호', '민호맨', '01034567890', 'user03@example.com', 'USER', '19920303', '남자', 'default3.jpg', 'NORMAL', 'N'),
-('user04', '$2b$12$2Viu.RNk48oEnEIio9VGze.3z6kmpx5EX2VM3SeKe1pgXxhe4GglC', '박지훈', '지훈킹', '01045678901', 'user04@example.com', 'USER', '19930404', '남자', 'default4.jpg', 'NORMAL', 'N'),
-('user05', '$2b$12$CKcYUPaoaTNCr3dWma9B..AVYx4rGmgqRen9ifepzkboQuJCx03aa', '최우진', '우진이', '01056789012', 'user05@example.com', 'USER', '19940505', '남자', 'default5.jpg', 'NORMAL', 'N'),
-('user06', '$2b$12$N05/DC0IcdXuXi2LgGbdB.kHsshLExM4OweZLfTTLpzYfTNaxE4j2', '정태호', '태호짱', '01067890123', 'user06@example.com', 'USER', '19950606', '남자', 'default6.jpg', 'NORMAL', 'N');
+('user01', '$2b$12$cE3qQ0dBV6GQx/g6UKRfLupzBEzU1BSZg9JtpNzGLoMyodM3LjMoa', '홍길동', '길동이', '010-1234-5678', 'user01@example.com', 'USER', '19900101', '남자', 'default1.jpg', 'NORMAL', 'N'),
+('user02', '$2b$12$cWxlnpiXk37R98U6NZ7zzONKKxqvRLpSkfNHcahJJySXjZrz4/Ch6', '김철수', '철수짱', '010-2345-6789', 'user02@example.com', 'USER', '19910202', '남자', 'default2.jpg', 'NORMAL', 'N'),
+('user03', '$2b$12$/7JW.XpEhb6aQFXqI1aR8.dSQrn63W6o3JIdetGItRc3dqnm.MzTq', '이민호', '민호맨', '010-3456-7890', 'user03@example.com', 'USER', '19920303', '남자', 'default3.jpg', 'NORMAL', 'N'),
+('user04', '$2b$12$2Viu.RNk48oEnEIio9VGze.3z6kmpx5EX2VM3SeKe1pgXxhe4GglC', '박지훈', '지훈킹', '010-4567-8901', 'user04@example.com', 'USER', '19930404', '남자', 'default4.jpg', 'NORMAL', 'N'),
+('user05', '$2b$12$CKcYUPaoaTNCr3dWma9B..AVYx4rGmgqRen9ifepzkboQuJCx03aa', '최우진', '우진이', '010-5678-9012', 'user05@example.com', 'USER', '19940505', '남자', 'default5.jpg', 'NORMAL', 'N'),
+('user06', '$2b$12$N05/DC0IcdXuXi2LgGbdB.kHsshLExM4OweZLfTTLpzYfTNaxE4j2', '정태호', '태호짱', '010-6789-0123', 'user06@example.com', 'USER', '19950606', '남자', 'default6.jpg', 'NORMAL', 'N');
 
 INSERT INTO region(RG_NAME) VALUES
 ("서울"),("경기"),("부산"),("제주");

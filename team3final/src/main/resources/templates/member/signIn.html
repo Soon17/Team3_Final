@@ -55,7 +55,7 @@
 											</div>
 											<p class="mb-0 mt-4 text-center">
 												<span class="link mr-3 signIn-i" data-toggle="modal" data-target="#idFindModal">아이디찾기</span>
-												<span class="link signIn-p">비밀번호 찾기</span>
+												<span class="link signIn-p" data-toggle="modal" data-target="#PwFindModal">비밀번호 찾기</span>
 											</p>
 											
 											<a href="/oauth2/authorization/kakao" class="api-login">
@@ -176,22 +176,439 @@
 				</div>
 			</div>
 		</div>
+		<!--아이디 찾기 모달-->
 		<div class="modal" id="idFindModal">
 			<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content id-find" style="color: #c4c3ca; font-weight: 500;">
-				<!-- Modal 헤더 -->
-				<div class="modal-header">
-					<span>아이디 찾기</span>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<!-- Modal 바디 -->
-				<div class="modal-body" id="map1">
-					하하하하
+				<div class="modal-content id-find" style="color: #c4c3ca; font-weight: 500; height: auto;">
+					<!-- Modal 헤더 -->
+					<div class="modal-header id-find-header">
+						<span>아이디 찾기</span>
+						<button type="button" class="close id-find-close" data-dismiss="modal">&times;</button>
+					</div>
+					<div id="foundIdBox" class="found-id-box">
+									회원님 아이디는 <span id="foundId" class="found-id"></span> 입니다.
+								</div>
+								<div id="notFoundoundIdBox" class="found-id-box">
+									찾으시는 아이디는 존재하지 않습니다.
+								</div>
+					<!-- Modal 바디 --> 
+					<div class="modal-body" id="map1">
+						<div class="form-group mt-2">
+							<form class="id-find-form" method="post">
+								<div class="mb-4">
+									<p>이름</p>
+									<i class="find-icon uil uil-user"></i>
+									<input type="text" name="id-find-name" id="id-find-name" class="form-style" autocomplete="off">
+									
+								</div>
+								<div class="mb-4">
+									<p>전화번호</p>	
+									<i class="find-icon  uil-phone"></i>							
+									<input type="text" name="id-find-menumber" id="id-find-number" class="form-style" autocomplete="off">
+									<label id="smsidSend" class=""></label>
+									<button class="sms-find-btn d-block mx-auto" type="button" id="sms-find-btn" disabled>인증번호 받기</button>								
+								</div>
+								<div>
+									<p>인증번호</p>
+									<i class="find-icon uil-comment-alt-dots"></i>
+									<input type="text" name="id-find-checknumber" class="form-style"id="id-find-checknumber" autocomplete="off" disabled>	
+									<label id="sms-id-msg" class=""></label>							
+									<button class="sms-find-btn d-block mx-auto" id="checkSms-find" type="button" disabled>인증번호 확인</button>
+								</div>
+								<button id="id-find-btn" class="btn mt-4 d-block mx-auto signIn-a" type="submit"  disabled>아이디 찾기</button>
+								
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
+		</div> 	
+		<!--비번 찾기 모달-->	
+		<div class="modal" id="PwFindModal">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content pw-find" style="color: #c4c3ca; font-weight: 500; height: auto;">
+					<!-- Modal 헤더 -->
+					<div class="modal-header pw-find-header">
+						<span>비번 찾기</span>
+						<button type="button" class="close pw-find-close" data-dismiss="modal">&times;</button>
+					</div>
+					<div id="notFoundoundPwBox" class="found-pw-box">
+						찾으시는 비밀번호는 존재하지 않습니다.
+					</div>
+					<!-- Modal 바디 --> 
+					<div class="modal-body" id="map1">
+						<div class="form-group mt-2">
+							<form class="pw-find-form" method="post">
+								<div class="mb-4">
+									<p>이름</p>
+									<i class="find-icon uil uil-user"></i>
+									<input type="text" name="pw-find-name" id="pw-find-name" class="form-style" autocomplete="off">								
+								</div>
+								<div class="mb-4">
+									<p>아이디</p>
+									<i class="find-icon uil uil-user-square"></i>
+									<input type="text" name="pw-find-id" id="pw-find-id" class="form-style" autocomplete="off">								
+								</div>
+								<div class="mb-4">
+									<p>전화번호</p>	
+									<i class="find-icon  uil-phone"></i>							
+									<input type="text" name="pw-find-menumber" id="pw-find-number" class="form-style" autocomplete="off">
+									<label id="smspwSend" class=""></label>
+									<button class="sms-pw-find-btn d-block mx-auto" type="button" id="sms-pw-find-btn" disabled>인증번호 받기</button>								
+								</div>
+								<div>
+									<p>인증번호</p>
+									<i class="find-icon uil-comment-alt-dots"></i>
+									<input type="text" name="pw-find-checknumber" class="form-style"id="pw-find-checknumber" autocomplete="off" disabled>	
+									<label id="sms-pw-msg" class=""></label>							
+									<button class="sms-pw-find-btn d-block mx-auto" id="checkSms-pw-find" type="button" disabled>인증번호 확인</button>
+								</div>
+								<button id="pw-find-btn" class="btn mt-4 d-block mx-auto signIn-a" type="submit">비밀번호 찾기</button>
+								
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div> 		
+		</div>
+		<div class="modal" id="passwordModal">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content pw-find" style="color: #c4c3ca; font-weight: 500; height: auto;">
+					<!-- Modal 헤더 -->
+					<div class="modal-header pw-find-header">
+						<span>비밀번호 변경</span>
+						<button type="button" class="close close-password-modal" data-dismiss="modal">&times;</button>
+					</div>
+					<div id="changePwBox" class="change-pw-box">
+									비밀번호가 변경 되었습니다.
+					</div>
+					<div id="notChangePwBox" class="found-id-box">
+									비밀번호가 변경 되지 않았습니다.
+					</div>
+					<!-- Modal 바디 --> 
+					<div class="modal-body" id="map1">
+						<div class="form-group mt-2">
+							<form class="pw-change-form" method="post">
+								<div class="mb-4">
+									<p>비밀번호</p>	
+									<i class="find-icon  uil uil-lock-alt"></i>							
+									<input type="password" name="change-pw" id="change-pw" class="form-style" autocomplete="off">							
+								</div>
+								<div>
+									<p>비밀번호 확인</p>
+									<i class="find-icon uil uil-lock-alt"></i>
+									<input type="password" name="change-pw2" class="form-style"id="change-pw2" autocomplete="off">	
+								</div>
+								<button id="change-pw-btn" class="btn mt-4 d-block mx-auto change-pw-btn" type="submit">비밀번호 변경</button>								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script>
+			//비번 변경 유효성 검사
+			$(".pw-change-form").validate({
+				rules: {
+					"change-pw": { required: true, regex: /^[a-zA-Z0-9!@#$]{3,15}$/ },
+					"change-pw2": { required: true, equalTo: "#change-pw" }
+				},
+				messages: {
+					"change-pw": {
+						required: "필수 항목입니다.",
+						regex: "비번은 영문, 숫자,특수문자(!@#$)만 가능하며, 3~15자입니다."
+					},
+					"change-pw2": {
+						required: "필수 항목입니다.",
+						equalTo: "비밀번호가 다릅니다."
+					},
+				},
+				submitHandler: function () {
+					const me_pw = $("#change-pw").val();
+					$.ajax({
+						async: false,
+						url: '/member/change/pw',
+						type: 'post',
+						data: { 
+							me_pw :me_pw
+						},
+						success: function (data) {
+							if(data){
+								$('#notChangePwBox').hide();
+								$("#changePwBox").slideDown();
+								return false;
+							}
+							$("#changePwBox").hide();
+							$('#notChangePwBox').slideDown();
+						}
+					});
+					return false;
+				},
+			});
+			//비번 찾기 유효성 검사
+			$(".pw-find-form").validate({
+				rules: {
+					'pw-find-name': { required: true },
+					"pw-find-id": { required: true, regex: /^[a-zA-Z0-9]{3,13}$/ },
+					"pw-find-menumber": { required: true, phone3: true },
+				},
+				messages: {
+					'pw-find-name': { required: "이름을 적어 주세요" },
+					"pw-find-id": {
+						required: "필수 항목입니다.",
+						regex: "아이디는 영문, 숫자만 가능하며, 3~13자입니다."
+					},
+					"pw-find-menumber": { required: "전화번호를 적어 주세요", phone3: "형식에 맞게 적어 주세요(010-0000-0000)" },
+				},
+				submitHandler: function () {
+					const me_name = $("#pw-find-name").val();
+					const me_number = $("#pw-find-number").val();
+					const me_id = $("#pw-find-id").val();
+					$.ajax({
+						async: false,
+						url: '/member/find',
+						type: 'post',
+						data: { 
+							me_name : me_name,
+							me_id : me_id ,
+							me_number: me_number
+						},
+						success: function (data) {
+						if (data.me_pw != null) {
+							$("#PwFindModal").modal("hide");
+							$("#passwordModal").modal("show");
+							return false;
+						} else {
+							$("#notFoundoundPwBox").slideDown();
+							$('#foundPwBox').hide();
+						}
+						}
+					});
+					return false;
+				},
+			});
+			$.validator.addMethod("phone3", function (value, element) {
+				$("#sms-pw-find-btn").prop("disabled", true);
+				$("#smspwSend").text("");
+				let res = this.optional(element) || /^01[016789]-\d{3,4}-\d{4}$/.test(value);
+				if (res) {
+					$("#sms-pw-find-btn").prop("disabled", false);
+				}
+				return res;
+			}, "정규표현식을 확인하세요.");		
+			//인증번호 받기 버튼 클릭
+			$('#sms-pw-find-btn').on('click', function () {
+				smsPwSend();
+			});
+			function smsPwSend() {
+				const me_number = $('#pw-find-number').val();
+				const type="pw";
+				$.ajax({
+					async: false,
+					url: '/sms/send',
+					type: 'post',
+					data: { 
+						me_number: me_number,
+						type:type
+					 },
+					success: function (data) {
+					if (data) res = true;
+					else res= false;
+					}
+				});
+				let str = res ? "전송 성공!." : "전송 실패ㅠ";
+				$("#smspwSend")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res);
+				if (1==1) {
+					$("#checkSms-pw-find, #pw-find-checknumber").prop("disabled", false);
+				}
+				return res;
+			}
+			//인증번호 확인 버튼 클릭
+			$('#checkSms-pw-find').on('click', function () {
+				checkPwSMS();
+			});
+			function checkPwSMS() {
+				$("#sms-pw-msg").text("");
+				let userCode = $("#pw-find-checknumber").val();
+				let res = false;
+				const type ="pw";
+				// $.ajax({
+				// 	async: false,
+				// 	url: '/sms/check',
+				// 	type: 'post',
+				// 	data: { 
+				// userCode: userCode,
+				// type : type
+				//  },
+				// 	success: function (data) {
+				// 		if (data) res = true;
+				// 	},
+				// });
+				res = true; //임의 값 = 무조건 참
+
+				let str = res ? "인증 성공!" : "인증번호가 다릅니다.";
+				$("#sms-pw-msg")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res)
+				if (res) {
+					$("#pw-find-btn").prop("disabled", false);
+				}
+				return res;
+			}	
+			$('.signIn-p').on('click', function () {
+				// 입력창 초기화
+				$('#pw-find-name').val('');
+				$('#pw-find-id').val('');
+				$('#pw-find-number').val('');
+				$('#pw-find-checknumber').val('');
+
+				// 인증 버튼 초기 상태
+				$('#sms-pw-find-btn').prop('disabled', true);
+				$('#checkSms-pw-find').prop('disabled', true);
+				$('#pw-find-btn').prop('disabled', true);
+
+				// 메시지 초기화
+				$('#smspwSend').text('');
+				$('#sms-pw-msg').text('');
+				$('#foundPw').text('');
+				$('#foundPwBox').hide();
+				$('#notFoundoundPwBox').hide();
+				$('#smspwSend, #sms-pw-msg').text('');
+				$('#sms-pw-find-btn, #checkSms-pw-find, #pw-find-btn').prop('disabled', true);
+			});
+
+
+			//아이디 찾기 유효성 검사
+			$(".id-find-form").validate({
+				rules: {
+					'id-find-name': { required: true },
+					"id-find-menumber": { required: true, phone2: true },
+				},
+				messages: {
+					'id-find-name': { required: "이름을 적어 주세요" },
+					"id-find-menumber": { required: "전화번호를 적어 주세요", phone2: "형식에 맞게 적어 주세요(010-0000-0000)" },
+				},
+				submitHandler: function () {
+					const me_name = $("#id-find-name").val();
+					const me_number = $("#id-find-number").val();
+					$.ajax({
+						async: false,
+						url: '/member/find',
+						type: 'post',
+						data: { 
+							me_name : me_name,
+							me_number: me_number
+						},
+						success: function (data) {
+						if (data.me_id != null) {
+							$('#notFoundoundIdBox').hide();
+							$('#foundId').text(data.me_id);
+							$('#foundIdBox').slideDown();  // 부드럽게 표시
+						} else {
+							$("#notFoundoundIdBox").slideDown();
+							$('#foundIdBox').hide();
+						}
+						}
+					});
+					return false;
+				},
+			});
+			$.validator.addMethod("phone2", function (value, element) {
+				$("#sms-find-btn").prop("disabled", true);
+				$("#smsidSend").text("");
+				let res = this.optional(element) || /^01[016789]-\d{3,4}-\d{4}$/.test(value);
+				if (res) {
+					$("#sms-find-btn").prop("disabled", false);
+				}
+				return res;
+			}, "정규표현식을 확인하세요.");		
+			//인증번호 받기 버튼 클릭
+			$('#sms-find-btn').on('click', function () {
+				smsIdSend();
+			});
+			function smsIdSend() {
+				const me_number = $('#id-find-number').val();
+				const type="id";
+				$.ajax({
+					async: false,
+					url: '/sms/send',
+					type: 'post',
+					data: { 
+						me_number: me_number,
+						type:type
+					 },
+					success: function (data) {
+					if (data) res = true;
+					else res= false;
+					}
+				});
+				let str = res ? "전송 성공!." : "전송 실패ㅠ";
+				$("#smsidSend")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res);
+				if (1==1) {
+					$("#checkSms-find, #id-find-checknumber").prop("disabled", false);
+				}
+				return res;
+			}
+			//인증번호 확인 버튼 클릭
+			$('#checkSms-find').on('click', function () {
+				checkIdSMS();
+			});
+			function checkIdSMS() {
+				$("#sms-id-msg").text("");
+				let userCode = $("#id-find-checknumber").val();
+				let res = false;
+				const type ="id";
+				// $.ajax({
+				// 	async: false,
+				// 	url: '/sms/check',
+				// 	type: 'post',
+				// 	data: { 
+				// userCode: userCode,
+				// type : type
+				//  },
+				// 	success: function (data) {
+				// 		if (data) res = true;
+				// 	},
+				// });
+				res = true; //임의 값 = 무조건 참
+
+				let str = res ? "인증 성공!" : "인증번호가 다릅니다.";
+				$("#sms-id-msg")
+					.text(str)
+					.toggleClass("green", res)
+					.toggleClass("red", !res)
+				if (res) {
+					$("#id-find-btn").prop("disabled", false);
+				}
+				return res;
+			}	
+			$('#idFindModal').on('show.bs.modal', function () {
+				// 입력창 초기화
+				$('#id-find-name').val('');
+				$('#id-find-number').val('');
+				$('#id-find-checknumber').val('');
+
+				// 인증 버튼 초기 상태
+				$('#sms-find-btn').prop('disabled', true);
+				$('#checkSms-find').prop('disabled', true);
+				$('#id-find-btn').prop('disabled', true);
+
+				// 메시지 초기화
+				$('#smsidSend').text('');
+				$('#sms-id-msg').text('');
+				$('#foundId').text('');
+				$('#foundIdBox').hide();
+				$('#notFoundoundIdBox').hide();
+				$('#smsidSend, #sms-id-msg').text('');
+				$('#sms-find-btn, #checkSms-find, #id-find-btn').prop('disabled', true);
+			});			
 			// 회원가입 유효성 검사
 			$(".singUp-from").validate({
 				rules: {
@@ -293,12 +710,15 @@
 				$("#sms-msg").text("");
 				let userCode = $("#checknumber").val();
 				let res = false;
-
+				const type ="signup";
 				// $.ajax({
 				// 	async: false,
 				// 	url: '/sms/check',
 				// 	type: 'post',
-				// 	data: { userCode: userCode },
+				// 	data: { 
+				// userCode: userCode,
+				// type : type
+				//  },
 				// 	success: function (data) {
 				// 		if (data) res = true;
 				// 	},
@@ -322,11 +742,15 @@
 			});
 			function smsSend() {
 				const me_number = $('#me_number').val();
+				const type="signup";
 				$.ajax({
 					async: false,
 					url: '/sms/send',
 					type: 'post',
-					data: { me_number: me_number },
+					data: { 
+						me_number: me_number,
+						type:type
+					 },
 					success: function (data) {
 					if (data) res = true;
 					else res= false;
@@ -342,6 +766,14 @@
 				}
 				return res;
 			}
+			$(document).on("click", ".close-password-modal", function () {
+				$("#passwordModal").modal("hide");
+			});
+			$(document).click(function (e) {
+				if ($(e.target).is("#passwordModal")) {
+					$("#passwordModal").modal("hide");
+				}
+			});
 		</script>
 	</main>
 </body>

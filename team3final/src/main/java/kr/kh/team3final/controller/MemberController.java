@@ -1,7 +1,10 @@
 package kr.kh.team3final.controller;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpSession;
 import kr.kh.team3final.dao.MemberDAO;
 import kr.kh.team3final.model.dto.Lodging_ReviewDTO;
 import kr.kh.team3final.model.dto.Rent_ReviewDTO;
@@ -338,4 +342,28 @@ public class MemberController {
 		return rentSuccess ? "success" : "fail";
 	}
 	
+	@PostMapping("/find")
+	@ResponseBody
+	public Map<String, Object> findUser(HttpSession session,MemberVO member) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(member.getMe_id() == null){
+			String  me_id = memberService.getId(member);
+			map.put("me_id", me_id);
+			return map;
+		}
+		MemberVO m = memberService.findPw(member);
+		session.setAttribute("findMeNum", m.getMe_num());
+		map.put("me_pw", m.getMe_pw());
+		return map;
+	}
+	@PostMapping("/change/pw")
+	@ResponseBody
+	public boolean chagnePw(HttpSession session,MemberVO member) {
+		int me_num = (int) session.getAttribute("findMeNum");
+		member.setMe_num(me_num);
+		if(memberService.updatePw(member)){
+			return true;
+		}
+		return false;
+	}
 }

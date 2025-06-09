@@ -84,5 +84,25 @@ public class MemberService {
 		return memberDAO.deleteUser(member);
 	}
 
+    public String getId(MemberVO member) {
+        return memberDAO.selectId(member);
+    }
+
+	public MemberVO findPw(MemberVO member) {
+		return memberDAO.selectPw(member);
+	}
+
+	public boolean updatePw(MemberVO member) {
+		try {
+			String encodedPw = passwordEncoder.encode(member.getMe_pw());
+			member.setMe_pw(encodedPw);
+			memberDAO.updatePw(member);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+		
+	}
+
 	
 }
