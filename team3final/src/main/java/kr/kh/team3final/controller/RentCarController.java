@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import kr.kh.team3final.model.dto.Rental_ReviewDTO;
 import kr.kh.team3final.model.vo.CarVO;
 import kr.kh.team3final.model.vo.RentalVO;
 import kr.kh.team3final.model.vo.ReviewVO;
@@ -86,7 +87,7 @@ public class RentCarController {
 			}
 		}
 		// 리뷰
-		List<ReviewVO> reviewList = reviewService.rentalReviews(car.getCr_re_num());
+		List<Rental_ReviewDTO> reviewList = reviewService.rentalReviews(car.getCr_re_num());
 
 		model.addAttribute("car", car);
 		model.addAttribute("rental", rental);
