@@ -118,28 +118,27 @@ public class MemberController {
 	}
 
 	@GetMapping("/reservation-hotel")
-	public String myHotel(Model model, @AuthenticationPrincipal CustomUser user,
-			@AuthenticationPrincipal OAuth2User oauth2user) {
-		if (user != null) {
-			int meNum = user.getUser().getMe_num();
-			model.addAttribute("user", user.getUser());
+	public String myHotel(Model model, @AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
+			int meNum = -1;
 
-			List<ReservationVO> latestReservation = reservationService.getLatestReservation(meNum);
-			model.addAttribute("reservations", latestReservation);
-			model.addAttribute("logIn", false);
-		} else if (oauth2user != null) {
-			MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
+			if (user != null) {
+					meNum = user.getUser().getMe_num();
+					model.addAttribute("user", user.getUser());
+			} else if (oauth2user != null) {
+					MemberVO dbuser = memberDAO.selectMember(oauth2user.getName());
+					meNum = dbuser.getMe_num();
+					model.addAttribute("user", dbuser);
+			}
 
-			int meNum = dbuser.getMe_num();
-			model.addAttribute("user", dbuser);
+			if (meNum != -1) {
+					List<ReservationVO> latestReservation = reservationService.getLatestReservation(meNum);
+					model.addAttribute("reservations", latestReservation);
+					model.addAttribute("logIn", true);
+			} else {
+					model.addAttribute("logIn", false);
+			}
 
-			List<ReservationVO> latestReservation = reservationService.getLatestReservation(meNum);
-			model.addAttribute("reservations", latestReservation);
-			model.addAttribute("logIn", false);
-		}
-
-		model.addAttribute("logIn", false);
-		return "member/reservation-hotel";
+			return "member/reservation-hotel";
 	}
 
 	@GetMapping("/reservation-rent")
@@ -154,8 +153,9 @@ public class MemberController {
 					meNum = dbuser.getMe_num();
 					model.addAttribute("user", dbuser);
 			}
+
 			if (meNum != -1) {
-					List<RentReservationVO> latestRent = rentReservationService.getLatestRentReservation(meNum); // 최신 예약 1건
+					List<RentReservationVO> latestRent = rentReservationService.getLatestRentReservation(meNum);
 					model.addAttribute("latestRent", latestRent);
 					model.addAttribute("logIn", true);
 			} else {
@@ -323,4 +323,19 @@ public class MemberController {
 		}
 		return new ArrayList<>();
 	}
+
+	@PostMapping("/reservation-hotel/cancel")
+	@ResponseBody
+	public String cancleHotel(@RequestParam("lr_num") int lr_num) {
+		boolean success = reservationService.cancelHotel(lr_num);
+		return success ? "success" : "fail";
+	}
+	
+	@PostMapping("/reservation-rent/cancel")
+	@ResponseBody
+	public String cancelRent(@RequestParam("rr_num") int rr_num) {
+		boolean rentSuccess = rentReservationService.cancelRent(rr_num);
+		return rentSuccess ? "success" : "fail";
+	}
+	
 }

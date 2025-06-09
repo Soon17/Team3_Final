@@ -322,3 +322,24 @@ label.regex-error,#checkId,#smsSend,#sms-msg {
 	transform: translateY(-50%);
 	padding: 0 4px;
 }
+.remember-checkbox {
+	appearance: checkbox;       
+	-webkit-appearance: checkbox;
+	-moz-appearance: checkbox;
+	margin-right: 5px;
+	width: 16px;
+	height: 16px;
+}
+.remember-label {
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	padding-left: 2px;
+}
+input[name="remember-me"] {
+	position: static !important;
+	left: auto !important;
+	appearance: checkbox;
+	-webkit-appearance: checkbox;
+}

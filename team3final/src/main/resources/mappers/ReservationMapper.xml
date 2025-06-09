@@ -19,6 +19,7 @@
             r.LR_RM_NUM,
             m.ME_NAME AS LR_ME_NAME,
             rm.RM_NAME AS LR_RM_NAME,
+            ld.LD_NUM AS LR_LD_NUM,
             ld.LD_NAME AS LR_LD_NAME
         FROM 
             lo_reservation r
@@ -35,36 +36,40 @@
     <!-- 최신 예약완료 내역 1개 -->
     <select id="selectLatestReservation" resultType="ReservationVO">
         SELECT 
-            r.LR_NUM,
-            r.LR_CHECKIN,
-            r.LR_CHECKOUT,
-            r.LR_COUNT,
-            r.LR_TOTAL_PRICE,
-            r.LR_STATE,
-            r.LR_DATE,
-            r.LR_BOOKER_NAME,
-            r.LR_GUEST_NAME,
-            r.LR_GUEST_NUMBER,
-            r.LR_MEAL_STATE,
-            r.LR_ME_NUM,
-            r.LR_RM_NUM,
-            m.ME_NAME AS LR_ME_NAME,
-            rm.RM_NAME AS LR_RM_NAME,
-            ld.LD_NAME AS LR_LD_NAME
-        FROM 
-            lo_reservation r
-        JOIN 
-            member m ON r.LR_ME_NUM = m.ME_NUM
-        JOIN 
-            room rm ON r.LR_RM_NUM = rm.RM_NUM
-        JOIN 
-            lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
-        WHERE
-            
-        
-            r.lr_me_num = #{meNum}
-        ORDER BY
-            r.LR_DATE DESC
-        LIMIT 1
+        r.LR_NUM,
+        r.LR_CHECKIN,
+        r.LR_CHECKOUT,
+        r.LR_COUNT,
+        r.LR_TOTAL_PRICE,
+        r.LR_STATE,
+        r.LR_DATE,
+        r.LR_BOOKER_NAME,
+        r.LR_GUEST_NAME,
+        r.LR_GUEST_NUMBER,
+        r.LR_MEAL_STATE,
+        r.LR_ME_NUM,
+        r.LR_RM_NUM,
+        m.ME_NAME AS LR_ME_NAME,
+        rm.RM_NAME AS LR_RM_NAME,
+        ld.LD_NAME AS LR_LD_NAME
+    FROM 
+        lo_reservation r
+    JOIN 
+        member m ON r.LR_ME_NUM = m.ME_NUM
+    JOIN 
+        room rm ON r.LR_RM_NUM = rm.RM_NUM
+    JOIN 
+        lodging ld ON rm.RM_LD_NUM = ld.LD_NUM
+    WHERE
+        r.LR_ME_NUM = #{meNum}
+        AND r.LR_STATE = '예약완료'
+        AND DATE(r.LR_CHECKIN) >= CURRENT_DATE
+    ORDER BY
+        r.LR_CHECKIN ASC
     </select>
+    <update id="cancelHotel">
+        UPDATE lo_reservation
+        SET LR_STATE = #{state}
+        WHERE LR_NUM = #{lr_num}
+    </update>
 </mapper>

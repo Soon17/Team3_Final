@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" 
-	xmlns:th="http://www.thymeleaf.org" 
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	layout:decorate="~{layout/layout.html}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout/layout.html}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <head>
@@ -193,13 +190,13 @@
 						<p>나의리뷰</p>
 					</a>
 				</div>
-	
+
 				<!-- 탭 메뉴 -->
 				<div class="tabs">
 					<div class="tab active" id="reservation-hotel">호텔</div>
 					<div class="tab" id="reservation-rent">렌트카</div>
 				</div>
-	
+
 				<!-- 기본은 호텔 내역 -->
 				<div class="empty-box">
 					<p class="main-text">예약하신 호텔 내역이 없습니다 :)</p>
@@ -237,16 +234,7 @@
 				$('#reservation-rent').on('click', function () {
 					$(this).addClass('active');
 					$('#reservation-hotel').removeClass('active');
-					$.ajax({
-						url: '/member/reservation-rent',
-						method: 'GET',
-						success: function (data) {
-							$('.empty-box').html(data);
-						},
-						error: function () {
-							$('.empty-box').html('<p>렌트카 예약 내역을 불러오는 데 실패했습니다.</p>');
-						}
-					});
+					loadRentReservation();
 				});
 
 				// 호텔 예약 내역을 불러오는 함수
@@ -260,6 +248,19 @@
 						},
 						error: function () {
 							$('.empty-box').html('<p>호텔 예약 내역을 불러오는 데 실패했습니다.</p>');
+						}
+					});
+				}
+
+				function loadRentReservation() {
+					$.ajax({
+						url: '/member/reservation-rent',
+						method: 'GET',
+						success: function (data) {
+							$('.empty-box').html(data);
+						},
+						error: function () {
+							$('.empty-box').html('<p>렌트카 예약 내역을 불러오는 데 실패했습니다.</p>');
 						}
 					});
 				}

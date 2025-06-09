@@ -142,6 +142,18 @@
 			background-color: #ccc;
 			color: black;
 		}
+		#reservation-table tr{
+			line-height: 40px;
+		}
+		#reservation-table tr td:last-child *{
+			width: 100%;
+		}
+		#rentcar-reservations tr{
+			line-height: 40px;
+		}
+		#rentcar-reservations tr td:last-child *{
+			width: 100%;
+		}
 	</style>
 </head>
 <body>
@@ -380,7 +392,7 @@
 							<button
 								type="button"
 								class="btn btn-outline-success review-btn"
-								data-lr-num="${res.lr_num}"
+								data-lr-num="${res.lr_ld_num}"
 								data-lodging-name="${res.lr_ld_name}"
 								data-room-name="${res.lr_rm_name}"
 								onclick="openReviewModal(this)">
@@ -401,7 +413,7 @@
 					}
 				} else {
 					// 예약취소 등
-					usageStatus = `<span style="color: red;">이용 불가</span>`;
+					usageStatus = `<span style="color: red;">예약 취소</span>`;
 					reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
 				}
 
@@ -481,7 +493,7 @@
 						`;
 					}
 				} else {
-					usageStatus = `<span style="color: red;">이용 불가</span>`;
+					usageStatus = `<span style="color: red;">예약 취소</span>`;
 					reviewBtnHtml = `<span style="color: #aaa;">리뷰 작성 불가</span>`;
 				}
 
@@ -650,7 +662,7 @@
 				document.getElementById('ratingValue').value = rating;
 				resetStars();
 			}
-
+			
 			function updateReview() {
 				const rating = $("#ratingValue").val();
 				const content = $("#reviewContent").val();
@@ -703,11 +715,16 @@
 
 			function submitReview() {
 				const lrNum = $('#hiddenLrNumInput').val();
-				const rating = $('#ratingValue').val();
+				const rating = parseInt($('#ratingValue').val());
 				const content = $('#reviewContent').val();
 
-				if (!rating || !content.trim()) {
-					alert('별점과 내용을 모두 입력해주세요!');
+				if (!rating || rating < 1) {
+					alert('별점은 최소 1점 이상 선택해야 합니다!');
+					return;
+				}
+
+				if (!content.trim()) {
+					alert('리뷰 내용을 입력해주세요!');
 					return;
 				}
 
@@ -715,15 +732,19 @@
 					url: '/review/insert',
 					type: 'POST',
 					data: {
-						rv_rating: rating,               
-						rv_content: content,             
+						rv_rating: rating,
+						rv_content: content,
 						rv_table_name: 'room',
-						rv_number: lrNum         
+						rv_number: lrNum
 					},
 					success: function (res) {
 						if (res === 'success') {
 							alert('리뷰가 등록되었습니다!');
 							closeReviewModal();
+						} else if (res === 'invalid_rating') {
+							alert('서버 응답: 별점은 최소 1점 이상이어야 합니다.');
+						} else if (res === 'invalid_content') {
+							alert('서버 응답: 리뷰 내용을 입력해주세요.');
 						} else {
 							alert('리뷰 등록 실패. 다시 시도해주세요!');
 						}
@@ -834,11 +855,17 @@
 			// 리뷰 등록
 			function submitReviewRental() {
 				const rentalNum = $("#hiddenRentalNumInput").val();
-				const rating = $("#ratingValueRental").val();
+				const rating = parseInt($("#ratingValueRental").val());
 				const content = $("#reviewContentRental").val();
 
-				if (!rating || !content.trim()) {
-					alert("별점과 내용을 모두 입력해주세요!");
+				// 프론트 1차 유효성 검사
+				if (!rating || rating < 1) {
+					alert("별점은 최소 1점 이상 선택해야 합니다!");
+					return;
+				}
+
+				if (!content.trim()) {
+					alert("리뷰 내용을 입력해주세요!");
 					return;
 				}
 
@@ -855,6 +882,10 @@
 						if (res === "success") {
 							alert("리뷰가 등록되었습니다!");
 							closeReviewModalRental();
+						} else if (res === "invalid_rating") {
+							alert("서버 측 유효성 검사 실패: 별점은 1~5점 사이여야 합니다.");
+						} else if (res === "invalid_content") {
+							alert("서버 측 유효성 검사 실패: 리뷰 내용을 입력해주세요.");
 						} else {
 							alert("리뷰 등록 실패. 다시 시도해주세요!");
 						}
@@ -865,11 +896,20 @@
 				});
 			}
 
-			// 리뷰 수정
 			function updateReviewRental() {
-				const rating = $("#ratingValueRental").val();
+				const rating = parseInt($("#ratingValueRental").val());
 				const content = $("#reviewContentRental").val();
 				const rv_number = $("#hiddenRentalNumInput").val();
+				const tableName = "rental";
+
+				if (!rating || rating < 1) {
+					alert("별점은 최소 1점 이상 선택해야 합니다!");
+					return;
+				}
+				if (!content.trim()) {
+					alert("리뷰 내용을 입력해주세요!");
+					return;
+				}
 
 				$.ajax({
 					url: "/review/update",
@@ -878,15 +918,22 @@
 						rv_rating: rating,
 						rv_content: content,
 						rv_number: rv_number,
-						rv_table_name: "rental"
+						rv_table_name: tableName
 					},
 					success: function (res) {
 						if (res === "success") {
 							alert("리뷰가 수정되었습니다!");
 							closeReviewModalRental();
+						} else if (res === "invalid_rating") {
+							alert("별점은 1점 이상 5점 이하로 입력해주세요.");
+						} else if (res === "invalid_content") {
+							alert("리뷰 내용을 입력해주세요.");
 						} else {
-							alert("리뷰 수정 실패");
+							alert("리뷰 수정 실패. 다시 시도해주세요!");
 						}
+					},
+					error: function () {
+						alert("서버 오류 발생. 잠시 후 다시 시도해주세요.");
 					}
 				});
 			}

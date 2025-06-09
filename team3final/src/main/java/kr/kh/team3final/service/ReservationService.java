@@ -1,5 +1,8 @@
 package kr.kh.team3final.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +23,29 @@ public class ReservationService {
 	}
 	
 	public List<ReservationVO> getLatestReservation(int meNum) {
+    List<ReservationVO> reservations = reservationDAO.selectLatestReservation(meNum);
+    
+    LocalDate today = LocalDate.now();
+
+    for (ReservationVO r : reservations) {
+        Date checkinDateUtil = r.getLr_checkin();
+        
+        if (checkinDateUtil != null) {
+            LocalDate checkinDate = checkinDateUtil.toInstant() .atZone(ZoneId.systemDefault()) .toLocalDate();
+
+            boolean canCancel = checkinDate.isAfter(today);
+            r.setCancelable(canCancel);
+        } else {
+            r.setCancelable(false);
+        }
+    }
+
+    return reservations;
+}
+
+	public boolean cancelHotel(int lr_num) {
 		
-    return reservationDAO.selectLatestReservation(meNum);
+		return reservationDAO.cancelHotel(lr_num, "예약취소") > 0;
 	}
 
 }
