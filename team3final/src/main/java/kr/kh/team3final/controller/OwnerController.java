@@ -86,7 +86,7 @@ public class OwnerController {
 			model.addAttribute("url", "/member/signIn");
 			return "msg";
 		}
-		if(user != null){
+		if (user != null) {
 			lodgingDTO.setLd_me_num(user.getMe_num());
 		}
 
@@ -96,7 +96,7 @@ public class OwnerController {
 
 		// 숙소 썸네일 업로드
 		String uploadDir = new File("").getAbsolutePath() +
-				"/team3final/src/main/resources/static/img";
+				"/src/main/resources/static/img";
 		boolean uploadLDTH = false;
 		for (MultipartFile file : lodgingDTO.getLodgingThumbnailList()) {
 			if (!file.isEmpty()) {
@@ -172,12 +172,12 @@ public class OwnerController {
 			model.addAttribute("url", "/member/signIn");
 			return "msg";
 		}
-		if(user != null){
+		if (user != null) {
 			rentalDTO.setRe_me_num(user.getMe_num());
 		}
 		// 렌탈 업로드
 		boolean uploadRental = rentalService.uploadRental(rentalDTO);
-		
+
 		// 자동차 업로드
 		boolean uploadCars = carService.uploadCars(rentalDTO.getCars(), rentalDTO.getRe_num());
 		if (uploadRental) {

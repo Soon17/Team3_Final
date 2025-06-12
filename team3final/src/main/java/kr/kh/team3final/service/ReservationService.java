@@ -13,39 +13,43 @@ import kr.kh.team3final.model.vo.ReservationVO;
 
 @Service
 public class ReservationService {
-	
-	@Autowired
-	ReservationDAO reservationDAO;
 
-	public List<ReservationVO> selectList(int meNum) {
-		
-		return reservationDAO.selectList(meNum);
-	}
-	
-	public List<ReservationVO> getLatestReservation(int meNum) {
-    List<ReservationVO> reservations = reservationDAO.selectLatestReservation(meNum);
-    
-    LocalDate today = LocalDate.now();
+    @Autowired
+    ReservationDAO reservationDAO;
 
-    for (ReservationVO r : reservations) {
-        Date checkinDateUtil = r.getLr_checkin();
-        
-        if (checkinDateUtil != null) {
-            LocalDate checkinDate = checkinDateUtil.toInstant() .atZone(ZoneId.systemDefault()) .toLocalDate();
+    public List<ReservationVO> selectList(int meNum) {
 
-            boolean canCancel = checkinDate.isAfter(today);
-            r.setCancelable(canCancel);
-        } else {
-            r.setCancelable(false);
-        }
+        return reservationDAO.selectList(meNum);
     }
 
-    return reservations;
-}
+    public List<ReservationVO> getLatestReservation(int meNum) {
+        List<ReservationVO> reservations = reservationDAO.selectLatestReservation(meNum);
 
-	public boolean cancelHotel(int lr_num) {
-		
-		return reservationDAO.cancelHotel(lr_num, "예약취소") > 0;
-	}
+        LocalDate today = LocalDate.now();
+
+        for (ReservationVO r : reservations) {
+            Date checkinDateUtil = r.getLr_checkin();
+
+            if (checkinDateUtil != null) {
+                LocalDate checkinDate = checkinDateUtil.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                boolean canCancel = checkinDate.isAfter(today);
+                r.setCancelable(canCancel);
+            } else {
+                r.setCancelable(false);
+            }
+        }
+
+        return reservations;
+    }
+
+    public boolean cancelHotel(int lr_num) {
+
+        return reservationDAO.cancelHotel(lr_num, "예약취소") > 0;
+    }
+
+    public int getRmNum(int lrNum) {
+        return reservationDAO.selectRmNum(lrNum);
+    }
 
 }

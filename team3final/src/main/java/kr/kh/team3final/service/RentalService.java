@@ -31,7 +31,8 @@ public class RentalService {
 	}
 
 	public boolean uploadRental(RentalDTO rentalDTO) {
-		if(rentalDTO == null) return false;
+		if (rentalDTO == null)
+			return false;
 		return rentalDao.insertRental(rentalDTO);
 	}
 
