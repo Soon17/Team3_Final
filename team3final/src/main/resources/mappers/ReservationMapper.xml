@@ -77,4 +77,11 @@
         from lo_reservation
         where lr_num = #{lrNum}
     </select>
+    <select id="selectReNum"  resultType="int">
+        select cr_re_num
+        from car
+        join car_package on cp_cr_id = cr_id
+        join re_reservation on rr_cp_num = cp_num
+        where rr_num = #{rrNum}
+    </select>
 </mapper>

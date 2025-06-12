@@ -36,10 +36,10 @@ public class ReviewController {
 			@RequestParam("rv_rating") int rating,
 			@RequestParam("rv_content") String content, // @RequestParam("rv_number") int rvNumber,
 			@RequestParam("rv_table_name") String tableName,
-			@RequestParam("lr_num") int lrNum) {
+			@RequestParam("all_num") int allNum) {
 
 		MemberVO member = null;
-
+		int result=0;
 		if (user != null) {
 			member = user.getUser();
 		} else if (oauth2user != null) {
@@ -56,17 +56,23 @@ public class ReviewController {
 		if (content == null || content.trim().isEmpty()) {
 			return "invalid_content";
 		}
-
+		
 		ReviewVO review = new ReviewVO();
+
+		if(tableName.equals("room")){
+			review.setRv_number(reservationService.getRmNum(allNum));
+			
+		}
+		if(tableName.equals("rental")){
+			review.setRv_number(reservationService.getReNum(allNum));
+		}
 		review.setRv_rating(rating);
 		review.setRv_content(content);
-		review.setRv_number(reservationService.getRmNum(lrNum));
 		review.setRv_table_name(tableName);
 		review.setRv_me_num(member.getMe_num());
 
-		int result = reviewService.insertReview(review);
-
-		return result > 0 ? "success" : "fail";
+		result = reviewService.insertReview(review);
+		return result > 0 ? "success" : "fail";		
 	}
 
 	@GetMapping("/check")
@@ -86,7 +92,7 @@ public class ReviewController {
 
 	@GetMapping("/detail")
 	@ResponseBody
-	public ReviewVO getReview(@RequestParam("lr_num") int lrNum, @RequestParam("rv_table_name") String tableName,
+	public ReviewVO getReview(@RequestParam("all_num") int allNum, @RequestParam("rv_table_name") String tableName,
 			@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user) {
 		MemberVO member = null;
 		if (user != null) {
@@ -96,14 +102,22 @@ public class ReviewController {
 		} else {
 			return null;
 		}
-		return reviewService.detailReview(reservationService.getRmNum(lrNum), member.getMe_num(), tableName);
+		if(tableName.equals("room")){
+			int lrNum = allNum;
+			return reviewService.detailReview(reservationService.getRmNum(lrNum), member.getMe_num(), tableName);
+		}
+		if(tableName.equals("rental")){
+			int rrNum = allNum;
+			return reviewService.detailReview(reservationService.getReNum(rrNum), member.getMe_num(), tableName);
+		}
+		return null;
 	}
 
 	@PostMapping("/update")
 	@ResponseBody
 	public String updateReview(@AuthenticationPrincipal CustomUser user, @AuthenticationPrincipal OAuth2User oauth2user,
 			@RequestParam("rv_rating") int rating,
-			@RequestParam("rv_content") String content, @RequestParam("lr_num") int lrNum,
+			@RequestParam("rv_content") String content, @RequestParam("all_num") int allNum,
 			@RequestParam("rv_table_name") String tableName) {
 
 		MemberVO member = null;
@@ -122,11 +136,16 @@ public class ReviewController {
 		if (content == null || content.trim().isEmpty()) {
 			return "invalid_content";
 		}
-
+		
 		ReviewVO review = new ReviewVO();
+		if(tableName.equals("room")){
+			review.setRv_number(reservationService.getRmNum(allNum));
+		}
+		if(tableName.equals("rental")){
+			review.setRv_number(reservationService.getReNum(allNum));
+		}
 		review.setRv_rating(rating);
 		review.setRv_content(content);
-		review.setRv_number(reservationService.getRmNum(lrNum));
 		review.setRv_me_num(member.getMe_num());
 		review.setRv_table_name(tableName);
 
@@ -136,10 +155,20 @@ public class ReviewController {
 
 	@PostMapping("/delete")
 	@ResponseBody
-	public String deleteReview(@RequestParam("lr_num") int lrNum,
+	public String deleteReview(@RequestParam("all_num") int allNum,
+			@RequestParam("rv_table_name") String tableName,
 			@AuthenticationPrincipal CustomUser user,
 			@AuthenticationPrincipal OAuth2User oauth2user) {
-		int rvNumber = reservationService.getRmNum(lrNum);
+		int rvNumber = 0;
+		if(tableName.equals("room")){
+			rvNumber = reservationService.getRmNum(allNum);
+		}
+		if(tableName.equals("rental")){
+			rvNumber = reservationService.getReNum(allNum);
+		}
+
+		if(rvNumber == 0) return "fail";
+
 		System.out.println("deleteReview 호출됨, rvNumber = " + rvNumber);
 		MemberVO member = null;
 		if (user != null) {
@@ -152,6 +181,7 @@ public class ReviewController {
 			System.out.println("인증 실패: user, oauth2user 둘 다 null");
 			return "fail";
 		}
+
 
 		int result = reviewService.deleteReview(rvNumber, member.getMe_num());
 		System.out.println("삭제 처리 결과 result = " + result);

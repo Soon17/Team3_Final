@@ -52,4 +52,8 @@ public class ReservationService {
         return reservationDAO.selectRmNum(lrNum);
     }
 
+	public int getReNum(int rrNum) {
+		return reservationDAO.selectReNum(rrNum);
+	}
+
 }

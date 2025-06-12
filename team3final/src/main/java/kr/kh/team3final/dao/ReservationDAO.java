@@ -16,4 +16,6 @@ public interface ReservationDAO {
 
 	int selectRmNum(int lrNum);
 
+	int selectReNum(int rrNum);
+
 }
