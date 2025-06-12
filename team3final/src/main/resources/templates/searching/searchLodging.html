@@ -20,7 +20,8 @@
           <div class="hotel-name" th:text="${ld.ld_name}"></div>
           <div class="hotel-grade">
             <img class="star" src="/resources/static/imgs/star.svg" alt="star">
-            <span class="review-score" th:text="${ld.avg_rating}"></span>
+            <span class="review-score" th:if="${ld.avg_rating != null}" th:text="${ld.avg_rating}"></span>
+            <span class="review-score" th:unless="${ld.avg_rating != null}">0.0</span>
             <span class="hotel-stars">
               <span th:if="${ld.ld_type == '호텔'}" style="margin-left: 5px;">[[${ld.ld_rating}]]성급</span>
               <span th:if="${ld.ld_type != '호텔'}" style="margin-left: 5px;">[[${ld.ld_type}]]</span>

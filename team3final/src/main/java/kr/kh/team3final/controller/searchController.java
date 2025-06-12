@@ -120,7 +120,7 @@ public class SearchController {
 		String checkout = times[1];
 
 		// 차량 상단 정보 (썸네일, 이름, 가격범위 등)
-		Map<String, Object> carTop = carService.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans);
+		Map<String, Object> carTop = carService.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans, rg_name);
 
 		// DTO 기반 렌탈 리스트
 		List<AvailableCarDTO> rentalList = rentalService.getAvailableCarList(ct_key, cr_year, cr_fuel_type, cr_trans,

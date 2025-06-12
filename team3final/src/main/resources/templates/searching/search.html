@@ -5,8 +5,8 @@
 <head>
    <meta charset="UTF-8">
    <title>카모아 - 국내도 해외도 렌트카</title>
-   <!-- <script
-   src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ad16376e4af261fc1e62afc32792b67a&libraries=services,clusterer,drawing"></script> -->
+   <script
+      src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ad16376e4af261fc1e62afc32792b67a&libraries=services,clusterer,drawing"></script>
    <style>
       .marker-title-div {
          border-radius: 20px;
@@ -666,7 +666,9 @@
                            <div class="hotel-name" th:text="${ld.ld_name}"></div>
                            <div class="hotel-grade">
                               <img class="star" src="/resources/static/imgs/star.svg" alt="star">
-                              <span class="review-score" th:text="${ld.avg_rating}"></span>
+                              <span class="review-score" th:if="${ld.avg_rating != null}"
+                                 th:text="${ld.avg_rating}"></span>
+                              <span class="review-score" th:unless="${ld.avg_rating != null}">0.0</span>
                               <span class="hotel-stars">
                                  <span th:if="${ld.ld_type == '호텔'}"
                                     style="margin-left: 5px;">[[${ld.ld_rating}]]성급</span>
@@ -1172,14 +1174,14 @@
          $(document).on('click', '.kakao-loadMap', function () {
             let region = [];
             $('.card-link').each(function () {
-               //region.push($(this).data('ld-region'));
+               region.push($(this).data('ld-region'));
             });
             let ld_name = [];
             $('.hotel-name').each(function () {
                ld_name.push($(this).text());
             });
-            console.log(ld_name)
-            region.push("제주특별자치도 제주시 조천읍 신북로 470", "제주특별자치도 서귀포시 1100로 453-95")
+
+
             kakaoMapLoad(region, ld_name);
          });
 

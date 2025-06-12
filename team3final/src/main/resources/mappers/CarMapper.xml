@@ -68,19 +68,30 @@
 
 	<select id="selectCarInfo" resultType="map" parameterType="map">
 		SELECT 
-			ct.ct_name AS carName,
-			c.cr_price AS minPrice,
-			c.cr_price AS maxPrice,
-			c.cr_thumbnail AS thumbnail, 						
-			c.cr_year AS cr_year,
-			c.cr_fuel_type AS cr_fuel_type,
-			c.cr_trans AS cr_trans
+			ct.ct_name         AS carName,
+			c.cr_thumbnail     AS thumbnail,
+			c.cr_year          AS cr_year,
+			c.cr_fuel_type     AS cr_fuel_type,
+			c.cr_trans         AS cr_trans,
+			stats.min_price    AS minPrice,
+			stats.max_price    AS maxPrice
 		FROM car c
 		JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+		JOIN rental r ON c.cr_re_num = r.re_num
+		JOIN region reg ON r.re_rg_num = reg.rg_num
+		JOIN (
+			SELECT 
+				cr_ct_key,
+				rg_name,
+				MIN(cr_price) AS min_price,
+				MAX(cr_price) AS max_price
+			FROM car
+			JOIN rental ON cr_re_num = re_num
+			JOIN region ON re_rg_num = rg_num
+			GROUP BY cr_ct_key, rg_name
+		) stats ON c.cr_ct_key = stats.cr_ct_key AND reg.rg_name = stats.rg_name
 		WHERE c.cr_ct_key = #{ct_key}
-			AND c.cr_year = #{cr_year}
-			AND c.cr_fuel_type = #{cr_fuel_type}
-			AND c.cr_trans = #{cr_trans}
+			AND reg.rg_name = #{rg_name}
 		ORDER BY c.cr_price ASC
 		LIMIT 1
 	</select>
@@ -116,8 +127,6 @@
 		JOIN region reg ON r.re_rg_num = reg.rg_num
 		WHERE c.cr_id = #{cr_id}
 	</select>
-
-
 
 	<select id="selectPriceCarList" resultType="CarVO">
 		select  car.*,ct_name from car

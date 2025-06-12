@@ -291,7 +291,7 @@
 					const phone = $(this).val().trim();
 
 					// 정규표현식: 010-1234-5678 또는 01012345678 등
-					// const regex = /^01[0|1|6|7|8|9]-?\d{3,4}-?\d{4}$/;
+					const regex = /^01[0|1|6|7|8|9]-?\d{3,4}-?\d{4}$/;
 
 					if (regex.test(phone)) {
 						$('#phone-error').hide();

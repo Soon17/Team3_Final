@@ -40,8 +40,9 @@ public class CarService {
 		return dates[1].trim().replace(".", "-");
 	}
 
-	public Map<String, Object> selectCarInfo(int ct_key, int cr_year, String cr_fuel_type, String cr_trans) {
-		return carDao.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans);
+	public Map<String, Object> selectCarInfo(int ct_key, int cr_year, String cr_fuel_type, String cr_trans,
+			String rg_name) {
+		return carDao.selectCarInfo(ct_key, cr_year, cr_fuel_type, cr_trans, rg_name);
 	}
 
 	public CarVO selectCarById(int cr_Id) {

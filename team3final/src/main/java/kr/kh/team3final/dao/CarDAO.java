@@ -19,7 +19,8 @@ public interface CarDAO {
                         @Param("ct_key") int ct_key,
                         @Param("cr_year") int cr_year,
                         @Param("cr_fuel_type") String cr_fuel_type,
-                        @Param("cr_trans") String cr_trans);
+                        @Param("cr_trans") String cr_trans,
+                        @Param("rg_name") String rg_name);
 
         CarVO selectCarById(@Param("cr_id") int cr_id);
 

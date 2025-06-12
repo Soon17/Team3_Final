@@ -577,7 +577,7 @@
 					async function requestPayment(channelKey, storeId) {
 						const tPriceText = $(".summary-total-price").text(); // "100,000원" 
 						const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
-						const rm_name = $(".rm-name").text();
+						const rm_name = $(".rm-name").text().replace(/[\\,]/g, " ");
 						const reserverName = $("[name = 'reserverName']").val();
 						const guestName = $("[name = 'guestName']").val();
 						const guestPhone = $("[name = 'guestPhone']").val();

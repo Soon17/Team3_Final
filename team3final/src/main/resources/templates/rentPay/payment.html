@@ -557,7 +557,7 @@
 					});
 					async function requestPayment(channelKey, storeId) {
 						const cr_id = $(".ct-name").data("cr-id");
-						const cr_name = $(".ct-name").text();
+						const cr_name = $(".ct-name").text().replace(/[\\,]/g, " ");
 						const reserverName = $("[name = 'reserverName']").val();
 						const reserverBirth = $("[name = 'reserverBirth']").val();
 						const reserverPhone = $("[name = 'reserverPhone']").val();
