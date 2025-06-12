@@ -72,4 +72,9 @@
         SET LR_STATE = #{state}
         WHERE LR_NUM = #{lr_num}
     </update>
+    <select id="selectRmNum" resultType="int">
+        select lr_rm_num
+        from lo_reservation
+        where lr_num = #{lrNum}
+    </select>
 </mapper>

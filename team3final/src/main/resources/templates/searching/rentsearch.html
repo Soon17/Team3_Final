@@ -539,6 +539,7 @@
       .car-details {
          font-size: 14px;
          color: #666;
+         font-weight: bold;
       }
 
       .car-top-info {
@@ -653,7 +654,7 @@
       </div>
       <!-- 모바일 전용 헤더 -->
       <div class="mobile-header">
-         <select name="rg_name" id="region" class="search-input">
+         <select name="rg_name" id="region2" class="search-input">
             <option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
          </select>
          <div class="mobile-header-bottom">
@@ -755,6 +756,14 @@
       </div>
 
       <script>
+         $("#region2").on('change', function () {
+            $("#region").val($(this).val());
+         })
+         $("#region2").val($("#region").val());
+         $("#region").on('change', function () {
+            $("#region2").val($(this).val());
+         })
+
          $(document).ready(function () {
 
             let lastScrollTop = 0;

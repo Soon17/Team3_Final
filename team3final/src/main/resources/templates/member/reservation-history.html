@@ -742,7 +742,7 @@
 				$.ajax({
 					url: "/review/detail",
 					type: "GET",
-					data: { rv_number: lrNum, rv_table_name: 'room' },
+					data: { lr_num: lrNum, rv_table_name: 'room' },
 					success: function (review) {
 						if (review && review.rv_number) { // 존재 여부를 정확히 체크
 							$("#reviewContent").val(review.rv_content);
@@ -818,7 +818,7 @@
 			function updateReview() {
 				const rating = $("#ratingValue").val();
 				const content = $("#reviewContent").val();
-				const rv_number = $("#hiddenLrNumInput").val();
+				const lr_num = $("#hiddenLrNumInput").val();
 				const rv_me_num = $("#hiddenMeNum").val(); // 숨겨진 input에 회원 번호 저장되어 있어야 함
 				const rv_table_name = "room"; // 혹은 동적으로 설정되게
 
@@ -828,7 +828,7 @@
 					data: {
 						rv_rating: rating,
 						rv_content: content,
-						rv_number: rv_number,
+						lr_num: lr_num,
 						rv_me_num: rv_me_num,
 						rv_table_name: rv_table_name
 					},
@@ -844,7 +844,7 @@
 			}
 
 			function deleteReview() {
-				const rv_number = $("#hiddenLrNumInput").val();
+				const lr_num = $("#hiddenLrNumInput").val();
 
 				if (!confirm("리뷰를 삭제하시겠습니까?")) return;
 
@@ -852,7 +852,7 @@
 					url: "/review/delete",
 					type: "POST",
 					data: {
-						rv_number: rv_number
+						lr_num: lr_num
 					},
 					success: function (res) {
 						if (res === "success") {
@@ -887,7 +887,8 @@
 						rv_rating: rating,
 						rv_content: content,
 						rv_table_name: 'room',
-						rv_number: lrNum
+						lr_num: lrNum
+						//rv_number: lrNum
 					},
 					success: function (res) {
 						if (res === 'success') {

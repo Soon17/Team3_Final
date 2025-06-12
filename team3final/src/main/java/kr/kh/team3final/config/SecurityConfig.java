@@ -39,6 +39,8 @@ public class SecurityConfig {
 						.hasRole(UserRole.OWNER.name())
 						.requestMatchers("/pay/**")
 						.hasRole(UserRole.USER.name())
+						.requestMatchers("/rent/payment/**")
+						.hasRole(UserRole.USER.name())
 						.anyRequest()
 						.permitAll() // 그 외 요청은 인증 필요
 				)
@@ -49,9 +51,9 @@ public class SecurityConfig {
 						.defaultSuccessUrl("/") // 성공 시 이동할 페이지
 				)
 				.exceptionHandling(ex -> ex
-					.accessDeniedHandler(customAccessDeniedHandler) // 여기에 적용
+						.accessDeniedHandler(customAccessDeniedHandler) // 여기에 적용
 				)
-				
+
 				.oauth2Login(oauth -> oauth
 						.loginPage("/member/signIn") // 커스텀 로그인 페이지
 						.userInfoEndpoint(userInfo -> userInfo
@@ -60,11 +62,10 @@ public class SecurityConfig {
 				)
 				// 자동 로그인 처리
 				.rememberMe(rm -> rm
-					.userDetailsService(memberDetailService)
-					.key("my-remember-me-key")
-					.rememberMeCookieName("T3")
-					.tokenValiditySeconds(60 * 60 * 24 * 7)
-				)
+						.userDetailsService(memberDetailService)
+						.key("my-remember-me-key")
+						.rememberMeCookieName("T3")
+						.tokenValiditySeconds(60 * 60 * 24 * 7))
 				.logout((logout) -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")

@@ -41,7 +41,7 @@ public class PaymentController {
 
 	@Value("${toss.pay-channel}")
 	private String tossChannel;
-	
+
 	@Autowired
 	LodgingService lodgingService;
 
@@ -58,6 +58,7 @@ public class PaymentController {
 	public String payment(HttpSession sesssion,
 			Model model, @RequestParam int ld_num, @RequestParam String checkTime, @RequestParam String rm_person,
 			@RequestParam int rm_num) {
+
 		LodgingVO lodging = lodgingService.getLodging(ld_num);
 		RoomVO room = roomService.getRoom(rm_num);
 		List<ChoiceOptionVO> choiceOptions = optionService.getChoiceOpotionList(ld_num);
@@ -87,6 +88,7 @@ public class PaymentController {
 	@ResponseBody
 	public Map<String, Object> getApi(@RequestParam String type) {
 		Map<String, Object> map = new HashMap<String, Object>();
+
 		switch (type) {
 			case "kakao":
 				map.put("channel", kakaoChannel);
