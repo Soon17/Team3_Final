@@ -294,7 +294,7 @@
 							</tr>
 						</thead>
 						<tbody id="reservation-list">
-							
+
 						</tbody>
 					</table>
 				</div>
@@ -302,7 +302,7 @@
 				<!-- 호텔 리뷰 모달 -->
 				<div id="modalOverlay">
 					<div id="reviewModal">
-						<input id="hiddenLrNumInput">
+						<input type="hidden" id="hiddenLrNumInput">
 
 						<div>
 							<strong>숙소 이름:</strong> <span id="lodgingName"></span><br>
@@ -310,16 +310,11 @@
 						</div>
 
 						<div class="star-rating" onmouseleave="resetStars()">
-							<span class="star" data-value="1" onmouseover="highlightStars(1)"
-								onclick="selectRating(1)">★</span>
-							<span class="star" data-value="2" onmouseover="highlightStars(2)"
-								onclick="selectRating(2)">★</span>
-							<span class="star" data-value="3" onmouseover="highlightStars(3)"
-								onclick="selectRating(3)">★</span>
-							<span class="star" data-value="4" onmouseover="highlightStars(4)"
-								onclick="selectRating(4)">★</span>
-							<span class="star" data-value="5" onmouseover="highlightStars(5)"
-								onclick="selectRating(5)">★</span>
+							<span class="star" data-value="1" onmouseover="highlightStars(1)" onclick="selectRating(1)">★</span>
+							<span class="star" data-value="2" onmouseover="highlightStars(2)" onclick="selectRating(2)">★</span>
+							<span class="star" data-value="3" onmouseover="highlightStars(3)" onclick="selectRating(3)">★</span>
+							<span class="star" data-value="4" onmouseover="highlightStars(4)" onclick="selectRating(4)">★</span>
+							<span class="star" data-value="5" onmouseover="highlightStars(5)" onclick="selectRating(5)">★</span>
 							<input type="hidden" id="ratingValue" name="rating" value="0">
 						</div>
 
@@ -357,7 +352,7 @@
 							</tr>
 						</thead>
 						<tbody id="rentcar-reservation-list">
-							
+
 						</tbody>
 					</table>
 				</div>
@@ -365,7 +360,7 @@
 				<!-- 렌트카 리뷰 모달 -->
 				<div id="modalOverlayRental">
 					<div id="reviewModalRental">
-						<input id="hiddenRentalNumInput">
+						<input type="hidden" id="hiddenRentalNumInput">
 
 						<div>
 							<strong>업체명:</strong> <span id="rental-name"></span><br>
@@ -1011,7 +1006,7 @@
 					type: "POST",
 					data: {
 						rv_table_name: "rental",
-						all_num : rr_num
+						all_num: rr_num
 					},
 					success: function (res) {
 						if (res === "success") {
