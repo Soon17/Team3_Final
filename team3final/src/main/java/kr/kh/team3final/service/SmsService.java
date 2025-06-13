@@ -4,12 +4,10 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
-
 
 @Service
 public class SmsService {
@@ -24,12 +22,20 @@ public class SmsService {
     private String sender;
 
     public boolean sendSms(String phone, String code) throws IOException {
-        DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.solapi.com");
+        DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret,
+                "https://api.solapi.com");
         // Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요
         Message message = new Message();
         message.setFrom(sender);
         message.setTo(phone);
         message.setText("[호텔고? 렌트고?] 인증번호 [" + code + "] 를 입력해주세요 :)");
-    return true;
+        try {
+            messageService.send(message);
+            System.out.println(1);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
