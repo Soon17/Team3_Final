@@ -96,7 +96,7 @@ public class OwnerController {
 
 		// 숙소 썸네일 업로드
 		String uploadDir = new File("").getAbsolutePath() +
-				"/team3final/src/main/resources/static/img";
+				"/src/main/resources/static/img";
 		boolean uploadLDTH = false;
 		for (MultipartFile file : lodgingDTO.getLodgingThumbnailList()) {
 			if (!file.isEmpty()) {
