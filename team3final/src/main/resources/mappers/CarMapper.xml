@@ -2,94 +2,100 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.kh.team3final.dao.CarDAO">
 
-	<select id="selectSearchCarList" parameterType="map" resultType="CarVO">
-		SELECT
-		c.cr_year,
-		c.cr_fuel_type,
-		c.cr_trans,
-		ct.ct_key,
-		ct.ct_name,
-		ct.ct_type,
-		c.cr_thumbnail,
-		MIN(c.cr_price) AS cr_price
-		FROM car c
-		JOIN rental r ON c.cr_re_num = r.re_num
-		JOIN region reg ON r.re_rg_num = reg.rg_num
-		JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+	<select id="selectSearchCarList" resultType="CarVO" parameterType="map">
+		SELECT *
+		FROM (
+			SELECT
+				c.cr_year,
+				c.cr_fuel_type,
+				c.cr_trans,
+				ct.ct_key,
+				ct.ct_name,
+				ct.ct_type,
+				c.cr_thumbnail,
+				c.cr_price,
+				ROW_NUMBER() OVER (
+					PARTITION BY ct.ct_key
+					ORDER BY c.cr_price ASC
+				) AS rn
+			FROM car c
+			JOIN rental r ON c.cr_re_num = r.re_num
+			JOIN region reg ON r.re_rg_num = reg.rg_num
+			JOIN car_type ct ON c.cr_ct_key = ct.ct_key
 		<where>
 			<if test="cri.rg_name != null and cri.rg_name != ''">
-        AND reg.rg_name = #{cri.rg_name}
+					AND reg.rg_name = #{cri.rg_name}
 			</if>
 			<if test="cri.ct_type != null and cri.ct_type.length > 0">
-        AND ct.ct_type IN
+					AND ct.ct_type IN
 				<foreach collection="cri.ct_type" item="type" open="(" separator="," close=")">
-          #{type}
+						#{type}
 				</foreach>
 			</if>
 			<if test="cri.ct_name != null and cri.ct_name != ''">
-        AND ct.ct_name LIKE CONCAT('%', #{cri.ct_name}, '%')
+					AND ct.ct_name LIKE CONCAT('%', #{cri.ct_name}, '%')
 			</if>
 			<if test="cri.cr_fuel_type != null and cri.cr_fuel_type.length > 0">
-        AND c.cr_fuel_type IN
+					AND c.cr_fuel_type IN
 				<foreach collection="cri.cr_fuel_type" item="fuel" open="(" separator="," close=")">
-          #{fuel}
+						#{fuel}
 				</foreach>
 			</if>
 			<if test="cri.cr_trans != null and cri.cr_trans.length > 0">
-        AND c.cr_trans IN
+					AND c.cr_trans IN
 				<foreach collection="cri.cr_trans" item="gear" open="(" separator="," close=")">
-          #{gear}
+						#{gear}
 				</foreach>
 			</if>
 			<if test="cri.price != null and cri.price != ''">
-        AND c.cr_price &lt;= #{cri.price}
+					AND c.cr_price &lt;= #{cri.price}
 			</if>
 		</where>
-
-		GROUP BY
-		c.cr_year,
-		c.cr_fuel_type,
-		c.cr_trans,
-		ct.ct_key,
-		ct.ct_name,
-		ct.ct_type,
-		c.cr_thumbnail
-
+		) temp
+		WHERE temp.rn = 1
 		<choose>
 			<when test="cri.sort == '가격순'">
-        ORDER BY cr_price ASC
+				ORDER BY cr_price ASC
 			</when>
 			<when test="cri.sort == '신차순'">
-        ORDER BY c.cr_year DESC
+				ORDER BY cr_year DESC
 			</when>
 			<otherwise>
-        ORDER BY ct.ct_key DESC
+				ORDER BY ct_key DESC
 			</otherwise>
 		</choose>
 	</select>
 
 	<select id="selectCarInfo" resultType="map" parameterType="map">
 		SELECT 
-			ct.ct_name AS carName,
-			MIN(c.cr_price) AS minPrice,
-			MAX(c.cr_price) AS maxPrice,
-			c.cr_thumbnail AS thumbnail, 						
-			c.cr_year AS cr_year,
-			c.cr_fuel_type AS cr_fuel_type,
-			c.cr_trans AS cr_trans
+			ct.ct_name         AS carName,
+			c.cr_thumbnail     AS thumbnail,
+			c.cr_year          AS cr_year,
+			c.cr_fuel_type     AS cr_fuel_type,
+			c.cr_trans         AS cr_trans,
+			stats.min_price    AS minPrice,
+			stats.max_price    AS maxPrice
 		FROM car c
 		JOIN car_type ct ON c.cr_ct_key = ct.ct_key
+		JOIN rental r ON c.cr_re_num = r.re_num
+		JOIN region reg ON r.re_rg_num = reg.rg_num
+		JOIN (
+			SELECT 
+				cr_ct_key,
+				rg_name,
+				MIN(cr_price) AS min_price,
+				MAX(cr_price) AS max_price
+			FROM car
+			JOIN rental ON cr_re_num = re_num
+			JOIN region ON re_rg_num = rg_num
+			GROUP BY cr_ct_key, rg_name
+		) stats ON c.cr_ct_key = stats.cr_ct_key AND reg.rg_name = stats.rg_name
 		WHERE c.cr_ct_key = #{ct_key}
-			AND c.cr_year = #{cr_year}
-			AND c.cr_fuel_type = #{cr_fuel_type}
-			AND c.cr_trans = #{cr_trans}
-		GROUP BY
-			ct.ct_name,
-			c.cr_thumbnail,
-			c.cr_year,
-			c.cr_fuel_type,
-			c.cr_trans
+			AND reg.rg_name = #{rg_name}
+		ORDER BY c.cr_price ASC
+		LIMIT 1
 	</select>
+
 	<select id="selectTrendCarList" resultType="CarVO">
 		select 
 			car.*,
@@ -121,8 +127,6 @@
 		JOIN region reg ON r.re_rg_num = reg.rg_num
 		WHERE c.cr_id = #{cr_id}
 	</select>
-
-
 
 	<select id="selectPriceCarList" resultType="CarVO">
 		select  car.*,ct_name from car

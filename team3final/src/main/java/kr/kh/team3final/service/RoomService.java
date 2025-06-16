@@ -28,17 +28,18 @@ public class RoomService {
 		return roomDao.selectRoom(rm_num);
 	}
 
-	public boolean uploadRooms(List<RoomDTO> rooms, int ld_num) throws IOException{
+	public boolean uploadRooms(List<RoomDTO> rooms, int ld_num) throws IOException {
 		boolean result = true;
 		boolean res;
 		String uploadDir = new File("").getAbsolutePath() +
-		"/team3final/src/main/resources/static/img";
-		for(RoomDTO room : rooms){
+				"/src/main/resources/static/img";
+		for (RoomDTO room : rooms) {
 			// 해당 숙소의 룸들에 rm_ld_num지정
 			room.setRm_ld_num(ld_num);
 
 			res = roomDao.insertRoom(room);
-			if(!res) result = res;
+			if (!res)
+				result = res;
 
 			boolean uploadRMTH = false;
 
@@ -48,7 +49,7 @@ public class RoomService {
 					String originalName = file.getOriginalFilename();
 					String uuid = UUID.randomUUID().toString();
 					String uniqueName = uuid + "_" + originalName;
-					
+
 					File destination = new File(uploadDir, uniqueName);
 					file.transferTo(destination);
 					System.out.println("룸 썸네일 업로드 성공: " + uniqueName);

@@ -25,28 +25,60 @@
 
 		.reserv-img {
 			display: flex;
-			gap: 10px;
-			justify-items: center;
+			gap: 16px;
 		}
 
-		.reserv-img img {
+		/* 메인 이미지 */
+		.main-img {
+			flex: 1 1 60%;
+			max-width: 60%;
+		}
+
+		.main-img img {
+			max-width: 608px;
 			width: 100%;
-			height: 100%;
+			aspect-ratio: 4 / 3;
 			object-fit: cover;
-			border-radius: 8px;
-			border: 1px solid #ddd;
+			border-radius: 10px;
 		}
 
-		.img-gallary {
+		/* 서브 이미지들 */
+		.sub-imgs {
 			display: grid;
-			gap: 1px;
-			grid-template-columns: repeat(4, 1fr);
-			grid-template-rows: repeat(2, 1fr);
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+			align-items: stretch;
 		}
 
-		.reserv-img img:first-child {
-			grid-column: 1/3;
-			grid-row: 1/3;
+		.sub-imgs img {
+			max-width: 283px;
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 10px;
+		}
+
+
+		/* 모바일 대응 */
+		@media (max-width: 995px) {
+			.main-img {
+				flex: 1 1 100%;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.reserv-img {
+				flex-direction: column;
+			}
+
+			.main-img {
+				flex: none;
+			}
+
+			.main-img {
+				max-width: 100%;
+				flex: 1 1 100%;
+			}
 		}
 
 		.infor-container {
@@ -96,9 +128,13 @@
 			overflow: hidden;
 		}
 
-		/* .infor-map{
-			display: flex; height: 100px; width: 200px; flex: 1 1;
-		} */
+		.infor-map {
+			display: flex;
+			height: 100px;
+			width: 200px;
+			flex: 1 1;
+		}
+
 		.infor-item2 {
 			flex-direction: row-reverse;
 			gap: 3.375rem;
@@ -140,6 +176,7 @@
 		.review-header {
 			font-weight: bold;
 			font-size: 15px;
+			width: 150px;
 		}
 
 		.review-content {
@@ -833,12 +870,13 @@
 		<main layout:fragment="content">
 			<div class="container">
 				<div class="reserv-img">
-
-					<div class="img-gallary">
-						<th:block th:each="thumb : ${thumbList}">
-							<img th:src="@{${thumb.th_upload + thumb.th_name}}" alt="이미지 없음">
+					<div class="main-img">
+						<img th:src="@{${thumbList[0].th_upload + thumbList[0].th_name}}" alt="메인 이미지">
+					</div>
+					<div class="sub-imgs">
+						<th:block th:each="thumb, iterStat : ${thumbList}" th:if="${iterStat.index > 0}">
+							<img th:src="@{${thumb.th_upload + thumb.th_name}}" alt="서브 이미지">
 						</th:block>
-
 					</div>
 				</div>
 			</div>
@@ -858,24 +896,42 @@
 						style="display: flex; justify-content: space-between; gap: 24px; align-items: flex-start;">
 						<!-- 리뷰 -->
 						<div class="review-container">
-							<div class="swiper review-swiper">
-								<div class="swiper-wrapper">
-									<th:block th:each="review : ${reviewList}">
-										<div class="swiper-slide review-card"
-											th:attr="data-nick=${review.me_nick}, data-content=${review.rv_content}, data-date=${#dates.format(review.rv_date, 'yyyy.MM.dd')}"
-											onclick="handleReviewClick(this)" style="cursor: pointer;">
-											<div style="display: flex; align-items: center;">
-												<div class="review-header" th:text="${review.me_nick}">닉네임</div>
-												<span th:text="${review.rm_name}"
-													style="display: block; margin-left: 5px; font-size: .75rem; line-height: 1.5; color: #999;">방이름</span>
-											</div>
-											<div class="review-content" th:text="${review.rv_content}">내용</div>
-											<div class="review-date" th:text="${#dates.format(review.rv_date,'yyyy.MM.dd')}">날짜</div>
-										</div>
-									</th:block>
+							<!-- 리뷰 없을 때 -->
+							<th:block th:if="${#lists.isEmpty(reviewList)}">
+								<div style="text-align: center; padding: 30px 0; font-size: 16px; color: #999;">
+									등록된 리뷰가 없습니다.
 								</div>
-							</div>
+							</th:block>
+
+							<!-- 리뷰 있을 때 -->
+							<th:block th:unless="${#lists.isEmpty(reviewList)}">
+								<div class="swiper review-swiper">
+									<div class="swiper-wrapper">
+										<th:block th:each="review : ${reviewList}">
+											<div class="swiper-slide review-card"
+												th:attr="data-nick=${review.me_nick}, data-content=${review.rv_content}, data-date=${#dates.format(review.rv_date, 'yyyy.MM.dd')}"
+												onclick="handleReviewClick(this)" style="cursor: pointer;">
+												<div style="display: flex; align-items: center;">
+													<div class="review-header" th:text="${review.me_nick}">닉네임</div>
+													<span th:text="${review.rm_name}" style="display: -webkit-box;
+														-webkit-line-clamp: 2;
+														line-clamp: 2;
+														-webkit-box-orient: vertical;
+														overflow: hidden;
+														width: 130px;
+														font-size: 13px;
+														margin-left: 10px; color: #999;">방이름
+													</span>
+												</div>
+												<div class="review-content" th:text="${review.rv_content}">내용</div>
+												<div class="review-date" th:text="${#dates.format(review.rv_date,'yyyy.MM.dd')}">날짜</div>
+											</div>
+										</th:block>
+									</div>
+								</div>
+							</th:block>
 						</div>
+
 						<!-- 지도 -->
 						<div class="homap" style="flex-shrink: 0;">
 							<div class="open-map" onclick="openMapModal()" id="map"
@@ -1701,42 +1757,49 @@
 													<div style="font-size: 1rem; font-weight: bold; color: #494949;">리뷰</div>
 												</div>
 												<!-- 리뷰 리스트 목록 -->
-												<th:block th:each="rev : ${reviewList}">
-													<div class="review-item"
-														style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
-														th:attr="data-nick=${rev.me_nick}, data-content=${rev.rv_content}, data-date=${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
-														onclick="handleReviewClick(this)">
-														<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
-															<div style="display: flex; align-items: end; gap: .125rem;">
-																<div style="font-size: 1.5rem; font-weight: bold; color: #333;"
-																	th:text="${rev.rv_rating} + .0">별점</div>
-																<div
-																	style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5; margin-bottom: 4px;">
-																	/ 5.0
+												<th:block th:if="${#lists.isEmpty(reviewList)}">
+													<div style="text-align:center; padding:2rem; color:#999; font-size:0.95rem;">
+														등록된 리뷰가 없습니다.
+													</div>
+												</th:block>
+												<th:block th:unless="${#lists.isEmpty(reviewList)}">
+													<th:block th:each="rev : ${reviewList}">
+														<div class="review-item"
+															style="width: 100%; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; padding: 1rem; border: 1px solid #f3f3f3; border-radius: .5rem; background-color: #fff;"
+															th:attr="data-nick=${rev.me_nick}, data-content=${rev.rv_content}, data-date=${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
+															onclick="handleReviewClick(this)">
+															<div style="width: 100%; display: flex; align-items: center; gap: .5rem;">
+																<div style="display: flex; align-items: end; gap: .125rem;">
+																	<div style="font-size: 1.5rem; font-weight: bold; color: #333;"
+																		th:text="${rev.rv_rating} + .0">별점</div>
+																	<div
+																		style="font-size: .75rem; color: #999; font-style: normal; line-height: 1.5; margin-bottom: 4px;">
+																		/ 5.0
+																	</div>
+																</div>
+																<div>
+																	<span th:text="${rev.rm_name}"
+																		style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">방이름</span>
 																</div>
 															</div>
 															<div>
-																<span th:text="${rev.rm_name}"
-																	style="display: block; font-size: .75rem; line-height: 1.5; color: #999;">방이름</span>
+																<div style="width: 100%; display: flex; align-items: center;">
+																	<i class="fas fa-user"></i>
+																	<p th:text="${rev.me_nick}"
+																		style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
+																		닉네임</p>
+																</div>
+																<p class="rev"
+																	style="margin: 0; width: 40%; font-size: .875rem; line-height: 1.5; color: #666;">
+																	<span th:text="${rev.rv_content}">리뷰</span>
+																</p>
+																<div style="width: 100%; display: flex; align-items: center;">
+																	<span th:text="${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
+																		style="font-size: .75rem; line-height: 1.5; color: #999;">날짜</span>
+																</div>
 															</div>
 														</div>
-														<div>
-															<div style="width: 100%; display: flex; align-items: center;">
-																<i class="fas fa-user"></i>
-																<p th:text="${rev.me_nick}"
-																	style="margin: 0; display: flex; align-items: center; gap: .25rem; color: #333; font-size: 1rem; line-height: 1.4;">
-																	닉네임</p>
-															</div>
-															<p class="rev"
-																style="margin: 0; width: 40%; font-size: .875rem; line-height: 1.5; color: #666;">
-																<span th:text="${rev.rv_content}">리뷰</span>
-															</p>
-															<div style="width: 100%; display: flex; align-items: center;">
-																<span th:text="${#dates.format(rev.rv_date,'yyyy.MM.dd')}"
-																	style="font-size: .75rem; line-height: 1.5; color: #999;">날짜</span>
-															</div>
-														</div>
-													</div>
+													</th:block>
 												</th:block>
 												<button id="review-more-btn">더보기</button>
 											</div>

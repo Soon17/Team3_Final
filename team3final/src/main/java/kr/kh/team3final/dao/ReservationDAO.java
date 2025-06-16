@@ -12,6 +12,10 @@ public interface ReservationDAO {
 
 	List<ReservationVO> selectLatestReservation(int meNum);
 
-	int cancelHotel(@Param("lr_num")int lr_num, @Param("state")String string);
-	
+	int cancelHotel(@Param("lr_num") int lr_num, @Param("state") String string);
+
+	int selectRmNum(int lrNum);
+
+	int selectReNum(int rrNum);
+
 }

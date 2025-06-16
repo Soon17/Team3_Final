@@ -539,6 +539,7 @@
       .car-details {
          font-size: 14px;
          color: #666;
+         font-weight: bold;
       }
 
       .car-top-info {
@@ -653,7 +654,7 @@
       </div>
       <!-- 모바일 전용 헤더 -->
       <div class="mobile-header">
-         <select name="rg_name" id="region" class="search-input">
+         <select name="rg_name" id="region2" class="search-input">
             <option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
          </select>
          <div class="mobile-header-bottom">
@@ -669,27 +670,29 @@
          </div>
       </div>
 
-      <div class="car-top-info">
-         <div class="inner-wrapper">
-            <div class="car-image">
-               <span class="badge">최저가 보장</span>
-               <img th:src="@{'/resources/static/imgs/' + ${carTop.thumbnail}}" alt="차 이미지" />
-            </div>
-            <div class="car-spec">
-               <div class="car-name" th:text="${carTop.carName}">차량 이름</div>
-               <div class="car-price-range">
-                  <span class="start-price"
-                     th:text="${#numbers.formatInteger(carTop.minPrice, 3, 'COMMA')} + '원'">0원</span>
-                  <span>~</span>
-                  <span th:text="${#numbers.formatInteger(carTop.maxPrice, 3, 'COMMA')} + '원'">0원</span>
+      <th:block th:if="${carTop != null}">
+         <div class="car-top-info">
+            <div class="inner-wrapper">
+               <div class="car-image">
+                  <span class="badge">최저가 보장</span>
+                  <img th:src="@{'/resources/static/imgs/' + ${carTop.thumbnail}}" alt="차 이미지" />
                </div>
-               <div class="car-etc"
-                  th:text="${carTop.cr_year + '년식 · ' + carTop.cr_fuel_type + ' · ' + carTop.cr_trans}">
-                  차량 조건
+               <div class="car-spec">
+                  <div class="car-name" th:text="${carTop.carName}">차량 이름</div>
+                  <div class="car-price-range">
+                     <span class="start-price"
+                        th:text="${#numbers.formatInteger(carTop.minPrice, 3, 'COMMA')} + '원'">0원</span>
+                     <span>~</span>
+                     <span th:text="${#numbers.formatInteger(carTop.maxPrice, 3, 'COMMA')} + '원'">0원</span>
+                  </div>
+                  <div class="car-etc"
+                     th:text="${carTop.cr_year + '년식 · ' + carTop.cr_fuel_type + ' · ' + carTop.cr_trans}">
+                     차량 조건
+                  </div>
                </div>
             </div>
          </div>
-      </div>
+      </th:block>
 
       <div class="row">
          <div class="container-box">
@@ -755,6 +758,14 @@
       </div>
 
       <script>
+         $("#region2").on('change', function () {
+            $("#region").val($(this).val());
+         })
+         $("#region2").val($("#region").val());
+         $("#region").on('change', function () {
+            $("#region2").val($(this).val());
+         })
+
          $(document).ready(function () {
 
             let lastScrollTop = 0;

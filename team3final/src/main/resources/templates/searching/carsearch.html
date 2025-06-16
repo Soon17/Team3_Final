@@ -553,7 +553,7 @@
       </div>
       <!-- 모바일 전용 헤더 -->
       <div class="mobile-header">
-         <select name="rg_name" id="region" class="search-input">
+         <select name="rg_name" id="region2" class="search-input">
             <option th:each="rg : ${regionList}" th:value="${rg.rg_name}" th:text="${rg.rg_name}"></option>
          </select>
          <div class="mobile-header-bottom">
@@ -656,6 +656,13 @@
 
       <!--url이동-->
       <script>
+         $("#region2").on('change', function () {
+            $("#region").val($(this).val());
+         })
+         $("#region2").val($("#region").val());
+         $("#region").on('change', function () {
+            $("#region2").val($(this).val());
+         })
          function updateCardLinks() {
             const region = $('#region').val();
             const checkTime = $('#checkTime').text().trim();
@@ -709,7 +716,7 @@
             getCarList();
          });
 
-         $(".search-btn").on('click', function () {
+         $(".search-btn, #mobile").on('click', function () {
             getCarList();
             updateCardLinks();
          });

@@ -48,19 +48,20 @@
         <result property="rv_content" column="rv_content"/>
     </resultMap>
     <select id="getSelectReviewList" resultType="kr.kh.team3final.model.dto.Lodging_ReviewDTO">
-        SELECT
-            r.rv_num,
-            r.rv_rating,
-            r.rv_date,
-            r.rv_content,
-            l.ld_num,
-            l.ld_name,
-            l.ld_region
-        FROM review r
-        JOIN lodging l ON r.rv_number = l.ld_num
-        WHERE r.rv_table_name = 'room'
-        AND r.rv_me_num = #{meNum}
-        ORDER BY r.rv_num DESC
+    SELECT
+      r.rv_num,
+      r.rv_rating,
+      r.rv_date,
+      r.rv_content,
+      l.ld_num,
+      l.ld_name,
+      l.ld_region
+    FROM review r
+    JOIN room rm ON r.rv_number = rm.rm_num
+    JOIN lodging l ON rm.rm_ld_num = l.ld_num
+    WHERE r.rv_table_name = 'room'
+      AND r.rv_me_num = #{meNum}
+    ORDER BY r.rv_num DESC
     </select>
     <select id="getSelectRentReviewList" parameterType="int" resultType="kr.kh.team3final.model.dto.Rent_ReviewDTO">
         SELECT

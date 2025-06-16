@@ -32,14 +32,12 @@
 
 		WHERE r.RE_REGION LIKE CONCAT('%', #{rg_name}, '%')
 			AND c.CR_CT_KEY = #{ct_key}
-			AND c.CR_YEAR = #{cr_year}
-			AND c.CR_FUEL_TYPE = #{cr_fuel_type}
-			AND c.CR_TRANS = #{cr_trans}
 			AND (c.CR_COUNT - IFNULL(res.reserved_count, 0)) &gt; 0
 
 		GROUP BY r.RE_NUM, c.CR_ID 
 		ORDER BY c.CR_PRICE ASC
 	</select>
+
 
 	<select id="selectRentalInfo" parameterType="int" resultType="RentalVO">
 		SELECT 

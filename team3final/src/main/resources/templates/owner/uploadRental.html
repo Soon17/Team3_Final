@@ -195,8 +195,7 @@
 							<label class="form-label" for="re_rg_num">지역</label>
 							<select class="form-select" id="re_rg_num" name="re_rg_num" required>
 								<option value="">-- 선택 --</option>
-								<option th:each="region : ${regions}" th:value="${region.rg_num}"
-									th:text="${region.rg_name}"></option>
+								<option th:each="region : ${regions}" th:value="${region.rg_num}" th:text="${region.rg_name}"></option>
 							</select>
 						</div>
 					</div>
@@ -225,8 +224,8 @@
 								<label class="form-label">사진</label>
 								<div class="image-box" style="height: 200px;" data-index="1">
 									<span class="plus-sign">+</span>
-									<input type="file" accept="image/*" class="car-thumb"
-										onchange="handleSingleImage($(this), 1)" name="cars[0].cr_thumbnail" required>
+									<input type="file" accept="image/*" class="car-thumb" onchange="handleSingleImage($(this), 1)"
+										name="cars[0].cr_thumbnail" required>
 								</div>
 							</div>
 
@@ -235,27 +234,24 @@
 									<label class="form-label mb-2">차량 타입</label>
 									<select class="form-select car-type" name="cars[0].cr_ct_key" required>
 										<option value="">-- 선택 --</option>
-										<option th:each="type : ${carTypes}" th:value="${type.ct_key}"
-											th:text="${type.ct_name}"></option>
+										<option th:each="type : ${carTypes}" th:value="${type.ct_key}" th:text="${type.ct_name}"></option>
 									</select>
 								</div>
 								<div class="form-group col-4">
 									<label class="form-label">차량 대수</label>
-									<input type="number" class="form-input car-count" name="cars[0].cr_count" min="1"
-										required>
+									<input type="number" class="form-input car-count" name="cars[0].cr_count" min="1" required>
 								</div>
 							</div>
 							<div class="d-flex">
 								<div class="form-group col-4">
 									<label class="form-label">차량 연식</label>
-									<input type="number" class="form-input car-year" name="cars[0].cr_year" min="1900"
-										required>
+									<input type="number" class="form-input car-year" name="cars[0].cr_year" min="1900" required>
 								</div>
 
 								<div class="form-group col-8">
 									<label class="form-label">기본 요금(단위: 원)</label>
-									<input type="number" class="form-input car-price" name="cars[0].cr_price" min="0"
-										step="1000" required>
+									<input type="number" class="form-input car-price" name="cars[0].cr_price" min="0" step="1000"
+										required>
 								</div>
 							</div>
 							<div class="d-flex">
@@ -305,7 +301,7 @@
 						$(this).addClass('red-border');
 					}
 				});
-				
+
 				// 차량 추가 박스 열기
 				function addCarBox() {
 					var carTypes = JSON.parse('[[${carTypes}]]'.replaceAll('&quot;', '"'));
