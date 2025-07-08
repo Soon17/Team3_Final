@@ -1184,26 +1184,20 @@
 
             kakaoMapLoad(region, ld_name);
          });
-
          function kakaoMapLoad(addresses, ld_name) {
-
             var mapContainer = document.getElementById('map1'), // 지도를 표시할 div 
                mapOption = {
                   center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                   level: 9 // 지도의 확대 레벨
                };
-
             // 지도를 생성합니다    
             var map = new kakao.maps.Map(mapContainer, mapOption);
-
             // 마커 이미지의 이미지 주소입니다
             var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
             var geocoder = new kakao.maps.services.Geocoder();
             for (let i = 0; i < addresses.length; i++) {
 
                geocoder.addressSearch(addresses[i], function (result, status) {
-
                   if (status === kakao.maps.services.Status.OK) {
                      // 주소를 좌표로 변환한 결과
                      var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -1212,10 +1206,8 @@
                         center: coords,  // 변환된 좌표로 중심을 설정
                         level: 3
                      };
-
                      // 마커 이미지의 이미지 크기 입니다
                      var imageSize = new kakao.maps.Size(24, 35);
-
                      // 마커 이미지를 생성합니다    
                      var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
                      // 마커를 생성합니다
@@ -1239,10 +1231,8 @@
                   } else {
                      console.error("주소 검색에 실패했습니다.");
                   }
-
                });
             }
-
          }
       </script>
    </main>

@@ -28,7 +28,7 @@ INSERT INTO member (ME_ID, ME_PW, ME_NAME, ME_NICK, ME_NUMBER, ME_EMAIL, ME_AUTH
 ('user06', '$2b$12$N05/DC0IcdXuXi2LgGbdB.kHsshLExM4OweZLfTTLpzYfTNaxE4j2', '정태호', '태호짱', '01067890123', 'user06@example.com', 'USER', '19950606', '남자', 'default6.jpg', 'NORMAL', 'N');
 
 INSERT INTO region(RG_NAME) VALUES
-("서울"),("경기"),("부산"),("제주");
+("서울"),("경기"),("인천"),("부산"),("광주"),("강원도");
 
 INSERT INTO default_option(DO_NAME) VALUES
 ("조식"),("금연 호텔"),("룸 온리"),("흡연 가능"),("수영장"),("반려 동물"),("스파"),("오션뷰"),("취사 가능");

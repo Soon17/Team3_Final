@@ -480,7 +480,8 @@
 							success: function (data) {
 								loMeal = data.mealPrice
 								total += loMeal;
-								$('.room-total-price, .st-total-price, .summary-total-price, .summary-st-price, .mobile-room-price').text(total.toLocaleString() + "원");
+								$('.room-total-price, .st-total-price, .summary-total-price, .summary-st-price, .mobile-room-price')
+								.text(total.toLocaleString() + "원");
 							}
 						});
 					}
@@ -575,7 +576,7 @@
 						}
 					});
 					async function requestPayment(channelKey, storeId) {
-						const tPriceText = $(".summary-total-price").text(); // "100,000원" 
+						const tPriceText = $(".summary-total-price").text(); 
 						const totlaPrice = parseInt(tPriceText.replace(/[^0-9]/g, ''));
 						const rm_name = $(".rm-name").text().replace(/[\\,]/g, " ");
 						const reserverName = $("[name = 'reserverName']").val();
@@ -607,7 +608,7 @@
 							return alert(response.message);
 						}
 						// /payment/complete 엔드포인트를 구현해야 합니다. 다음 목차에서 설명합니다.
-						const notified = await fetch(`http://192.168.40.62:8080/pay/kakao/complete`, {
+						const notified = await fetch(`http://localhost:8080/pay/kakao/complete`, {
 							method: "POST",
 							headers: { "Content-Type": "application/json" },
 							// paymentId와 주문 정보를 서버에 전달합니다

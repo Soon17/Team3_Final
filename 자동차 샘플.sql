@@ -12,7 +12,6 @@ INSERT INTO rental (RE_NAME, RE_NUMBER, RE_REGION, RE_ME_NUM, RE_RG_NUM) VALUES
 ('발리렌트카', '010-1111-1111', '서울특별시 강남구 테헤란로 123', 1, 1),
 ('제주사랑렌트카', '010-2222-2222', '경기도 성남시 분당구 판교역로 235', 2, 2),
 ('카모아렌트카', '010-3333-3333', '제주특별자치도 제주시 신북로 470', 3, 4);
-
 -- 3. 차량 타입 데이터 초기화 및 삽입
 DELETE FROM car_type;
 ALTER TABLE car_type AUTO_INCREMENT = 1;
