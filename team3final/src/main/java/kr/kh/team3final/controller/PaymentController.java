@@ -39,8 +39,8 @@ public class PaymentController {
 	@Value("${kakao.pay-channel}")
 	private String kakaoChannel;
 
-	@Value("${toss.pay-channel}")
-	private String tossChannel;
+	// @Value("${toss.pay-channel}")
+	// private String tossChannel;
 
 	@Autowired
 	LodgingService lodgingService;
@@ -94,9 +94,9 @@ public class PaymentController {
 				map.put("channel", kakaoChannel);
 				break;
 
-			case "toss":
-				map.put("channel", tossChannel);
-				break;
+			// case "toss":
+			// 	map.put("channel", tossChannel);
+			// 	break;
 		}
 
 		map.put("store", store);
