@@ -342,6 +342,8 @@
 
 <body>
 	<div layout:fragment="content">
+
+		<!-- 달력 모달 -->
 		<div class="modal" id="calendarModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -366,6 +368,8 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- 인원 모달 -->
 		<div class="modal" id="guestModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -395,7 +399,11 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- 홈 페이지 전체 -->
 		<div>
+
+			<!-- 배너 스와이프 -->
 			<div class="swiper event-swiper d-md-flex">
 				<div class="swiper-wrapper">
 					<div class="swiper-slide first">
@@ -418,11 +426,15 @@
 				<div class="swiper-button-next event-next"></div>
 
 			</div>
+
+			<!-- 배너 아래 페이지 전체 -->
 			<div th:fragment="hotel-search-box" class="mb-5">
+
+				<!-- 검색박스 -->
 				<div
 					style="margin-top: 2rem; background-color: white; border-radius: 1rem; padding: 1.5rem; max-width: 1032px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);">
 
-					<!-- 탭 메뉴 -->
+					<!-- 박스 네임 -->
 					<div style="display: flex; gap: 1rem; margin-bottom: 1rem; font-weight: bold;">
 						<div style="color: #007aff; display: flex; align-items: center; gap: 0.3rem;">
 							<img
@@ -430,7 +442,8 @@
 							<span>국내호텔</span>
 						</div>
 					</div>
-					<!-- 입력 박스 -->
+
+					<!-- 입력 부분 -->
 					<form th:action="@{/searching/search}" method="get"
 						style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; position: relative;">
 						<select name="rg_name" id="region"
@@ -451,23 +464,30 @@
 						</div>
 					</form>
 				</div>
+
+				<!-- 평점순 출력부 -->
 				<div class="container region-lodging">
+					<!-- 제목 -->
 					<div class=" container region-text">
 						<h3 style="font-size: 24px;">🌼 지역별 레전더리 숙소!!(리뷰 평점 좋은 순)</h3>
 					</div>
+					<!-- 지역 선택 버튼 -->
 					<div class="container region-text region-btn-box" data-sw="review">
 						<button class="region-btn" th:each="rg : ${regionList}" th:data-id="${rg.rg_num}" th:value="${rg.rg_num}"
 							th:text="${rg.rg_name}"></button>
 					</div>
+					<!-- 목록 출력부 -->
 					<div class="container region-text" style="margin-top: 20px; position: relative;">
 
 						<div class="swiper lodging-swiper">
-
+							<!-- 목록은 스크립트로 출력 -->
 						</div>
 						<div class="swiper-button-next lodging-next"></div>
 						<div class="swiper-button-prev lodging-prev"></div>
 					</div>
 				</div>
+
+				<!-- 저가순 출력부 -->
 				<div class="container region-lodging">
 					<div class=" container region-text">
 						<h3 style="font-size: 24px;">🌼 지역별 가성비 숙소!!(가격 싼 순)</h3>
@@ -485,6 +505,8 @@
 						<div class="swiper-button-prev money-prev"></div>
 					</div>
 				</div>
+
+				<!-- 예약순 출력부 -->
 				<div class="container region-lodging">
 					<div class=" container region-text">
 						<h3 style="font-size: 24px;">🌼 지역별 레전더리 숙소!!(예약순)</h3>
@@ -502,6 +524,7 @@
 						<div class="swiper-button-prev booking-prev"></div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 		<script>
